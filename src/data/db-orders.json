@@ -1,0 +1,165 @@
+[
+  {
+    "customerName": "Rahul Sharma",
+    "customerEmail": "rahul@example.com",
+    "customerPhone": "9876543210",
+    "shippingAddress": "104, Indiranagar, 12th Main",
+    "city": "Bangalore",
+    "postalCode": "560038",
+    "items": [
+      {
+        "productId": 1792515530641,
+        "title": "Golden Dragon Super Red Arowana Grade A",
+        "price": 7999,
+        "quantity": 1,
+        "department": "aquarium",
+        "image": "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=900&auto=format&fit=crop&q=80"
+      }
+    ],
+    "total": 7999,
+    "hasAquaticItems": true,
+    "orderId": "CRFT-119351",
+    "date": "20 Oct 2026",
+    "status": "Shipped (Oxygen Packed)",
+    "estimatedDelivery": "24 Oct"
+  },
+  {
+    "customerName": "Rahul Sharma",
+    "customerEmail": "rahul@example.com",
+    "customerPhone": "9876543210",
+    "shippingAddress": "104, Indiranagar, 12th Main",
+    "city": "Bangalore",
+    "postalCode": "560038",
+    "items": [
+      {
+        "productId": 1792513825592,
+        "title": "Golden Dragon Super Red Arowana Grade A",
+        "price": 7999,
+        "quantity": 1,
+        "department": "aquarium",
+        "image": "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=900&auto=format&fit=crop&q=80"
+      }
+    ],
+    "total": 7999,
+    "hasAquaticItems": true,
+    "orderId": "CRFT-208066",
+    "date": "20 Oct 2026",
+    "status": "Shipped (Oxygen Packed)",
+    "estimatedDelivery": "24 Oct"
+  },
+  {
+    "customerName": "Rahul Sharma",
+    "customerEmail": "rahul@example.com",
+    "customerPhone": "9876543210",
+    "shippingAddress": "104, Indiranagar, 12th Main",
+    "city": "Bangalore",
+    "postalCode": "560038",
+    "items": [
+      {
+        "productId": 1792513134928,
+        "title": "Golden Dragon Super Red Arowana Grade A",
+        "price": 7999,
+        "quantity": 1,
+        "department": "aquarium",
+        "image": "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=900&auto=format&fit=crop&q=80"
+      }
+    ],
+    "total": 7999,
+    "hasAquaticItems": true,
+    "orderId": "CRFT-634101",
+    "date": "20 Oct 2026",
+    "status": "Shipped (Oxygen Packed)",
+    "estimatedDelivery": "24 Oct"
+  },
+  {
+    "customerName": "Rahul Sharma",
+    "customerEmail": "rahul@example.com",
+    "customerPhone": "9876543210",
+    "shippingAddress": "104, Indiranagar, 12th Main",
+    "city": "Bangalore",
+    "postalCode": "560038",
+    "items": [
+      {
+        "productId": 1792512995198,
+        "title": "Golden Dragon Super Red Arowana Grade A",
+        "price": 7999,
+        "quantity": 1,
+        "department": "aquarium",
+        "image": "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=900&auto=format&fit=crop&q=80"
+      }
+    ],
+    "total": 7999,
+    "hasAquaticItems": true,
+    "orderId": "CRFT-775027",
+    "date": "20 Oct 2026",
+    "status": "Aquatic & Craft Packing",
+    "estimatedDelivery": "24 Oct"
+  },
+  {
+    "orderId": "CRFT-849201",
+    "date": "Aug 24, 2026",
+    "items": [
+      {
+        "id": 1,
+        "title": "Atelier NP Sea Life DIY Paint Kit",
+        "price": "₹449",
+        "quantity": 2,
+        "image": "/products/atelier-diy-paint-kit-sea.jpg",
+        "category": "Beauty DIY Products",
+        "department": "crafts"
+      },
+      {
+        "id": 102,
+        "title": "Samurai Koi Halfmoon Plakat Betta (Show Grade)",
+        "price": "₹899",
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=800&q=80",
+        "category": "Live Freshwater Fish",
+        "department": "aquarium"
+      }
+    ],
+    "subtotal": 1797,
+    "discount": 180,
+    "shipping": 0,
+    "giftWrap": 49,
+    "total": 1666,
+    "customer": {
+      "fullName": "Pooja Verma",
+      "email": "pooja.verma@example.in",
+      "city": "Bengaluru, Karnataka",
+      "phone": "+91 98765 43210",
+      "address": "42 Lotus Boulevard, Indiranagar"
+    },
+    "status": "Aquatic Packing & Oxygenation",
+    "estimatedDelivery": "Aug 29, 2026"
+  },
+  {
+    "orderId": "CRFT-773194",
+    "date": "Aug 23, 2026",
+    "items": [
+      {
+        "id": 105,
+        "title": "Ultra-Clear Rimless 60P Low-Iron Glass Aquarium (64 Liters)",
+        "price": "₹4,499",
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1546026423-cc4642628d2b?auto=format&fit=crop&w=800&q=80",
+        "category": "Aquariums & Nano Tanks",
+        "department": "aquarium"
+      }
+    ],
+    "subtotal": 4499,
+    "discount": 0,
+    "shipping": 0,
+    "giftWrap": 0,
+    "total": 4499,
+    "customer": {
+      "fullName": "Rohan Mehra",
+      "email": "rohan.mehra@example.in",
+      "city": "Mumbai, Maharashtra",
+      "phone": "+91 98200 12345",
+      "address": "15 Sea View Apartments, Bandra West"
+    },
+    "status": "Shipped (Express Fragile Courier)",
+    "estimatedDelivery": "Aug 27, 2026"
+  }
+]
