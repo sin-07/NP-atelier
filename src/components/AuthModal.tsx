@@ -2,19 +2,40 @@
 
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { LogIn, UserPlus, X } from 'lucide-react'
+import { LogIn, UserPlus, X, Sparkles, KeyRound } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
 
+const DEMO_USER = {
+  name: 'Pooja Verma',
+  email: 'pooja.verma@example.in',
+  password: 'password123',
+}
+
 export default function AuthModal() {
-  const { isAuthOpen, setIsAuthOpen, login, user, logout } = useMarketplace()
-  const [mode, setMode] = useState('login') // 'login' | 'register'
+  const { isAuthOpen, setIsAuthOpen, login, user, logout, showToast } = useMarketplace()
+  const [mode, setMode] = useState<'login' | 'register'>('login')
   const [formState, setFormState] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    password: '',
+    name: user?.name || DEMO_USER.name,
+    email: user?.email || DEMO_USER.email,
+    password: DEMO_USER.password,
   })
 
-  const handleSubmit = (e) => {
+  const handleFillDemoUser = () => {
+    setFormState({
+      name: DEMO_USER.name,
+      email: DEMO_USER.email,
+      password: DEMO_USER.password,
+    })
+    if (showToast) {
+      showToast({
+        title: 'Demo Filled! ✦',
+        message: 'Demo collector profile filled.',
+        type: 'info',
+      })
+    }
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     login(formState)
     setIsAuthOpen(false)
@@ -44,7 +65,7 @@ export default function AuthModal() {
               type="button"
               aria-label="Close modal"
               onClick={() => setIsAuthOpen(false)}
-              className="absolute right-5 top-5 z-20 grid h-10 w-10 place-items-center rounded-full border border-[#DFCFA6]/60 bg-white text-[#141414] shadow-sm transition hover:bg-[#FAF6ED] hover:border-[#D4AF37]"
+              className="absolute right-5 top-5 z-20 grid h-10 w-10 place-items-center rounded-full border border-[#DFCFA6]/60 bg-white text-[#141414] shadow-sm transition hover:bg-[#FAF6ED] hover:border-[#D4AF37] cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
@@ -64,7 +85,7 @@ export default function AuthModal() {
                 <button
                   type="button"
                   onClick={() => setMode('login')}
-                  className={`flex-1 rounded-full py-1.5 text-xs font-bold transition ${
+                  className={`flex-1 rounded-full py-1.5 text-xs font-bold transition cursor-pointer ${
                     mode === 'login'
                       ? 'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#1A120B] font-extrabold shadow-[0_2px_10px_rgba(212,175,55,0.3)]'
                       : 'text-[#5A451A] hover:text-[#875A10]'
@@ -75,7 +96,7 @@ export default function AuthModal() {
                 <button
                   type="button"
                   onClick={() => setMode('register')}
-                  className={`flex-1 rounded-full py-1.5 text-xs font-bold transition ${
+                  className={`flex-1 rounded-full py-1.5 text-xs font-bold transition cursor-pointer ${
                     mode === 'register'
                       ? 'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#1A120B] font-extrabold shadow-[0_2px_10px_rgba(212,175,55,0.3)]'
                       : 'text-[#5A451A] hover:text-[#875A10]'
@@ -87,6 +108,22 @@ export default function AuthModal() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 p-6 sm:p-8">
+              {/* Quick Demo Fill Pill */}
+              <div className="flex items-center justify-between rounded-xl border border-[#D4AF37]/40 bg-[#FAF7F0] p-2.5 text-xs">
+                <div className="flex items-center gap-2">
+                  <KeyRound className="h-3.5 w-3.5 text-[#B8860B]" />
+                  <span className="font-bold text-[#141414]">Demo Collector Profile</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleFillDemoUser}
+                  className="rounded-lg border border-[#D4AF37]/50 bg-white px-2.5 py-1 text-[11px] font-bold text-[#5C4106] hover:bg-[#FAF5E8] transition shadow-xs cursor-pointer flex items-center gap-1"
+                >
+                  <Sparkles className="h-3 w-3 text-[#B8860B]" />
+                  <span>Pre-fill</span>
+                </button>
+              </div>
+
               <div>
                 <label className="mb-1 block text-xs font-bold text-[#141414]">Full Name</label>
                 <input
@@ -125,7 +162,7 @@ export default function AuthModal() {
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="btn-gold w-full py-3.5 text-xs shadow-[0_6px_20px_rgba(212,175,55,0.35)] justify-center font-bold tracking-wide"
+                  className="btn-gold w-full py-3.5 text-xs shadow-[0_6px_20px_rgba(212,175,55,0.35)] justify-center font-bold tracking-wide cursor-pointer"
                 >
                   {mode === 'login' ? <LogIn className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
                   {mode === 'login' ? 'Sign In to Account' : 'Create Artisan Account'}
@@ -140,7 +177,7 @@ export default function AuthModal() {
                       logout()
                       setIsAuthOpen(false)
                     }}
-                    className="w-full text-center text-xs font-bold text-rose-500 hover:underline"
+                    className="w-full text-center text-xs font-bold text-rose-500 hover:underline cursor-pointer"
                   >
                     Log Out of Current Session ({user.name})
                   </button>
@@ -149,7 +186,7 @@ export default function AuthModal() {
 
               <div className="border-t border-[#DFCFA6]/40 pt-3 text-center">
                 <p className="text-[11px] text-[#5A554E]">
-                  Looking for creator & inventory management?{' '}
+                  Looking for creator &amp; inventory management?{' '}
                   <a
                     href="/admin/login"
                     onClick={() => setIsAuthOpen(false)}
