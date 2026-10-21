@@ -387,7 +387,7 @@ export const aquariumCategoryGroups: CategoryGroup[] = [
     badge: 'Live Arrival Guarantee',
     description: 'Captive-bred Discus, Show Bettas, Guppies, and peaceful schooling community fish.',
     accent: 'from-cyan-100 via-white to-blue-50',
-    image: 'https://images.unsplash.com/photo-1544943910-4c1dc44a0b38?auto=format&fit=crop&w=700&q=80',
+    image: '/products/royal-discus-aquarium.jpg',
   },
   {
     title: 'Marine & Saltwater Fish',
@@ -433,7 +433,7 @@ export const fishAndAquariumProducts: Product[] = [
     price: '₹2,999',
     department: 'aquarium',
     category: 'Live Freshwater Fish',
-    image: 'https://images.unsplash.com/photo-1544943910-4c1dc44a0b38?auto=format&fit=crop&w=800&q=80',
+    image: '/products/royal-discus-aquarium.jpg',
     badges: ['Live Arrival Guarantee', 'Captive Bred', 'Centerpiece Fish'],
     description: 'Vibrant iridescent cobalt blue captive-bred discus pair. Acclimated to standard freshwater parameters (pH 6.5-7.2, 28-30°C). Shipped in temperature-controlled oxygenated breather bags with heat/ice pack.',
     stock: 8,
@@ -673,7 +673,7 @@ export const inspirationTiles = [
   },
   {
     title: 'Royal Discus Aquatic Display',
-    image: 'https://images.unsplash.com/photo-1544943910-4c1dc44a0b38?auto=format&fit=crop&w=700&q=80',
+    image: '/products/royal-discus-aquarium.jpg',
   },
   {
     title: 'Lush Rimless Aquascape',

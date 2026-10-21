@@ -700,7 +700,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       image:
         productData.image?.trim() ||
         (isAquarium
-          ? 'https://images.unsplash.com/photo-1544943910-4c1dc44a0b38?auto=format&fit=crop&w=800&q=80'
+          ? '/products/royal-discus-aquarium.jpg'
           : '/products/ceramic-mug.jpg'),
       badges: productData.badges || ['New', 'In Stock'],
       rating: 5.0,

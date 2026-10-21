@@ -47,7 +47,7 @@ export default function Footer() {
               <div className="rounded-lg bg-gradient-to-b from-white to-[#FDFBF7] p-2 pb-5 shadow-2xl border border-[#D4AF37]/60 group-hover:border-[#D4AF37] group-hover:shadow-[0_12px_35px_rgba(212,175,55,0.35)] transition-all w-24 sm:w-28">
                 <div className="aspect-square w-full overflow-hidden rounded bg-[#1A1A1A] ring-1 ring-[#D4AF37]/30">
                   <img
-                    src="https://images.unsplash.com/photo-1544943910-4c1dc44a0b38?auto=format&fit=crop&w=700&q=80"
+                    src="/products/royal-discus-aquarium.jpg"
                     alt="Royal Blue Discus"
                     className="h-full w-full object-cover"
                   />

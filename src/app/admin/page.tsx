@@ -53,7 +53,7 @@ const PRESET_IMAGES = [
   { label: 'Botanical Soap', department: 'crafts', url: 'https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?auto=format&fit=crop&w=800&q=80' },
   { label: 'Ceramic Decor', department: 'crafts', url: 'https://images.unsplash.com/photo-1484101403633-562f891dc89a?auto=format&fit=crop&w=800&q=80' },
   // Aquatic
-  { label: 'Discus Fish', department: 'aquarium', url: 'https://images.unsplash.com/photo-1544943910-4c1dc44a0b38?auto=format&fit=crop&w=800&q=80' },
+  { label: 'Discus Fish', department: 'aquarium', url: '/products/royal-discus-aquarium.jpg' },
   { label: 'Show Betta', department: 'aquarium', url: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=800&q=80' },
   { label: 'Clownfish', department: 'aquarium', url: 'https://images.unsplash.com/photo-1524704654690-b56c05c78a00?auto=format&fit=crop&w=800&q=80' },
   { label: 'Planted Tank', department: 'aquarium', url: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?auto=format&fit=crop&w=800&q=80' },

@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from 'framer-motion'
+import { useState } from 'react'
 import {
   ArrowUpRight,
   HeartHandshake,
@@ -10,90 +10,256 @@ import {
   Star,
   Users,
   Leaf,
+  ShoppingBag,
+  Waves,
+  ArrowRight,
 } from 'lucide-react'
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll'
 import { fallbackCraftImage } from '../utils/fallbackImage'
+import { useMarketplace } from '../context/MarketplaceContext'
 
-const showcaseItems = [
+type DropKey = 'featured' | 'botanical' | 'monogram'
+
+interface ShowcaseCard {
+  id: number
+  title: string
+  subtitle: string
+  artisan: string
+  price: string
+  category: string
+  image: string
+  badge: string
+  accentColor: string
+  rating: string
+}
+
+const HERO_DROPS: Record<
+  DropKey,
   {
-    title: 'Evil Eye Mandala Pendant',
-    price: '₹1,599',
-    category: 'Handmade Jewelry',
-    image: '/products/atelier-evil-eye-pendant.jpg',
-    className: 'top-2 left-0 sm:left-4 -rotate-6 w-36 sm:w-44',
+    tabLabel: string
+    craft: ShowcaseCard
+    aquatic: ShowcaseCard
+  }
+> = {
+  featured: {
+    tabLabel: 'Signature Duo',
+    craft: {
+      id: 1,
+      title: 'Evil Eye Mandala Pendant',
+      subtitle: 'Hand-poured enamel in 24K gold bezel',
+      artisan: 'Atelier NP Studio',
+      price: '₹1,599',
+      category: 'Handmade Jewelry',
+      image: '/products/atelier-evil-eye-pendant.jpg',
+      badge: '✦ Signature Talisman',
+      accentColor: '#D4AF37',
+      rating: '4.9',
+    },
+    aquatic: {
+      id: 101,
+      title: 'Royal Discus Nature Aquascape',
+      subtitle: 'Low-iron rimless nature aquarium specimen',
+      artisan: 'Captive-Bred Sanctuary',
+      price: '₹2,999',
+      category: 'Exotic Aquatics',
+      image: '/products/royal-discus-aquarium.jpg',
+      badge: '🐠 Live Arrival Guarantee',
+      accentColor: '#0D9488',
+      rating: '5.0',
+    },
+  },
+  botanical: {
+    tabLabel: 'Botanical Sanctuary',
+    craft: {
+      id: 2,
+      title: 'Pressed Botanical Resin Tray',
+      subtitle: 'Real foraged wild meadow blooms in crystal resin',
+      artisan: 'Clara & Fern Botanicals',
+      price: '₹799',
+      category: 'Botanical Decor',
+      image: '/products/resin-art-tray.jpg',
+      badge: '✦ 100% Hand-Foraged',
+      accentColor: '#B8860B',
+      rating: '4.95',
+    },
+    aquatic: {
+      id: 102,
+      title: 'Samurai Koi Halfmoon Betta',
+      subtitle: 'Show-grade iridescent captive-bred betta',
+      artisan: 'Aqua Botanica Lab',
+      price: '₹899',
+      category: 'Freshwater Show Fish',
+      image: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=800&q=80',
+      badge: '🐠 Certified Show Grade',
+      accentColor: '#0D9488',
+      rating: '4.98',
+    },
+  },
+  monogram: {
+    tabLabel: 'Bespoke Keepsakes',
+    craft: {
+      id: 3,
+      title: 'Ruby Initial Gold Flake Monogram',
+      subtitle: 'Pure gold leaf dipping with crystal resin initials',
+      artisan: 'Atelier NP Studio',
+      price: '₹1,299',
+      category: 'Custom Accessories',
+      image: '/products/atelier-ruby-glitter-keychains.jpg',
+      badge: '✦ 1-of-1 Bespoke',
+      accentColor: '#D4AF37',
+      rating: '5.0',
+    },
+    aquatic: {
+      id: 103,
+      title: 'Bonded Clownfish Marine Pair',
+      subtitle: 'Captive-bred reef safe saltwater specimens',
+      artisan: 'Ocean Reef Collective',
+      price: '₹3,499',
+      category: 'Marine & Saltwater',
+      image: 'https://images.unsplash.com/photo-1524704654690-b56c05c78a00?auto=format&fit=crop&w=800&q=80',
+      badge: '🐠 Reef Safe Pair',
+      accentColor: '#0284C7',
+      rating: '4.9',
+    },
+  },
+}
+
+const VALUE_PERKS = [
+  {
+    icon: HeartHandshake,
+    title: 'Direct Maker Studios',
+    desc: 'Zero middlemen markup',
+    highlight: '100% fair artisan value',
   },
   {
-    title: 'Royal Discus Aquatic Pair',
-    price: '₹2,999',
-    category: 'Fish & Aquarium',
-    image: 'https://images.unsplash.com/photo-1544943910-4c1dc44a0b38?auto=format&fit=crop&w=800&q=80',
-    className: 'top-8 right-0 sm:right-2 rotate-6 w-40 sm:w-48',
+    icon: ShieldCheck,
+    title: 'Live Arrival Guarantee',
+    desc: 'Oxygenated thermal packs',
+    highlight: 'Full transit protection',
   },
   {
-    title: 'Ruby Initial Keychains',
-    price: '₹1,299',
-    category: 'Accessories',
-    image: '/products/atelier-ruby-glitter-keychains.jpg',
-    className: 'bottom-2 left-6 -rotate-3 w-36 sm:w-44',
+    icon: Sparkles,
+    title: 'Bespoke Studio Customizer',
+    desc: 'Engraving & color choices',
+    highlight: '1-of-1 personalized',
+  },
+  {
+    icon: PackageCheck,
+    title: 'Plastic-Free Luxury Packaging',
+    desc: 'Honeycomb paper & wax seal',
+    highlight: 'Eco biodegradable wrap',
   },
 ]
 
 export default function Hero() {
   const { ref, isVisible } = useRevealOnScroll()
+  const { addToCart, setIsCartOpen, setActiveDepartment } = useMarketplace()
+  const [activeTab, setActiveTab] = useState<DropKey>('featured')
+
+  const currentDrop = HERO_DROPS[activeTab]
+
+  const handleQuickAdd = (item: ShowcaseCard) => {
+    addToCart(
+      {
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        category: item.category,
+        image: item.image,
+        badges: [item.badge.replace(/^[^a-zA-Z0-9]+/, '').trim()],
+        description: item.subtitle,
+        rating: Number(item.rating) || 5.0,
+      },
+      1
+    )
+    setIsCartOpen(true)
+  }
+
+  const handleDepartmentJump = (dept: 'all' | 'crafts' | 'aquarium') => {
+    if (setActiveDepartment) {
+      setActiveDepartment(dept)
+    }
+    const collectionEl = document.getElementById('collection')
+    if (collectionEl) {
+      collectionEl.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   return (
     <section id="home" ref={ref} className={`section-shell pt-4 sm:pt-8 ${isVisible ? 'is-visible' : ''}`}>
-      <div className="reveal is-visible relative overflow-hidden rounded-[2.5rem] border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] via-[#FAF4E5] to-[#F7ECCF]/90 p-6 sm:p-10 lg:p-14 shadow-[0_18px_45px_rgba(184,134,11,0.10),0_0_25px_rgba(212,175,55,0.10)]">
-        {/* Radiant Warm Golden Ambient Glow Spheres (lightweight, isolated) */}
-        <div className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-[#F5DE98]/35 blur-2xl pointer-events-none" />
-        <div className="absolute -right-20 top-1/4 h-72 w-72 rounded-full bg-[#FAD97A]/30 blur-2xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-[#E8C86A]/25 blur-2xl pointer-events-none" />
+      {/* Grand Architectural Canvas */}
+      <div className="reveal is-visible relative overflow-hidden rounded-[2.5rem] border border-[#D4AF37]/35 bg-gradient-to-br from-[#FFFFFF] via-[#FDFBF7] to-[#F8F3E6] p-6 sm:p-10 lg:p-12 shadow-[0_20px_50px_rgba(184,134,11,0.08),0_0_1px_1px_rgba(212,175,55,0.25)]">
+        {/* Soft Ambient Radiance Highlights */}
+        <div className="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-[#FAF0D4]/60 blur-3xl pointer-events-none" />
+        <div className="absolute right-0 top-1/3 h-96 w-96 rounded-full bg-[#F5E6BF]/40 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 left-1/3 h-80 w-80 rounded-full bg-[#CCFBF1]/30 blur-3xl pointer-events-none" />
 
-        <div className="relative grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-          {/* Text Content */}
-          <div className="max-w-2xl">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="section-eyebrow">
-                <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" /> Handcrafted With Soul & Living Nature
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/45 bg-gradient-to-r from-white to-[#FDF9EE] px-3.5 py-1 text-xs font-bold text-[#4D3605] shadow-xs">
-                <Users className="h-3.5 w-3.5 text-[#B8860B]" /> 240+ Verified Makers & Aquarists
-              </span>
-            </div>
+        {/* Top Architectural Header Bar */}
+        <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-[#E8DEC7]/80 pb-6">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <span className="section-eyebrow">
+              <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" />
+              Haute Artisan Craft & Living Waters
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/40 bg-white/95 px-3 py-1 text-xs font-bold text-[#4D3605] shadow-xs">
+              <Users className="h-3.5 w-3.5 text-[#B8860B]" />
+              240+ Verified Independent Studios
+            </span>
+          </div>
 
-            <h1 className="heading-display mt-6 sm:text-6xl lg:text-7xl">
-              Where Art Meets <br />
-              <span className="italic font-normal text-gold-gradient">
-                Living Imagination.
+          <div className="hidden sm:flex items-center gap-2 rounded-full border border-[#D4AF37]/35 bg-white/90 px-3.5 py-1 text-xs font-semibold text-[#5C4106]">
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Spring Drops Shipping Nationwide</span>
+          </div>
+        </div>
+
+        {/* Main Content Grid: Left Editorial + Right Dual Showcase Stage */}
+        <div className="relative z-10 mt-8 grid items-center gap-10 lg:grid-cols-[1.05fr_1.15fr] lg:gap-12">
+          {/* Left Editorial Column */}
+          <div className="max-w-xl">
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[3.75rem] font-bold tracking-tight text-[#141414] leading-[1.08]">
+              Where Fine Art <br />
+              <span className="italic font-normal text-gold-gradient font-serif">
+                Meets Living Waters.
               </span>
             </h1>
 
-            <p className="body-lead mt-6 sm:text-lg">
-              Discover a world where creativity and living nature merge through handmade artisan crafts and exotic aquatics. Every piece and specimen is curated with passion, skill, and care.
+            <p className="body-lead mt-5 sm:text-lg text-[#4A4339] leading-relaxed">
+              Discover genuine artisan handmade jewelry, wild botanical resin decor, and clean soy candles alongside exotic captive-bred fish, lush planted aquascapes, and rimless nature aquariums.
             </p>
 
             {/* CTAs */}
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <a
-                href="#collection"
-                className="btn-primary py-4 px-8 text-sm sm:text-base tracking-wide"
+            <div className="mt-8 flex flex-wrap items-center gap-3.5">
+              <button
+                type="button"
+                onClick={() => handleDepartmentJump('crafts')}
+                className="btn-primary py-4 px-7 text-sm font-semibold tracking-wide shadow-md group cursor-pointer"
               >
-                <span>Explore Collection</span>
-                <ArrowUpRight className="h-4 w-4 stroke-[2.5]" />
-              </a>
+                <span>Explore Artisan Drops</span>
+                <ArrowUpRight className="h-4 w-4 stroke-[2.5] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleDepartmentJump('aquarium')}
+                className="inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-4 text-sm font-bold tracking-wide cursor-pointer border border-teal-600/40 bg-gradient-to-r from-[#F0FDFA] to-[#CCFBF1] text-[#0F766E] shadow-sm transition hover:border-teal-600 hover:shadow-md hover:-translate-y-0.5"
+              >
+                <Waves className="h-4 w-4 text-[#0F766E]" />
+                <span>Exotic Fish & Aquatics</span>
+              </button>
 
               <a
-                href="#collection"
-                className="btn-secondary py-4 px-7 text-sm font-bold tracking-wide border-teal-500/50 hover:border-teal-600"
+                href="#customize"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#7A5408] hover:text-[#4A3405] underline underline-offset-4 py-2 px-1 transition"
               >
-                <span>🐠 Fish & Aquarium</span>
+                Custom Studio Builder →
               </a>
             </div>
 
-            {/* Social Proof Badges */}
-            <div className="mt-10 flex flex-wrap items-center gap-6 border-t border-[#E8DCC2] pt-6">
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-2">
+            {/* Social Proof & Guarantee Strip */}
+            <div className="mt-10 flex flex-wrap items-center gap-6 border-t border-[#E8DEC7] pt-6">
+              <div className="flex items-center gap-3">
+                <div className="flex -space-x-2.5">
                   {[
                     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
                     'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&q=80',
@@ -102,8 +268,8 @@ export default function Hero() {
                     <img
                       key={i}
                       src={src}
-                      alt="Artisan maker"
-                      className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm"
+                      alt="Artisan collector"
+                      className="h-10 w-10 rounded-full border-2 border-white object-cover shadow-xs"
                     />
                   ))}
                 </div>
@@ -113,7 +279,7 @@ export default function Hero() {
                       <Star key={i} className="h-3.5 w-3.5 fill-[#D4AF37] text-[#B8860B]" />
                     ))}
                   </div>
-                  <p className="font-bold text-[#141414]">4.9/5 &#8226; 3,400+ Verified Reviews</p>
+                  <p className="font-bold text-[#141414] mt-0.5">4.9/5 &#8226; 3,400+ Verified Collectors</p>
                 </div>
               </div>
 
@@ -123,81 +289,182 @@ export default function Hero() {
                 <p className="font-bold text-[#141414] flex items-center gap-1.5">
                   <Leaf className="h-3.5 w-3.5 text-[#7A5408]" /> 100% Eco Packaging
                 </p>
-                <p className="text-[#635B4F]">Biodegradable boxes & honeycomb wrap</p>
+                <p className="text-[#635B4F] text-[11px]">Biodegradable boxes & honeycomb wrap</p>
               </div>
             </div>
           </div>
 
-          {/* Interactive Floating Showcase */}
-          <div className="relative mx-auto h-[460px] w-full max-w-[540px] lg:h-[520px]">
-            {/* Center Artisan Ambient Disc */}
-            <div className="absolute inset-8 rounded-[3rem] bg-gradient-to-br from-[#FAF5E8] to-[#F5EBD0] border border-[#D4AF37]/45 shadow-[0_8px_30px_rgba(184,134,11,0.08)]" />
-
-            {/* Showcase Floating Cards */}
-            {showcaseItems.map((item, idx) => (
-              <div
-                key={item.title}
-                className={`absolute ${item.className}`}
-              >
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.32, delay: idx * 0.08, ease: 'easeOut' }}
-                  className="overflow-hidden rounded-[2rem] border border-[#D4AF37]/60 bg-gradient-to-b from-white via-[#FCF8EE] to-[#F7ECCF] p-2.5 shadow-[0_12px_28px_rgba(184,134,11,0.12)] transition-transform duration-200 ease-out hover:scale-[1.03] hover:border-[#D4AF37]"
-                >
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-[1.4rem]">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      onError={(e) => {
-                        e.currentTarget.src = fallbackCraftImage
-                      }}
-                      className="h-full w-full object-cover"
-                    />
-                    <div className="absolute inset-x-2 bottom-2 flex items-center justify-between rounded-full bg-white/95 border border-[#D4AF37]/50 px-3 py-1.5 text-[10px] font-bold text-[#141414] shadow-sm">
-                      <span className="truncate max-w-[90px]">{item.title}</span>
-                      <span className="text-[#9E7314] font-black">{item.price}</span>
-                    </div>
-                  </div>
-                </motion.div>
+          {/* Right Dual-World Showcase Bento Stage */}
+          <div className="relative">
+            {/* Interactive Drop Selector Pills */}
+            <div className="mb-4 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 rounded-full border border-[#D4AF37]/45 bg-white/95 p-1 shadow-xs">
+                {(Object.keys(HERO_DROPS) as DropKey[]).map((key) => {
+                  const isActive = activeTab === key
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => setActiveTab(key)}
+                      className={`rounded-full px-3.5 py-1.5 text-xs font-bold transition duration-150 cursor-pointer ${
+                        isActive
+                          ? 'bg-[#141414] text-[#ECC872] shadow-xs'
+                          : 'text-[#615748] hover:text-[#141414] hover:bg-[#FAF4E2]'
+                      }`}
+                    >
+                      {HERO_DROPS[key].tabLabel}
+                    </button>
+                  )
+                })}
               </div>
-            ))}
 
-            {/* Floating Center Pill */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
-              <div className="rounded-full border border-[#D4AF37]/75 bg-gradient-to-b from-white via-[#FFFDF8] to-[#FAF3DE] px-6 py-4 text-center shadow-[0_10px_28px_rgba(184,134,11,0.18)]">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-[#241A06] to-[#141414] border border-[#D4AF37]/60 text-[#ECC872] font-black text-sm shadow-xs">
-                    ★
-                  </span>
-                  <div className="text-left">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#946B08]">Limited Drop</p>
-                    <p className="font-serif text-lg font-bold text-[#141414]">Spring Artisan Edition</p>
+              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-[#7A5408]">
+                <span>Tap to switch showcase</span>
+              </span>
+            </div>
+
+            {/* Dual Stage Cards Container */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
+              {/* Card 1: Artisan Craft Showcase */}
+              <article className="group relative overflow-hidden rounded-[2rem] border border-[#D4AF37]/50 bg-gradient-to-b from-white via-[#FCF9EE] to-[#FAF2DB] p-3.5 shadow-[0_12px_32px_rgba(184,134,11,0.12)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF37] hover:shadow-[0_16px_40px_rgba(184,134,11,0.20)]">
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#F7F2E6] border border-[#E8DEC7]">
+                  <img
+                    src={currentDrop.craft.image}
+                    alt={currentDrop.craft.title}
+                    onError={(e) => {
+                      e.currentTarget.src = fallbackCraftImage
+                    }}
+                    className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60" />
+
+                  {/* Top Floating Badge */}
+                  <div className="absolute left-2.5 top-2.5">
+                    <span className="inline-flex items-center rounded-full border border-[#D4AF37]/60 bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#5C4106] shadow-xs">
+                      {currentDrop.craft.badge}
+                    </span>
+                  </div>
+
+                  {/* Bottom Image Overlay Tag */}
+                  <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between rounded-xl bg-white/95 border border-[#D4AF37]/50 px-3 py-1.5 shadow-sm">
+                    <span className="text-[11px] font-bold text-[#141414] truncate max-w-[130px]">
+                      {currentDrop.craft.title}
+                    </span>
+                    <span className="font-extrabold text-[#946B08] text-xs">
+                      {currentDrop.craft.price}
+                    </span>
                   </div>
                 </div>
+
+                {/* Card Sub-Info & Action */}
+                <div className="mt-3 px-1 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A5408] block">
+                      {currentDrop.craft.category}
+                    </span>
+                    <p className="text-xs text-[#524B40] font-medium">{currentDrop.craft.artisan}</p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleQuickAdd(currentDrop.craft)}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-[#141414] border border-[#D4AF37]/60 px-3.5 py-1.5 text-xs font-bold text-[#ECC872] shadow-xs transition hover:bg-[#251D0B] active:scale-95 cursor-pointer"
+                    title={`Add ${currentDrop.craft.title} to bag`}
+                  >
+                    <ShoppingBag className="h-3 w-3" />
+                    <span>Bag</span>
+                  </button>
+                </div>
+              </article>
+
+              {/* Card 2: Exotic Aquatics Showcase */}
+              <article className="group relative overflow-hidden rounded-[2rem] border border-teal-500/40 bg-gradient-to-b from-white via-[#F0FDFA] to-[#E6FFFA] p-3.5 shadow-[0_12px_32px_rgba(15,118,110,0.10)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-teal-500 hover:shadow-[0_16px_40px_rgba(15,118,110,0.18)]">
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#F0FDFA] border border-teal-600/20">
+                  <img
+                    src={currentDrop.aquatic.image}
+                    alt={currentDrop.aquatic.title}
+                    onError={(e) => {
+                      e.currentTarget.src = fallbackCraftImage
+                    }}
+                    className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60" />
+
+                  {/* Top Floating Badge */}
+                  <div className="absolute left-2.5 top-2.5">
+                    <span className="inline-flex items-center rounded-full border border-teal-600/40 bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#0F766E] shadow-xs">
+                      {currentDrop.aquatic.badge}
+                    </span>
+                  </div>
+
+                  {/* Bottom Image Overlay Tag */}
+                  <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between rounded-xl bg-white/95 border border-teal-600/40 px-3 py-1.5 shadow-sm">
+                    <span className="text-[11px] font-bold text-[#141414] truncate max-w-[130px]">
+                      {currentDrop.aquatic.title}
+                    </span>
+                    <span className="font-extrabold text-[#0F766E] text-xs">
+                      {currentDrop.aquatic.price}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card Sub-Info & Action */}
+                <div className="mt-3 px-1 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#0F766E] block">
+                      {currentDrop.aquatic.category}
+                    </span>
+                    <p className="text-xs text-[#524B40] font-medium">{currentDrop.aquatic.artisan}</p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleQuickAdd(currentDrop.aquatic)}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-[#141414] border border-teal-500/50 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#1E293B] active:scale-95 cursor-pointer"
+                    title={`Add ${currentDrop.aquatic.title} to bag`}
+                  >
+                    <ShoppingBag className="h-3 w-3 text-teal-400" />
+                    <span>Bag</span>
+                  </button>
+                </div>
+              </article>
+            </div>
+
+            {/* Bottom Quick Feature Strip */}
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[#D4AF37]/35 bg-white/80 px-4 py-2.5 shadow-xs">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#4D3605]">
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-[#FAF0D4] text-[#B8860B] text-[10px] font-black">
+                  ✦
+                </span>
+                <span>Both artisan crafts & live aquatics ship in specialized protective packaging</span>
               </div>
+              <a
+                href="#collection"
+                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#7A5408] hover:text-[#4A3405] transition"
+              >
+                <span>View All 60+ Drops</span>
+                <ArrowRight className="h-3 w-3" />
+              </a>
             </div>
           </div>
         </div>
 
-        {/* Value Perks Row */}
-        <div className="mt-12 grid grid-cols-2 gap-3.5 border-t border-[#E8DCC2] pt-8 sm:grid-cols-4">
-          {[
-            { icon: HeartHandshake, title: 'Direct from Makers', desc: 'Zero middlemen markup' },
-            { icon: Sparkles, title: 'Bespoke Customization', desc: 'Engraving & color choices' },
-            { icon: PackageCheck, title: 'Eco-Friendly Wrap', desc: 'Plastic-free boutique pack' },
-            { icon: ShieldCheck, title: 'Artisan Guarantee', desc: '100% safe transit or refund' },
-          ].map((perk, i) => (
+        {/* Value Perks 4-Column Grid */}
+        <div className="mt-12 grid grid-cols-2 gap-3.5 border-t border-[#E8DCC2] pt-8 lg:grid-cols-4">
+          {VALUE_PERKS.map((perk, i) => (
             <div
               key={i}
-              className="flex items-center gap-3 rounded-2xl border border-[#D4AF37]/45 bg-gradient-to-b from-white via-[#FCF9EE] to-[#FAF4E2] p-3.5 shadow-xs transition-[border-color,box-shadow] duration-200 ease-out hover:border-[#D4AF37] hover:shadow-[0_8px_20px_rgba(184,134,11,0.12)]"
+              className="flex items-start gap-3 rounded-2xl border border-[#D4AF37]/40 bg-gradient-to-b from-white via-[#FCF9EE] to-[#FAF4E2] p-4 shadow-xs transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#D4AF37] hover:shadow-[0_8px_22px_rgba(184,134,11,0.12)]"
             >
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#FAF4E2] to-[#F5E8C4] border border-[#D4AF37]/40 text-[#8F650D]">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#FAF4E2] to-[#F5E8C4] border border-[#D4AF37]/40 text-[#8F650D] shadow-xs">
                 <perk.icon className="h-5 w-5 text-[#8F650D]" />
               </div>
-              <div>
-                <p className="text-xs font-bold text-[#141414]">{perk.title}</p>
-                <p className="text-[11px] text-[#6E6860]">{perk.desc}</p>
+              <div className="min-w-0">
+                <p className="text-xs font-bold text-[#141414] truncate">{perk.title}</p>
+                <p className="text-[11px] text-[#6E6860] mt-0.5">{perk.desc}</p>
+                <span className="mt-1.5 inline-block rounded-full bg-white/90 border border-[#D4AF37]/35 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-[#735206]">
+                  {perk.highlight}
+                </span>
               </div>
             </div>
           ))}
