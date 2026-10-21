@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import gsap from 'gsap'
 import {
   ArrowUpRight,
   HeartHandshake,
@@ -156,7 +157,104 @@ export default function Hero() {
   const { addToCart, setIsCartOpen, setActiveDepartment } = useMarketplace()
   const [activeTab, setActiveTab] = useState<DropKey>('featured')
 
+  const heroContainerRef = useRef<HTMLDivElement>(null)
+  const stageRef = useRef<HTMLDivElement>(null)
+
   const currentDrop = HERO_DROPS[activeTab]
+
+  // GSAP Entrance Animation on Mount
+  useEffect(() => {
+    if (!heroContainerRef.current) return
+
+    const ctx = gsap.context(() => {
+      // Main Entrance Timeline
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+      tl.fromTo(
+        '.gsap-hero-header',
+        { opacity: 0, y: -16 },
+        { opacity: 1, y: 0, duration: 0.7 }
+      )
+        .fromTo(
+          '.gsap-hero-title',
+          { opacity: 0, y: 28 },
+          { opacity: 1, y: 0, duration: 0.8 },
+          '-=0.4'
+        )
+        .fromTo(
+          '.gsap-hero-text',
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          '-=0.5'
+        )
+        .fromTo(
+          '.gsap-hero-cta',
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.08 },
+          '-=0.4'
+        )
+        .fromTo(
+          '.gsap-hero-trust',
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          '-=0.3'
+        )
+        .fromTo(
+          '.gsap-hero-card',
+          { opacity: 0, y: 35, scale: 0.94 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.12 },
+          '-=0.6'
+        )
+        .fromTo(
+          '.gsap-hero-perk',
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.08 },
+          '-=0.4'
+        )
+    }, heroContainerRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  // GSAP Smooth Tab Change Animation
+  useEffect(() => {
+    if (!stageRef.current) return
+    const cards = stageRef.current.querySelectorAll('.gsap-hero-card')
+    gsap.fromTo(
+      cards,
+      { opacity: 0.4, scale: 0.96, y: 8 },
+      { opacity: 1, scale: 1, y: 0, duration: 0.35, stagger: 0.06, ease: 'power2.out' }
+    )
+  }, [activeTab])
+
+  // GSAP Interactive 3D Parallax on Stage
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!stageRef.current || window.innerWidth < 1024) return
+    const rect = stageRef.current.getBoundingClientRect()
+    const xRatio = (e.clientX - rect.left) / rect.width - 0.5
+    const yRatio = (e.clientY - rect.top) / rect.height - 0.5
+
+    gsap.to(stageRef.current.querySelectorAll('.gsap-hero-card'), {
+      x: xRatio * 8,
+      y: yRatio * 8,
+      rotateY: xRatio * 4,
+      rotateX: -yRatio * 4,
+      duration: 0.4,
+      ease: 'power1.out',
+    })
+  }
+
+  const handleMouseLeave = () => {
+    if (!stageRef.current) return
+    gsap.to(stageRef.current.querySelectorAll('.gsap-hero-card'), {
+      x: 0,
+      y: 0,
+      rotateY: 0,
+      rotateX: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+    })
+  }
 
   const handleQuickAdd = (item: ShowcaseCard) => {
     addToCart(
@@ -188,14 +286,17 @@ export default function Hero() {
   return (
     <section id="home" ref={ref} className={`section-shell pt-4 sm:pt-8 ${isVisible ? 'is-visible' : ''}`}>
       {/* Grand Architectural Canvas */}
-      <div className="reveal is-visible relative overflow-hidden rounded-[2.5rem] border border-[#D4AF37]/35 bg-gradient-to-br from-[#FFFFFF] via-[#FDFBF7] to-[#F8F3E6] p-6 sm:p-10 lg:p-12 shadow-[0_20px_50px_rgba(184,134,11,0.08),0_0_1px_1px_rgba(212,175,55,0.25)]">
+      <div
+        ref={heroContainerRef}
+        className="reveal is-visible relative overflow-hidden rounded-[2.5rem] border border-[#D4AF37]/35 bg-gradient-to-br from-[#FFFFFF] via-[#FDFBF7] to-[#F8F3E6] p-6 sm:p-10 lg:p-12 shadow-[0_20px_50px_rgba(184,134,11,0.08),0_0_1px_1px_rgba(212,175,55,0.25)]"
+      >
         {/* Soft Ambient Radiance Highlights */}
         <div className="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-[#FAF0D4]/60 blur-3xl pointer-events-none" />
         <div className="absolute right-0 top-1/3 h-96 w-96 rounded-full bg-[#F5E6BF]/40 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 left-1/3 h-80 w-80 rounded-full bg-[#CCFBF1]/30 blur-3xl pointer-events-none" />
 
         {/* Top Architectural Header Bar */}
-        <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-[#E8DEC7]/80 pb-6">
+        <div className="gsap-hero-header relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-[#E8DEC7]/80 pb-6">
           <div className="flex flex-wrap items-center gap-2.5">
             <span className="section-eyebrow">
               <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" />
@@ -217,14 +318,14 @@ export default function Hero() {
         <div className="relative z-10 mt-8 grid items-center gap-10 lg:grid-cols-[1.05fr_1.15fr] lg:gap-12">
           {/* Left Editorial Column */}
           <div className="max-w-xl">
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[3.75rem] font-bold tracking-tight text-[#141414] leading-[1.08]">
+            <h1 className="gsap-hero-title font-serif text-4xl sm:text-5xl lg:text-[3.75rem] font-bold tracking-tight text-[#141414] leading-[1.08]">
               Where Fine Art <br />
               <span className="italic font-normal text-gold-gradient font-serif">
                 Meets Living Waters.
               </span>
             </h1>
 
-            <p className="body-lead mt-5 sm:text-lg text-[#4A4339] leading-relaxed">
+            <p className="gsap-hero-text body-lead mt-5 sm:text-lg text-[#4A4339] leading-relaxed">
               Discover genuine artisan handmade jewelry, wild botanical resin decor, and clean soy candles alongside exotic captive-bred fish, lush planted aquascapes, and rimless nature aquariums.
             </p>
 
@@ -233,7 +334,7 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={() => handleDepartmentJump('crafts')}
-                className="btn-primary py-4 px-7 text-sm font-semibold tracking-wide shadow-md group cursor-pointer"
+                className="gsap-hero-cta btn-primary py-4 px-7 text-sm font-semibold tracking-wide shadow-md group cursor-pointer"
               >
                 <span>Explore Artisan Drops</span>
                 <ArrowUpRight className="h-4 w-4 stroke-[2.5] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -242,7 +343,7 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={() => handleDepartmentJump('aquarium')}
-                className="inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-4 text-sm font-bold tracking-wide cursor-pointer border border-teal-600/40 bg-gradient-to-r from-[#F0FDFA] to-[#CCFBF1] text-[#0F766E] shadow-sm transition hover:border-teal-600 hover:shadow-md hover:-translate-y-0.5"
+                className="gsap-hero-cta inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-4 text-sm font-bold tracking-wide cursor-pointer border border-teal-600/40 bg-gradient-to-r from-[#F0FDFA] to-[#CCFBF1] text-[#0F766E] shadow-sm transition hover:border-teal-600 hover:shadow-md hover:-translate-y-0.5"
               >
                 <Waves className="h-4 w-4 text-[#0F766E]" />
                 <span>Exotic Fish & Aquatics</span>
@@ -250,14 +351,14 @@ export default function Hero() {
 
               <a
                 href="#customize"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#7A5408] hover:text-[#4A3405] underline underline-offset-4 py-2 px-1 transition"
+                className="gsap-hero-cta inline-flex items-center gap-1.5 text-xs font-bold text-[#7A5408] hover:text-[#4A3405] underline underline-offset-4 py-2 px-1 transition"
               >
                 Custom Studio Builder →
               </a>
             </div>
 
             {/* Social Proof & Guarantee Strip */}
-            <div className="mt-10 flex flex-wrap items-center gap-6 border-t border-[#E8DEC7] pt-6">
+            <div className="gsap-hero-trust mt-10 flex flex-wrap items-center gap-6 border-t border-[#E8DEC7] pt-6">
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-2.5">
                   {[
@@ -294,8 +395,13 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right Dual-World Showcase Bento Stage */}
-          <div className="relative">
+          {/* Right Dual-World Showcase Bento Stage with GSAP Parallax */}
+          <div
+            ref={stageRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className="relative"
+          >
             {/* Interactive Drop Selector Pills */}
             <div className="mb-4 flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5 rounded-full border border-[#D4AF37]/45 bg-white/95 p-1 shadow-xs">
@@ -326,7 +432,7 @@ export default function Hero() {
             {/* Dual Stage Cards Container */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
               {/* Card 1: Artisan Craft Showcase */}
-              <article className="group relative overflow-hidden rounded-[2rem] border border-[#D4AF37]/50 bg-gradient-to-b from-white via-[#FCF9EE] to-[#FAF2DB] p-3.5 shadow-[0_12px_32px_rgba(184,134,11,0.12)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF37] hover:shadow-[0_16px_40px_rgba(184,134,11,0.20)]">
+              <article className="gsap-hero-card group relative overflow-hidden rounded-[2rem] border border-[#D4AF37]/50 bg-gradient-to-b from-white via-[#FCF9EE] to-[#FAF2DB] p-3.5 shadow-[0_12px_32px_rgba(184,134,11,0.12)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF37] hover:shadow-[0_16px_40px_rgba(184,134,11,0.20)]">
                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#F7F2E6] border border-[#E8DEC7]">
                   <img
                     src={currentDrop.craft.image}
@@ -378,7 +484,7 @@ export default function Hero() {
               </article>
 
               {/* Card 2: Exotic Aquatics Showcase */}
-              <article className="group relative overflow-hidden rounded-[2rem] border border-teal-500/40 bg-gradient-to-b from-white via-[#F0FDFA] to-[#E6FFFA] p-3.5 shadow-[0_12px_32px_rgba(15,118,110,0.10)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-teal-500 hover:shadow-[0_16px_40px_rgba(15,118,110,0.18)]">
+              <article className="gsap-hero-card group relative overflow-hidden rounded-[2rem] border border-teal-500/40 bg-gradient-to-b from-white via-[#F0FDFA] to-[#E6FFFA] p-3.5 shadow-[0_12px_32px_rgba(15,118,110,0.10)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-teal-500 hover:shadow-[0_16px_40px_rgba(15,118,110,0.18)]">
                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#F0FDFA] border border-teal-600/20">
                   <img
                     src={currentDrop.aquatic.image}
@@ -449,12 +555,12 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Value Perks 4-Column Grid */}
+        {/* Value Perks 4-Column Grid with GSAP Stagger */}
         <div className="mt-12 grid grid-cols-2 gap-3.5 border-t border-[#E8DCC2] pt-8 lg:grid-cols-4">
           {VALUE_PERKS.map((perk, i) => (
             <div
               key={i}
-              className="flex items-start gap-3 rounded-2xl border border-[#D4AF37]/40 bg-gradient-to-b from-white via-[#FCF9EE] to-[#FAF4E2] p-4 shadow-xs transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#D4AF37] hover:shadow-[0_8px_22px_rgba(184,134,11,0.12)]"
+              className="gsap-hero-perk flex items-start gap-3 rounded-2xl border border-[#D4AF37]/40 bg-gradient-to-b from-white via-[#FCF9EE] to-[#FAF4E2] p-4 shadow-xs transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#D4AF37] hover:shadow-[0_8px_22px_rgba(184,134,11,0.12)]"
             >
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#FAF4E2] to-[#F5E8C4] border border-[#D4AF37]/40 text-[#8F650D] shadow-xs">
                 <perk.icon className="h-5 w-5 text-[#8F650D]" />
