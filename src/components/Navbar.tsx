@@ -115,7 +115,7 @@ export default function Navbar() {
       setCopiedCoupon(true)
       if (showToast) {
         showToast({
-          title: 'Code Copied! ✦',
+          title: 'Code Copied',
           message: 'Code ATELIER10 saved to clipboard for 10% off at checkout.',
           type: 'success',
         })

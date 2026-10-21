@@ -116,7 +116,7 @@ export default function QuickSearchModal() {
                       : 'border border-[#DFCFA6]/50 bg-[#FAF7F0] text-[#5A451A] hover:bg-[#FAF2DE] hover:border-[#D4AF37]/60'
                   }`}
                 >
-                  {cat === 'Fish & Aquarium' ? '🐠 Fish & Aquarium' : cat}
+                  {cat}
                 </button>
               ))}
             </div>

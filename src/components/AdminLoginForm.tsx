@@ -42,7 +42,7 @@ export default function AdminLoginForm({ onLoginSuccess }: { onLoginSuccess?: ()
     setError('')
     if (showToast) {
       showToast({
-        title: 'Demo Filled! ✦',
+        title: 'Demo Filled',
         message: 'Admin credentials pre-filled automatically.',
         type: 'success',
       })

@@ -131,7 +131,7 @@ export default function Footer() {
               onClick={() => setActiveDepartment?.('aquarium')}
               className="hover:text-[#F2D785] transition-colors text-teal-400"
             >
-              🐠 Fish & Aquatics
+              Living Aquatics
             </a>
             <a href="#customize" className="hover:text-[#F2D785] transition-colors">Custom Studio</a>
             <a href="#makers" className="hover:text-[#F2D785] transition-colors">Makers</a>

@@ -17,7 +17,7 @@ export default function Newsletter() {
 
     setIsSubscribed(true)
     showToast({
-      title: 'Welcome to the Circle! 🌸',
+      title: 'Welcome to the Circle',
       message: 'Here is your ₹150 welcome coupon: WELCOME150',
       type: 'success',
     })
@@ -48,7 +48,7 @@ export default function Newsletter() {
                 className="h-12 w-12 rounded-xl object-cover border border-[#D4AF37]/50 shadow-sm"
               />
               <p className="text-xs font-semibold text-[#7A5408]">
-                ✨ Handcrafted boutique packaging • Dispatched across India
+                Handcrafted boutique packaging • Dispatched across India
               </p>
             </div>
           </div>
@@ -59,7 +59,7 @@ export default function Newsletter() {
                 <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-[#FAF4E2] to-[#F5E8C4] border border-[#D4AF37]/50 text-[#8F650D]">
                   <CheckCircle2 className="h-6 w-6 text-[#8F650D]" />
                 </div>
-                <h3 className="mt-3 font-serif text-2xl font-bold text-[#141414]">You're on the list! ✨</h3>
+                <h3 className="mt-3 font-serif text-2xl font-bold text-[#141414]">You're on the list!</h3>
                 <p className="mt-1 text-xs text-[#4A4339]">
                   Use coupon code below at checkout for ₹150 off:
                 </p>
@@ -100,7 +100,7 @@ export default function Newsletter() {
             )}
             {!isSubscribed && (
               <p className="mt-2.5 text-center text-[11px] text-[#635B4F] sm:text-left">
-                🔒 We respect your privacy. Zero spam, unsubscribe anytime.
+                We respect your privacy. Zero spam, unsubscribe anytime.
               </p>
             )}
           </div>

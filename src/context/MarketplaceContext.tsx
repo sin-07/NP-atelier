@@ -324,7 +324,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }
 
     showToast({
-      title: 'Branding Updated Live! 🎨',
+      title: 'Branding Updated Live',
       message: 'New store name & logo applied permanently across the entire website.',
       type: 'success',
     })
@@ -370,7 +370,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       }
 
       showToast({
-        title: 'Saved to Wishlist! 💖',
+        title: 'Saved to Wishlist',
         message: `${title} added to your curated list.`,
         type: 'success',
       })
@@ -410,7 +410,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     })
 
     showToast({
-      title: 'Added to Bag! 🛍️',
+      title: 'Added to Bag',
       message: `${safeQuantity}x "${product.title}" is ready in your cart.`,
       type: 'cart',
     })
@@ -467,7 +467,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     setIsCartOpen(true)
 
     showToast({
-      title: 'Wishlist Moved to Bag! 🎁',
+      title: 'Wishlist Moved to Bag',
       message: `${wishlistedProducts.length} items moved to your bag.`,
       type: 'cart',
     })
@@ -533,7 +533,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     if (availableCoupons[cleanCode]) {
       setAppliedCoupon(availableCoupons[cleanCode])
       showToast({
-        title: 'Coupon Applied! 🎉',
+        title: 'Coupon Applied',
         message: `${availableCoupons[cleanCode].label} has been activated.`,
         type: 'success',
       })
@@ -568,7 +568,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       },
     }))
     showToast({
-      title: 'Coupon Created! 🎟️',
+      title: 'Coupon Created',
       message: `Coupon code "${code}" is now active in store.`,
       type: 'success',
     })
@@ -623,7 +623,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }
 
     showToast({
-      title: 'Order Confirmed! 🌟',
+      title: 'Order Confirmed',
       message: `Order #${newOrder.orderId} placed successfully. We are preparing your shipment!`,
       type: 'success',
     })
@@ -666,7 +666,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     })
 
     showToast({
-      title: `Welcome, ${cleanedName}! 🌸`,
+      title: `Welcome, ${cleanedName}!`,
       message: `Signed in to ${branding.siteName}.`,
       type: 'success',
     })
@@ -724,7 +724,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }
 
     showToast({
-      title: 'Product Listed Live! 🎨',
+      title: 'Product Listed Live',
       message: `"${nextProduct.title}" is now available in ${nextProduct.category}.`,
       type: 'success',
     })
@@ -770,7 +770,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }
 
     showToast({
-      title: 'Product Updated! ✏️',
+      title: 'Product Updated',
       message: 'Product details saved & updated permanently.',
       type: 'success',
     })
@@ -810,7 +810,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     )
 
     showToast({
-      title: 'Review Posted! ⭐',
+      title: 'Review Posted',
       message: 'Thank you for sharing your feedback with the community.',
       type: 'success',
     })

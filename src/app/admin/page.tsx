@@ -323,7 +323,7 @@ export default function AdminPage() {
       if (data.success && data.url) {
         setProductForm((prev) => ({ ...prev, image: data.url }))
         showToast({
-          title: 'Image Uploaded! 📷',
+          title: 'Image Uploaded',
           message: 'Product image successfully uploaded and linked.',
           type: 'success',
         })
@@ -380,7 +380,7 @@ export default function AdminPage() {
           logoType: prev.logoType === 'icon' ? 'image' : prev.logoType,
         }))
         showToast({
-          title: 'Logo Uploaded! 🎨',
+          title: 'Logo Uploaded',
           message: 'New website logo uploaded. Click "Save Branding Settings" to commit.',
           type: 'success',
         })
@@ -493,7 +493,7 @@ export default function AdminPage() {
           {[
             { id: 'overview', label: 'Executive Analytics', icon: LayoutDashboard },
             { id: 'products', label: `Catalog (${products.length})`, icon: Package },
-            { id: 'branding', label: '🎨 Branding Settings', icon: Palette },
+            { id: 'branding', label: 'Branding Settings', icon: Palette },
             { id: 'orders', label: `Orders (${orders.length})`, icon: PackageCheck },
             { id: 'coupons', label: 'Promos & Coupons', icon: Tag },
             { id: 'artisans', label: 'Makers & Aquarists', icon: Users },
@@ -529,7 +529,7 @@ export default function AdminPage() {
                   </div>
                 </div>
                 <p className="mt-3 font-serif text-3xl font-bold text-[#141414]">₹{metrics.totalSales.toFixed(0)}</p>
-                <p className="mt-1 text-[11px] font-semibold text-emerald-700">↗ Across Crafts &amp; Living Aquatics</p>
+                <p className="mt-1 text-[11px] font-semibold text-emerald-700">Across Crafts &amp; Living Aquatics</p>
               </div>
 
               <div className="glass-card p-5">
@@ -577,7 +577,7 @@ export default function AdminPage() {
 
                 <div className="space-y-3.5">
                   <p className="text-xs font-extrabold uppercase tracking-wider text-cyan-900 border-b pb-1">
-                    🐠 Fish &amp; Aquarium Categories
+                    Living Aquatics Categories
                   </p>
                   {aquariumCategories.map((cat) => {
                     const count = products.filter((p: Product) => p.category === cat).length
@@ -599,7 +599,7 @@ export default function AdminPage() {
                   })}
 
                   <p className="text-xs font-extrabold uppercase tracking-wider text-[#855A10] border-b pb-1 pt-3">
-                    🎨 Crafts Categories
+                    Artisan Crafts Categories
                   </p>
                   {craftCategories.map((cat) => {
                     const count = products.filter((p: Product) => p.category === cat).length
@@ -694,8 +694,8 @@ export default function AdminPage() {
                   className="h-10 rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-sm"
                 >
                   <option value="All">All Departments</option>
-                  <option value="aquarium">🐠 Fish &amp; Aquarium</option>
-                  <option value="crafts">🎨 Handmade Crafts</option>
+                  <option value="aquarium">Living Aquatics</option>
+                  <option value="crafts">Handmade Crafts</option>
                 </select>
 
                 {/* Subcategory Filter */}
@@ -708,13 +708,13 @@ export default function AdminPage() {
                   {productDepartment !== 'crafts' &&
                     aquariumCategories.map((c) => (
                       <option key={c} value={c}>
-                        🐠 {c}
+                        {c}
                       </option>
                     ))}
                   {productDepartment !== 'aquarium' &&
                     craftCategories.map((c) => (
                       <option key={c} value={c}>
-                        🎨 {c}
+                        {c}
                       </option>
                     ))}
                 </select>
@@ -776,7 +776,7 @@ export default function AdminPage() {
                                   : 'bg-amber-100 text-amber-900 border border-amber-300'
                               }`}
                             >
-                              {isAqua ? '🐠 Aquarium' : '🎨 Craft'}
+                              {isAqua ? 'Aquatics' : 'Craft'}
                             </span>
                           </td>
                           <td className="p-4 font-semibold text-[#5E4318]">{p.category}</td>
@@ -793,7 +793,7 @@ export default function AdminPage() {
                             </span>
                           </td>
                           <td className="p-4 font-bold text-[#241705]">
-                            ⭐ {p.rating ?? 4.9} ({p.reviews ?? 12})
+                            {p.rating ?? 4.9} ({p.reviews ?? 12} reviews)
                           </td>
                           <td className="p-4 text-right">
                             <div className="flex items-center justify-end gap-2">
@@ -922,11 +922,11 @@ export default function AdminPage() {
                           maxLength={4}
                           value={brandingForm.logoText}
                           onChange={(e) => setBrandingForm({ ...brandingForm, logoText: e.target.value })}
-                          placeholder="✦ or 🐠"
+                          placeholder="NP or ATELIER"
                           className="h-11 w-24 rounded-xl border border-[#d4a338]/40 bg-white px-3.5 text-center text-lg font-bold text-[#141414] outline-none focus:border-[#c59325] shadow-sm"
                         />
                         <div className="flex flex-wrap items-center gap-1.5">
-                          {['✦', '🐠', '🌊', '✿', '🌿', '💎'].map((sym) => (
+                          {['NP', 'ATELIER', 'NPA', 'LUX', 'ART'].map((sym) => (
                             <button
                               key={sym}
                               type="button"
@@ -1067,7 +1067,7 @@ export default function AdminPage() {
 
                   {/* Simulated Mini Announcement Bar */}
                   <div className="mt-4 rounded-t-xl bg-gradient-to-r from-[#FAF4E4] via-[#F6EAC9] to-[#FAF4E4] border border-[#E8D6A7] p-2 text-center text-[10px] font-semibold text-[#4A380A] truncate">
-                    ★ {brandingForm.announcementText || 'Artisan Drops & Living Aquatics Live'}
+                    {brandingForm.announcementText || 'Artisan Drops & Living Aquatics Live'}
                   </div>
 
                   {/* Simulated Mini Header */}
@@ -1114,8 +1114,8 @@ export default function AdminPage() {
                       {brandingForm.tagline}
                     </p>
                     <div className="pt-2 border-t border-white/10 text-[11px] text-[#E8C566] space-y-0.5">
-                      <p>📧 {brandingForm.contactEmail}</p>
-                      <p>📱 {brandingForm.contactPhone}</p>
+                      <p>{brandingForm.contactEmail}</p>
+                      <p>{brandingForm.contactPhone}</p>
                     </div>
                   </div>
                 </div>
@@ -1172,7 +1172,7 @@ export default function AdminPage() {
                               </span>
                               {hasAquatics && (
                                 <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[8px] font-bold text-cyan-800">
-                                  🐠 Aquatic
+                                  Aquatic
                                 </span>
                               )}
                             </div>
@@ -1337,7 +1337,7 @@ export default function AdminPage() {
                 </div>
                 <h4 className="mt-3 font-serif text-xl font-bold text-[#241705]">{artisan.name}</h4>
                 <p className="text-xs font-semibold text-[#5e4318]">{artisan.specialty}</p>
-                <p className="mt-2 text-xs text-[#8C827A]">📍 {artisan.location}</p>
+                <p className="mt-2 text-xs text-[#8C827A]">{artisan.location}</p>
               </div>
             ))}
           </div>
@@ -1386,7 +1386,7 @@ export default function AdminPage() {
                     }`}
                   >
                     <Fish className="h-4 w-4" />
-                    <span>🐠 Fish &amp; Aquarium</span>
+                    <span>Living Aquatics</span>
                   </button>
 
                   <button
@@ -1405,7 +1405,7 @@ export default function AdminPage() {
                     }`}
                   >
                     <Palette className="h-4 w-4" />
-                    <span>🎨 Handmade Crafts</span>
+                    <span>Handmade Crafts</span>
                   </button>
                 </div>
               </div>
@@ -1716,7 +1716,7 @@ export default function AdminPage() {
                               <p className="font-bold text-[#241705]">{item.title}</p>
                               {isAqua && (
                                 <span className="rounded-full bg-cyan-100 px-1.5 py-0.2 text-[8px] font-bold text-cyan-800">
-                                  🐠 Aquatic
+                                  Aquatic
                                 </span>
                               )}
                             </div>

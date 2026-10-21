@@ -28,7 +28,7 @@ export default function AuthModal() {
     })
     if (showToast) {
       showToast({
-        title: 'Demo Filled! ✦',
+        title: 'Demo Filled',
         message: 'Demo collector profile filled.',
         type: 'info',
       })

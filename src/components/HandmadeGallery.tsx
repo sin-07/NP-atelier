@@ -260,7 +260,7 @@ export default function HandmadeGallery() {
                     : 'text-[#5A554E] hover:text-[#141414] hover:bg-[#FAF6ED]'
                 }`}
               >
-                <span>🎨 Handmade Crafts</span>
+                <span>Handmade Crafts</span>
               </button>
 
               <button
@@ -276,7 +276,7 @@ export default function HandmadeGallery() {
                 }`}
               >
                 <Fish className="h-4 w-4 text-cyan-300" />
-                <span>🐠 Fish & Aquarium</span>
+                <span>Living Aquatics</span>
               </button>
             </div>
           </div>
@@ -776,9 +776,9 @@ export default function HandmadeGallery() {
                                 onChange={(e) => setReviewRating(Number(e.target.value))}
                                 className="h-8 rounded-lg border border-[#DDD7CE] bg-white px-2 text-xs text-[#141414] outline-none focus:border-[#141414]"
                               >
-                                <option value={5}>5 ★★★★★</option>
-                                <option value={4}>4 ★★★★☆</option>
-                                <option value={3}>3 ★★★☆☆</option>
+                                <option value={5}>5 Stars (Excellent)</option>
+                                <option value={4}>4 Stars (Very Good)</option>
+                                <option value={3}>3 Stars (Average)</option>
                               </select>
                             </div>
                             <input
