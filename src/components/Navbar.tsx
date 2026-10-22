@@ -25,9 +25,11 @@ import {
   Fish,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
+import gsap from 'gsap'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMenuMounted, setIsMenuMounted] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [userDropdownOpen, setUserDropdownOpen] = useState(false)
@@ -35,6 +37,7 @@ export default function Navbar() {
   const [copiedCoupon, setCopiedCoupon] = useState(false)
   const megamenuTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const userMenuRef = useRef<HTMLDivElement>(null)
+  const mobileDrawerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -75,6 +78,44 @@ export default function Navbar() {
       document.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
+
+  // GSAP Mobile Drawer Entrance and Exit Controller
+  useEffect(() => {
+    if (isMenuOpen) {
+      setIsMenuMounted(true)
+    } else if (isMenuMounted && mobileDrawerRef.current) {
+      gsap.to(mobileDrawerRef.current, {
+        opacity: 0,
+        y: -14,
+        scale: 0.97,
+        duration: 0.22,
+        ease: 'power2.in',
+        onComplete: () => {
+          setIsMenuMounted(false)
+        },
+      })
+    }
+  }, [isMenuOpen, isMenuMounted])
+
+  useEffect(() => {
+    if (isMenuMounted && isMenuOpen && mobileDrawerRef.current) {
+      const drawer = mobileDrawerRef.current
+      const items = drawer.querySelectorAll('.gsap-menu-item')
+
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+      tl.fromTo(
+        drawer,
+        { opacity: 0, y: -20, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.38 }
+      ).fromTo(
+        items,
+        { opacity: 0, y: 14, scale: 0.96 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.32, stagger: 0.045, ease: 'power2.out' },
+        '-=0.2'
+      )
+    }
+  }, [isMenuMounted, isMenuOpen])
 
   const {
     branding,
@@ -571,31 +612,54 @@ export default function Navbar() {
                 </button>
               )}
 
-              {/* Mobile Hamburger Drawer Toggle */}
+              {/* Mobile Hamburger Drawer Toggle with Custom Animated 3-Bar Morph Icon */}
               <button
                 type="button"
                 aria-label="Toggle navigation menu"
+                aria-expanded={isMenuOpen}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="grid h-10 w-10 place-items-center rounded-full border border-[#D8C9A3] bg-white text-[#141414] shadow-xs lg:hidden transition cursor-pointer hover:bg-[#FAF5E8]"
+                className="relative grid h-10 w-10 place-items-center rounded-full border border-[#D8C9A3] bg-white text-[#141414] shadow-xs lg:hidden transition duration-200 cursor-pointer hover:border-[#D4AF37] hover:bg-[#FAF5E8] active:scale-90"
               >
-                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                <div className="relative flex flex-col items-center justify-center w-5 h-5 pointer-events-none">
+                  {/* Top Bar */}
+                  <span
+                    className={`block h-[2px] w-5 rounded-full bg-[#1A1A1A] transition-all duration-300 ease-out origin-center ${
+                      isMenuOpen ? 'rotate-45 translate-y-[6px] bg-[#B8860B]' : ''
+                    }`}
+                  />
+                  {/* Middle Bar */}
+                  <span
+                    className={`block h-[2px] w-3.5 my-[4px] rounded-full bg-[#D4AF37] transition-all duration-200 ease-out self-start ${
+                      isMenuOpen ? 'opacity-0 scale-x-0' : 'opacity-100'
+                    }`}
+                  />
+                  {/* Bottom Bar */}
+                  <span
+                    className={`block h-[2px] w-5 rounded-full bg-[#1A1A1A] transition-all duration-300 ease-out origin-center ${
+                      isMenuOpen ? '-rotate-45 -translate-y-[6px] bg-[#B8860B]' : ''
+                    }`}
+                  />
+                </div>
               </button>
             </div>
           </div>
 
-          {/* 3. Mobile Boutique Drawer Menu */}
-          {isMenuOpen && (
-            <div className="pb-6 lg:hidden animate-in fade-in slide-in-from-top-2 duration-200">
-              <div className="rounded-3xl border border-[#D4AF37]/40 bg-gradient-to-b from-white via-[#FCF9F1] to-[#F8F2E2] p-5 shadow-xl">
+          {/* 3. Mobile Boutique Drawer Menu with GSAP Stagger Entrance */}
+          {isMenuMounted && (
+            <div
+              ref={mobileDrawerRef}
+              className="pb-6 lg:hidden"
+            >
+              <div className="rounded-3xl border border-[#D4AF37]/50 bg-gradient-to-b from-white via-[#FCF9F1] to-[#F8F2E2] p-5 shadow-[0_16px_40px_rgba(20,18,12,0.15),0_0_20px_rgba(212,175,55,0.12)]">
                 {/* Mobile Search Bar */}
-                <div className="mb-4">
+                <div className="gsap-menu-item mb-4">
                   <button
                     type="button"
                     onClick={() => {
                       setIsMenuOpen(false)
                       setIsQuickSearchOpen(true)
                     }}
-                    className="flex w-full items-center justify-between rounded-full border border-[#E5D7B7] bg-white px-4 py-3 text-xs text-[#141414] shadow-xs"
+                    className="flex w-full items-center justify-between rounded-full border border-[#E5D7B7] bg-white px-4 py-3 text-xs text-[#141414] shadow-xs hover:border-[#D4AF37] transition"
                   >
                     <span className="flex items-center gap-2 text-[#5A5040]">
                       <Search className="h-4 w-4 text-[#B8860B]" />
@@ -612,7 +676,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => handleLinkClick('#collection', 'crafts')}
-                    className={`p-3.5 rounded-2xl border text-left transition ${
+                    className={`gsap-menu-item p-3.5 rounded-2xl border text-left transition ${
                       activeDepartment === 'crafts'
                         ? 'border-[#D4AF37] bg-white shadow-sm'
                         : 'border-[#E8DEC7] bg-white/70 hover:bg-white'
@@ -626,7 +690,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => handleLinkClick('#collection', 'aquarium')}
-                    className={`p-3.5 rounded-2xl border text-left transition ${
+                    className={`gsap-menu-item p-3.5 rounded-2xl border text-left transition ${
                       activeDepartment === 'aquarium'
                         ? 'border-teal-500 bg-white shadow-sm'
                         : 'border-[#E8DEC7] bg-white/70 hover:bg-white'
@@ -643,7 +707,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => handleLinkClick('#collection', 'all')}
-                    className="rounded-xl px-4 py-2.5 transition flex items-center justify-between hover:bg-[#FAF4E2] text-[#332C22] text-left"
+                    className="gsap-menu-item rounded-xl px-4 py-2.5 transition flex items-center justify-between hover:bg-[#FAF4E2] text-[#332C22] text-left cursor-pointer"
                   >
                     <span>All Collections</span>
                     <span className="text-xs font-normal opacity-60">→</span>
@@ -651,7 +715,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => handleLinkClick('#makers')}
-                    className="rounded-xl px-4 py-2.5 transition flex items-center justify-between hover:bg-[#FAF4E2] text-[#332C22] text-left"
+                    className="gsap-menu-item rounded-xl px-4 py-2.5 transition flex items-center justify-between hover:bg-[#FAF4E2] text-[#332C22] text-left cursor-pointer"
                   >
                     <span>The Collective</span>
                     <span className="text-xs font-normal opacity-60">→</span>
@@ -666,7 +730,7 @@ export default function Navbar() {
                       setIsMenuOpen(false)
                       setIsSellOpen(true)
                     }}
-                    className="flex w-full items-center justify-center gap-2 rounded-full border border-[#D4AF37]/50 bg-gradient-to-r from-[#FAF5E8] to-[#F5ECD5] py-3 text-xs font-bold text-[#5C4106] shadow-xs cursor-pointer"
+                    className="gsap-menu-item flex w-full items-center justify-center gap-2 rounded-full border border-[#D4AF37]/50 bg-gradient-to-r from-[#FAF5E8] to-[#F5ECD5] py-3 text-xs font-bold text-[#5C4106] shadow-xs cursor-pointer hover:border-[#D4AF37] transition"
                   >
                     <Store className="h-4 w-4 text-[#B8860B]" />
                     <span>Sell With Us • Zero Setup Fees</span>
@@ -679,7 +743,7 @@ export default function Navbar() {
                         logout()
                         setIsMenuOpen(false)
                       }}
-                      className="flex w-full items-center justify-center gap-2 rounded-full border border-[#DDD7CE] bg-white py-2.5 text-xs font-bold text-rose-600 cursor-pointer"
+                      className="gsap-menu-item flex w-full items-center justify-center gap-2 rounded-full border border-[#DDD7CE] bg-white py-2.5 text-xs font-bold text-rose-600 cursor-pointer"
                     >
                       <LogOut className="h-4 w-4" />
                       <span>Sign Out ({user.name})</span>
@@ -691,7 +755,7 @@ export default function Navbar() {
                         setIsMenuOpen(false)
                         setIsAuthOpen(true)
                       }}
-                      className="btn-primary w-full text-xs justify-center py-3 cursor-pointer"
+                      className="gsap-menu-item btn-primary w-full text-xs justify-center py-3 cursor-pointer"
                     >
                       <LogIn className="h-4 w-4" />
                       <span>Sign In / Create Account</span>

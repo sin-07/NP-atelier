@@ -10,9 +10,16 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { useGsapReveal } from '../hooks/useGsapReveal'
 
 export default function Footer() {
   const { branding, setActiveDepartment } = useMarketplace()
+  const { containerRef } = useGsapReveal({
+    selector: '.gsap-footer-item',
+    stagger: 0.1,
+    yOffset: 24,
+    duration: 0.75,
+  })
 
   const siteName = branding?.siteName || 'NP Atelier'
   const tagline = branding?.tagline || 'Where luxury handmade craftsmanship meets exotic aquatic splendor.'
@@ -20,13 +27,13 @@ export default function Footer() {
   const phone = branding?.contactPhone || '+91 93412 97124'
 
   return (
-    <footer id="contact" className="mt-20 bg-gradient-to-b from-[#0E0E0E] via-[#120F09] to-[#0A0805] text-white pt-20 pb-12 border-t border-[#D4AF37]/25 relative overflow-hidden">
+    <footer id="contact" ref={containerRef} className="mt-20 bg-gradient-to-b from-[#0E0E0E] via-[#120F09] to-[#0A0805] text-white pt-20 pb-12 border-t border-[#D4AF37]/25 relative overflow-hidden">
       {/* Subtle top gold halo */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-b from-[#D4AF37]/10 to-transparent blur-2xl pointer-events-none" />
 
       <div className="section-shell relative z-10">
         {/* Tilted Polaroid Gallery Showcase featuring both Crafts and Aquatics */}
-        <div className="flex justify-center items-center pb-12">
+        <div className="gsap-footer-item flex justify-center items-center pb-12">
           <div className="relative flex items-center justify-center -space-x-4">
             {/* Left Polaroid - Craft */}
             <div className="group relative -rotate-6 transition-transform duration-200 ease-out hover:rotate-0 hover:scale-105 hover:z-20">
@@ -79,7 +86,7 @@ export default function Footer() {
         </div>
 
         {/* Central Contact Headline */}
-        <div className="text-center space-y-3 pb-12 border-b border-[#D4AF37]/20">
+        <div className="gsap-footer-item text-center space-y-3 pb-12 border-b border-[#D4AF37]/20">
           <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
             Private Inquiries & Commissions
           </p>
@@ -100,7 +107,7 @@ export default function Footer() {
         </div>
 
         {/* Navigation & Details Grid */}
-        <div className="pt-10 grid gap-10 md:grid-cols-3 items-center text-center md:text-left">
+        <div className="gsap-footer-item pt-10 grid gap-10 md:grid-cols-3 items-center text-center md:text-left">
           {/* Brand Note */}
           <div className="space-y-2">
             <div className="flex items-center justify-center md:justify-start gap-2.5">
@@ -175,7 +182,7 @@ export default function Footer() {
         </div>
 
         {/* Legal & Credits Bottom Bar */}
-        <div className="mt-12 pt-6 border-t border-[#D4AF37]/15 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#A69E90] gap-4">
+        <div className="gsap-footer-item mt-12 pt-6 border-t border-[#D4AF37]/15 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#A69E90] gap-4">
           <p>© {new Date().getFullYear()} {siteName}. All handcrafted items and aquatic specimens protected by guarantee.</p>
           <div className="flex items-center gap-4">
             <span className="text-teal-400 font-semibold">● Live Fish Safe Arrival Guaranteed</span>

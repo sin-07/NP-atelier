@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown, HelpCircle, Plus, Minus } from 'lucide-react'
+import { useGsapReveal } from '../hooks/useGsapReveal'
 
 const FAQS = [
   {
@@ -39,11 +40,17 @@ const FAQS = [
 
 export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState(0)
+  const { containerRef } = useGsapReveal({
+    selector: '.gsap-faq-item',
+    stagger: 0.08,
+    yOffset: 24,
+    duration: 0.7,
+  })
 
   return (
-    <section className="section-shell py-16 sm:py-24">
-      <div className="reveal is-visible space-y-10">
-        <div className="mx-auto max-w-2xl text-center">
+    <section ref={containerRef} className="section-shell py-16 sm:py-24">
+      <div className="space-y-10">
+        <div className="gsap-faq-item mx-auto max-w-2xl text-center">
           <span className="section-eyebrow">
             <HelpCircle className="h-3.5 w-3.5 text-[#B8860B]" /> Questions & Answers
           </span>
@@ -62,7 +69,7 @@ export default function FaqSection() {
             return (
               <div
                 key={index}
-                className="overflow-hidden rounded-2xl border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] via-[#FAF5E8] to-[#F7ECCF]/80 transition duration-200 hover:border-[#D4AF37] shadow-xs"
+                className="gsap-faq-item overflow-hidden rounded-2xl border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] via-[#FAF5E8] to-[#F7ECCF]/80 transition duration-200 hover:border-[#D4AF37] shadow-xs"
               >
                 <button
                   type="button"
@@ -101,7 +108,7 @@ export default function FaqSection() {
         </div>
 
         {/* Still Have Questions Banner */}
-        <div className="mx-auto max-w-lg rounded-2xl border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] to-[#FAF4E5] p-4 text-center shadow-xs">
+        <div className="gsap-faq-item mx-auto max-w-lg rounded-2xl border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] to-[#FAF4E5] p-4 text-center shadow-xs">
           <p className="text-xs text-[#4A4339]">
             Still have questions about a custom piece?{' '}
             <a href="#contact" className="font-bold text-[#7A5408] underline transition hover:text-[#5C4106]">

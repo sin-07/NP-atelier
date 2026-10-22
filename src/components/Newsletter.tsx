@@ -2,16 +2,20 @@
 
 import { useState } from 'react'
 import { CheckCircle2, Mail, Send, Sparkles } from 'lucide-react'
-import { useRevealOnScroll } from '../hooks/useRevealOnScroll'
+import { useGsapReveal } from '../hooks/useGsapReveal'
 import { useMarketplace } from '../context/MarketplaceContext'
 
 export default function Newsletter() {
-  const { ref, isVisible } = useRevealOnScroll()
+  const { containerRef } = useGsapReveal({
+    selector: '.gsap-newsletter-card',
+    yOffset: 30,
+    duration: 0.8,
+  })
   const { showToast, applyCouponCode } = useMarketplace()
   const [email, setEmail] = useState('')
   const [isSubscribed, setIsSubscribed] = useState(false)
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault()
     if (!email.trim()) return
 
@@ -28,8 +32,8 @@ export default function Newsletter() {
   }
 
   return (
-    <section id="newsletter" ref={ref} className={`section-shell py-14 sm:py-20 ${isVisible ? 'is-visible' : ''}`}>
-      <div className="reveal is-visible relative overflow-hidden rounded-[2.5rem] border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] via-[#FAF5E8] to-[#F7ECCF]/90 p-8 sm:p-12 lg:p-16 shadow-[0_16px_45px_rgba(184,134,11,0.12),0_0_20px_rgba(212,175,55,0.10)]">
+    <section id="newsletter" ref={containerRef} className="section-shell py-14 sm:py-20">
+      <div className="gsap-newsletter-card relative overflow-hidden rounded-[2.5rem] border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] via-[#FAF5E8] to-[#F7ECCF]/90 p-8 sm:p-12 lg:p-16 shadow-[0_16px_45px_rgba(184,134,11,0.12),0_0_20px_rgba(212,175,55,0.10)]">
         <div className="relative grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <span className="section-eyebrow">

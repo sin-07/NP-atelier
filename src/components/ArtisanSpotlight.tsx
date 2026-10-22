@@ -2,6 +2,7 @@
 
 import { ArrowRight, Award, MapPin, Star } from 'lucide-react'
 import { fallbackCraftImage } from '../utils/fallbackImage'
+import { useGsapReveal } from '../hooks/useGsapReveal'
 
 const ARTISANS = [
   {
@@ -46,10 +47,16 @@ const ARTISANS = [
 ]
 
 export default function ArtisanSpotlight() {
+  const { containerRef } = useGsapReveal<HTMLElement>({
+    targetSelector: '.gsap-artisan-item',
+    stagger: 0.12,
+    y: 35,
+  })
+
   return (
-    <section className="section-shell py-16 sm:py-24">
-      <div className="reveal is-visible space-y-10">
-        <div className="mx-auto max-w-3xl text-center">
+    <section ref={containerRef} className="section-shell py-16 sm:py-24">
+      <div className="space-y-10">
+        <div className="gsap-artisan-item mx-auto max-w-3xl text-center">
           <span className="section-eyebrow">
             <Award className="h-3.5 w-3.5 text-[#B8860B]" /> Meet the Makers
           </span>
@@ -65,7 +72,7 @@ export default function ArtisanSpotlight() {
           {ARTISANS.map((artisan) => (
             <article
               key={artisan.id}
-              className="group overflow-hidden rounded-[2rem] border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] via-[#FAF5E8] to-[#F7ECCF]/80 p-5 shadow-[0_8px_24px_rgba(184,134,11,0.08)] transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF37] hover:shadow-[0_14px_32px_rgba(184,134,11,0.18)]"
+              className="gsap-artisan-item group overflow-hidden rounded-[2rem] border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] via-[#FAF5E8] to-[#F7ECCF]/80 p-5 shadow-[0_8px_24px_rgba(184,134,11,0.08)] transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF37] hover:shadow-[0_14px_32px_rgba(184,134,11,0.18)]"
             >
               <div className="relative h-44 w-full overflow-hidden rounded-2xl bg-[#F6F3EE] border border-[#E8DEC7]">
                 <img

@@ -33,7 +33,7 @@ import {
   inspirationTiles,
   Product,
 } from '../data/products'
-import { useRevealOnScroll } from '../hooks/useRevealOnScroll'
+import { useGsapReveal } from '../hooks/useGsapReveal'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
 
@@ -69,7 +69,12 @@ const MAKER_ARTICLES = [
 ]
 
 export default function HandmadeGallery() {
-  const { ref, isVisible } = useRevealOnScroll()
+  const { containerRef } = useGsapReveal({
+    selector: '.gsap-gallery-section',
+    stagger: 0.1,
+    yOffset: 24,
+    duration: 0.7,
+  })
   const {
     products,
     branding,
@@ -278,10 +283,10 @@ export default function HandmadeGallery() {
   }
 
   return (
-    <section id="collection" ref={ref} className={`section-shell py-16 sm:py-24 ${isVisible ? 'is-visible' : ''}`}>
-      <div className="reveal is-visible space-y-12">
+    <section id="collection" ref={containerRef} className="section-shell py-16 sm:py-24">
+      <div className="space-y-12">
         {/* Section Header */}
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="gsap-gallery-section mx-auto max-w-3xl text-center">
           <div className="section-eyebrow mb-3.5">
             <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" />
             <span>Curated Marketplace & Living Waters</span>
@@ -347,7 +352,7 @@ export default function HandmadeGallery() {
         </div>
 
         {/* Visual Category Showcase Cards */}
-        <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4 sm:gap-4">
+        <div className="gsap-gallery-section grid grid-cols-2 gap-3.5 sm:grid-cols-4 sm:gap-4">
           {currentCategoryGroups.map((cat) => {
             const isSelected = activeCategory === cat.title
             return (
@@ -391,7 +396,7 @@ export default function HandmadeGallery() {
         </div>
 
         {/* RE-ARCHITECTED LUXURY COMMAND & FILTER SKELETON */}
-        <div className="relative rounded-[2rem] sm:rounded-[2.5rem] border border-[#DFCFA6]/80 bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5ECE0] p-4 sm:p-6 lg:p-7 shadow-[0_20px_50px_rgba(26,20,10,0.06),0_2px_8px_rgba(212,175,55,0.08)] overflow-hidden">
+        <div className="gsap-gallery-section relative rounded-[2rem] sm:rounded-[2.5rem] border border-[#DFCFA6]/80 bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5ECE0] p-4 sm:p-6 lg:p-7 shadow-[0_20px_50px_rgba(26,20,10,0.06),0_2px_8px_rgba(212,175,55,0.08)] overflow-hidden">
           {/* Ambient luxury lighting accents */}
           <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-[#D4AF37]/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-[#008080]/8 blur-3xl" />
@@ -640,7 +645,7 @@ export default function HandmadeGallery() {
         )}
 
         {/* INSPIRATION & JOURNALS */}
-        <section id="inspiration" className="glass-card overflow-hidden p-6 sm:p-10 lg:p-12 border border-[#DFCFA6]/60 bg-gradient-to-b from-white via-[#FCF9F1] to-[#FAF4E5]">
+        <section id="inspiration" className="gsap-gallery-section glass-card overflow-hidden p-6 sm:p-10 lg:p-12 border border-[#DFCFA6]/60 bg-gradient-to-b from-white via-[#FCF9F1] to-[#FAF4E5]">
           <div className="text-center max-w-2xl mx-auto">
             <span className="section-eyebrow">
               <BookOpen className="h-3.5 w-3.5 text-[#141414]" /> Maker & Aquarist Journals

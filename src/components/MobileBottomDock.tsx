@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import gsap from 'gsap'
 import {
   Compass,
   Sparkles,
@@ -13,9 +14,26 @@ import { useMarketplace } from '../context/MarketplaceContext'
 export default function MobileBottomDock() {
   const [mounted, setMounted] = useState(false)
   const [activeTab, setActiveTab] = useState<'home' | 'drops' | 'search' | 'wishlist' | 'bag'>('home')
+  const dockRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     setMounted(true)
+
+    if (dockRef.current) {
+      const ctx = gsap.context(() => {
+        gsap.fromTo(
+          dockRef.current,
+          { y: 50, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.65, delay: 0.25, ease: 'power3.out', clearProps: 'transform' }
+        )
+        gsap.fromTo(
+          '.gsap-dock-btn',
+          { scale: 0.85, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.4, stagger: 0.05, delay: 0.4, ease: 'back.out(1.4)' }
+        )
+      }, dockRef)
+      return () => ctx.revert()
+    }
   }, [])
 
   const {
@@ -48,6 +66,7 @@ export default function MobileBottomDock() {
 
   return (
     <nav
+      ref={dockRef}
       aria-label="Mobile primary navigation"
       className="fixed bottom-3 inset-x-3 max-w-md mx-auto z-40 sm:hidden"
     >
@@ -56,7 +75,7 @@ export default function MobileBottomDock() {
         <button
           type="button"
           onClick={() => handleNavClick('home')}
-          className={`flex flex-col items-center justify-center py-1 px-3 rounded-full transition-all duration-150 active:scale-95 cursor-pointer ${
+          className={`gsap-dock-btn flex flex-col items-center justify-center py-1 px-3 rounded-full transition-all duration-150 active:scale-95 cursor-pointer ${
             activeTab === 'home'
               ? 'text-[#ECC872] bg-[#221B10]'
               : 'text-[#A89876] hover:text-[#ECC872]'
@@ -70,7 +89,7 @@ export default function MobileBottomDock() {
         <button
           type="button"
           onClick={() => handleNavClick('drops')}
-          className={`flex flex-col items-center justify-center py-1 px-3 rounded-full transition-all duration-150 active:scale-95 cursor-pointer ${
+          className={`gsap-dock-btn flex flex-col items-center justify-center py-1 px-3 rounded-full transition-all duration-150 active:scale-95 cursor-pointer ${
             activeTab === 'drops'
               ? 'text-[#ECC872] bg-[#221B10]'
               : 'text-[#A89876] hover:text-[#ECC872]'
@@ -87,7 +106,7 @@ export default function MobileBottomDock() {
             setActiveTab('search')
             setIsQuickSearchOpen(true)
           }}
-          className="flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#A89876] hover:text-[#ECC872] active:scale-95 transition-all duration-150 cursor-pointer"
+          className="gsap-dock-btn flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#A89876] hover:text-[#ECC872] active:scale-95 transition-all duration-150 cursor-pointer"
         >
           <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-tr from-[#D4AF37] to-[#B8860B] text-[#120F0A] shadow-md">
             <Search className="h-4 w-4 stroke-[2.5]" />
@@ -102,7 +121,7 @@ export default function MobileBottomDock() {
             setActiveTab('wishlist')
             setIsWishlistOpen(true)
           }}
-          className="relative flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#A89876] hover:text-[#ECC872] active:scale-95 transition-all duration-150 cursor-pointer"
+          className="gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#A89876] hover:text-[#ECC872] active:scale-95 transition-all duration-150 cursor-pointer"
         >
           <div className="relative">
             <Heart className="h-5 w-5" />
@@ -122,7 +141,7 @@ export default function MobileBottomDock() {
             setActiveTab('bag')
             setIsCartOpen(true)
           }}
-          className="relative flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#A89876] hover:text-[#ECC872] active:scale-95 transition-all duration-150 cursor-pointer"
+          className="gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#A89876] hover:text-[#ECC872] active:scale-95 transition-all duration-150 cursor-pointer"
         >
           <div className="relative">
             <ShoppingBag className="h-5 w-5" />
