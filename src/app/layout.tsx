@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Plus_Jakarta_Sans, Cinzel } from 'next/font/google'
 import '../index.css'
 import { MarketplaceProvider } from '../context/MarketplaceContext'
+import Preloader from '../components/Preloader'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -64,7 +65,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="font-sans antialiased bg-[#F8F5F0] text-[#1A1A1A] selection:bg-[#D4AF37]/25 selection:text-[#382606]">
-        <MarketplaceProvider>{children}</MarketplaceProvider>
+        <MarketplaceProvider>
+          <Preloader />
+          {children}
+        </MarketplaceProvider>
       </body>
     </html>
   )
