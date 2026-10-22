@@ -25,6 +25,8 @@ export default function CheckoutModal() {
   const {
     isCheckoutOpen,
     setIsCheckoutOpen,
+    setIsAuthOpen,
+    showToast,
     branding,
     cartItems,
     cartSubtotal,
@@ -111,9 +113,21 @@ export default function CheckoutModal() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (!user) {
+      showToast({
+        title: 'Sign In Required',
+        message: 'Please log in to your account before placing your order.',
+        type: 'error',
+      })
+      setIsCheckoutOpen(false)
+      setIsAuthOpen(true)
+      return
+    }
     const order = createOrder(formData)
-    setConfirmedOrder(order)
-    setStep('success')
+    if (order) {
+      setConfirmedOrder(order)
+      setStep('success')
+    }
   }
 
   const handleClose = () => {
@@ -151,7 +165,58 @@ export default function CheckoutModal() {
               <X className="h-5 w-5" />
             </button>
 
-            {step === 'form' ? (
+            {!user ? (
+              <div className="p-8 sm:p-12 text-center space-y-6">
+                <div className="mx-auto grid h-20 w-20 place-items-center rounded-3xl bg-gradient-to-br from-[#FAF3DE] to-[#faeed1] border-2 border-[#D4AF37]/50 text-[#855A10] shadow-[0_8px_25px_rgba(212,175,55,0.25)]">
+                  <Lock className="h-9 w-9 text-[#855A10]" />
+                </div>
+
+                <div className="space-y-2">
+                  <span className="section-eyebrow">Customer Account Required</span>
+                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#141414]">
+                    Sign In to Place Your Order
+                  </h3>
+                  <p className="mx-auto max-w-md text-xs sm:text-sm text-[#5A554E] leading-relaxed">
+                    To track your shipment in real time, receive delivery alerts, and safeguard your purchase with our certified live transit &amp; craft warranty, please sign in or register before ordering.
+                  </p>
+                </div>
+
+                {/* Benefits Pill */}
+                <div className="mx-auto max-w-md rounded-2xl border border-[#DFCFA6]/60 bg-[#FAF7F2] p-4 text-left text-xs text-[#5A554E] space-y-2.5 shadow-xs">
+                  <div className="flex items-center gap-2 font-bold text-[#141414]">
+                    <Sparkles className="h-4 w-4 text-[#B8860B]" />
+                    <span>Member Checkout Benefits:</span>
+                  </div>
+                  <ul className="space-y-1.5 list-disc pl-4 text-[11px] text-[#4A4339]">
+                    <li>Auto-populates your verified delivery address and state PIN code</li>
+                    <li>Live SMS, email, and WhatsApp dispatch tracking</li>
+                    <li>Official GST tax invoice and live arrival transit guarantee</li>
+                  </ul>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsCheckoutOpen(false)
+                      setIsAuthOpen(true)
+                    }}
+                    className="btn-gold w-full sm:w-auto px-8 py-3.5 font-bold shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Lock className="h-4 w-4" />
+                    <span>Sign In or Create Account</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    className="w-full sm:w-auto rounded-xl border border-[#DFCFA6] bg-white px-6 py-3.5 text-xs font-bold text-[#5A554E] hover:bg-[#FAF6ED] transition cursor-pointer"
+                  >
+                    Continue Browsing
+                  </button>
+                </div>
+              </div>
+            ) : step === 'form' ? (
               <div>
                 <div className="border-b border-[#DFCFA6]/60 bg-gradient-to-r from-white via-[#FDFBF7] to-[#FAF6ED] px-6 py-6 sm:px-8 text-[#141414]">
                   <div className="flex items-center gap-2">
@@ -161,9 +226,15 @@ export default function CheckoutModal() {
                     </span>
                   </div>
                   <h3 className="mt-2 font-serif text-3xl text-[#141414] font-bold">Complete Your Order</h3>
-                  <p className="mt-1 text-xs text-[#4A4339] sm:text-sm font-medium">
-                    Direct from certified artisans and breeders • Express tracked shipping across India
-                  </p>
+                  <div className="mt-1 flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
+                      <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                      <span>Signed In as {user.name} ({user.email})</span>
+                    </span>
+                    <span className="text-xs text-[#4A4339] font-medium hidden sm:inline">
+                      • Direct from certified artisans and breeders
+                    </span>
+                  </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6 p-6 sm:p-8">

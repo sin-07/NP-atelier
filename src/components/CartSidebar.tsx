@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowRight,
   Gift,
+  Lock,
   Minus,
   Plus,
   ShoppingBag,
@@ -29,6 +30,9 @@ export default function CartSidebar() {
     isCartOpen,
     setIsCartOpen,
     setIsCheckoutOpen,
+    setIsAuthOpen,
+    showToast,
+    user,
     setCartQuantity,
     removeFromCart,
     appliedCoupon,
@@ -50,6 +54,16 @@ export default function CartSidebar() {
   }
 
   const handleProceedToCheckout = () => {
+    if (!user) {
+      showToast({
+        title: 'Sign In Required',
+        message: 'Please sign in or create an account to place your order.',
+        type: 'info',
+      })
+      setIsCartOpen(false)
+      setIsAuthOpen(true)
+      return
+    }
     setIsCartOpen(false)
     setIsCheckoutOpen(true)
   }
@@ -318,11 +332,26 @@ export default function CartSidebar() {
                 <button
                   type="button"
                   onClick={handleProceedToCheckout}
-                  className="btn-gold mt-4 w-full py-3.5 shadow-[0_6px_20px_rgba(212,175,55,0.35)] justify-center font-bold tracking-wide"
+                  className="btn-gold mt-4 w-full py-3.5 shadow-[0_6px_20px_rgba(212,175,55,0.35)] justify-center font-bold tracking-wide flex items-center gap-2"
                 >
-                  Proceed to Secure Checkout
-                  <ArrowRight className="h-4 w-4" />
+                  {!user ? (
+                    <>
+                      <Lock className="h-4 w-4 text-[#1A120B]" />
+                      <span>Sign In to Place Order</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Proceed to Secure Checkout</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </>
+                  )}
                 </button>
+                {!user && (
+                  <p className="mt-2 text-center text-[11px] text-[#8C827A] flex items-center justify-center gap-1 font-medium">
+                    <Lock className="h-3 w-3 text-[#B8860B]" />
+                    <span>Login is required before ordering to track delivery &amp; warranty</span>
+                  </p>
+                )}
               </div>
             )}
           </motion.aside>

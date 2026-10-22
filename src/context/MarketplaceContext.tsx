@@ -590,6 +590,16 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const clearCart = () => setCart([])
 
   const createOrder = async (orderData: any) => {
+    if (!user) {
+      showToast({
+        title: 'Sign In Required',
+        message: 'Please sign in or create an account to place your order.',
+        type: 'error',
+      })
+      setIsAuthOpen(true)
+      return null
+    }
+
     const hasAquariumItem = cartItems.some((i: any) => i.department === 'aquarium')
     const newOrder = {
       orderId: `CRFT-${Math.floor(100000 + Math.random() * 900000)}`,
@@ -600,7 +610,11 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       shipping: shippingCost,
       giftWrap: giftWrapCost,
       total: cartFinalTotal,
-      customer: orderData,
+      customer: {
+        ...orderData,
+        userId: user.email,
+        userEmail: user.email,
+      },
       status: hasAquariumItem ? 'Aquatic Packing & Oxygenation' : 'Handcrafting & Packing',
       estimatedDelivery: new Date(Date.now() + 4 * 86400000).toLocaleDateString('en-IN', {
         month: 'short',

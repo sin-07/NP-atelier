@@ -29,7 +29,16 @@ const DEMO_USER = {
 }
 
 export default function AuthModal() {
-  const { isAuthOpen, setIsAuthOpen, login, user, logout, showToast } = useMarketplace()
+  const {
+    isAuthOpen,
+    setIsAuthOpen,
+    login,
+    user,
+    logout,
+    showToast,
+    cartItems,
+    setIsCheckoutOpen,
+  } = useMarketplace()
   const [mode, setMode] = useState<'login' | 'register'>('register')
   const [isLocatingPin, setIsLocatingPin] = useState(false)
   const [pinStatus, setPinStatus] = useState<string | null>(null)
@@ -106,6 +115,11 @@ export default function AuthModal() {
     e.preventDefault()
     login(formState)
     setIsAuthOpen(false)
+    if (cartItems && cartItems.length > 0) {
+      setTimeout(() => {
+        setIsCheckoutOpen(true)
+      }, 350)
+    }
   }
 
   return (
