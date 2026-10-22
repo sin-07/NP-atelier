@@ -13,6 +13,7 @@ export interface AquaticSpecs {
 
 export interface Product {
   id: number | string
+  _id?: string
   title: string
   price: string
   department?: 'crafts' | 'aquarium'

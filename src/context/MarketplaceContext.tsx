@@ -288,32 +288,38 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const productLookup = useMemo(() => {
     const map = new Map<string | number, Product>()
     for (const item of products) {
+      if (!item) continue
       map.set(item.id, item)
+      map.set(String(item.id), item)
+      if ((item as any)._id) {
+        map.set((item as any)._id, item)
+        map.set(String((item as any)._id), item)
+      }
     }
     return map
   }, [products])
 
   const wishlistedProducts = useMemo(
-    () => wishlist.map((id) => productLookup.get(id)).filter(Boolean),
+    () => wishlist.map((id) => productLookup.get(id) || productLookup.get(String(id))).filter(Boolean),
     [wishlist, productLookup]
   )
 
-  const isWishlisted = useCallback((id: string | number) => wishlist.includes(id), [wishlist])
+  const isWishlisted = useCallback((id: string | number) => wishlist.some((wId) => String(wId) === String(id)), [wishlist])
 
   const toggleWishlist = useCallback((productId: string | number) => {
-    const product = productLookup.get(productId)
+    const product = productLookup.get(productId) || productLookup.get(String(productId))
     const title = product?.title || 'Item'
-    const exists = wishlist.includes(productId)
+    const exists = wishlist.some((wId) => String(wId) === String(productId))
 
     if (exists) {
-      setWishlist((current) => current.filter((id) => id !== productId))
+      setWishlist((current) => current.filter((id) => String(id) !== String(productId)))
       showToast({
         title: 'Removed from Saved',
         message: `${title} was removed from your favorites.`,
         type: 'info',
       })
     } else {
-      setWishlist((current) => (current.includes(productId) ? current : [...current, productId]))
+      setWishlist((current) => (current.some((wId) => String(wId) === String(productId)) ? current : [...current, productId]))
       showToast({
         title: 'Saved to Wishlist',
         message: `${title} added to your curated list.`,
@@ -325,11 +331,17 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const addToCart = (product: any, quantity: number | string = 1, customization: any = null) => {
     const safeQuantity = Math.max(1, Math.floor(Number(quantity)) || 1)
     const cartItemId = customization ? `${product.id}-${Date.now()}` : product.id
+    const targetProdId = String(product.id ?? product._id ?? '')
 
     setCart((current) => {
       const existingIndex = current.findIndex((item) => {
         if (customization) return false
-        return item.productId === product.id && !item.customization
+        return (
+          (String(item.productId) === targetProdId ||
+           String(item.cartItemId) === targetProdId ||
+           (product._id && (String(item.productId) === String(product._id) || String(item.cartItemId) === String(product._id)))) &&
+          !item.customization
+        )
       })
 
       if (existingIndex > -1) {
@@ -345,7 +357,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
         ...current,
         {
           cartItemId,
-          productId: product.id,
+          productId: product.id ?? product._id,
           quantity: safeQuantity,
           customization,
           department: product.department || (aquariumCategories.includes(product.category) ? 'aquarium' : 'crafts'),
@@ -396,7 +408,12 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       const next = [...current]
       for (const prod of wishlistedProducts) {
         if (!prod) continue
-        const existingIdx = next.findIndex((item) => item.productId === prod.id && !item.customization)
+        const existingIdx = next.findIndex(
+          (item) =>
+            (String(item.productId) === String(prod.id) ||
+             (prod._id && String(item.productId) === String(prod._id))) &&
+            !item.customization
+        )
         if (existingIdx > -1) {
           next[existingIdx].quantity += 1
         } else {

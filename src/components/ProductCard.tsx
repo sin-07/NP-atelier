@@ -29,9 +29,13 @@ export default function ProductCard({
   const [plusPop, setPlusPop] = useState(false)
 
   // Find item quantity in active shopping bag
+  const productIdStr = String(product.id ?? product._id ?? '')
+  const productAltIdStr = product._id ? String(product._id) : ''
   const cartItem = cart?.find(
     (item: any) =>
-      (String(item.cartItemId) === String(product.id) || String(item.productId) === String(product.id)) &&
+      (String(item.cartItemId) === productIdStr ||
+       String(item.productId) === productIdStr ||
+       (productAltIdStr && (String(item.productId) === productAltIdStr || String(item.cartItemId) === productAltIdStr))) &&
       !item.customization
   )
   const cartQuantity = cartItem ? cartItem.quantity : 0
@@ -39,7 +43,7 @@ export default function ProductCard({
   const handleAdd = (e: React.MouseEvent) => {
     e.stopPropagation()
     setPlusPop(true)
-    setTimeout(() => setPlusPop(false), 700)
+    setTimeout(() => setPlusPop(false), 900)
     if (onAddToCart) {
       onAddToCart(product, 1)
     } else {
@@ -50,16 +54,18 @@ export default function ProductCard({
   const handleIncrement = (e: React.MouseEvent) => {
     e.stopPropagation()
     setPlusPop(true)
-    setTimeout(() => setPlusPop(false), 700)
-    setCartQuantity(product.id, cartQuantity + 1)
+    setTimeout(() => setPlusPop(false), 900)
+    const targetId = product.id ?? product._id
+    setCartQuantity(targetId, cartQuantity + 1)
   }
 
   const handleDecrement = (e: React.MouseEvent) => {
     e.stopPropagation()
+    const targetId = product.id ?? product._id
     if (cartQuantity <= 1) {
-      removeFromCart(product.id)
+      removeFromCart(targetId)
     } else {
-      setCartQuantity(product.id, cartQuantity - 1)
+      setCartQuantity(targetId, cartQuantity - 1)
     }
   }
 
@@ -106,7 +112,7 @@ export default function ProductCard({
           {cartQuantity > 0 && (
             <div className="absolute left-2 sm:left-3 bottom-2 sm:bottom-3 z-10 flex items-center gap-1.5 rounded-full bg-[#120F0A]/95 border border-[#D4AF37] px-2.5 py-1 text-[10px] sm:text-[11px] font-black text-[#ECC872] shadow-md">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>{cartQuantity} in Bag</span>
+              <span>+{cartQuantity} in Bag</span>
             </div>
           )}
 
@@ -207,7 +213,7 @@ export default function ProductCard({
 
       {/* Footer: Price clearly visible on its own row + Full-width Order Option */}
       <div className="mt-3 sm:mt-4 border-t border-[#E8DEC7] px-0.5 sm:px-1 pt-2.5 sm:pt-3 flex flex-col gap-2">
-        {/* Price & Department row - Never clipped, completely visible */}
+        {/* Price & Department row - Never clipped, with active cart quantity indicator */}
         <div className="flex items-baseline justify-between gap-1.5">
           <div className="flex items-baseline gap-1.5 flex-wrap">
             <span className="text-base sm:text-lg lg:text-xl font-extrabold text-[#141414] tracking-tight whitespace-nowrap">
@@ -223,46 +229,54 @@ export default function ProductCard({
               </span>
             )}
           </div>
-          <span
-            className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full shrink-0 ${
-              product.department === 'aquarium'
-                ? 'bg-teal-50 text-teal-800 border border-teal-200/70'
-                : 'bg-[#FAF4E2] text-[#7A5408] border border-[#D4AF37]/35'
-            }`}
-          >
-            {product.department === 'aquarium' ? 'Aquatics' : 'Artisan'}
-          </span>
+          <div className="flex items-center gap-1 shrink-0">
+            {cartQuantity > 0 && (
+              <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-black text-[#5C3E00] bg-gradient-to-r from-[#FCE6A8] via-[#F8D279] to-[#FCE6A8] border border-[#D4AF37] px-2 py-0.5 rounded-full shadow-2xs whitespace-nowrap animate-in fade-in zoom-in-95 duration-200">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse shrink-0" />
+                +{cartQuantity} in Bag
+              </span>
+            )}
+            <span
+              className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full shrink-0 ${
+                product.department === 'aquarium'
+                  ? 'bg-teal-50 text-teal-800 border border-teal-200/70'
+                  : 'bg-[#FAF4E2] text-[#7A5408] border border-[#D4AF37]/35'
+              }`}
+            >
+              {product.department === 'aquarium' ? 'Aquatics' : 'Artisan'}
+            </span>
+          </div>
         </div>
 
         {/* Full-width Order Option: Stepper when in bag (+1, +2, etc.), Add to Bag button when 0 */}
         <div className="relative w-full">
           {plusPop && (
-            <span className="absolute -top-3.5 right-6 z-20 pointer-events-none inline-flex items-center gap-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#ECC872] text-[#120F0A] text-[10px] font-black px-2 py-0.5 shadow-md animate-bounce">
-              +1
+            <span className="absolute -top-4 right-4 sm:right-6 z-30 pointer-events-none inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F5DE9C] to-[#D4AF37] text-[#141008] text-[10px] sm:text-xs font-black px-2.5 py-0.5 shadow-[0_4px_14px_rgba(212,175,55,0.45)] animate-bounce border border-white">
+              ✨ +1 Added!
             </span>
           )}
 
           {cartQuantity > 0 ? (
             <div
               onClick={(e) => e.stopPropagation()}
-              className="flex w-full items-center justify-between rounded-full bg-gradient-to-r from-[#171410] via-[#221C14] to-[#171410] border border-[#D4AF37] p-1 shadow-[0_4px_16px_rgba(212,175,55,0.20)] select-none"
+              className="flex w-full items-center justify-between rounded-full bg-gradient-to-r from-[#171410] via-[#241E15] to-[#171410] border border-[#D4AF37] p-1 shadow-[0_4px_16px_rgba(212,175,55,0.22)] select-none"
             >
               <button
                 type="button"
                 aria-label={`Decrease ${product.title} quantity`}
                 onClick={handleDecrement}
-                className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-full bg-[#282115] text-[#ECC872] hover:bg-[#3D3220] hover:text-white transition duration-150 active:scale-90 cursor-pointer shrink-0"
-                title="Decrease quantity"
+                className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-full bg-[#2A2114] text-[#ECC872] hover:bg-[#3D3220] hover:text-white transition duration-150 active:scale-90 cursor-pointer shrink-0 border border-[#D4AF37]/30"
+                title="Decrease quantity (-1)"
               >
                 <Minus className="h-3 w-3 sm:h-3.5 sm:w-3.5 stroke-[3]" />
               </button>
 
-              <div className="flex items-center gap-1 sm:gap-1.5 px-1 justify-center flex-1">
-                <span className="text-xs sm:text-sm font-black text-[#FCE6A8] font-mono tracking-tight">
-                  {cartQuantity}
+              <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 justify-center flex-1">
+                <span className="inline-flex items-center justify-center min-w-[28px] px-2 py-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#F5DE9C] text-[#141008] text-xs sm:text-sm font-black font-mono shadow-xs">
+                  +{cartQuantity}
                 </span>
-                <span className="text-[10px] sm:text-xs font-bold text-[#C8B896] uppercase tracking-wider">
-                  in Bag
+                <span className="text-[10px] sm:text-xs font-bold text-[#E8DEC7] uppercase tracking-wider">
+                  Added
                 </span>
               </div>
 
@@ -270,21 +284,27 @@ export default function ProductCard({
                 type="button"
                 aria-label={`Increase ${product.title} quantity`}
                 onClick={handleIncrement}
-                className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-full bg-gradient-to-tr from-[#B8860B] to-[#D4AF37] text-[#141008] hover:brightness-110 transition duration-150 active:scale-90 cursor-pointer shadow-xs shrink-0"
+                className="inline-flex items-center justify-center gap-0.5 px-2.5 h-7 sm:h-8 rounded-full bg-gradient-to-tr from-[#B8860B] via-[#D4AF37] to-[#F5DE9C] text-[#141008] hover:brightness-110 transition duration-150 active:scale-90 cursor-pointer shadow-xs shrink-0 font-extrabold"
                 title="Add one more (+1)"
               >
                 <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5 stroke-[3]" />
+                <span className="text-[10px] font-black">+1</span>
               </button>
             </div>
           ) : (
             <button
               type="button"
               onClick={handleAdd}
-              className="group/btn w-full inline-flex items-center justify-center gap-1.5 rounded-full bg-[#14120E] border border-[#D4AF37]/70 py-2 sm:py-2.5 px-3 text-xs font-bold text-white transition-all duration-200 hover:bg-[#251D0B] hover:border-[#D4AF37] hover:shadow-[0_4px_16px_rgba(20,18,14,0.25)] active:scale-[0.98] shadow-xs whitespace-nowrap cursor-pointer"
+              className="group/btn w-full inline-flex items-center justify-between rounded-full bg-[#14120E] border border-[#D4AF37]/75 py-2 sm:py-2.5 px-3 sm:px-4 text-xs font-bold text-white transition-all duration-200 hover:bg-[#251D0B] hover:border-[#D4AF37] hover:shadow-[0_4px_16px_rgba(20,18,14,0.3)] active:scale-[0.98] shadow-xs whitespace-nowrap cursor-pointer"
               title={`Order ${product.title} - Add to Bag`}
             >
-              <ShoppingBag className="h-3.5 w-3.5 text-[#ECC872] transition-transform duration-200 group-hover/btn:scale-110 shrink-0" />
-              <span className="font-bold text-white tracking-wide">Add to Bag</span>
+              <div className="flex items-center gap-1.5 truncate">
+                <ShoppingBag className="h-3.5 w-3.5 text-[#ECC872] transition-transform duration-200 group-hover/btn:scale-110 shrink-0" />
+                <span className="font-bold text-white tracking-wide truncate">Add to Bag</span>
+              </div>
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black tracking-tight bg-gradient-to-r from-[#D4AF37] to-[#F5DE9C] text-[#141008] shadow-xs shrink-0">
+                +1
+              </span>
             </button>
           )}
         </div>
