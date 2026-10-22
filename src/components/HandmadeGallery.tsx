@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowUpRight,
@@ -15,6 +15,7 @@ import {
   Minus,
   Package,
   Plus,
+  RotateCcw,
   Search,
   ShieldCheck,
   SlidersHorizontal,
@@ -89,6 +90,51 @@ export default function HandmadeGallery() {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null)
   const [quickViewQuantity, setQuickViewQuantity] = useState(1)
   const [activeQuickTab, setActiveQuickTab] = useState('details')
+
+  // Instant luxury shimmer skeleton transition on filter/search switch
+  const [isFiltering, setIsFiltering] = useState(false)
+  const shimmerTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  const triggerFilterShimmer = () => {
+    if (shimmerTimeoutRef.current) {
+      clearTimeout(shimmerTimeoutRef.current)
+    }
+    setIsFiltering(true)
+    shimmerTimeoutRef.current = setTimeout(() => {
+      setIsFiltering(false)
+    }, 220)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (shimmerTimeoutRef.current) {
+        clearTimeout(shimmerTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  const hasActiveFilters =
+    (activeCategory !== 'All' && activeCategory !== 'All Aquatics' && activeCategory !== 'All Crafts') ||
+    activeBadge !== 'All' ||
+    searchTerm.trim().length > 0
+
+  const activeFilterCount =
+    (activeCategory !== 'All' && activeCategory !== 'All Aquatics' && activeCategory !== 'All Crafts' ? 1 : 0) +
+    (activeBadge !== 'All' ? 1 : 0) +
+    (searchTerm.trim().length > 0 ? 1 : 0)
+
+  const handleResetFilters = () => {
+    setActiveCategory(
+      activeDepartment === 'aquarium'
+        ? 'All Aquatics'
+        : activeDepartment === 'crafts'
+        ? 'All Crafts'
+        : 'All'
+    )
+    setActiveBadge('All')
+    setSearchTerm('')
+    triggerFilterShimmer()
+  }
 
   // Review Form in Quick View
   const [reviewName, setReviewName] = useState('')
@@ -326,116 +372,212 @@ export default function HandmadeGallery() {
           })}
         </div>
 
-        {/* Filter Toolbar */}
-        <div className="glass-card space-y-5 p-5 sm:p-6 border border-[#D4AF37]/50 bg-gradient-to-b from-white via-[#FAF5E8] to-[#F7ECCF]/80 shadow-[0_12px_36px_rgba(184,134,11,0.10),0_0_15px_rgba(212,175,55,0.10)]">
-          {/* Search + Category Tabs */}
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="relative w-full lg:max-w-md">
-              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9E7314]" />
-              <input
-                type="search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search fish, aquariums, plants, candles, jewelry..."
-                className="h-12 w-full rounded-full border border-[#E2D2AD] bg-[#FCFBF8] pl-11 pr-4 text-xs text-[#141414] outline-none transition placeholder:text-[#8C827A] focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 focus:bg-white sm:text-sm font-medium shadow-xs"
-              />
-            </div>
+        {/* RE-ARCHITECTED LUXURY COMMAND & FILTER SKELETON */}
+        <div className="relative rounded-[2rem] sm:rounded-[2.5rem] border border-[#DFCFA6]/80 bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5ECE0] p-4 sm:p-6 lg:p-7 shadow-[0_20px_50px_rgba(26,20,10,0.06),0_2px_8px_rgba(212,175,55,0.08)] overflow-hidden">
+          {/* Ambient luxury lighting accents */}
+          <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-[#D4AF37]/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-[#008080]/8 blur-3xl" />
 
-            {/* Dynamic Category Pills */}
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth pb-1 -mx-2 px-2 sm:mx-0 sm:px-0 sm:flex-wrap">
-              {categoryPills.map((cat) => {
-                const isActive =
-                  activeCategory === cat ||
-                  (cat === 'All Aquatics' && activeCategory === 'All Aquatics') ||
-                  (cat === 'All Crafts' && activeCategory === 'All Crafts') ||
-                  (cat === 'All' && activeCategory === 'All')
-                return (
+          <div className="relative space-y-4 sm:space-y-5">
+            {/* TIER 1: Search Console + Controls Toolbar */}
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              {/* Precision Search Input */}
+              <div className="relative flex-1">
+                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#B8860B]" />
+                <input
+                  type="search"
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value)
+                    triggerFilterShimmer()
+                  }}
+                  placeholder="Search live fish, aquascapes, jewelry, soy candles, artisan crafts..."
+                  className="h-12 w-full rounded-2xl border border-[#E0D3B4] bg-white/95 pl-11 pr-24 text-xs sm:text-sm font-medium text-[#1A140B] placeholder:text-[#918574] focus:border-[#B8860B] focus:ring-2 focus:ring-[#D4AF37]/25 shadow-[inset_0_1px_3px_rgba(0,0,0,0.02)] outline-none transition-all"
+                />
+                {searchTerm ? (
                   <button
-                    key={cat}
                     type="button"
-                    onClick={() => setActiveCategory(cat)}
-                    className={`rounded-full px-4 py-2 text-xs font-bold transition duration-200 shrink-0 ${
-                      isActive
-                        ? 'bg-[#141414] border border-[#D4AF37]/70 text-[#ECC872] shadow-sm'
-                        : 'border border-[#E2D2AD] bg-white text-[#4A3810] hover:border-[#D4AF37] hover:bg-[#FAF4E5]'
-                    }`}
+                    onClick={() => {
+                      setSearchTerm('')
+                      triggerFilterShimmer()
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 rounded-full bg-[#FAF3E3] border border-[#E0D3B4] px-2.5 py-1 text-[10px] font-bold text-[#7A5408] hover:bg-[#F2E5C7] transition"
                   >
-                    {cat}
+                    <X className="h-3 w-3" />
+                    <span>Clear</span>
                   </button>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* Secondary Filter Row: Badge Chips + Sort + Layout Toggle */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-[#E8DEC7] pt-4 text-xs">
-            {/* Tag Badges */}
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
-              <span className="font-bold text-[#694806] shrink-0">Filter by:</span>
-              {BADGE_TAGS.map((tag) => {
-                const isSelected = activeBadge === tag
-                return (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => setActiveBadge(tag)}
-                    className={`rounded-full px-3 py-1 font-bold transition ${
-                      isSelected
-                        ? 'bg-[#141414] border border-[#D4AF37]/70 text-[#ECC872] shadow-sm'
-                        : 'border border-[#E2D2AD] bg-[#FAF8F2] text-[#695222] hover:border-[#D4AF37] hover:bg-[#F6ECDA]'
-                    }`}
-                  >
-                    {tag}
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Controls: Sort Dropdown & Layout Grid Toggle */}
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5">
-                <SlidersHorizontal className="h-3.5 w-3.5 text-[#5A554E]" />
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="rounded-full border border-[#DDD7CE] bg-white px-3 py-1.5 font-bold text-[#141414] outline-none focus:border-[#141414] shadow-sm"
-                >
-                  <option value="featured">Featured Drops</option>
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
-                  <option value="rating">Highest Rated</option>
-                </select>
+                ) : (
+                  <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1.5 text-[11px] font-semibold text-[#8C7A58] bg-[#FAF7F0] border border-[#E7DCBF] rounded-lg px-2 py-0.5">
+                    <span>{filteredProducts.length} pieces</span>
+                  </div>
+                )}
               </div>
 
-              {/* Grid / Masonry Toggle */}
-              <div className="flex items-center rounded-full border border-[#DDD7CE] bg-white p-1 shadow-sm">
-                <button
-                  type="button"
-                  title="Grid View"
-                  onClick={() => setLayoutMode('grid')}
-                  className={`grid h-7 w-7 place-items-center rounded-full transition ${
-                    layoutMode === 'grid' ? 'bg-[#141414] text-white font-bold shadow-sm' : 'text-[#5A554E] hover:text-[#141414]'
-                  }`}
-                >
-                  <LayoutGrid className="h-3.5 w-3.5" />
-                </button>
-                <button
-                  type="button"
-                  title="Compact View"
-                  onClick={() => setLayoutMode('masonry')}
-                  className={`grid h-7 w-7 place-items-center rounded-full transition ${
-                    layoutMode === 'masonry' ? 'bg-[#141414] text-white font-bold shadow-sm' : 'text-[#5A554E] hover:text-[#141414]'
-                  }`}
-                >
-                  <Grid2X2 className="h-3.5 w-3.5" />
-                </button>
+              {/* Control Actions: Sort, Grid Mode & Reset */}
+              <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2.5">
+                {/* Sort Selector */}
+                <div className="relative flex items-center rounded-2xl border border-[#E0D3B4] bg-white/95 px-3 py-2 text-xs font-bold text-[#1A140B] shadow-xs hover:border-[#D4AF37] transition">
+                  <SlidersHorizontal className="h-3.5 w-3.5 text-[#B8860B] mr-2 shrink-0" />
+                  <select
+                    value={sortBy}
+                    onChange={(e) => {
+                      setSortBy(e.target.value)
+                      triggerFilterShimmer()
+                    }}
+                    className="bg-transparent font-bold text-[#1A140B] outline-none cursor-pointer pr-4 text-xs"
+                  >
+                    <option value="featured">Featured Drops</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="rating">Highest Rated</option>
+                  </select>
+                </div>
+
+                {/* Layout Density Switcher */}
+                <div className="flex items-center rounded-2xl border border-[#E0D3B4] bg-white/95 p-1 shadow-xs">
+                  <button
+                    type="button"
+                    title="Grid View (4-wide)"
+                    onClick={() => setLayoutMode('grid')}
+                    className={`grid h-8 w-8 place-items-center rounded-xl transition ${
+                      layoutMode === 'grid'
+                        ? 'bg-[#14120E] text-[#F3D789] shadow-sm font-bold'
+                        : 'text-[#5A554E] hover:text-[#141414] hover:bg-[#FAF4E5]'
+                    }`}
+                  >
+                    <LayoutGrid className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    title="Compact View (Dense)"
+                    onClick={() => setLayoutMode('masonry')}
+                    className={`grid h-8 w-8 place-items-center rounded-xl transition ${
+                      layoutMode === 'masonry'
+                        ? 'bg-[#14120E] text-[#F3D789] shadow-sm font-bold'
+                        : 'text-[#5A554E] hover:text-[#141414] hover:bg-[#FAF4E5]'
+                    }`}
+                  >
+                    <Grid2X2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+
+                {/* Reset Filter Button if active */}
+                {hasActiveFilters && (
+                  <button
+                    type="button"
+                    onClick={handleResetFilters}
+                    className="flex items-center gap-1.5 rounded-2xl border border-[#E8C2B8] bg-[#FDF5F3] px-3.5 py-2 text-xs font-bold text-[#B3261E] hover:bg-[#FBE8E5] transition shadow-xs"
+                  >
+                    <RotateCcw className="h-3 w-3" />
+                    <span>Reset ({activeFilterCount})</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* TIER 2: Curated Category Horizontal Rail (No messy 3-line wrapping!) */}
+            <div className="space-y-2 border-t border-[#E8DEC7] pt-3.5">
+              <div className="flex items-center justify-between px-0.5">
+                <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#8C6D23]">
+                  Collections & Specialties
+                </span>
+                <span className="text-[10px] text-[#8C827A] hidden sm:inline">
+                  Scroll horizontally to explore &rarr;
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth py-1 -mx-1 px-1">
+                {categoryPills.map((cat) => {
+                  const isActive =
+                    activeCategory === cat ||
+                    (cat === 'All Aquatics' && activeCategory === 'All Aquatics') ||
+                    (cat === 'All Crafts' && activeCategory === 'All Crafts') ||
+                    (cat === 'All' && activeCategory === 'All')
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => {
+                        setActiveCategory(cat)
+                        triggerFilterShimmer()
+                      }}
+                      className={`rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
+                        isActive
+                          ? 'bg-gradient-to-r from-[#171410] to-[#25201A] text-[#F3D789] border border-[#D4AF37]/80 shadow-[0_4px_16px_rgba(20,18,14,0.18)] scale-[1.02]'
+                          : 'border border-[#E2D4B7] bg-white/90 text-[#4A3810] hover:border-[#D4AF37] hover:bg-[#FAF4E5] shadow-xs'
+                      }`}
+                    >
+                      {isActive && <span className="h-1.5 w-1.5 rounded-full bg-[#ECC872] animate-pulse" />}
+                      <span>{cat}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* TIER 3: Filter Attributes Rail */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-4 border-t border-[#E8DEC7] pt-3 text-xs">
+              <div className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#8C6D23] shrink-0">
+                <Sparkles className="h-3 w-3 text-[#B8860B]" />
+                <span>Filter by:</span>
+              </div>
+
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth pb-1 flex-1">
+                {BADGE_TAGS.map((tag) => {
+                  const isSelected = activeBadge === tag
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => {
+                        setActiveBadge(tag)
+                        triggerFilterShimmer()
+                      }}
+                      className={`rounded-full px-3.5 py-1.5 font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+                        isSelected
+                          ? 'bg-[#14120E] border border-[#D4AF37]/80 text-[#ECC872] shadow-sm'
+                          : 'border border-[#E2D4B7] bg-[#FAF8F2]/90 text-[#695222] hover:border-[#D4AF37] hover:bg-[#F6ECDA]'
+                      }`}
+                    >
+                      {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-[#ECC872]" />}
+                      <span>{tag}</span>
+                    </button>
+                  )
+                })}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Product Cards Display */}
-        {filteredProducts.length === 0 ? (
+        {/* Product Cards Display with Dynamic Shimmer Skeleton */}
+        {isFiltering ? (
+          <div
+            className={`grid gap-3 sm:gap-6 ${
+              layoutMode === 'grid'
+                ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+            }`}
+          >
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div
+                key={`gallery-skeleton-${i}`}
+                className="overflow-hidden rounded-2xl sm:rounded-3xl border border-[#E8DEC7] bg-white/90 p-3 sm:p-4 shadow-sm animate-pulse"
+              >
+                <div className="relative aspect-square w-full rounded-xl sm:rounded-2xl bg-gradient-to-tr from-[#ECE5D8] via-[#F6F1E8] to-[#ECE5D8] flex items-center justify-center">
+                  <Sparkles className="h-5 w-5 text-[#D4AF37]/30" />
+                </div>
+                <div className="mt-3.5 space-y-2.5">
+                  <div className="h-3 w-1/3 rounded-full bg-[#ECE3D0]" />
+                  <div className="h-4 w-4/5 rounded-full bg-[#E5DBC4]" />
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="h-5 w-1/3 rounded-full bg-[#E8DEC7]" />
+                    <div className="h-8 w-16 rounded-full bg-[#E0D5BE]" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filteredProducts.length === 0 ? (
           <div className="glass-card flex flex-col items-center justify-center p-12 text-center">
             <Package className="h-12 w-12 text-[#8C827A]" />
             <h3 className="mt-4 font-serif text-2xl font-bold text-[#141414]">No Items Found</h3>
@@ -444,12 +586,7 @@ export default function HandmadeGallery() {
             </p>
             <button
               type="button"
-              onClick={() => {
-                setActiveDepartment?.('all')
-                setActiveCategory('All')
-                setActiveBadge('All')
-                setSearchTerm('')
-              }}
+              onClick={handleResetFilters}
               className="btn-primary mt-6 text-xs"
             >
               Reset All Filters
