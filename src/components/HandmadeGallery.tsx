@@ -990,8 +990,11 @@ export default function HandmadeGallery() {
 
                       <button
                         type="button"
-                        onClick={() => toggleWishlist(quickViewProduct.id)}
-                        className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[#DDD7CE] bg-white text-[#141414] transition ${
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleWishlist(quickViewProduct.id)
+                        }}
+                        className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[#DDD7CE] bg-white text-[#141414] transition cursor-pointer ${
                           isWishlisted(quickViewProduct.id)
                             ? 'border-rose-400 bg-rose-50 text-rose-500'
                             : 'hover:border-[#141414]'

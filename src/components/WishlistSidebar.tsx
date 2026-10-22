@@ -101,9 +101,12 @@ export default function WishlistSidebar() {
                               <h5 className="truncate font-serif text-lg font-bold text-[#141414]">{product.title}</h5>
                               <button
                                 type="button"
-                                onClick={() => toggleWishlist(product.id)}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  toggleWishlist(product.id)
+                                }}
                                 aria-label="Remove from wishlist"
-                                className="text-[#8C827A] transition hover:text-rose-500"
+                                className="text-[#8C827A] transition hover:text-rose-500 cursor-pointer"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </button>

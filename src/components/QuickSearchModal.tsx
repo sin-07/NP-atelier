@@ -175,8 +175,11 @@ export default function QuickSearchModal() {
                         <button
                           type="button"
                           aria-label="Wishlist item"
-                          onClick={() => toggleWishlist(product.id)}
-                          className={`grid h-8 w-8 place-items-center rounded-full border border-[#DDD7CE] bg-[#FAF8F5] text-[#141414] transition hover:border-rose-400 hover:text-rose-500 ${
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleWishlist(product.id)
+                          }}
+                          className={`grid h-8 w-8 place-items-center rounded-full border border-[#DDD7CE] bg-[#FAF8F5] text-[#141414] transition hover:border-rose-400 hover:text-rose-500 cursor-pointer ${
                             isWishlisted(product.id) ? 'border-rose-400 bg-rose-50 text-rose-500' : ''
                           }`}
                         >

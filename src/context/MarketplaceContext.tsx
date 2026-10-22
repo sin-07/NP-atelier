@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import {
   allInitialProducts,
   aquariumCategories,
@@ -182,10 +182,29 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
   // Toasts
   const [toasts, setToasts] = useState<any[]>([])
+  const lastToastRef = useRef<{ title: string; message: string; timestamp: number } | null>(null)
 
   const showToast = useCallback(({ title, message, type = 'info' }: { title: string; message: string; type?: string }) => {
-    const id = Date.now() + Math.random().toString(36).substring(2, 6)
-    setToasts((current) => [...current, { id, title, message, type }])
+    const now = Date.now()
+    // Suppress duplicate identical toasts within 1200ms
+    if (
+      lastToastRef.current &&
+      lastToastRef.current.title === title &&
+      lastToastRef.current.message === message &&
+      now - lastToastRef.current.timestamp < 1200
+    ) {
+      return
+    }
+    lastToastRef.current = { title, message, timestamp: now }
+
+    const id = now + Math.random().toString(36).substring(2, 6)
+    setToasts((current) => {
+      // Prevent identical duplicate toast from appearing twice simultaneously
+      if (current.some((t) => t.title === title && t.message === message)) {
+        return current
+      }
+      return [...current, { id, title, message, type }]
+    })
 
     setTimeout(() => {
       setToasts((current) => current.filter((t) => t.id !== id))
@@ -354,29 +373,27 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
   const isWishlisted = useCallback((id: string | number) => wishlist.includes(id), [wishlist])
 
-  const toggleWishlist = (productId: string | number) => {
+  const toggleWishlist = useCallback((productId: string | number) => {
     const product = productLookup.get(productId)
     const title = product?.title || 'Item'
+    const exists = wishlist.includes(productId)
 
-    setWishlist((current) => {
-      const exists = current.includes(productId)
-      if (exists) {
-        showToast({
-          title: 'Removed from Saved',
-          message: `${title} was removed from your favorites.`,
-          type: 'info',
-        })
-        return current.filter((id) => id !== productId)
-      }
-
+    if (exists) {
+      setWishlist((current) => current.filter((id) => id !== productId))
+      showToast({
+        title: 'Removed from Saved',
+        message: `${title} was removed from your favorites.`,
+        type: 'info',
+      })
+    } else {
+      setWishlist((current) => (current.includes(productId) ? current : [...current, productId]))
       showToast({
         title: 'Saved to Wishlist',
         message: `${title} added to your curated list.`,
         type: 'success',
       })
-      return [...current, productId]
-    })
-  }
+    }
+  }, [productLookup, wishlist, showToast])
 
   const addToCart = (product: any, quantity: number | string = 1, customization: any = null) => {
     const safeQuantity = Math.max(1, Math.floor(Number(quantity)) || 1)
