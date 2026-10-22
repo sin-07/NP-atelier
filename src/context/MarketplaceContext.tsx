@@ -653,13 +653,27 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     })
   }
 
-  const login = ({ name, email }: { name: string; email: string }) => {
-    const cleanedName = name.trim()
-    const cleanedEmail = email.trim().toLowerCase()
+  const login = (userData: {
+    name: string
+    email: string
+    phone?: string
+    address?: string
+    pincode?: string
+    city?: string
+    state?: string
+    password?: string
+  }) => {
+    const cleanedName = (userData.name || '').trim()
+    const cleanedEmail = (userData.email || '').trim().toLowerCase()
 
     setUser({
       name: cleanedName,
       email: cleanedEmail,
+      phone: userData.phone || '',
+      address: userData.address || '',
+      pincode: userData.pincode || '',
+      city: userData.city || '',
+      state: userData.state || '',
       avatar: buildAvatar(cleanedName),
       avatarImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
       memberSince: '2026',

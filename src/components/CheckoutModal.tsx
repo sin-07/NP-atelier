@@ -1,11 +1,14 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
+  Building2,
   CheckCircle2,
   CreditCard,
+  Loader2,
   Lock,
+  MapPin,
   PackageCheck,
   QrCode,
   ShieldCheck,
@@ -16,6 +19,7 @@ import {
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
+import { lookupPincode } from '../utils/pincodeLookup'
 
 export default function CheckoutModal() {
   const {
@@ -40,20 +44,70 @@ export default function CheckoutModal() {
 
   const [step, setStep] = useState('form') // 'form' | 'success'
   const [confirmedOrder, setConfirmedOrder] = useState<any>(null)
+  const [isLocatingPin, setIsLocatingPin] = useState(false)
+  const [pinStatus, setPinStatus] = useState<string | null>(null)
+
   const [formData, setFormData] = useState({
     fullName: user?.name || '',
     email: user?.email || '',
-    phone: '',
-    address: '',
-    city: '',
-    state: '',
-    zip: '',
+    phone: user?.phone || '',
+    address: user?.address || '',
+    city: user?.city || '',
+    state: user?.state || '',
+    zip: user?.pincode || '',
     paymentMethod: 'upi', // 'upi' | 'card' | 'cod'
     upiId: '',
     cardNumber: '',
     cardExp: '',
     cardCvc: '',
   })
+
+  // Pre-fill user profile address whenever user logs in or modal opens
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        fullName: prev.fullName || user.name || '',
+        email: prev.email || user.email || '',
+        phone: prev.phone || user.phone || '',
+        address: prev.address || user.address || '',
+        city: prev.city || user.city || '',
+        state: prev.state || user.state || '',
+        zip: prev.zip || user.pincode || '',
+      }))
+    }
+  }, [user, isCheckoutOpen])
+
+  // Handle live 6-digit Indian PIN code auto-fill in Checkout
+  const handlePincodeChange = async (pinRaw: string) => {
+    const cleanPin = pinRaw.replace(/[^0-9]/g, '').slice(0, 6)
+    setFormData((prev) => ({ ...prev, zip: cleanPin }))
+
+    if (cleanPin.length === 6) {
+      setIsLocatingPin(true)
+      setPinStatus('Detecting location...')
+      try {
+        const details = await lookupPincode(cleanPin)
+        if (details && details.success) {
+          setFormData((prev) => ({
+            ...prev,
+            zip: cleanPin,
+            city: details.city,
+            state: details.state,
+          }))
+          setPinStatus(`Auto-filled: ${details.city}, ${details.state}`)
+        } else {
+          setPinStatus(null)
+        }
+      } catch {
+        setPinStatus(null)
+      } finally {
+        setIsLocatingPin(false)
+      }
+    } else {
+      setPinStatus(null)
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -191,12 +245,54 @@ export default function CheckoutModal() {
                         />
                       </div>
                       <div>
-                        <label className="mb-1 block text-xs font-bold text-[#141414]">City & State</label>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="block text-xs font-bold text-[#141414] flex items-center gap-1">
+                            <MapPin className="h-3 w-3 text-[#B8860B]" />
+                            <span>Postal PIN Code (6 Digits)</span>
+                          </label>
+                          <span className="text-[10px] text-[#8C7A58]">Auto-fills Location</span>
+                        </div>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            maxLength={6}
+                            required
+                            value={formData.zip}
+                            onChange={(e) => handlePincodeChange(e.target.value)}
+                            placeholder="e.g. 560038"
+                            className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 pr-20 text-sm font-bold text-[#141414] tracking-wider outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40"
+                          />
+                          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                            {isLocatingPin ? (
+                              <Loader2 className="h-3.5 w-3.5 text-[#B8860B] animate-spin" />
+                            ) : formData.zip.length === 6 && formData.city ? (
+                              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                            ) : null}
+                          </div>
+                        </div>
+                        {pinStatus && (
+                          <p className="mt-1 text-[10px] font-semibold text-[#875A10]">
+                            {pinStatus}
+                          </p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-xs font-bold text-[#141414]">City / Capital</label>
                         <input
                           required
                           value={formData.city}
                           onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                          placeholder="Bengaluru, Karnataka"
+                          placeholder="e.g. Bengaluru"
+                          className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-xs font-bold text-[#141414]">State / Union Territory</label>
+                        <input
+                          required
+                          value={formData.state}
+                          onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                          placeholder="e.g. Karnataka"
                           className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
                         />
                       </div>
