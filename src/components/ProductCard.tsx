@@ -159,18 +159,6 @@ export default function ProductCard({
             >
               <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </button>
-            <a
-              href={`https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20order%3A%20${encodeURIComponent(
-                product.title
-              )}%20%E2%80%94%20please%20confirm%20availability!`}
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="grid h-7 w-7 sm:h-9 sm:w-9 place-items-center rounded-full border border-[#D4AF37]/50 bg-white/95 text-[#25D366] shadow-xs transition duration-150 active:scale-90 hover:scale-105 hover:border-[#25D366] hover:bg-[#F0FDF4] cursor-pointer"
-              title="Inquire or order via WhatsApp"
-            >
-              <MessageCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#25D366]" />
-            </a>
           </div>
 
           {/* Desktop Quick Add Overlay on Hover */}
@@ -318,6 +306,21 @@ export default function ProductCard({
               <span className="font-bold text-white tracking-wide">Add to Bag</span>
             </button>
           )}
+
+          {/* Prominent Order on WhatsApp Button directly here on card */}
+          <a
+            href={`https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20order%3A%20${encodeURIComponent(
+              product.title
+            )}%20(${formattedPrice})${activeQuantity > 1 ? `%20(Qty%3A%20${activeQuantity})` : ''}%20%E2%80%94%20please%20confirm%20my%20order!`}
+            target="_blank"
+            rel="noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-full bg-[#132E1C] border border-emerald-500/70 py-2 sm:py-2.5 px-3 text-xs sm:text-sm font-bold text-[#D1FAE5] shadow-[0_2px_10px_rgba(16,185,129,0.2)] hover:bg-[#1A4228] hover:border-emerald-400 hover:text-white transition-all duration-200 active:scale-[0.98] cursor-pointer"
+            title={`Order ${product.title} directly via WhatsApp (+91 93412 97124)`}
+          >
+            <MessageCircle className="h-4 w-4 text-emerald-400 fill-emerald-400/20 shrink-0" />
+            <span className="font-extrabold tracking-wide">Order on WhatsApp</span>
+          </a>
         </div>
       </div>
     </article>
