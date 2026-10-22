@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Eye, Heart, MessageCircle, Minus, Plus, ShoppingBag, Star } from 'lucide-react'
 import { fallbackCraftImage } from '../utils/fallbackImage'
 import { Product } from '../data/products'
@@ -29,8 +29,8 @@ export default function ProductCard({
   const [plusPop, setPlusPop] = useState(false)
 
   // Find item quantity in active shopping bag
-  const productIdStr = String(product.id ?? product._id ?? '')
-  const productAltIdStr = product._id ? String(product._id) : ''
+  const productIdStr = String(product?.id ?? product?._id ?? '')
+  const productAltIdStr = product?._id ? String(product._id) : ''
   const cartItem = cart?.find(
     (item: any) =>
       (String(item.cartItemId) === productIdStr ||
@@ -40,8 +40,17 @@ export default function ProductCard({
   )
   const cartQuantity = cartItem ? cartItem.quantity : 0
 
+  // Optimistic quantity state for instant Flipkart-style response
+  const [optimisticQty, setOptimisticQty] = useState<number | null>(null)
+  const activeQuantity = optimisticQty !== null ? optimisticQty : cartQuantity
+
+  useEffect(() => {
+    setOptimisticQty(cartQuantity)
+  }, [cartQuantity])
+
   const handleAdd = (e: React.MouseEvent) => {
     e.stopPropagation()
+    setOptimisticQty(1)
     setPlusPop(true)
     setTimeout(() => setPlusPop(false), 900)
     if (onAddToCart) {
@@ -53,19 +62,24 @@ export default function ProductCard({
 
   const handleIncrement = (e: React.MouseEvent) => {
     e.stopPropagation()
+    const nextQty = (activeQuantity || 1) + 1
+    setOptimisticQty(nextQty)
     setPlusPop(true)
     setTimeout(() => setPlusPop(false), 900)
     const targetId = product.id ?? product._id
-    setCartQuantity(targetId, cartQuantity + 1)
+    setCartQuantity(targetId, nextQty)
   }
 
   const handleDecrement = (e: React.MouseEvent) => {
     e.stopPropagation()
     const targetId = product.id ?? product._id
-    if (cartQuantity <= 1) {
+    if (activeQuantity <= 1) {
+      setOptimisticQty(0)
       removeFromCart(targetId)
     } else {
-      setCartQuantity(targetId, cartQuantity - 1)
+      const nextQty = activeQuantity - 1
+      setOptimisticQty(nextQty)
+      setCartQuantity(targetId, nextQty)
     }
   }
 
@@ -109,10 +123,10 @@ export default function ProductCard({
           </div>
 
           {/* Active Bag Quantity Pill on Image */}
-          {cartQuantity > 0 && (
+          {activeQuantity > 0 && (
             <div className="absolute left-2 sm:left-3 bottom-2 sm:bottom-3 z-10 flex items-center gap-1.5 rounded-full bg-[#120F0A]/95 border border-[#D4AF37] px-2.5 py-1 text-[10px] sm:text-[11px] font-black text-[#ECC872] shadow-md">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>+{cartQuantity} in Bag</span>
+              <span>+{activeQuantity} in Bag</span>
             </div>
           )}
 
@@ -163,13 +177,13 @@ export default function ProductCard({
           <div className="hidden sm:block absolute inset-x-3 bottom-3 translate-y-2 opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100 z-10">
             <button
               type="button"
-              onClick={cartQuantity > 0 ? handleIncrement : handleAdd}
+              onClick={activeQuantity > 0 ? handleIncrement : handleAdd}
               className="flex w-full items-center justify-center gap-2 rounded-full bg-[#14100A] border border-[#D4AF37]/70 py-2.5 text-xs font-bold text-white shadow-[0_4px_14px_rgba(0,0,0,0.2)] transition hover:bg-[#251D0B] hover:border-[#D4AF37] cursor-pointer"
             >
-              {cartQuantity > 0 ? (
+              {activeQuantity > 0 ? (
                 <>
                   <Plus className="h-3.5 w-3.5 stroke-[2.8] text-[#ECC872]" />
-                  <span>Add Another (+1)</span>
+                  <span>Add Another (+1) • Now +{activeQuantity}</span>
                 </>
               ) : (
                 <>
@@ -230,10 +244,10 @@ export default function ProductCard({
             )}
           </div>
           <div className="flex items-center gap-1 shrink-0">
-            {cartQuantity > 0 && (
+            {activeQuantity > 0 && (
               <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-black text-[#5C3E00] bg-gradient-to-r from-[#FCE6A8] via-[#F8D279] to-[#FCE6A8] border border-[#D4AF37] px-2 py-0.5 rounded-full shadow-2xs whitespace-nowrap animate-in fade-in zoom-in-95 duration-200">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse shrink-0" />
-                +{cartQuantity} in Bag
+                +{activeQuantity} in Bag
               </span>
             )}
             <span
@@ -248,63 +262,60 @@ export default function ProductCard({
           </div>
         </div>
 
-        {/* Full-width Order Option: Stepper when in bag (+1, +2, etc.), Add to Bag button when 0 */}
+        {/* Full-width Order Option: Flipkart-style Stepper [-] +1 [+] when in bag, Add to Bag button when 0 */}
         <div className="relative w-full">
           {plusPop && (
             <span className="absolute -top-4 right-4 sm:right-6 z-30 pointer-events-none inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F5DE9C] to-[#D4AF37] text-[#141008] text-[10px] sm:text-xs font-black px-2.5 py-0.5 shadow-[0_4px_14px_rgba(212,175,55,0.45)] animate-bounce border border-white">
-              ✨ +1 Added!
+              ✨ +{activeQuantity > 1 ? activeQuantity : 1} in Bag!
             </span>
           )}
 
-          {cartQuantity > 0 ? (
+          {activeQuantity > 0 ? (
             <div
               onClick={(e) => e.stopPropagation()}
-              className="flex w-full items-center justify-between rounded-full bg-gradient-to-r from-[#171410] via-[#241E15] to-[#171410] border border-[#D4AF37] p-1 shadow-[0_4px_16px_rgba(212,175,55,0.22)] select-none"
+              className="flex w-full items-center justify-between rounded-full bg-[#14120E] border-2 border-[#D4AF37] p-1 shadow-[0_4px_16px_rgba(212,175,55,0.25)] select-none transition-all duration-200"
             >
+              {/* Minus Button (Flipkart Style) */}
               <button
                 type="button"
                 aria-label={`Decrease ${product.title} quantity`}
                 onClick={handleDecrement}
-                className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-full bg-[#2A2114] text-[#ECC872] hover:bg-[#3D3220] hover:text-white transition duration-150 active:scale-90 cursor-pointer shrink-0 border border-[#D4AF37]/30"
+                className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-full bg-[#2A2114] text-[#ECC872] hover:bg-[#3D301C] hover:text-white transition duration-150 active:scale-85 cursor-pointer shrink-0 border border-[#D4AF37]/40 shadow-xs"
                 title="Decrease quantity (-1)"
               >
-                <Minus className="h-3 w-3 sm:h-3.5 sm:w-3.5 stroke-[3]" />
+                <Minus className="h-3.5 w-3.5 sm:h-4 sm:w-4 stroke-[3]" />
               </button>
 
-              <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 justify-center flex-1">
-                <span className="inline-flex items-center justify-center min-w-[28px] px-2 py-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#F5DE9C] text-[#141008] text-xs sm:text-sm font-black font-mono shadow-xs">
-                  +{cartQuantity}
+              {/* Center Quantity Count (+1, +2, etc.) */}
+              <div className="flex items-center gap-1.5 px-2 justify-center flex-1">
+                <span className="inline-flex items-center justify-center min-w-[32px] px-2.5 py-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#F5DE9C] text-[#141008] text-xs sm:text-sm font-black font-mono shadow-xs">
+                  +{activeQuantity}
                 </span>
-                <span className="text-[10px] sm:text-xs font-bold text-[#E8DEC7] uppercase tracking-wider">
-                  Added
+                <span className="text-[10px] sm:text-xs font-bold text-[#E8DEC7] uppercase tracking-wider whitespace-nowrap">
+                  in Bag
                 </span>
               </div>
 
+              {/* Plus Button (Flipkart Style) */}
               <button
                 type="button"
                 aria-label={`Increase ${product.title} quantity`}
                 onClick={handleIncrement}
-                className="inline-flex items-center justify-center gap-0.5 px-2.5 h-7 sm:h-8 rounded-full bg-gradient-to-tr from-[#B8860B] via-[#D4AF37] to-[#F5DE9C] text-[#141008] hover:brightness-110 transition duration-150 active:scale-90 cursor-pointer shadow-xs shrink-0 font-extrabold"
+                className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-full bg-gradient-to-tr from-[#B8860B] via-[#D4AF37] to-[#F5DE9C] text-[#141008] hover:brightness-110 transition duration-150 active:scale-85 cursor-pointer shadow-xs shrink-0"
                 title="Add one more (+1)"
               >
-                <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5 stroke-[3]" />
-                <span className="text-[10px] font-black">+1</span>
+                <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4 stroke-[3]" />
               </button>
             </div>
           ) : (
             <button
               type="button"
               onClick={handleAdd}
-              className="group/btn w-full inline-flex items-center justify-between rounded-full bg-[#14120E] border border-[#D4AF37]/75 py-2 sm:py-2.5 px-3 sm:px-4 text-xs font-bold text-white transition-all duration-200 hover:bg-[#251D0B] hover:border-[#D4AF37] hover:shadow-[0_4px_16px_rgba(20,18,14,0.3)] active:scale-[0.98] shadow-xs whitespace-nowrap cursor-pointer"
+              className="group/btn w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#14120E] border-2 border-[#D4AF37]/80 py-2 sm:py-2.5 px-4 text-xs sm:text-sm font-bold text-white transition-all duration-200 hover:bg-[#251D0B] hover:border-[#D4AF37] hover:shadow-[0_4px_16px_rgba(20,18,14,0.35)] active:scale-[0.98] shadow-xs whitespace-nowrap cursor-pointer"
               title={`Order ${product.title} - Add to Bag`}
             >
-              <div className="flex items-center gap-1.5 truncate">
-                <ShoppingBag className="h-3.5 w-3.5 text-[#ECC872] transition-transform duration-200 group-hover/btn:scale-110 shrink-0" />
-                <span className="font-bold text-white tracking-wide truncate">Add to Bag</span>
-              </div>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black tracking-tight bg-gradient-to-r from-[#D4AF37] to-[#F5DE9C] text-[#141008] shadow-xs shrink-0">
-                +1
-              </span>
+              <ShoppingBag className="h-3.5 w-3.5 text-[#ECC872] transition-transform duration-200 group-hover/btn:scale-115 shrink-0" />
+              <span className="font-bold text-white tracking-wide">Add to Bag</span>
             </button>
           )}
         </div>

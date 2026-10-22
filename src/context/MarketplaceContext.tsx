@@ -330,8 +330,8 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
   const addToCart = (product: any, quantity: number | string = 1, customization: any = null) => {
     const safeQuantity = Math.max(1, Math.floor(Number(quantity)) || 1)
-    const cartItemId = customization ? `${product.id}-${Date.now()}` : product.id
     const targetProdId = String(product.id ?? product._id ?? '')
+    const cartItemId = customization ? `${targetProdId}-${Date.now()}` : targetProdId
 
     setCart((current) => {
       const existingIndex = current.findIndex((item) => {
@@ -357,7 +357,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
         ...current,
         {
           cartItemId,
-          productId: product.id ?? product._id,
+          productId: targetProdId,
           quantity: safeQuantity,
           customization,
           department: product.department || (aquariumCategories.includes(product.category) ? 'aquarium' : 'crafts'),
