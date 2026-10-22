@@ -36,21 +36,50 @@ export default function MobileBottomDock() {
     }
   }, [])
 
+  // Auto-sync active tab with scroll position smoothly
+  useEffect(() => {
+    let ticking = false
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY
+          const collectionEl = document.getElementById('collection')
+          const collectionTop = collectionEl ? collectionEl.offsetTop - 140 : 600
+
+          if (scrollY >= collectionTop - 100) {
+            setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'drops'))
+          } else {
+            setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'home'))
+          }
+          ticking = false
+        })
+        ticking = true
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   const {
     wishlist,
     cartCount,
     setIsCartOpen,
     setIsWishlistOpen,
     setIsQuickSearchOpen,
-    setActiveDepartment,
   } = useMarketplace()
 
   const scrollToAnchor = (href: string) => {
-    if (typeof window !== 'undefined') {
-      const target = document.querySelector(href)
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' })
-      }
+    if (typeof window === 'undefined') return
+    if (href === '#home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+    const target = document.querySelector(href)
+    if (target) {
+      const rect = target.getBoundingClientRect()
+      const top = rect.top + window.pageYOffset - 85
+      window.scrollTo({ top, behavior: 'smooth' })
     }
   }
 
@@ -59,8 +88,9 @@ export default function MobileBottomDock() {
     if (tab === 'home') {
       scrollToAnchor('#home')
     } else if (tab === 'drops') {
-      if (setActiveDepartment) setActiveDepartment('all')
-      scrollToAnchor('#collection')
+      requestAnimationFrame(() => {
+        scrollToAnchor('#collection')
+      })
     }
   }
 
@@ -68,16 +98,16 @@ export default function MobileBottomDock() {
     <nav
       ref={dockRef}
       aria-label="Mobile primary navigation"
-      className="fixed bottom-3 inset-x-3 max-w-md mx-auto z-40 sm:hidden"
+      className="fixed bottom-3 inset-x-3 max-w-md mx-auto z-40 sm:hidden transform-gpu will-change-transform"
     >
-      <div className="flex items-center justify-around rounded-full border border-[#D4AF37]/50 bg-[#120F0A]/96 p-1.5 shadow-[0_14px_40px_rgba(0,0,0,0.45),0_0_15px_rgba(212,175,55,0.15)] backdrop-blur-sm">
+      <div className="flex items-center justify-around rounded-full border border-[#D4AF37]/60 bg-[#120F0A] p-1.5 shadow-[0_14px_40px_rgba(0,0,0,0.55),0_0_20px_rgba(212,175,55,0.15)]">
         {/* 1. Home / Atelier */}
         <button
           type="button"
           onClick={() => handleNavClick('home')}
-          className={`gsap-dock-btn flex flex-col items-center justify-center py-1 px-3 rounded-full transition-all duration-150 active:scale-95 cursor-pointer ${
+          className={`gsap-dock-btn flex flex-col items-center justify-center py-1.5 px-3.5 rounded-full transition-all duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'home'
-              ? 'text-[#ECC872] bg-[#221B10]'
+              ? 'text-[#ECC872] bg-[#221B10] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]'
               : 'text-[#A89876] hover:text-[#ECC872]'
           }`}
         >
@@ -89,9 +119,9 @@ export default function MobileBottomDock() {
         <button
           type="button"
           onClick={() => handleNavClick('drops')}
-          className={`gsap-dock-btn flex flex-col items-center justify-center py-1 px-3 rounded-full transition-all duration-150 active:scale-95 cursor-pointer ${
+          className={`gsap-dock-btn flex flex-col items-center justify-center py-1.5 px-3.5 rounded-full transition-all duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'drops'
-              ? 'text-[#ECC872] bg-[#221B10]'
+              ? 'text-[#ECC872] bg-[#221B10] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]'
               : 'text-[#A89876] hover:text-[#ECC872]'
           }`}
         >

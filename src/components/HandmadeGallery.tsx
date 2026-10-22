@@ -97,28 +97,6 @@ export default function HandmadeGallery() {
   const [quickViewQuantity, setQuickViewQuantity] = useState(1)
   const [activeQuickTab, setActiveQuickTab] = useState('details')
 
-  // Instant luxury shimmer skeleton transition on filter/search switch
-  const [isFiltering, setIsFiltering] = useState(false)
-  const shimmerTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-  const triggerFilterShimmer = () => {
-    if (shimmerTimeoutRef.current) {
-      clearTimeout(shimmerTimeoutRef.current)
-    }
-    setIsFiltering(true)
-    shimmerTimeoutRef.current = setTimeout(() => {
-      setIsFiltering(false)
-    }, 220)
-  }
-
-  useEffect(() => {
-    return () => {
-      if (shimmerTimeoutRef.current) {
-        clearTimeout(shimmerTimeoutRef.current)
-      }
-    }
-  }, [])
-
   const hasActiveFilters =
     (activeCategory !== 'All' && activeCategory !== 'All Aquatics' && activeCategory !== 'All Crafts') ||
     activeBadge !== 'All' ||
@@ -139,7 +117,6 @@ export default function HandmadeGallery() {
     )
     setActiveBadge('All')
     setSearchTerm('')
-    triggerFilterShimmer()
   }
 
   // Review Form in Quick View
@@ -413,7 +390,6 @@ export default function HandmadeGallery() {
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value)
-                    triggerFilterShimmer()
                   }}
                   placeholder="Search live fish, aquascapes, jewelry, soy candles, artisan crafts..."
                   className="h-12 w-full rounded-2xl border border-[#E0D3B4] bg-white/95 pl-11 pr-24 text-xs sm:text-sm font-medium text-[#1A140B] placeholder:text-[#918574] focus:border-[#B8860B] focus:ring-2 focus:ring-[#D4AF37]/25 shadow-[inset_0_1px_3px_rgba(0,0,0,0.02)] outline-none transition-all"
@@ -423,7 +399,6 @@ export default function HandmadeGallery() {
                     type="button"
                     onClick={() => {
                       setSearchTerm('')
-                      triggerFilterShimmer()
                     }}
                     className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 rounded-full bg-[#FAF3E3] border border-[#E0D3B4] px-2.5 py-1 text-[10px] font-bold text-[#7A5408] hover:bg-[#F2E5C7] transition"
                   >
@@ -446,7 +421,6 @@ export default function HandmadeGallery() {
                     value={sortBy}
                     onChange={(e) => {
                       setSortBy(e.target.value)
-                      triggerFilterShimmer()
                     }}
                     className="bg-transparent font-bold text-[#1A140B] outline-none cursor-pointer pr-4 text-xs"
                   >
@@ -523,7 +497,6 @@ export default function HandmadeGallery() {
                       type="button"
                       onClick={() => {
                         setActiveCategory(cat)
-                        triggerFilterShimmer()
                       }}
                       className={`rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
                         isActive
@@ -555,7 +528,6 @@ export default function HandmadeGallery() {
                       type="button"
                       onClick={() => {
                         setActiveBadge(tag)
-                        triggerFilterShimmer()
                       }}
                       className={`rounded-full px-3.5 py-1.5 font-bold transition-all shrink-0 flex items-center gap-1.5 ${
                         isSelected
@@ -573,35 +545,8 @@ export default function HandmadeGallery() {
           </div>
         </div>
 
-        {/* Product Cards Display with Dynamic Shimmer Skeleton */}
-        {isFiltering ? (
-          <div
-            className={`grid gap-3 sm:gap-6 ${
-              layoutMode === 'grid'
-                ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
-            }`}
-          >
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div
-                key={`gallery-skeleton-${i}`}
-                className="overflow-hidden rounded-2xl sm:rounded-3xl border border-[#E8DEC7] bg-white/90 p-3 sm:p-4 shadow-sm animate-pulse"
-              >
-                <div className="relative aspect-square w-full rounded-xl sm:rounded-2xl bg-gradient-to-tr from-[#ECE5D8] via-[#F6F1E8] to-[#ECE5D8] flex items-center justify-center">
-                  <Sparkles className="h-5 w-5 text-[#D4AF37]/30" />
-                </div>
-                <div className="mt-3.5 space-y-2.5">
-                  <div className="h-3 w-1/3 rounded-full bg-[#ECE3D0]" />
-                  <div className="h-4 w-4/5 rounded-full bg-[#E5DBC4]" />
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="h-5 w-1/3 rounded-full bg-[#E8DEC7]" />
-                    <div className="h-8 w-16 rounded-full bg-[#E0D5BE]" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : filteredProducts.length === 0 ? (
+        {/* Product Cards Display with Instant Zero-Lag GPU Transitions */}
+        {filteredProducts.length === 0 ? (
           <div className="glass-card flex flex-col items-center justify-center p-12 text-center">
             <Package className="h-12 w-12 text-[#8C827A]" />
             <h3 className="mt-4 font-serif text-2xl font-bold text-[#141414]">No Items Found</h3>
@@ -618,16 +563,17 @@ export default function HandmadeGallery() {
           </div>
         ) : (
           <div
-            className={`grid gap-3 sm:gap-6 ${
+            className={`grid gap-3 sm:gap-6 transition-all duration-200 ${
               layoutMode === 'grid'
                 ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
                 : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
             }`}
           >
-            {filteredProducts.map((prod: Product) => (
+            {filteredProducts.map((prod: Product, idx: number) => (
               <ProductCard
                 key={prod.id}
                 product={prod}
+                priority={idx < 4}
                 isWishlisted={isWishlisted(prod.id)}
                 onWishlistToggle={() => toggleWishlist(prod.id)}
                 onQuickView={() => {

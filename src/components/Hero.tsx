@@ -215,14 +215,37 @@ export default function Hero() {
     return () => ctx.revert()
   }, [])
 
-  // GSAP Smooth Tab Change Animation
+  // Preload Hero drop images so switching is instant and 0-latency
   useEffect(() => {
+    const imagesToPreload = [
+      HERO_DROPS.featured.craft.image,
+      HERO_DROPS.featured.aquatic.image,
+      HERO_DROPS.botanical.craft.image,
+      HERO_DROPS.botanical.aquatic.image,
+      HERO_DROPS.monogram.craft.image,
+      HERO_DROPS.monogram.aquatic.image,
+    ]
+    imagesToPreload.forEach((src) => {
+      if (typeof window !== 'undefined' && src) {
+        const img = new Image()
+        img.src = src
+      }
+    })
+  }, [])
+
+  // GSAP Silky Smooth Tab Change Animation (skips initial mount)
+  const isHeroTabInitial = useRef(true)
+  useEffect(() => {
+    if (isHeroTabInitial.current) {
+      isHeroTabInitial.current = false
+      return
+    }
     if (!stageRef.current) return
     const cards = stageRef.current.querySelectorAll('.gsap-hero-card')
     gsap.fromTo(
       cards,
-      { opacity: 0.4, scale: 0.96, y: 8 },
-      { opacity: 1, scale: 1, y: 0, duration: 0.35, stagger: 0.06, ease: 'power2.out' }
+      { opacity: 0.6, y: 6 },
+      { opacity: 1, y: 0, duration: 0.22, stagger: 0.04, ease: 'power2.out', clearProps: 'opacity,transform' }
     )
   }, [activeTab])
 

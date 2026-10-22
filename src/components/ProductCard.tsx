@@ -9,6 +9,7 @@ import { useMarketplace } from '../context/MarketplaceContext'
 export interface ProductCardProps {
   product: Product | any
   isWishlisted?: boolean
+  priority?: boolean
   onWishlistToggle?: () => void
   onQuickView?: () => void
   onAddToCart?: (product: any, quantity?: number) => void
@@ -19,6 +20,7 @@ export interface ProductCardProps {
 export default function ProductCard({
   product,
   isWishlisted = false,
+  priority = false,
   onWishlistToggle,
   onQuickView,
   onAddToCart,
@@ -93,7 +95,7 @@ export default function ProductCard({
 
   return (
     <article
-      className={`group relative flex flex-col justify-between overflow-hidden rounded-[1.4rem] sm:rounded-[2rem] border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF9] via-[#FAF5E8] to-[#F7ECCF]/80 p-2.5 sm:p-4 shadow-[0_4px_16px_rgba(184,134,11,0.06)] sm:shadow-[0_8px_24px_rgba(184,134,11,0.08)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF37] hover:shadow-[0_14px_32px_rgba(184,134,11,0.18)] ${className}`}
+      className={`card-smooth-appear group relative flex flex-col justify-between overflow-hidden rounded-[1.4rem] sm:rounded-[2rem] border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF9] via-[#FAF5E8] to-[#F7ECCF]/80 p-2.5 sm:p-4 shadow-[0_4px_16px_rgba(184,134,11,0.06)] sm:shadow-[0_8px_24px_rgba(184,134,11,0.08)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF37] hover:shadow-[0_14px_32px_rgba(184,134,11,0.18)] ${className}`}
     >
       <div>
         {/* Image Container with Floating Action Pills */}
@@ -101,7 +103,7 @@ export default function ProductCard({
           <img
             src={product.image}
             alt={product.title}
-            loading="lazy"
+            loading={priority ? 'eager' : 'lazy'}
             decoding="async"
             onError={(event) => {
               event.currentTarget.src = fallbackCraftImage
