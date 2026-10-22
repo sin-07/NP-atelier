@@ -369,13 +369,19 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
     setCart((current) =>
       current.map((item) =>
-        (item.cartItemId || item.productId) === cartItemId ? { ...item, quantity: targetQty } : item
+        String(item.cartItemId) === String(cartItemId) || String(item.productId) === String(cartItemId)
+          ? { ...item, quantity: targetQty }
+          : item
       )
     )
   }
 
   const removeFromCart = (cartItemId: string | number) => {
-    setCart((current) => current.filter((item) => (item.cartItemId || item.productId) !== cartItemId))
+    setCart((current) =>
+      current.filter(
+        (item) => String(item.cartItemId) !== String(cartItemId) && String(item.productId) !== String(cartItemId)
+      )
+    )
     showToast({
       title: 'Item Removed',
       message: 'Product removed from your shopping bag.',

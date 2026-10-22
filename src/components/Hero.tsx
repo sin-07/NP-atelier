@@ -11,6 +11,8 @@ import {
   Star,
   Users,
   Leaf,
+  Minus,
+  Plus,
   ShoppingBag,
   Waves,
   ArrowRight,
@@ -154,13 +156,29 @@ const VALUE_PERKS = [
 
 export default function Hero() {
   const { ref, isVisible } = useRevealOnScroll()
-  const { addToCart, setIsCartOpen, setActiveDepartment } = useMarketplace()
+  const { cart, addToCart, setCartQuantity, removeFromCart, setIsCartOpen, setActiveDepartment } = useMarketplace()
   const [activeTab, setActiveTab] = useState<DropKey>('featured')
 
   const heroContainerRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
 
   const currentDrop = HERO_DROPS[activeTab]
+
+  const craftInCart = cart?.find(
+    (item: any) =>
+      (String(item.cartItemId) === String(currentDrop.craft.id) ||
+        String(item.productId) === String(currentDrop.craft.id)) &&
+      !item.customization
+  )
+  const craftQty = craftInCart ? craftInCart.quantity : 0
+
+  const aquaticInCart = cart?.find(
+    (item: any) =>
+      (String(item.cartItemId) === String(currentDrop.aquatic.id) ||
+        String(item.productId) === String(currentDrop.aquatic.id)) &&
+      !item.customization
+  )
+  const aquaticQty = aquaticInCart ? aquaticInCart.quantity : 0
 
   // GSAP Entrance Animation on Mount
   useEffect(() => {
@@ -472,15 +490,45 @@ export default function Hero() {
                     <p className="text-xs text-[#524B40] font-medium">{currentDrop.craft.artisan}</p>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handleQuickAdd(currentDrop.craft)}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-[#141414] border border-[#D4AF37]/60 px-3.5 py-1.5 text-xs font-bold text-[#ECC872] shadow-xs transition hover:bg-[#251D0B] active:scale-95 cursor-pointer"
-                    title={`Add ${currentDrop.craft.title} to bag`}
-                  >
-                    <ShoppingBag className="h-3 w-3" />
-                    <span>Bag</span>
-                  </button>
+                  {craftQty > 0 ? (
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center gap-1 rounded-full bg-[#141414] border border-[#D4AF37]/70 p-1 shadow-xs"
+                    >
+                      <button
+                        type="button"
+                        aria-label="Decrease quantity"
+                        onClick={() => {
+                          if (craftQty <= 1) removeFromCart(currentDrop.craft.id)
+                          else setCartQuantity(currentDrop.craft.id, craftQty - 1)
+                        }}
+                        className="grid h-6 w-6 place-items-center rounded-full bg-[#251E14] text-[#ECC872] hover:bg-[#382D1C] hover:text-white transition active:scale-90 cursor-pointer"
+                      >
+                        <Minus className="h-3 w-3 stroke-[2.8]" />
+                      </button>
+                      <span className="px-1 text-xs font-black text-[#FCE6A8] min-w-5 text-center font-mono">
+                        {craftQty}
+                      </span>
+                      <button
+                        type="button"
+                        aria-label="Increase quantity"
+                        onClick={() => setCartQuantity(currentDrop.craft.id, craftQty + 1)}
+                        className="grid h-6 w-6 place-items-center rounded-full bg-gradient-to-tr from-[#B8860B] to-[#D4AF37] text-[#141008] hover:brightness-110 transition active:scale-90 cursor-pointer shadow-xs"
+                      >
+                        <Plus className="h-3 w-3 stroke-[2.8]" />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleQuickAdd(currentDrop.craft)}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[#141414] border border-[#D4AF37]/60 px-3.5 py-1.5 text-xs font-bold text-[#ECC872] shadow-xs transition hover:bg-[#251D0B] active:scale-95 cursor-pointer"
+                      title={`Add ${currentDrop.craft.title} to bag`}
+                    >
+                      <ShoppingBag className="h-3 w-3" />
+                      <span>Bag</span>
+                    </button>
+                  )}
                 </div>
               </article>
 
@@ -526,15 +574,45 @@ export default function Hero() {
                     <p className="text-xs text-[#524B40] font-medium">{currentDrop.aquatic.artisan}</p>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handleQuickAdd(currentDrop.aquatic)}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-[#141414] border border-teal-500/50 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#1E293B] active:scale-95 cursor-pointer"
-                    title={`Add ${currentDrop.aquatic.title} to bag`}
-                  >
-                    <ShoppingBag className="h-3 w-3 text-teal-400" />
-                    <span>Bag</span>
-                  </button>
+                  {aquaticQty > 0 ? (
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center gap-1 rounded-full bg-[#141414] border border-teal-500/70 p-1 shadow-xs"
+                    >
+                      <button
+                        type="button"
+                        aria-label="Decrease quantity"
+                        onClick={() => {
+                          if (aquaticQty <= 1) removeFromCart(currentDrop.aquatic.id)
+                          else setCartQuantity(currentDrop.aquatic.id, aquaticQty - 1)
+                        }}
+                        className="grid h-6 w-6 place-items-center rounded-full bg-teal-950 text-teal-300 hover:bg-teal-900 transition active:scale-90 cursor-pointer"
+                      >
+                        <Minus className="h-3 w-3 stroke-[2.8]" />
+                      </button>
+                      <span className="px-1 text-xs font-black text-teal-200 min-w-5 text-center font-mono">
+                        {aquaticQty}
+                      </span>
+                      <button
+                        type="button"
+                        aria-label="Increase quantity"
+                        onClick={() => setCartQuantity(currentDrop.aquatic.id, aquaticQty + 1)}
+                        className="grid h-6 w-6 place-items-center rounded-full bg-teal-500 text-teal-950 hover:brightness-110 transition active:scale-90 cursor-pointer shadow-xs"
+                      >
+                        <Plus className="h-3 w-3 stroke-[2.8]" />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleQuickAdd(currentDrop.aquatic)}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[#141414] border border-teal-500/50 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#1E293B] active:scale-95 cursor-pointer"
+                      title={`Add ${currentDrop.aquatic.title} to bag`}
+                    >
+                      <ShoppingBag className="h-3 w-3 text-teal-400" />
+                      <span>Bag</span>
+                    </button>
+                  )}
                 </div>
               </article>
             </div>
