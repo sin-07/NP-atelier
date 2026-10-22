@@ -1,7 +1,13 @@
+import dns from 'dns'
 import fs from 'fs'
 import path from 'path'
 import { allInitialProducts, Product } from '../data/products'
 import { getDb } from './mongodb'
+
+try {
+  dns.setDefaultResultOrder?.('ipv4first')
+  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4'])
+} catch {}
 
 export interface BrandingSettings {
   siteName: string
