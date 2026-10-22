@@ -27,75 +27,7 @@ export const DEFAULT_BRANDING: BrandingSettings = {
   currency: '₹',
 }
 
-export const SEED_ORDERS = [
-  {
-    orderId: 'CRFT-849201',
-    date: 'Aug 24, 2026',
-    items: [
-      {
-        id: 1,
-        title: 'Atelier NP Sea Life DIY Paint Kit',
-        price: '₹449',
-        quantity: 2,
-        image: '/products/atelier-diy-paint-kit-sea.jpg',
-        category: 'Beauty DIY Products',
-        department: 'crafts',
-      },
-      {
-        id: 102,
-        title: 'Samurai Koi Halfmoon Plakat Betta (Show Grade)',
-        price: '₹899',
-        quantity: 1,
-        image: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=800&q=80',
-        category: 'Live Freshwater Fish',
-        department: 'aquarium',
-      },
-    ],
-    subtotal: 1797,
-    discount: 180,
-    shipping: 0,
-    giftWrap: 49,
-    total: 1666,
-    customer: {
-      fullName: 'Pooja Verma',
-      email: 'pooja.verma@example.in',
-      city: 'Bengaluru, Karnataka',
-      phone: '+91 98765 43210',
-      address: '42 Lotus Boulevard, Indiranagar',
-    },
-    status: 'Aquatic Packing & Oxygenation',
-    estimatedDelivery: 'Aug 29, 2026',
-  },
-  {
-    orderId: 'CRFT-773194',
-    date: 'Aug 23, 2026',
-    items: [
-      {
-        id: 105,
-        title: 'Ultra-Clear Rimless 60P Low-Iron Glass Aquarium (64 Liters)',
-        price: '₹4,499',
-        quantity: 1,
-        image: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?auto=format&fit=crop&w=800&q=80',
-        category: 'Aquariums & Nano Tanks',
-        department: 'aquarium',
-      },
-    ],
-    subtotal: 4499,
-    discount: 0,
-    shipping: 0,
-    giftWrap: 0,
-    total: 4499,
-    customer: {
-      fullName: 'Rohan Mehra',
-      email: 'rohan.mehra@example.in',
-      city: 'Mumbai, Maharashtra',
-      phone: '+91 98200 12345',
-      address: '15 Sea View Apartments, Bandra West',
-    },
-    status: 'Shipped (Express Fragile Courier)',
-    estimatedDelivery: 'Aug 27, 2026',
-  },
-]
+export const SEED_ORDERS: any[] = []
 
 const DATA_DIR = path.join(process.cwd(), 'src', 'data')
 const SETTINGS_FILE = path.join(DATA_DIR, 'db-settings.json')
@@ -111,7 +43,7 @@ function ensureDirExists(dir: string) {
 // In-memory fallback in case filesystem is restricted or read-only
 let memorySettings: BrandingSettings = { ...DEFAULT_BRANDING }
 let memoryProducts: Product[] = [...allInitialProducts]
-let memoryOrders: any[] = [...SEED_ORDERS]
+let memoryOrders: any[] = []
 
 export async function getSettings(): Promise<BrandingSettings> {
   // 1. Try MongoDB Atlas
@@ -205,18 +137,19 @@ export async function getProducts(): Promise<Product[]> {
       } as Product
     })
 
-    // Ensure any newly added default catalog seed products exist
-    const storedIds = new Set(cleanDocs.map((p) => String(p.id)))
-    const missing = allInitialProducts.filter((p) => !storedIds.has(String(p.id)))
-    if (missing.length > 0) {
-      await collection.insertMany(missing.map((p) => ({ ...p })))
-      const combined = [...missing, ...cleanDocs]
-      memoryProducts = combined
-      return combined
+    // Return unique products deduplicated by id
+    const seenIds = new Set<string>()
+    const uniqueDocs: Product[] = []
+    for (const p of cleanDocs) {
+      const key = String(p.id)
+      if (!seenIds.has(key)) {
+        seenIds.add(key)
+        uniqueDocs.push(p)
+      }
     }
 
-    memoryProducts = cleanDocs
-    return cleanDocs
+    memoryProducts = uniqueDocs
+    return uniqueDocs
   } catch (mongoErr) {
     console.warn('MongoDB getProducts fallback to disk:', mongoErr)
   }
@@ -232,14 +165,6 @@ export async function getProducts(): Promise<Product[]> {
     const raw = await fs.promises.readFile(PRODUCTS_FILE, 'utf8')
     const parsed = JSON.parse(raw)
     if (Array.isArray(parsed) && parsed.length > 0) {
-      const storedIds = new Set(parsed.map((p) => String(p.id)))
-      const missing = allInitialProducts.filter((p) => !storedIds.has(String(p.id)))
-      if (missing.length > 0) {
-        const merged = [...missing, ...parsed]
-        await fs.promises.writeFile(PRODUCTS_FILE, JSON.stringify(merged, null, 2), 'utf8')
-        memoryProducts = merged
-        return merged
-      }
       memoryProducts = parsed
       return parsed
     }
@@ -373,9 +298,8 @@ export async function getOrders(): Promise<any[]> {
     const count = await collection.countDocuments()
 
     if (count === 0) {
-      await collection.insertMany(SEED_ORDERS.map((o) => ({ ...o, createdAt: new Date() })))
-      memoryOrders = [...SEED_ORDERS]
-      return memoryOrders
+      memoryOrders = []
+      return []
     }
 
     const docs = await collection.find({}).sort({ _id: -1 }).toArray()
@@ -396,9 +320,9 @@ export async function getOrders(): Promise<any[]> {
   try {
     ensureDirExists(DATA_DIR)
     if (!fs.existsSync(ORDERS_FILE)) {
-      await fs.promises.writeFile(ORDERS_FILE, JSON.stringify(SEED_ORDERS, null, 2), 'utf8')
-      memoryOrders = [...SEED_ORDERS]
-      return memoryOrders
+      await fs.promises.writeFile(ORDERS_FILE, JSON.stringify([], null, 2), 'utf8')
+      memoryOrders = []
+      return []
     }
     const raw = await fs.promises.readFile(ORDERS_FILE, 'utf8')
     const parsed = JSON.parse(raw)

@@ -53,76 +53,6 @@ const DEFAULT_COUPONS = {
   WELCOME150: { code: 'WELCOME150', type: 'fixed', value: 150, label: '₹150 Off First Order' },
 }
 
-const SEED_ORDERS = [
-  {
-    orderId: 'CRFT-849201',
-    date: 'Aug 24, 2026',
-    items: [
-      {
-        id: 1,
-        title: 'Atelier NP Sea Life DIY Paint Kit',
-        price: '₹449',
-        quantity: 2,
-        image: '/products/atelier-diy-paint-kit-sea.jpg',
-        category: 'Beauty DIY Products',
-        department: 'crafts',
-      },
-      {
-        id: 102,
-        title: 'Samurai Koi Halfmoon Plakat Betta (Show Grade)',
-        price: '₹899',
-        quantity: 1,
-        image: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=800&q=80',
-        category: 'Live Freshwater Fish',
-        department: 'aquarium',
-      },
-    ],
-    subtotal: 1797,
-    discount: 180,
-    shipping: 0,
-    giftWrap: 49,
-    total: 1666,
-    customer: {
-      fullName: 'Pooja Verma',
-      email: 'pooja.verma@example.in',
-      city: 'Bengaluru, Karnataka',
-      phone: '+91 98765 43210',
-      address: '42 Lotus Boulevard, Indiranagar',
-    },
-    status: 'Aquatic Packing & Oxygenation',
-    estimatedDelivery: 'Aug 29, 2026',
-  },
-  {
-    orderId: 'CRFT-773194',
-    date: 'Aug 23, 2026',
-    items: [
-      {
-        id: 105,
-        title: 'Ultra-Clear Rimless 60P Low-Iron Glass Aquarium (64 Liters)',
-        price: '₹4,499',
-        quantity: 1,
-        image: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?auto=format&fit=crop&w=800&q=80',
-        category: 'Aquariums & Nano Tanks',
-        department: 'aquarium',
-      },
-    ],
-    subtotal: 4499,
-    discount: 0,
-    shipping: 0,
-    giftWrap: 0,
-    total: 4499,
-    customer: {
-      fullName: 'Rohan Mehra',
-      email: 'rohan.mehra@example.in',
-      city: 'Mumbai, Maharashtra',
-      phone: '+91 98200 12345',
-      address: '15 Sea View Apartments, Bandra West',
-    },
-    status: 'Shipped (Express Courier)',
-    estimatedDelivery: 'Aug 27, 2026',
-  },
-]
-
 function safeReadStorage<T>(key: string, fallbackValue: T): T {
   if (typeof window === 'undefined') {
     return fallbackValue
@@ -133,12 +63,9 @@ function safeReadStorage<T>(key: string, fallbackValue: T): T {
     if (!storedValue) return fallbackValue
     const parsed = JSON.parse(storedValue)
 
-    // Ensure all products include missing seed items and clean currency
+    // Ensure currency formatting is clean
     if (Array.isArray(parsed) && key === STORAGE_KEYS.products) {
-      const storedIds = new Set(parsed.map((p) => String(p.id)))
-      const missingDefaults = allInitialProducts.filter((p) => !storedIds.has(String(p.id)))
-      const combined = [...missingDefaults, ...parsed]
-      return combined.map((p) => ({
+      return parsed.map((p) => ({
         ...p,
         price: typeof p.price === 'string' && p.price.includes('$')
           ? p.price.replace('$', '₹')
@@ -164,9 +91,9 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const [branding, setBranding] = useState<BrandingSettings>(DEFAULT_BRANDING)
   const [products, setProducts] = useState<Product[]>(allInitialProducts)
   const [cart, setCart] = useState<any[]>([])
-  const [wishlist, setWishlist] = useState<any[]>([1, 102, 105])
+  const [wishlist, setWishlist] = useState<any[]>([])
   const [user, setUser] = useState<any>(null)
-  const [orders, setOrders] = useState<any[]>(SEED_ORDERS)
+  const [orders, setOrders] = useState<any[]>([])
   const [availableCoupons, setAvailableCoupons] = useState<any>(DEFAULT_COUPONS)
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
   const [isGiftWrap, setIsGiftWrap] = useState(false)

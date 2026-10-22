@@ -153,19 +153,6 @@ export default function SellCraftModal() {
     setUploadSuccess(false)
   }
 
-  // 1-Click Demo login for makers
-  const handleQuickArtisanLogin = () => {
-    login({
-      name: 'Pooja Verma',
-      email: 'pooja.verma@example.in',
-    })
-    showToast?.({
-      title: 'Welcome Back, Maker!',
-      message: 'Signed in as Pooja Verma (Artisan Creator). You can now list your craft.',
-      type: 'success',
-    })
-  }
-
   return (
     <AnimatePresence>
       {isSellOpen ? (
@@ -241,15 +228,6 @@ export default function SellCraftModal() {
                   >
                     <LogIn className="h-4 w-4" />
                     <span>Sign In / Create Maker Account</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleQuickArtisanLogin}
-                    className="w-full rounded-full border border-[#D4AF37]/60 bg-[#FAF7F0] py-2.5 px-4 text-xs font-bold text-[#6B4E1B] hover:bg-[#FAF4E5] hover:border-[#D4AF37] transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" />
-                    <span>1-Click Demo Maker Sign In (Pooja Verma)</span>
                   </button>
                 </div>
 

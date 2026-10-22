@@ -682,30 +682,38 @@ export default function AdminPage() {
                 </div>
 
                 <div className="mt-4 space-y-3">
-                  {orders.slice(0, 5).map((order: any) => (
-                    <div
-                      key={order.orderId}
-                      onClick={() => setSelectedOrder(order)}
-                      className="flex cursor-pointer items-center justify-between rounded-2xl border border-[#d4a338]/25 bg-white/80 p-3 transition hover:bg-[#faeed1]"
-                    >
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs font-bold text-[#241705]">{order.orderId}</span>
-                          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-bold text-emerald-800">
-                            {order.status}
-                          </span>
-                        </div>
-                        <p className="mt-0.5 text-xs text-[#5e4318]">
-                          {order.customer?.fullName || 'Customer'} • {order.items?.length || 1} item(s)
-                        </p>
-                      </div>
-
-                      <div className="text-right">
-                        <span className="text-sm font-extrabold text-[#855a10]">₹{order.total?.toFixed(0)}</span>
-                        <p className="text-[10px] text-[#73562a]">{order.date}</p>
-                      </div>
+                  {orders.length === 0 ? (
+                    <div className="rounded-2xl border border-dashed border-[#d4a338]/30 bg-white/40 p-6 text-center text-xs text-[#73562a]">
+                      <Package className="mx-auto h-7 w-7 text-[#d4a338]/60 mb-2" />
+                      <p className="font-semibold text-[#241705]">No customer orders yet</p>
+                      <p className="text-[11px] text-[#73562a] mt-0.5">When buyers place orders, they will appear here in real-time.</p>
                     </div>
-                  ))}
+                  ) : (
+                    orders.slice(0, 5).map((order: any) => (
+                      <div
+                        key={order.orderId}
+                        onClick={() => setSelectedOrder(order)}
+                        className="flex cursor-pointer items-center justify-between rounded-2xl border border-[#d4a338]/25 bg-white/80 p-3 transition hover:bg-[#faeed1]"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono text-xs font-bold text-[#241705]">{order.orderId}</span>
+                            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-bold text-emerald-800">
+                              {order.status}
+                            </span>
+                          </div>
+                          <p className="mt-0.5 text-xs text-[#5e4318]">
+                            {order.customer?.fullName || 'Customer'} • {order.items?.length || 1} item(s)
+                          </p>
+                        </div>
+
+                        <div className="text-right">
+                          <span className="text-sm font-extrabold text-[#855a10]">₹{order.total?.toFixed(0)}</span>
+                          <p className="text-[10px] text-[#73562a]">{order.date}</p>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
@@ -1264,56 +1272,68 @@ export default function AdminPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#d4a338]/15">
-                    {orders.map((order: any) => {
-                      const hasAquatics = order.items?.some(
-                        (i: any) => i.department === 'aquarium' || aquariumCategories.includes(i.category)
-                      )
-                      return (
-                        <tr key={order.orderId} className="transition hover:bg-white/60">
-                          <td className="p-4 font-mono font-bold text-[#241705]">{order.orderId}</td>
-                          <td className="p-4 text-[#5e4318]">{order.date}</td>
-                          <td className="p-4">
-                            <p className="font-bold text-[#241705]">{order.customer?.fullName || 'Customer'}</p>
-                            <p className="text-[10px] text-[#73562a]">{order.customer?.city}</p>
-                          </td>
-                          <td className="p-4">
-                            <div className="flex items-center gap-1.5">
-                              <span className="font-semibold text-[#241705]">
-                                {order.items?.length || 1} item(s)
-                              </span>
-                              {hasAquatics && (
-                                <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[8px] font-bold text-cyan-800">
-                                  Aquatic
+                    {orders.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="p-12 text-center text-[#73562a]">
+                          <Package className="mx-auto h-10 w-10 text-[#d4a338]/60 mb-2" />
+                          <p className="font-serif text-base font-bold text-[#241705]">No Customer Orders Yet</p>
+                          <p className="text-xs text-[#5e4318] mt-1">
+                            Live orders placed by buyers on the store will appear here in real time.
+                          </p>
+                        </td>
+                      </tr>
+                    ) : (
+                      orders.map((order: any) => {
+                        const hasAquatics = order.items?.some(
+                          (i: any) => i.department === 'aquarium' || aquariumCategories.includes(i.category)
+                        )
+                        return (
+                          <tr key={order.orderId} className="transition hover:bg-white/60">
+                            <td className="p-4 font-mono font-bold text-[#241705]">{order.orderId}</td>
+                            <td className="p-4 text-[#5e4318]">{order.date}</td>
+                            <td className="p-4">
+                              <p className="font-bold text-[#241705]">{order.customer?.fullName || 'Customer'}</p>
+                              <p className="text-[10px] text-[#73562a]">{order.customer?.city}</p>
+                            </td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-1.5">
+                                <span className="font-semibold text-[#241705]">
+                                  {order.items?.length || 1} item(s)
                                 </span>
-                              )}
-                            </div>
-                          </td>
-                          <td className="p-4 text-sm font-extrabold text-[#855a10]">₹{order.total?.toFixed(0)}</td>
-                          <td className="p-4">
-                            <select
-                              value={order.status}
-                              onChange={(e) => updateOrderStatus(order.orderId, e.target.value)}
-                              className="rounded-xl border border-[#d4a338]/35 bg-white px-2.5 py-1 text-xs font-bold text-[#241705] outline-none shadow-sm"
-                            >
-                              <option value="Aquatic Packing & Oxygenation">Aquatic Packing & Oxygenation</option>
-                              <option value="Handcrafting & Packing">Handcrafting & Packing</option>
-                              <option value="Shipped (Express Courier)">Shipped (Express Courier)</option>
-                              <option value="Delivered">Delivered</option>
-                              <option value="Cancelled">Cancelled</option>
-                            </select>
-                          </td>
-                          <td className="p-4 text-right">
-                            <button
-                              type="button"
-                              onClick={() => setSelectedOrder(order)}
-                              className="inline-flex items-center gap-1 rounded-lg border border-[#d4a338]/30 bg-white px-2.5 py-1 text-xs font-bold text-[#241705] transition hover:bg-[#faeed1] shadow-sm"
-                            >
-                              <Eye className="h-3.5 w-3.5" /> View
-                            </button>
-                          </td>
-                        </tr>
-                      )
-                    })}
+                                {hasAquatics && (
+                                  <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[8px] font-bold text-cyan-800">
+                                    Aquatic
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="p-4 text-sm font-extrabold text-[#855a10]">₹{order.total?.toFixed(0)}</td>
+                            <td className="p-4">
+                              <select
+                                value={order.status}
+                                onChange={(e) => updateOrderStatus(order.orderId, e.target.value)}
+                                className="rounded-xl border border-[#d4a338]/35 bg-white px-2.5 py-1 text-xs font-bold text-[#241705] outline-none shadow-sm"
+                              >
+                                <option value="Aquatic Packing & Oxygenation">Aquatic Packing & Oxygenation</option>
+                                <option value="Handcrafting & Packing">Handcrafting & Packing</option>
+                                <option value="Shipped (Express Courier)">Shipped (Express Courier)</option>
+                                <option value="Delivered">Delivered</option>
+                                <option value="Cancelled">Cancelled</option>
+                              </select>
+                            </td>
+                            <td className="p-4 text-right">
+                              <button
+                                type="button"
+                                onClick={() => setSelectedOrder(order)}
+                                className="inline-flex items-center gap-1 rounded-lg border border-[#d4a338]/30 bg-white px-2.5 py-1 text-xs font-bold text-[#241705] transition hover:bg-[#faeed1] shadow-sm"
+                              >
+                                <Eye className="h-3.5 w-3.5" /> View
+                              </button>
+                            </td>
+                          </tr>
+                        )
+                      })
+                    )}
                   </tbody>
                 </table>
               </div>

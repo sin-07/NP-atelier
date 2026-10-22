@@ -17,17 +17,6 @@ import {
 import { useMarketplace } from '../context/MarketplaceContext'
 import { lookupPincode } from '../utils/pincodeLookup'
 
-const DEMO_USER = {
-  name: 'Pooja Verma',
-  email: 'pooja.verma@example.in',
-  password: 'password123',
-  phone: '+91 98765 43210',
-  address: '42 Lotus Orchid, 12th Main Road, Indiranagar',
-  pincode: '560038',
-  city: 'Bengaluru',
-  state: 'Karnataka',
-}
-
 export default function AuthModal() {
   const {
     isAuthOpen,
@@ -44,14 +33,14 @@ export default function AuthModal() {
   const [pinStatus, setPinStatus] = useState<string | null>(null)
 
   const [formState, setFormState] = useState({
-    name: user?.name || DEMO_USER.name,
-    email: user?.email || DEMO_USER.email,
-    password: DEMO_USER.password,
-    phone: user?.phone || DEMO_USER.phone,
-    address: user?.address || DEMO_USER.address,
-    pincode: user?.pincode || DEMO_USER.pincode,
-    city: user?.city || DEMO_USER.city,
-    state: user?.state || DEMO_USER.state,
+    name: user?.name || '',
+    email: user?.email || '',
+    password: '',
+    phone: user?.phone || '',
+    address: user?.address || '',
+    pincode: user?.pincode || '',
+    city: user?.city || '',
+    state: user?.state || '',
   })
 
   // Handle live 6-digit Indian PIN code auto-detection
@@ -87,27 +76,6 @@ export default function AuthModal() {
       }
     } else {
       setPinStatus(null)
-    }
-  }
-
-  const handleFillDemoUser = () => {
-    setFormState({
-      name: DEMO_USER.name,
-      email: DEMO_USER.email,
-      password: DEMO_USER.password,
-      phone: DEMO_USER.phone,
-      address: DEMO_USER.address,
-      pincode: DEMO_USER.pincode,
-      city: DEMO_USER.city,
-      state: DEMO_USER.state,
-    })
-    setPinStatus('Auto-detected: Bengaluru, Karnataka')
-    if (showToast) {
-      showToast({
-        title: 'Demo Profile Filled',
-        message: 'Demo collector details with full Bengaluru address pre-filled.',
-        type: 'info',
-      })
     }
   }
 
@@ -194,22 +162,6 @@ export default function AuthModal() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 p-6 sm:p-8">
-              {/* Quick Demo Fill Pill */}
-              <div className="flex items-center justify-between rounded-xl border border-[#D4AF37]/40 bg-[#FAF7F0] p-2.5 text-xs">
-                <div className="flex items-center gap-2">
-                  <KeyRound className="h-3.5 w-3.5 text-[#B8860B]" />
-                  <span className="font-bold text-[#141414]">Demo Collector Profile</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleFillDemoUser}
-                  className="rounded-lg border border-[#D4AF37]/50 bg-white px-2.5 py-1 text-[11px] font-bold text-[#5C4106] hover:bg-[#FAF5E8] transition shadow-xs cursor-pointer flex items-center gap-1"
-                >
-                  <Sparkles className="h-3 w-3 text-[#B8860B]" />
-                  <span>Pre-fill Full Address</span>
-                </button>
-              </div>
-
               {/* Mode: Register Fields (Address, PIN code, City, State, Phone) */}
               {mode === 'register' && (
                 <>
@@ -220,7 +172,7 @@ export default function AuthModal() {
                         required
                         value={formState.name}
                         onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                        placeholder="e.g. Pooja Verma"
+                        placeholder="Enter full name"
                         className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
                       />
                     </div>
