@@ -58,7 +58,7 @@ export default function ProductCard({
             ))}
           </div>
 
-          {/* Floating Actions (Wishlist & Quick View) */}
+          {/* Floating Actions (Wishlist, Quick View & WhatsApp) */}
           <div className="absolute right-2 sm:right-3 top-2 sm:top-3 flex flex-col gap-1.5 sm:gap-2">
             <button
               type="button"
@@ -87,6 +87,18 @@ export default function ProductCard({
             >
               <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </button>
+            <a
+              href={`https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20order%3A%20${encodeURIComponent(
+                product.title
+              )}%20%E2%80%94%20please%20confirm%20availability!`}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="grid h-7 w-7 sm:h-9 sm:w-9 place-items-center rounded-full border border-[#D4AF37]/50 bg-white/95 text-[#25D366] shadow-xs transition duration-150 active:scale-90 hover:scale-105 hover:border-[#25D366] hover:bg-[#F0FDF4] cursor-pointer"
+              title="Inquire or order via WhatsApp"
+            >
+              <MessageCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#25D366]" />
+            </a>
           </div>
 
           {/* Desktop Quick Add Overlay on Hover */}
@@ -132,51 +144,35 @@ export default function ProductCard({
         </div>
       </div>
 
-      {/* Footer Price & Responsive Actions */}
-      <div className="mt-3 sm:mt-4 border-t border-[#E8DEC7] px-0.5 sm:px-1 pt-2 sm:pt-3">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-2">
-          <div>
+      {/* Footer Price & Refined Action */}
+      <div className="mt-3 sm:mt-4 border-t border-[#E8DEC7] px-0.5 sm:px-1 pt-2.5 sm:pt-3">
+        <div className="flex items-center justify-between gap-2">
+          <div className="min-w-0">
             <span
-              className={`text-[8px] sm:text-[10px] font-bold block uppercase tracking-wider ${
+              className={`text-[8px] sm:text-[10px] font-bold block uppercase tracking-wider truncate ${
                 product.department === 'aquarium' ? 'text-teal-800' : 'text-[#756C5E]'
               }`}
             >
               {product.department === 'aquarium' ? 'Aquatics Direct' : 'Artisan Direct'}
             </span>
-            <p className="text-base sm:text-xl font-extrabold text-[#141414] tracking-tight">
+            <p className="text-base sm:text-xl font-extrabold text-[#141414] tracking-tight truncate">
               {formattedPrice}
             </p>
           </div>
 
-          <div className="flex items-center gap-1.5 w-full sm:w-auto">
-            {/* Direct Mobile Quick Add to Bag */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                onAddToCart?.(product, 1)
-              }}
-              className="flex-1 sm:flex-initial rounded-full bg-[#14100A] border border-[#D4AF37]/60 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-white transition hover:bg-[#251D0B] active:scale-95 flex items-center justify-center gap-1 shadow-xs cursor-pointer"
-              title="Add to shopping bag"
-            >
-              <ShoppingBag className="h-3 w-3 text-[#ECC872]" />
-              <span>+ Bag</span>
-            </button>
-
-            {/* WhatsApp Order Action */}
-            <a
-              href={`https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20order%3A%20${encodeURIComponent(
-                product.title
-              )}%20%E2%80%94%20please%20confirm%20availability!`}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-full bg-emerald-700 hover:bg-emerald-800 border border-emerald-600/50 px-2 sm:px-3 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold text-white transition active:scale-95 flex items-center justify-center gap-1 shadow-xs"
-              title="Order via WhatsApp"
-            >
-              <MessageCircle className="h-3 w-3 stroke-[2.2]" />
-              <span className="hidden md:inline">Order</span>
-            </a>
-          </div>
+          {/* Unified Luxury Add to Bag Action (Never Wraps, Perfectly Proportioned) */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              onAddToCart?.(product, 1)
+            }}
+            className="group/btn inline-flex items-center justify-center gap-1.5 rounded-full bg-[#14120E] border border-[#D4AF37]/60 px-3.5 sm:px-4 py-2 text-xs font-bold text-white transition-all duration-200 hover:bg-[#251D0B] hover:border-[#D4AF37] hover:shadow-[0_4px_16px_rgba(20,18,14,0.2)] active:scale-95 shadow-xs whitespace-nowrap cursor-pointer shrink-0"
+            title="Add to shopping bag"
+          >
+            <ShoppingBag className="h-3.5 w-3.5 text-[#ECC872] transition-transform duration-200 group-hover/btn:scale-110 shrink-0" />
+            <span className="whitespace-nowrap font-bold text-white">Add to Bag</span>
+          </button>
         </div>
       </div>
     </article>
