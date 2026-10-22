@@ -376,10 +376,10 @@ export default function Navbar() {
                           </span>
                           <button
                             type="button"
-                            onClick={() => handleLinkClick('#customize')}
-                            className="inline-flex items-center gap-1 font-bold text-[#ECC872] hover:text-white transition"
+                            onClick={() => handleLinkClick('#collection', 'all')}
+                            className="inline-flex items-center gap-1 font-bold text-[#ECC872] hover:text-white transition cursor-pointer"
                           >
-                            <span>Open Studio</span>
+                            <span>Explore Catalog</span>
                             <ArrowRight className="h-3 w-3" />
                           </button>
                         </div>
@@ -414,14 +414,6 @@ export default function Navbar() {
                   Nature Aquatics
                 </button>
 
-                {/* Custom Studio */}
-                <button
-                  type="button"
-                  onClick={() => handleLinkClick('#customize')}
-                  className="rounded-full px-3.5 py-2 text-xs font-bold tracking-wide text-[#4A4339] hover:text-[#141414] hover:bg-[#F5EFE1] transition duration-150 cursor-pointer"
-                >
-                  Bespoke Studio
-                </button>
 
                 {/* The Collective */}
                 <button
@@ -645,14 +637,6 @@ export default function Navbar() {
                     className="rounded-xl px-4 py-2.5 transition flex items-center justify-between hover:bg-[#FAF4E2] text-[#332C22] text-left"
                   >
                     <span>All Collections</span>
-                    <span className="text-xs font-normal opacity-60">→</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleLinkClick('#customize')}
-                    className="rounded-xl px-4 py-2.5 transition flex items-center justify-between hover:bg-[#FAF4E2] text-[#332C22] text-left"
-                  >
-                    <span>Bespoke Studio</span>
                     <span className="text-xs font-normal opacity-60">→</span>
                   </button>
                   <button

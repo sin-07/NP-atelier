@@ -133,7 +133,6 @@ export default function Footer() {
             >
               Living Aquatics
             </a>
-            <a href="#customize" className="hover:text-[#F2D785] transition-colors">Custom Studio</a>
             <a href="#makers" className="hover:text-[#F2D785] transition-colors">Makers</a>
           </div>
 

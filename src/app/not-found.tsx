@@ -20,7 +20,7 @@ export default function NotFound() {
             Lost in the <span className="text-gold-gradient">Gallery</span>?
           </h1>
           <p className="text-sm leading-relaxed text-[#6E6860]">
-            The piece or page you are looking for has moved or does not exist. Explore our active artisan collections and custom studios below.
+            The piece or page you are looking for has moved or does not exist. Explore our active artisan collections below.
           </p>
         </div>
 

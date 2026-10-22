@@ -140,9 +140,9 @@ const VALUE_PERKS = [
   },
   {
     icon: Sparkles,
-    title: 'Bespoke Studio Customizer',
-    desc: 'Engraving & color choices',
-    highlight: '1-of-1 personalized',
+    title: 'Direct Artisan Marketplace',
+    desc: 'Handmade by skilled makers',
+    highlight: 'Zero mass production',
   },
   {
     icon: PackageCheck,
@@ -303,8 +303,8 @@ export default function Hero() {
               Haute Artisan Craft & Living Waters
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/40 bg-white/95 px-3 py-1 text-xs font-bold text-[#4D3605] shadow-xs">
-              <Users className="h-3.5 w-3.5 text-[#B8860B]" />
-              240+ Verified Independent Studios
+              <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" />
+              Direct Artisan Collective
             </span>
           </div>
 
@@ -348,49 +348,24 @@ export default function Hero() {
                 <Waves className="h-4 w-4 text-[#0F766E]" />
                 <span>Exotic Fish & Aquatics</span>
               </button>
-
-              <a
-                href="#customize"
-                className="gsap-hero-cta inline-flex items-center gap-1.5 text-xs font-bold text-[#7A5408] hover:text-[#4A3405] underline underline-offset-4 py-2 px-1 transition"
-              >
-                Custom Studio Builder →
-              </a>
             </div>
 
-            {/* Social Proof & Guarantee Strip */}
+            {/* Guarantee Strip */}
             <div className="gsap-hero-trust mt-10 flex flex-wrap items-center gap-6 border-t border-[#E8DEC7] pt-6">
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-2.5">
-                  {[
-                    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
-                    'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&q=80',
-                    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80',
-                  ].map((src, i) => (
-                    <img
-                      key={i}
-                      src={src}
-                      alt="Artisan collector"
-                      className="h-10 w-10 rounded-full border-2 border-white object-cover shadow-xs"
-                    />
-                  ))}
-                </div>
-                <div className="text-xs">
-                  <div className="flex items-center gap-0.5 text-[#B8860B]">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-3.5 w-3.5 fill-[#D4AF37] text-[#B8860B]" />
-                    ))}
-                  </div>
-                  <p className="font-bold text-[#141414] mt-0.5">4.9/5 &#8226; 3,400+ Verified Collectors</p>
-                </div>
+              <div className="text-xs font-semibold text-[#4A4339]">
+                <p className="font-bold text-[#141414] flex items-center gap-1.5">
+                  <Leaf className="h-3.5 w-3.5 text-[#7A5408]" /> 100% Eco Packaging
+                </p>
+                <p className="text-[#635B4F] text-[11px]">Biodegradable boxes & honeycomb wrap</p>
               </div>
 
               <div className="hidden h-8 w-px bg-[#E2D2B0] sm:block" />
 
               <div className="text-xs font-semibold text-[#4A4339]">
                 <p className="font-bold text-[#141414] flex items-center gap-1.5">
-                  <Leaf className="h-3.5 w-3.5 text-[#7A5408]" /> 100% Eco Packaging
+                  <ShieldCheck className="h-3.5 w-3.5 text-[#B8860B]" /> Live Transit & Arrival Guarantee
                 </p>
-                <p className="text-[#635B4F] text-[11px]">Biodegradable boxes & honeycomb wrap</p>
+                <p className="text-[#635B4F] text-[11px]">Oxygenated packs & express fragile couriers</p>
               </div>
             </div>
           </div>
