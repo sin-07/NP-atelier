@@ -8,8 +8,8 @@ import { useMarketplace } from '../context/MarketplaceContext'
 export default function Newsletter() {
   const { containerRef } = useGsapReveal({
     selector: '.gsap-newsletter-card',
-    yOffset: 30,
-    duration: 0.8,
+    yOffset: 12,
+    duration: 0.35,
   })
   const { showToast, applyCouponCode } = useMarketplace()
   const [email, setEmail] = useState('')

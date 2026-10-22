@@ -16,9 +16,9 @@ export default function Footer() {
   const { branding, setActiveDepartment } = useMarketplace()
   const { containerRef } = useGsapReveal({
     selector: '.gsap-footer-item',
-    stagger: 0.1,
-    yOffset: 24,
-    duration: 0.75,
+    stagger: 0.035,
+    yOffset: 12,
+    duration: 0.35,
   })
 
   const siteName = branding?.siteName || 'NP Atelier'

@@ -23,13 +23,13 @@ export default function MobileBottomDock() {
       const ctx = gsap.context(() => {
         gsap.fromTo(
           dockRef.current,
-          { y: 50, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.65, delay: 0.25, ease: 'power3.out', clearProps: 'transform' }
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.35, delay: 0.05, ease: 'power2.out', clearProps: 'all' }
         )
         gsap.fromTo(
           '.gsap-dock-btn',
-          { scale: 0.85, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.4, stagger: 0.05, delay: 0.4, ease: 'back.out(1.4)' }
+          { opacity: 0, y: 6 },
+          { opacity: 1, y: 0, duration: 0.25, stagger: 0.025, delay: 0.1, ease: 'power2.out', clearProps: 'all' }
         )
       }, dockRef)
       return () => ctx.revert()

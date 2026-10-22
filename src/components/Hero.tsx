@@ -180,54 +180,35 @@ export default function Hero() {
   )
   const aquaticQty = aquaticInCart ? aquaticInCart.quantity : 0
 
-  // GSAP Entrance Animation on Mount
+  // GSAP Snappy Luxury Entrance Animation on Mount
   useEffect(() => {
     if (!heroContainerRef.current) return
 
     const ctx = gsap.context(() => {
-      // Main Entrance Timeline
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
 
       tl.fromTo(
-        '.gsap-hero-header',
-        { opacity: 0, y: -16 },
-        { opacity: 1, y: 0, duration: 0.7 }
+        ['.gsap-hero-header', '.gsap-hero-title', '.gsap-hero-text'],
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.42, stagger: 0.05, clearProps: 'all' }
       )
         .fromTo(
-          '.gsap-hero-title',
-          { opacity: 0, y: 28 },
-          { opacity: 1, y: 0, duration: 0.8 },
-          '-=0.4'
-        )
-        .fromTo(
-          '.gsap-hero-text',
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.6 },
-          '-=0.5'
-        )
-        .fromTo(
-          '.gsap-hero-cta',
-          { opacity: 0, y: 14 },
-          { opacity: 1, y: 0, duration: 0.6, stagger: 0.08 },
-          '-=0.4'
-        )
-        .fromTo(
-          '.gsap-hero-trust',
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: 0.6 },
-          '-=0.3'
+          ['.gsap-hero-cta', '.gsap-hero-trust'],
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.38, stagger: 0.04, clearProps: 'all' },
+          '-=0.25'
         )
         .fromTo(
           '.gsap-hero-card',
-          { opacity: 0, y: 35, scale: 0.94 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.12 },
-          '-=0.6'
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.42, stagger: 0.06, clearProps: 'all' },
+          '-=0.32'
         )
         .fromTo(
           '.gsap-hero-perk',
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.6, stagger: 0.08 },
-          '-=0.4'
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.35, stagger: 0.03, clearProps: 'all' },
+          '-=0.28'
         )
     }, heroContainerRef)
 

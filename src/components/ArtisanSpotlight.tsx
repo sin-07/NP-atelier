@@ -49,8 +49,9 @@ const ARTISANS = [
 export default function ArtisanSpotlight() {
   const { containerRef } = useGsapReveal<HTMLElement>({
     targetSelector: '.gsap-artisan-item',
-    stagger: 0.12,
-    y: 35,
+    stagger: 0.04,
+    y: 12,
+    duration: 0.35,
   })
 
   return (

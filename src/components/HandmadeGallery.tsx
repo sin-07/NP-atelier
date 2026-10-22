@@ -71,9 +71,9 @@ const MAKER_ARTICLES = [
 export default function HandmadeGallery() {
   const { containerRef } = useGsapReveal({
     selector: '.gsap-gallery-section',
-    stagger: 0.1,
-    yOffset: 24,
-    duration: 0.7,
+    stagger: 0.035,
+    yOffset: 12,
+    duration: 0.35,
   })
   const {
     products,

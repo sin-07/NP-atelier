@@ -79,16 +79,15 @@ export default function Navbar() {
     }
   }, [])
 
-  // GSAP Mobile Drawer Entrance and Exit Controller
+  // GSAP Mobile Drawer Entrance and Exit Controller - Ultra Smooth & Instant
   useEffect(() => {
     if (isMenuOpen) {
       setIsMenuMounted(true)
     } else if (isMenuMounted && mobileDrawerRef.current) {
       gsap.to(mobileDrawerRef.current, {
         opacity: 0,
-        y: -14,
-        scale: 0.97,
-        duration: 0.22,
+        y: -8,
+        duration: 0.14,
         ease: 'power2.in',
         onComplete: () => {
           setIsMenuMounted(false)
@@ -102,17 +101,17 @@ export default function Navbar() {
       const drawer = mobileDrawerRef.current
       const items = drawer.querySelectorAll('.gsap-menu-item')
 
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
 
       tl.fromTo(
         drawer,
-        { opacity: 0, y: -20, scale: 0.95 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.38 }
+        { opacity: 0, y: -12 },
+        { opacity: 1, y: 0, duration: 0.22, clearProps: 'all' }
       ).fromTo(
         items,
-        { opacity: 0, y: 14, scale: 0.96 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.32, stagger: 0.045, ease: 'power2.out' },
-        '-=0.2'
+        { opacity: 0, y: 8 },
+        { opacity: 1, y: 0, duration: 0.18, stagger: 0.02, clearProps: 'all' },
+        '-=0.12'
       )
     }
   }, [isMenuMounted, isMenuOpen])

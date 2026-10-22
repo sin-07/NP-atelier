@@ -23,25 +23,49 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
   const hasAnimatedRef = useRef(false)
 
   const {
-    threshold = 0.08,
-    rootMargin = '0px 0px -30px 0px',
-    y = 30,
+    threshold = 0.05,
+    rootMargin = '0px 0px 120px 0px',
+    y = 12,
     yOffset,
-    scale = 0.98,
-    duration = 0.65,
-    stagger = 0.09,
+    duration = 0.35,
+    stagger = 0.035,
     delay = 0,
     targetSelector,
     selector,
   } = options
 
-  const resolvedY = yOffset ?? y
+  const resolvedY = yOffset !== undefined ? Math.min(yOffset, 14) : y
   const resolvedSelector = selector || targetSelector || '.gsap-reveal-item'
 
   useEffect(() => {
     const node = containerRef.current
     if (!node || typeof window === 'undefined') return
 
+    // Check if element is already in view on mount (e.g. initial page load)
+    const rect = node.getBoundingClientRect()
+    const isAlreadyVisible = rect.top < window.innerHeight && rect.bottom > 0
+
+    if (isAlreadyVisible && !hasAnimatedRef.current) {
+      hasAnimatedRef.current = true
+      const targets = resolvedSelector ? node.querySelectorAll(resolvedSelector) : [node]
+      if (targets && targets.length > 0) {
+        gsap.fromTo(
+          targets,
+          { opacity: 0, y: resolvedY },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.32,
+            stagger: 0.03,
+            ease: 'power2.out',
+            clearProps: 'all',
+          }
+        )
+      }
+      return
+    }
+
+    // Ahead-of-scroll observer (triggers 120px before user arrives for seamless smoothness)
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasAnimatedRef.current) {
@@ -55,16 +79,15 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
           if (targets && targets.length > 0) {
             gsap.fromTo(
               targets,
-              { opacity: 0, y: resolvedY, scale },
+              { opacity: 0, y: resolvedY },
               {
                 opacity: 1,
                 y: 0,
-                scale: 1,
                 duration,
                 stagger,
                 delay,
-                ease: 'power3.out',
-                clearProps: 'transform',
+                ease: 'power2.out',
+                clearProps: 'all',
               }
             )
           }
@@ -76,7 +99,7 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
     observer.observe(node)
 
     return () => observer.disconnect()
-  }, [threshold, rootMargin, resolvedY, scale, duration, stagger, delay, resolvedSelector])
+  }, [threshold, rootMargin, resolvedY, duration, stagger, delay, resolvedSelector])
 
   return { containerRef, ref: containerRef }
 }

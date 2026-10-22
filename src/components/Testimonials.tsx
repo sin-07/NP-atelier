@@ -36,9 +36,9 @@ const TESTIMONIALS_DATA = [
 export default function Testimonials() {
   const { containerRef } = useGsapReveal({
     selector: '.gsap-testimonial-item',
-    stagger: 0.12,
-    yOffset: 28,
-    duration: 0.75,
+    stagger: 0.04,
+    yOffset: 12,
+    duration: 0.35,
   })
 
   return (
