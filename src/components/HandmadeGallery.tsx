@@ -158,25 +158,43 @@ export default function HandmadeGallery() {
     ]
   }, [activeDepartment])
 
-  // Dynamic Category Pills based on active department
+  // Dynamic Category Pills based on active department & loaded products
   const categoryPills = useMemo(() => {
+    const dynamicCrafts = Array.from(
+      new Set([
+        ...craftCategories,
+        ...products
+          .filter(
+            (p: Product) =>
+              p.department === 'crafts' ||
+              (!p.department && !aquariumCategories.includes(p.category))
+          )
+          .map((p: Product) => p.category)
+          .filter(Boolean),
+      ])
+    )
+
+    const dynamicAquatics = Array.from(
+      new Set([
+        ...aquariumCategories,
+        ...products
+          .filter(
+            (p: Product) =>
+              p.department === 'aquarium' || aquariumCategories.includes(p.category)
+          )
+          .map((p: Product) => p.category)
+          .filter(Boolean),
+      ])
+    )
+
     if (activeDepartment === 'aquarium') {
-      return ['All Aquatics', ...aquariumCategories]
+      return ['All Aquatics', ...dynamicAquatics]
     }
     if (activeDepartment === 'crafts') {
-      return ['All Crafts', ...craftCategories]
+      return ['All Crafts', ...dynamicCrafts]
     }
-    return [
-      'All',
-      'Live Freshwater Fish',
-      'Marine & Saltwater Fish',
-      'Aquariums & Nano Tanks',
-      'Handmade Jewelry',
-      'DIY Home Decor & Crafts',
-      'Beauty DIY Products',
-      'Cute Handmade Accessories',
-    ]
-  }, [activeDepartment])
+    return ['All', ...Array.from(new Set([...dynamicAquatics, ...dynamicCrafts]))]
+  }, [activeDepartment, products])
 
   const filteredProducts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase()

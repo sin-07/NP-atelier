@@ -110,6 +110,8 @@ export default function AdminPage() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [isUploadingImage, setIsUploadingImage] = useState(false)
+  const [isCustomCategory, setIsCustomCategory] = useState(false)
+  const [customCategoryInput, setCustomCategoryInput] = useState('')
   const productFileInputRef = useRef<HTMLInputElement>(null)
 
   interface ProductFormState {
@@ -191,6 +193,27 @@ export default function AdminPage() {
     label: '15% Off Spring Festival',
   })
 
+  // Dynamic Categories from seed list + all user-created products
+  const allCraftCategories = useMemo(() => {
+    const fromProducts = products
+      .filter((p: Product) => p.department === 'crafts' || (!p.department && !aquariumCategories.includes(p.category)))
+      .map((p: Product) => p.category)
+      .filter(Boolean)
+    return Array.from(new Set([...craftCategories, ...fromProducts]))
+  }, [products])
+
+  const allAquariumCategories = useMemo(() => {
+    const fromProducts = products
+      .filter((p: Product) => p.department === 'aquarium' || aquariumCategories.includes(p.category))
+      .map((p: Product) => p.category)
+      .filter(Boolean)
+    return Array.from(new Set([...aquariumCategories, ...fromProducts]))
+  }, [products])
+
+  const activeDepartmentCategories = useMemo(() => {
+    return productForm.department === 'aquarium' ? allAquariumCategories : allCraftCategories
+  }, [productForm.department, allAquariumCategories, allCraftCategories])
+
   // Filtered Products for Admin Table
   const filteredProducts = useMemo(() => {
     const query = productSearch.trim().toLowerCase()
@@ -198,9 +221,9 @@ export default function AdminPage() {
       // Department match
       let matchDept = true
       if (productDepartment === 'crafts') {
-        matchDept = p.department === 'crafts' || craftCategories.includes(p.category)
+        matchDept = p.department === 'crafts' || allCraftCategories.includes(p.category) || (!p.department && !allAquariumCategories.includes(p.category))
       } else if (productDepartment === 'aquarium') {
-        matchDept = p.department === 'aquarium' || aquariumCategories.includes(p.category)
+        matchDept = p.department === 'aquarium' || allAquariumCategories.includes(p.category)
       }
 
       // Category match
@@ -215,7 +238,7 @@ export default function AdminPage() {
 
       return matchDept && matchCat && matchQuery
     })
-  }, [products, productDepartment, productCategory, productSearch])
+  }, [products, productDepartment, productCategory, productSearch, allCraftCategories, allAquariumCategories])
 
   // Analytics Metrics
   const metrics = useMemo(() => {
@@ -224,10 +247,10 @@ export default function AdminPage() {
     const totalProductsCount = products.length
 
     const craftCount = products.filter(
-      (p: Product) => p.department === 'crafts' || craftCategories.includes(p.category)
+      (p: Product) => p.department === 'crafts' || allCraftCategories.includes(p.category) || (!p.department && !allAquariumCategories.includes(p.category))
     ).length
     const aquaticCount = products.filter(
-      (p: Product) => p.department === 'aquarium' || aquariumCategories.includes(p.category)
+      (p: Product) => p.department === 'aquarium' || allAquariumCategories.includes(p.category)
     ).length
 
     const avgOrderVal = totalOrdersCount > 0 ? totalSales / totalOrdersCount : 0
@@ -239,16 +262,24 @@ export default function AdminPage() {
       aquaticCount,
       avgOrderVal,
     }
-  }, [orders, products])
+  }, [orders, products, allCraftCategories, allAquariumCategories])
 
   // Handlers for Products
-  const openAddProductModal = (initialDept: string = 'aquarium') => {
+  const openAddProductModal = (initialDept: string = 'aquarium', initialCat?: string) => {
     setEditingProduct(null)
     const isAquarium = initialDept === 'aquarium'
+    const deptCats = isAquarium ? allAquariumCategories : allCraftCategories
+    const chosenCat =
+      initialCat && initialCat !== 'All'
+        ? initialCat
+        : deptCats[0] || (isAquarium ? aquariumCategories[0] : craftCategories[0])
+
+    setIsCustomCategory(false)
+    setCustomCategoryInput('')
     setProductForm({
       title: '',
       department: isAquarium ? 'aquarium' : 'crafts',
-      category: isAquarium ? aquariumCategories[0] : craftCategories[0],
+      category: chosenCat,
       subCategory: '',
       price: isAquarium ? '899' : '499',
       description: '',
@@ -272,6 +303,11 @@ export default function AdminPage() {
     setEditingProduct(product)
     const isAquarium =
       product.department === 'aquarium' || aquariumCategories.includes(product.category)
+    const deptCats = isAquarium ? allAquariumCategories : allCraftCategories
+    const isCustom = !deptCats.includes(product.category)
+
+    setIsCustomCategory(isCustom)
+    setCustomCategoryInput(isCustom ? product.category : '')
 
     setProductForm({
       title: product.title,
@@ -298,10 +334,20 @@ export default function AdminPage() {
 
   const handleProductSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const resolvedCat = isCustomCategory
+      ? (customCategoryInput.trim() || productForm.category.trim() || 'General')
+      : productForm.category.trim()
+
+    const finalProduct = {
+      ...productForm,
+      category: resolvedCat,
+      subCategory: productForm.subCategory.trim() || resolvedCat,
+    }
+
     if (editingProduct) {
-      await editProduct(editingProduct.id, productForm)
+      await editProduct(editingProduct.id, finalProduct)
     } else {
-      await addProduct(productForm)
+      await addProduct(finalProduct)
     }
     setIsProductModalOpen(false)
   }
@@ -577,9 +623,9 @@ export default function AdminPage() {
 
                 <div className="space-y-3.5">
                   <p className="text-xs font-extrabold uppercase tracking-wider text-cyan-900 border-b pb-1">
-                    Living Aquatics Categories
+                    Living Aquatics Categories ({allAquariumCategories.length})
                   </p>
-                  {aquariumCategories.map((cat) => {
+                  {allAquariumCategories.map((cat) => {
                     const count = products.filter((p: Product) => p.category === cat).length
                     const pct = Math.round((count / products.length) * 100) || 0
                     return (
@@ -599,9 +645,9 @@ export default function AdminPage() {
                   })}
 
                   <p className="text-xs font-extrabold uppercase tracking-wider text-[#855A10] border-b pb-1 pt-3">
-                    Artisan Crafts Categories
+                    Artisan Crafts Categories ({allCraftCategories.length})
                   </p>
-                  {craftCategories.map((cat) => {
+                  {allCraftCategories.map((cat) => {
                     const count = products.filter((p: Product) => p.category === cat).length
                     const pct = Math.round((count / products.length) * 100) || 0
                     return (
@@ -698,36 +744,93 @@ export default function AdminPage() {
                   <option value="crafts">Handmade Crafts</option>
                 </select>
 
-                {/* Subcategory Filter */}
+                {/* Category Filter */}
                 <select
                   value={productCategory}
                   onChange={(e) => setProductCategory(e.target.value)}
                   className="h-10 rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-sm"
                 >
-                  <option value="All">All Subcategories</option>
+                  <option value="All">All Categories</option>
                   {productDepartment !== 'crafts' &&
-                    aquariumCategories.map((c) => (
+                    allAquariumCategories.map((c) => (
                       <option key={c} value={c}>
-                        {c}
+                        Aquatics: {c}
                       </option>
                     ))}
                   {productDepartment !== 'aquarium' &&
-                    craftCategories.map((c) => (
+                    allCraftCategories.map((c) => (
                       <option key={c} value={c}>
-                        {c}
+                        Craft: {c}
                       </option>
                     ))}
                 </select>
 
                 <button
                   type="button"
-                  onClick={() => openAddProductModal(productDepartment === 'crafts' ? 'crafts' : 'aquarium')}
-                  className="btn-primary text-xs py-2 px-4 whitespace-nowrap"
+                  onClick={() =>
+                    openAddProductModal(
+                      productDepartment === 'crafts' ? 'crafts' : 'aquarium',
+                      productCategory !== 'All' ? productCategory : undefined
+                    )
+                  }
+                  className="btn-primary text-xs py-2 px-4 whitespace-nowrap flex items-center gap-1.5"
                 >
                   <Plus className="h-4 w-4" />
-                  New Product
+                  <span>
+                    {productCategory !== 'All'
+                      ? `Add to ${productCategory.length > 18 ? productCategory.slice(0, 16) + '...' : productCategory}`
+                      : 'New Product'}
+                  </span>
                 </button>
               </div>
+            </div>
+
+            {/* Category-Wise Quick Filter Chips */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+              <span className="text-[10px] font-extrabold text-[#855A10] uppercase tracking-wider shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#faeed1]/70 border border-[#d4a338]/30">
+                <Tag className="h-3 w-3 text-[#B8860B]" /> Category Filter:
+              </span>
+              <button
+                type="button"
+                onClick={() => setProductCategory('All')}
+                className={`rounded-full px-3 py-1 font-bold whitespace-nowrap text-xs transition ${
+                  productCategory === 'All'
+                    ? 'bg-[#855A10] text-white shadow-xs'
+                    : 'bg-white/85 border border-[#d4a338]/30 text-[#5E4318] hover:bg-[#faeed1]'
+                }`}
+              >
+                All Categories ({products.length})
+              </button>
+              {(productDepartment === 'crafts'
+                ? allCraftCategories
+                : productDepartment === 'aquarium'
+                ? allAquariumCategories
+                : Array.from(new Set([...allCraftCategories, ...allAquariumCategories]))
+              ).map((cat) => {
+                const count = products.filter((p: Product) => p.category === cat).length
+                const isActive = productCategory === cat
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setProductCategory(cat)}
+                    className={`rounded-full px-3 py-1 font-bold whitespace-nowrap text-xs transition flex items-center gap-1.5 ${
+                      isActive
+                        ? 'bg-[#855A10] text-white shadow-xs'
+                        : 'bg-white/85 border border-[#d4a338]/30 text-[#5E4318] hover:bg-[#faeed1]'
+                    }`}
+                  >
+                    <span>{cat}</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                        isActive ? 'bg-white/25 text-white' : 'bg-[#faeed1] text-[#855A10]'
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                )
+              })}
             </div>
 
             {/* Products Table */}
@@ -738,7 +841,7 @@ export default function AdminPage() {
                     <tr>
                       <th className="p-4">Product</th>
                       <th className="p-4">Department</th>
-                      <th className="p-4">Subcategory</th>
+                      <th className="p-4">Category &amp; Subcategory</th>
                       <th className="p-4">Price</th>
                       <th className="p-4">Stock</th>
                       <th className="p-4">Rating</th>
@@ -772,14 +875,22 @@ export default function AdminPage() {
                             <span
                               className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
                                 isAqua
-                                  ? 'bg-cyan-100 text-cyan-900 border border-cyan-300'
-                                  : 'bg-amber-100 text-amber-900 border border-amber-300'
+                                    ? 'bg-cyan-100 text-cyan-900 border border-cyan-300'
+                                    : 'bg-amber-100 text-amber-900 border border-amber-300'
                               }`}
                             >
                               {isAqua ? 'Aquatics' : 'Craft'}
                             </span>
                           </td>
-                          <td className="p-4 font-semibold text-[#5E4318]">{p.category}</td>
+                          <td className="p-4">
+                            <div className="font-semibold text-[#5E4318]">{p.category}</div>
+                            {p.subCategory && p.subCategory !== p.category && (
+                              <div className="text-[10px] text-[#8C827A] flex items-center gap-1 mt-0.5">
+                                <Tag className="h-2.5 w-2.5 text-[#b8860b]" />
+                                <span>{p.subCategory}</span>
+                              </div>
+                            )}
+                          </td>
                           <td className="p-4 text-sm font-extrabold text-[#855a10]">{p.price}</td>
                           <td className="p-4">
                             <span
@@ -1373,10 +1484,11 @@ export default function AdminPage() {
                   <button
                     type="button"
                     onClick={() => {
+                      const newDeptCats = allAquariumCategories
                       setProductForm({
                         ...productForm,
                         department: 'aquarium',
-                        category: aquariumCategories[0],
+                        category: isCustomCategory ? productForm.category : (newDeptCats[0] || aquariumCategories[0]),
                       })
                     }}
                     className={`flex items-center justify-center gap-2 rounded-xl border p-2.5 text-xs font-bold transition ${
@@ -1392,10 +1504,11 @@ export default function AdminPage() {
                   <button
                     type="button"
                     onClick={() => {
+                      const newDeptCats = allCraftCategories
                       setProductForm({
                         ...productForm,
                         department: 'crafts',
-                        category: craftCategories[0],
+                        category: isCustomCategory ? productForm.category : (newDeptCats[0] || craftCategories[0]),
                       })
                     }}
                     className={`flex items-center justify-center gap-2 rounded-xl border p-2.5 text-xs font-bold transition ${
@@ -1426,29 +1539,157 @@ export default function AdminPage() {
                 />
               </div>
 
-              {/* Category & Price */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="mb-1 block text-xs font-bold text-[#241705]">Subcategory</label>
-                  <select
-                    value={productForm.category}
-                    onChange={(e) => setProductForm({ ...productForm, category: e.target.value })}
-                    className="h-10 w-full rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-sm"
+              {/* Category-Wise Selection Hub */}
+              <div className="rounded-2xl border border-[#d4a338]/35 bg-white/70 p-4 space-y-3.5 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Layers className="h-4 w-4 text-[#855a10]" />
+                    <div>
+                      <span className="text-xs font-extrabold text-[#241705]">Product Category (Category-Wise)</span>
+                      <p className="text-[10px] text-[#73562a]">Organize product category-wise or create a brand new category</p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!isCustomCategory) {
+                        setIsCustomCategory(true)
+                        setCustomCategoryInput('')
+                      } else {
+                        setIsCustomCategory(false)
+                        setProductForm((prev) => ({
+                          ...prev,
+                          category: activeDepartmentCategories[0] || (productForm.department === 'aquarium' ? aquariumCategories[0] : craftCategories[0]),
+                        }))
+                      }
+                    }}
+                    className="inline-flex items-center gap-1 rounded-lg border border-[#d4a338]/40 bg-[#faeed1] px-2.5 py-1 text-[11px] font-bold text-[#855a10] hover:bg-[#f5e0b8] transition shadow-xs"
                   >
-                    {productForm.department === 'aquarium'
-                      ? aquariumCategories.map((c) => (
-                          <option key={c} value={c}>
-                            {c}
-                          </option>
-                        ))
-                      : craftCategories.map((c) => (
-                          <option key={c} value={c}>
-                            {c}
-                          </option>
-                        ))}
-                  </select>
+                    {isCustomCategory ? (
+                      <>
+                        <RefreshCw className="h-3 w-3" />
+                        <span>Select Existing</span>
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="h-3 w-3" />
+                        <span>+ Custom Category</span>
+                      </>
+                    )}
+                  </button>
                 </div>
 
+                {/* Quick Category Chips */}
+                {!isCustomCategory && (
+                  <div>
+                    <label className="mb-1.5 block text-[10px] font-extrabold uppercase tracking-wider text-[#73562a]">
+                      Pick Category ({activeDepartmentCategories.length} Available):
+                    </label>
+                    <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto pr-1">
+                      {activeDepartmentCategories.map((c) => {
+                        const isSelected = productForm.category === c
+                        const isAqua = productForm.department === 'aquarium'
+                        return (
+                          <button
+                            key={c}
+                            type="button"
+                            onClick={() => setProductForm({ ...productForm, category: c })}
+                            className={`rounded-xl px-2.5 py-1 text-[11px] font-bold transition flex items-center gap-1.5 ${
+                              isSelected
+                                ? isAqua
+                                  ? 'bg-cyan-700 text-white shadow-xs'
+                                  : 'bg-[#855a10] text-white shadow-xs'
+                                : 'border border-[#d4a338]/30 bg-white text-[#5e4318] hover:bg-[#faeed1]'
+                            }`}
+                          >
+                            {isSelected && <Check className="h-3 w-3 stroke-[3]" />}
+                            <span>{c}</span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Category Dropdown or Custom Input */}
+                {isCustomCategory ? (
+                  <div className="rounded-xl border border-dashed border-[#855a10]/50 bg-[#faeed1]/40 p-3 space-y-1">
+                    <label className="block text-[11px] font-bold text-[#855a10]">
+                      Enter Custom Category Name <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={customCategoryInput}
+                      onChange={(e) => {
+                        setCustomCategoryInput(e.target.value)
+                        setProductForm({ ...productForm, category: e.target.value })
+                      }}
+                      placeholder={
+                        productForm.department === 'aquarium'
+                          ? 'e.g. Freshwater Shrimp, Terrarium Kits, Coral Frags'
+                          : 'e.g. Resin Clocks, Polymer Clay Jewelry, Handmade Candles'
+                      }
+                      className="h-10 w-full rounded-xl border border-[#d4a338]/50 bg-white px-3 text-xs font-bold text-[#241705] outline-none focus:border-[#855a10] shadow-sm"
+                    />
+                    <p className="text-[10px] text-[#73562a]">
+                      This category will appear live in catalog filters, admin analytics, and navigation.
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="mb-1 block text-[11px] font-bold text-[#241705]">
+                      Selected Category Dropdown
+                    </label>
+                    <select
+                      value={productForm.category}
+                      onChange={(e) => {
+                        if (e.target.value === '__NEW_CUSTOM_CATEGORY__') {
+                          setIsCustomCategory(true)
+                          setCustomCategoryInput('')
+                        } else {
+                          setProductForm({ ...productForm, category: e.target.value })
+                        }
+                      }}
+                      className="h-10 w-full rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-sm"
+                    >
+                      {activeDepartmentCategories.map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                      <option value="__NEW_CUSTOM_CATEGORY__">
+                        + Create a New Custom Category...
+                      </option>
+                    </select>
+                  </div>
+                )}
+
+                {/* Subcategory / Micro-tag input */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-[11px] font-bold text-[#241705]">
+                      Subcategory / Specific Type <span className="text-[10px] font-normal text-[#8c827a]">(Optional)</span>
+                    </label>
+                    <span className="text-[10px] text-[#8c827a]">e.g. Serving Tray, Studs, Discus Pair</span>
+                  </div>
+                  <input
+                    type="text"
+                    value={productForm.subCategory}
+                    onChange={(e) => setProductForm({ ...productForm, subCategory: e.target.value })}
+                    placeholder={
+                      productForm.department === 'aquarium'
+                        ? 'e.g. Discus Cichlid, Nano Rimless 60P, External Canister'
+                        : 'e.g. Scalloped Floral Tray, Silk Bangles, Soy Wax Candle'
+                    }
+                    className="h-9 w-full rounded-xl border border-[#d4a338]/30 bg-white px-3 text-xs font-medium text-[#241705] outline-none focus:border-[#c59325] shadow-xs"
+                  />
+                </div>
+              </div>
+
+              {/* Price & Stock Inventory Row */}
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="mb-1 block text-xs font-bold text-[#241705]">Price (₹ INR)</label>
                   <input
@@ -1460,10 +1701,7 @@ export default function AdminPage() {
                     className="h-10 w-full rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-sm"
                   />
                 </div>
-              </div>
 
-              {/* Stock and Badges */}
-              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="mb-1 block text-xs font-bold text-[#241705]">Stock Inventory</label>
                   <input
@@ -1475,21 +1713,22 @@ export default function AdminPage() {
                     className="h-10 w-full rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-sm"
                   />
                 </div>
+              </div>
 
-                <div>
-                  <label className="mb-1 block text-xs font-bold text-[#241705]">Badges (comma-separated)</label>
-                  <input
-                    value={(productForm.badges || []).join(', ')}
-                    onChange={(e) =>
-                      setProductForm({
-                        ...productForm,
-                        badges: e.target.value.split(',').map((s) => s.trim()).filter(Boolean),
-                      })
-                    }
-                    placeholder="Live Arrival Guarantee, Captive Bred"
-                    className="h-10 w-full rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-sm"
-                  />
-                </div>
+              {/* Badges */}
+              <div>
+                <label className="mb-1 block text-xs font-bold text-[#241705]">Badges (comma-separated)</label>
+                <input
+                  value={(productForm.badges || []).join(', ')}
+                  onChange={(e) =>
+                    setProductForm({
+                      ...productForm,
+                      badges: e.target.value.split(',').map((s) => s.trim()).filter(Boolean),
+                    })
+                  }
+                  placeholder="Live Arrival Guarantee, Captive Bred, Handmade"
+                  className="h-10 w-full rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-sm"
+                />
               </div>
 
               {/* Description */}
