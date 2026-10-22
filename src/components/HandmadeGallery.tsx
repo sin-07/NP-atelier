@@ -799,7 +799,9 @@ export default function HandmadeGallery() {
                     <div className="mt-3 flex items-center justify-between border-b border-[#EAE5DC] pb-4">
                       <div>
                         <span className="text-2xl font-extrabold text-[#141414]">
-                          {quickViewProduct.price}
+                          {String(quickViewProduct.price).startsWith('₹')
+                            ? quickViewProduct.price
+                            : `₹${quickViewProduct.price}`}
                         </span>
                         <span className="ml-2 text-xs text-[#8C827A]">Free shipping over ₹1,499</span>
                       </div>

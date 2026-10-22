@@ -23,9 +23,13 @@ export default function ProductCard({
   onBuyNow,
   className = '',
 }: ProductCardProps) {
-  const formattedPrice = product.price
-    ? String(product.price).replace(/^[?,]/, '₹')
-    : '₹999'
+  const rawPriceStr = product.price != null ? String(product.price).trim() : '999'
+  const numericVal = parseFloat(rawPriceStr.replace(/[^0-9.]/g, ''))
+  const formattedPrice = !isNaN(numericVal)
+    ? `₹${numericVal.toLocaleString('en-IN')}`
+    : rawPriceStr.startsWith('₹')
+    ? rawPriceStr
+    : `₹${rawPriceStr}`
 
   return (
     <article
@@ -132,48 +136,60 @@ export default function ProductCard({
 
           <h3
             onClick={() => onQuickView?.()}
-            className="mt-1 cursor-pointer truncate font-serif text-sm sm:text-lg lg:text-xl font-bold tracking-tight text-[#141414] transition-colors duration-200 hover:text-[#7A5408]"
+            className="mt-1 cursor-pointer font-serif text-sm sm:text-base font-bold tracking-tight text-[#141414] line-clamp-2 min-h-[2.4rem] sm:min-h-[2.8rem] leading-snug transition-colors duration-200 hover:text-[#7A5408]"
             title={product.title}
           >
             {product.title}
           </h3>
 
-          <p className="mt-0.5 sm:mt-1 line-clamp-1 sm:line-clamp-2 text-[11px] sm:text-xs leading-relaxed text-[#524B40]">
+          <p className="mt-0.5 text-[11px] sm:text-xs leading-relaxed text-[#524B40] line-clamp-1 sm:line-clamp-2">
             {product.description}
           </p>
         </div>
       </div>
 
-      {/* Footer Price & Refined Action */}
-      <div className="mt-3 sm:mt-4 border-t border-[#E8DEC7] px-0.5 sm:px-1 pt-2.5 sm:pt-3">
-        <div className="flex items-center justify-between gap-2">
-          <div className="min-w-0">
-            <span
-              className={`text-[8px] sm:text-[10px] font-bold block uppercase tracking-wider truncate ${
-                product.department === 'aquarium' ? 'text-teal-800' : 'text-[#756C5E]'
-              }`}
-            >
-              {product.department === 'aquarium' ? 'Aquatics Direct' : 'Artisan Direct'}
-            </span>
-            <p className="text-base sm:text-xl font-extrabold text-[#141414] tracking-tight truncate">
+      {/* Footer: Price clearly visible on its own row + Full-width Order Option */}
+      <div className="mt-3 sm:mt-4 border-t border-[#E8DEC7] px-0.5 sm:px-1 pt-2.5 sm:pt-3 flex flex-col gap-2">
+        {/* Price & Department row - Never clipped, completely visible */}
+        <div className="flex items-baseline justify-between gap-1.5">
+          <div className="flex items-baseline gap-1.5 flex-wrap">
+            <span className="text-base sm:text-lg lg:text-xl font-extrabold text-[#141414] tracking-tight whitespace-nowrap">
               {formattedPrice}
-            </p>
+            </span>
+            {(product as any).originalPrice && (
+              <span className="text-[10px] sm:text-xs text-[#8C827A] line-through font-medium whitespace-nowrap">
+                {typeof (product as any).originalPrice === 'number'
+                  ? `₹${Number((product as any).originalPrice).toLocaleString('en-IN')}`
+                  : String((product as any).originalPrice).startsWith('₹')
+                  ? (product as any).originalPrice
+                  : `₹${(product as any).originalPrice}`}
+              </span>
+            )}
           </div>
-
-          {/* Unified Luxury Add to Bag Action (Never Wraps, Perfectly Proportioned) */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              onAddToCart?.(product, 1)
-            }}
-            className="group/btn inline-flex items-center justify-center gap-1.5 rounded-full bg-[#14120E] border border-[#D4AF37]/60 px-3.5 sm:px-4 py-2 text-xs font-bold text-white transition-all duration-200 hover:bg-[#251D0B] hover:border-[#D4AF37] hover:shadow-[0_4px_16px_rgba(20,18,14,0.2)] active:scale-95 shadow-xs whitespace-nowrap cursor-pointer shrink-0"
-            title="Add to shopping bag"
+          <span
+            className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full shrink-0 ${
+              product.department === 'aquarium'
+                ? 'bg-teal-50 text-teal-800 border border-teal-200/70'
+                : 'bg-[#FAF4E2] text-[#7A5408] border border-[#D4AF37]/35'
+            }`}
           >
-            <ShoppingBag className="h-3.5 w-3.5 text-[#ECC872] transition-transform duration-200 group-hover/btn:scale-110 shrink-0" />
-            <span className="whitespace-nowrap font-bold text-white">Add to Bag</span>
-          </button>
+            {product.department === 'aquarium' ? 'Aquatics' : 'Artisan'}
+          </span>
         </div>
+
+        {/* Full-width Order Option Button - Fully visible & easy for users to tap */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onAddToCart?.(product, 1)
+          }}
+          className="group/btn w-full inline-flex items-center justify-center gap-1.5 rounded-full bg-[#14120E] border border-[#D4AF37]/70 py-2 sm:py-2.5 px-3 text-xs font-bold text-white transition-all duration-200 hover:bg-[#251D0B] hover:border-[#D4AF37] hover:shadow-[0_4px_16px_rgba(20,18,14,0.25)] active:scale-[0.98] shadow-xs whitespace-nowrap cursor-pointer"
+          title={`Order ${product.title} - Add to Bag`}
+        >
+          <ShoppingBag className="h-3.5 w-3.5 text-[#ECC872] transition-transform duration-200 group-hover/btn:scale-110 shrink-0" />
+          <span className="font-bold text-white tracking-wide">Add to Bag</span>
+        </button>
       </div>
     </article>
   )
