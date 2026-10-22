@@ -665,6 +665,8 @@ export default function HandmadeGallery() {
                     <img
                       src={article.image}
                       alt={article.title}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                     />
                     <span className="absolute top-2.5 left-2.5 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#141414] shadow-sm">

@@ -4,6 +4,8 @@
 
 @layer base {
   html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 110px;
     color-scheme: light;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -15,6 +17,7 @@
     @apply bg-[#F8F5F0] text-[#1A1A1A] antialiased font-sans min-h-screen relative;
     background-color: #F8F5F0;
     color: #1A1A1A;
+    background-attachment: fixed;
     isolation: isolate;
   }
 
@@ -32,6 +35,9 @@
       radial-gradient(circle 850px at 90% 90%, rgba(238, 206, 132, 0.28), transparent 65%),
       radial-gradient(circle 800px at 10% 85%, rgba(247, 228, 170, 0.32), transparent 60%);
     contain: strict;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
   /* Minimalist Paper/Gallery Texture overlay */
@@ -46,6 +52,9 @@
       radial-gradient(circle at 1px 1px, rgba(140, 105, 30, 0.18) 1px, transparent 0);
     background-size: 32px 32px;
     contain: strict;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
   /* Typographic Hierarchy Baseline */

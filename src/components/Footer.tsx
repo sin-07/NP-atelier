@@ -35,6 +35,8 @@ export default function Footer() {
                   <img
                     src="/products/atelier-evil-eye-pendant.jpg"
                     alt="Art talisman"
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -49,6 +51,8 @@ export default function Footer() {
                   <img
                     src="/products/royal-discus-aquarium.jpg"
                     alt="Royal Blue Discus"
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -63,6 +67,8 @@ export default function Footer() {
                   <img
                     src="https://images.unsplash.com/photo-1546026423-cc4642628d2b?auto=format&fit=crop&w=700&q=80"
                     alt="Planted Rimless Aquarium"
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover"
                   />
                 </div>

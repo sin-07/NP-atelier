@@ -29,14 +29,9 @@ export default function MobileBottomDock() {
 
   const scrollToAnchor = (href: string) => {
     if (typeof window !== 'undefined') {
-      const lenis = (window as any).lenis
       const target = document.querySelector(href)
       if (target) {
-        if (lenis) {
-          lenis.scrollTo(target, { offset: -80, duration: 1.1 })
-        } else {
-          target.scrollIntoView({ behavior: 'smooth' })
-        }
+        target.scrollIntoView({ behavior: 'smooth' })
       }
     }
   }
@@ -56,7 +51,7 @@ export default function MobileBottomDock() {
       aria-label="Mobile primary navigation"
       className="fixed bottom-3 inset-x-3 max-w-md mx-auto z-40 sm:hidden"
     >
-      <div className="flex items-center justify-around rounded-full border border-[#D4AF37]/50 bg-[#120F0A]/95 p-1.5 shadow-[0_14px_40px_rgba(0,0,0,0.45),0_0_15px_rgba(212,175,55,0.15)] backdrop-blur-xl">
+      <div className="flex items-center justify-around rounded-full border border-[#D4AF37]/50 bg-[#120F0A]/96 p-1.5 shadow-[0_14px_40px_rgba(0,0,0,0.45),0_0_15px_rgba(212,175,55,0.15)] backdrop-blur-sm">
         {/* 1. Home / Atelier */}
         <button
           type="button"

@@ -227,32 +227,56 @@ export default function Hero() {
     )
   }, [activeTab])
 
-  // GSAP Interactive 3D Parallax on Stage
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!stageRef.current || window.innerWidth < 1024) return
-    const rect = stageRef.current.getBoundingClientRect()
-    const xRatio = (e.clientX - rect.left) / rect.width - 0.5
-    const yRatio = (e.clientY - rect.top) / rect.height - 0.5
+  const mouseRafRef = useRef<number | null>(null)
 
-    gsap.to(stageRef.current.querySelectorAll('.gsap-hero-card'), {
-      x: xRatio * 8,
-      y: yRatio * 8,
-      rotateY: xRatio * 4,
-      rotateX: -yRatio * 4,
-      duration: 0.4,
-      ease: 'power1.out',
+  useEffect(() => {
+    return () => {
+      if (mouseRafRef.current) {
+        cancelAnimationFrame(mouseRafRef.current)
+      }
+    }
+  }, [])
+
+  // GSAP Interactive 3D Parallax on Stage - Throttled with RAF for 60/120fps smoothness
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!stageRef.current || typeof window === 'undefined' || window.innerWidth < 1024) return
+    const clientX = e.clientX
+    const clientY = e.clientY
+
+    if (mouseRafRef.current) return
+
+    mouseRafRef.current = requestAnimationFrame(() => {
+      mouseRafRef.current = null
+      if (!stageRef.current) return
+      const rect = stageRef.current.getBoundingClientRect()
+      const xRatio = (clientX - rect.left) / rect.width - 0.5
+      const yRatio = (clientY - rect.top) / rect.height - 0.5
+
+      gsap.to('.gsap-hero-card', {
+        x: xRatio * 8,
+        y: yRatio * 8,
+        rotateY: xRatio * 4,
+        rotateX: -yRatio * 4,
+        duration: 0.3,
+        ease: 'power1.out',
+        overwrite: 'auto',
+      })
     })
   }
 
   const handleMouseLeave = () => {
-    if (!stageRef.current) return
-    gsap.to(stageRef.current.querySelectorAll('.gsap-hero-card'), {
+    if (mouseRafRef.current) {
+      cancelAnimationFrame(mouseRafRef.current)
+      mouseRafRef.current = null
+    }
+    gsap.to('.gsap-hero-card', {
       x: 0,
       y: 0,
       rotateY: 0,
       rotateX: 0,
-      duration: 0.6,
+      duration: 0.5,
       ease: 'power2.out',
+      overwrite: 'auto',
     })
   }
 
@@ -412,6 +436,8 @@ export default function Hero() {
                   <img
                     src={currentDrop.craft.image}
                     alt={currentDrop.craft.title}
+                    loading="eager"
+                    decoding="async"
                     onError={(e) => {
                       e.currentTarget.src = fallbackCraftImage
                     }}
@@ -464,6 +490,8 @@ export default function Hero() {
                   <img
                     src={currentDrop.aquatic.image}
                     alt={currentDrop.aquatic.title}
+                    loading="eager"
+                    decoding="async"
                     onError={(e) => {
                       e.currentTarget.src = fallbackCraftImage
                     }}

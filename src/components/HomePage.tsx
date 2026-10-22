@@ -30,7 +30,7 @@ export default function HomePage() {
       <Navbar />
 
       {/* Main Content Flow */}
-      <main className="pb-24 sm:pb-0">
+      <main className="pt-28 sm:pt-32 pb-24 sm:pb-0">
         <Hero />
         <HandmadeGallery />
         <div id="makers">

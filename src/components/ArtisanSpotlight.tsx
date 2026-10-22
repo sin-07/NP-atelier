@@ -71,6 +71,8 @@ export default function ArtisanSpotlight() {
                 <img
                   src={artisan.cover}
                   alt={artisan.name}
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     e.currentTarget.src = fallbackCraftImage
                   }}
@@ -93,6 +95,8 @@ export default function ArtisanSpotlight() {
                   <img
                     src={artisan.avatar}
                     alt={artisan.name}
+                    loading="lazy"
+                    decoding="async"
                     className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-md"
                   />
                   <span className="rounded-full bg-white/95 border border-[#D4AF37]/50 px-3 py-1 text-[11px] font-bold text-[#735206] shadow-xs">

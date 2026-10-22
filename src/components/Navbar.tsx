@@ -39,8 +39,16 @@ export default function Navbar() {
   useEffect(() => {
     setMounted(true)
 
+    let ticking = false
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 25)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrolled = window.scrollY > 25
+          setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev))
+          ticking = false
+        })
+        ticking = true
+      }
     }
 
     const handleClickOutside = (e: MouseEvent) => {
@@ -84,17 +92,12 @@ export default function Navbar() {
     logout,
   } = useMarketplace()
 
-  // Smooth scroll using global Lenis instance if present, else fallback
+  // Native smooth scroll to anchor
   const scrollToAnchor = (href: string) => {
     if (typeof window !== 'undefined') {
-      const lenis = (window as any).lenis
       const target = document.querySelector(href)
       if (target) {
-        if (lenis) {
-          lenis.scrollTo(target, { offset: -90, duration: 1.2 })
-        } else {
-          target.scrollIntoView({ behavior: 'smooth' })
-        }
+        target.scrollIntoView({ behavior: 'smooth' })
       }
     }
   }
@@ -138,76 +141,82 @@ export default function Navbar() {
   const siteName = branding?.siteName || 'NP Atelier'
 
   return (
-    <>
-      {/* 1. Ultra-Sleek Haute Atelier Ribbon */}
-      <aside aria-label="Announcement banner" className="relative z-50 bg-[#0E0C09] text-[#E5D7B7] border-b border-[#241F16]/90 transition-colors duration-200">
-        <div className="section-shell">
-          <div className="flex h-9 items-center justify-between text-[11px] font-medium tracking-wide">
-            {/* Left Tagline & Emblem */}
-            <div className="flex items-center gap-2">
-              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-tr from-[#B8860B] to-[#ECC872] text-[9px] text-[#141008] font-black shadow-xs">
-                ✦
-              </span>
-              <span className="hidden sm:inline uppercase text-[10px] tracking-[0.2em] text-[#CBB994] font-semibold">
-                Haute Atelier & Aquatics
-              </span>
-              <span className="hidden sm:inline text-[#423724]">•</span>
-              <span className="truncate text-[#EADFC7]">
-                Live Arrival Guarantee & Free Pan-India Courier
-              </span>
-            </div>
+    <div className="fixed top-0 inset-x-0 z-50 w-full pointer-events-none">
+      <div className="pointer-events-auto">
+        {/* 1. Ultra-Sleek Haute Atelier Ribbon */}
+        <aside
+          aria-label="Announcement banner"
+          className={`relative z-50 bg-[#0E0C09] text-[#E5D7B7] border-b border-[#241F16]/90 transition-all duration-300 overflow-hidden ${
+            isScrolled ? 'max-h-0 opacity-0 -translate-y-full' : 'max-h-12 opacity-100 translate-y-0'
+          }`}
+        >
+          <div className="section-shell">
+            <div className="flex h-9 items-center justify-between text-[11px] font-medium tracking-wide">
+              {/* Left Tagline & Emblem */}
+              <div className="flex items-center gap-2">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-tr from-[#B8860B] to-[#ECC872] text-[9px] text-[#141008] font-black shadow-xs">
+                  ✦
+                </span>
+                <span className="hidden sm:inline uppercase text-[10px] tracking-[0.2em] text-[#CBB994] font-semibold">
+                  Haute Atelier & Aquatics
+                </span>
+                <span className="hidden sm:inline text-[#423724]">•</span>
+                <span className="truncate text-[#EADFC7]">
+                  Live Arrival Guarantee & Free Pan-India Courier
+                </span>
+              </div>
 
-            {/* Center Code Copy Trigger */}
-            <div className="hidden lg:flex items-center gap-1.5">
-              <span className="text-[#A89876]">Unlock 10% Off:</span>
-              <button
-                type="button"
-                onClick={handleCopyCoupon}
-                className="group inline-flex items-center gap-1 rounded-full border border-[#D4AF37]/40 bg-[#1A160F] px-2.5 py-0.5 text-[10px] font-mono font-bold text-[#F5E6C8] hover:border-[#ECC872] hover:bg-[#2A2215] transition cursor-pointer"
-                title="Click to copy coupon code"
-              >
-                <span>ATELIER10</span>
-                {copiedCoupon ? (
-                  <Check className="h-3 w-3 text-emerald-400" />
-                ) : (
-                  <Copy className="h-2.5 w-2.5 text-[#ECC872] opacity-75 group-hover:opacity-100" />
-                )}
-              </button>
-            </div>
+              {/* Center Code Copy Trigger */}
+              <div className="hidden lg:flex items-center gap-1.5">
+                <span className="text-[#A89876]">Unlock 10% Off:</span>
+                <button
+                  type="button"
+                  onClick={handleCopyCoupon}
+                  className="group inline-flex items-center gap-1 rounded-full border border-[#D4AF37]/40 bg-[#1A160F] px-2.5 py-0.5 text-[10px] font-mono font-bold text-[#F5E6C8] hover:border-[#ECC872] hover:bg-[#2A2215] transition cursor-pointer"
+                  title="Click to copy coupon code"
+                >
+                  <span>ATELIER10</span>
+                  {copiedCoupon ? (
+                    <Check className="h-3 w-3 text-emerald-400" />
+                  ) : (
+                    <Copy className="h-2.5 w-2.5 text-[#ECC872] opacity-75 group-hover:opacity-100" />
+                  )}
+                </button>
+              </div>
 
-            {/* Right Quick Links */}
-            <div className="flex items-center gap-4 text-[#A89876] shrink-0">
-              <a
-                href="#makers"
-                onClick={(e) => {
-                  e.preventDefault()
-                  scrollToAnchor('#makers')
-                }}
-                className="hidden md:inline hover:text-[#ECC872] transition text-[11px]"
-              >
-                Makers Collective
-              </a>
-              <span className="hidden md:inline text-[#423724]">•</span>
-              <Link
-                href="/admin"
-                className="inline-flex items-center gap-1.5 text-[11px] text-[#D4AF37] hover:text-[#FFF] transition"
-              >
-                <LayoutDashboard className="h-3 w-3" />
-                <span className="underline underline-offset-2">Admin Portal</span>
-              </Link>
+              {/* Right Quick Links */}
+              <div className="flex items-center gap-4 text-[#A89876] shrink-0">
+                <a
+                  href="#makers"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    scrollToAnchor('#makers')
+                  }}
+                  className="hidden md:inline hover:text-[#ECC872] transition text-[11px]"
+                >
+                  Makers Collective
+                </a>
+                <span className="hidden md:inline text-[#423724]">•</span>
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 text-[11px] text-[#D4AF37] hover:text-[#FFF] transition"
+                >
+                  <LayoutDashboard className="h-3 w-3" />
+                  <span className="underline underline-offset-2">Admin Portal</span>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </aside>
+        </aside>
 
-      {/* 2. Main Luxury Header */}
-      <header
-        className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-          isScrolled
-            ? 'bg-[#FAF8F5]/95 backdrop-blur-xl border-b border-[#D4AF37]/20 shadow-[0_12px_32px_rgba(20,18,12,0.06)] py-2.5'
-            : 'bg-[#FAF8F5]/85 backdrop-blur-md border-b border-[#1A160F]/[0.06] py-3.5'
-        }`}
-      >
+        {/* 2. Main Luxury Header */}
+        <header
+          className={`w-full transition-all duration-300 ${
+            isScrolled
+              ? 'bg-[#FAF8F5]/98 backdrop-blur-sm border-b border-[#D4AF37]/20 shadow-[0_12px_32px_rgba(20,18,12,0.06)] py-2.5'
+              : 'bg-[#FAF8F5]/95 backdrop-blur-sm border-b border-[#1A160F]/[0.06] py-3.5'
+          }`}
+        >
         <div className="section-shell">
           <div className="flex items-center justify-between gap-4">
             
@@ -694,6 +703,7 @@ export default function Navbar() {
           )}
         </div>
       </header>
-    </>
+    </div>
+  </div>
   )
 }
