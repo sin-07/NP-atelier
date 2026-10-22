@@ -352,3 +352,20 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Mobile Touch & Safe-Area Utilities */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .pb-safe {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.75rem);
+  }
+  .pt-safe {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem);
+  }
+}

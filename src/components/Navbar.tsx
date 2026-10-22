@@ -440,7 +440,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setIsQuickSearchOpen(true)}
-                className="group flex h-10 items-center gap-2 rounded-full border border-[#E2D5BA] bg-white/95 px-3 text-xs font-semibold text-[#4A4339] shadow-xs transition hover:border-[#D4AF37] hover:bg-white hover:text-[#141414] hover:shadow-[0_0_15px_rgba(212,175,55,0.20)] cursor-pointer"
+                className="hidden sm:flex h-10 items-center gap-2 rounded-full border border-[#E2D5BA] bg-white/95 px-3 text-xs font-semibold text-[#4A4339] shadow-xs transition hover:border-[#D4AF37] hover:bg-white hover:text-[#141414] hover:shadow-[0_0_15px_rgba(212,175,55,0.20)] cursor-pointer"
                 title="Search catalogue (⌘K)"
               >
                 <Search className="h-4 w-4 text-[#A87B14] transition-transform duration-200 group-hover:scale-110" />
@@ -465,7 +465,7 @@ export default function Navbar() {
                 type="button"
                 aria-label="View Wishlist"
                 onClick={() => setIsWishlistOpen(true)}
-                className="relative grid h-10 w-10 place-items-center rounded-full border border-[#E2D5BA] bg-white text-[#4A4339] shadow-xs transition duration-150 hover:scale-105 hover:border-rose-400 hover:text-rose-500 cursor-pointer"
+                className="hidden sm:grid relative h-10 w-10 place-items-center rounded-full border border-[#E2D5BA] bg-white text-[#4A4339] shadow-xs transition duration-150 hover:scale-105 hover:border-rose-400 hover:text-rose-500 cursor-pointer"
                 title="Your Wishlist"
               >
                 <Heart className="h-4 w-4" />

@@ -79,7 +79,7 @@ export default function Footer() {
           </p>
           <a
             href={`mailto:${email}`}
-            className="block text-2xl sm:text-4xl lg:text-5xl font-sans font-medium tracking-tight text-white hover:text-[#F2D785] transition-colors"
+            className="block text-xl sm:text-4xl lg:text-5xl font-sans font-medium tracking-tight text-white hover:text-[#F2D785] transition-colors break-all sm:break-normal"
           >
             {email}
           </a>

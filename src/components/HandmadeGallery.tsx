@@ -231,7 +231,7 @@ export default function HandmadeGallery() {
 
           {/* Department Switcher Tabs (All | Crafts | Fish & Aquarium) */}
           <div className="mt-8 flex justify-center">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-white/95 p-1.5 shadow-[0_6px_20px_rgba(184,134,11,0.12)]">
+            <div className="inline-flex max-w-full overflow-x-auto no-scrollbar items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-white/95 p-1.5 shadow-[0_6px_20px_rgba(184,134,11,0.12)]">
               <button
                 type="button"
                 onClick={() => {
@@ -342,7 +342,7 @@ export default function HandmadeGallery() {
             </div>
 
             {/* Dynamic Category Pills */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth pb-1 -mx-2 px-2 sm:mx-0 sm:px-0 sm:flex-wrap">
               {categoryPills.map((cat) => {
                 const isActive =
                   activeCategory === cat ||
@@ -354,7 +354,7 @@ export default function HandmadeGallery() {
                     key={cat}
                     type="button"
                     onClick={() => setActiveCategory(cat)}
-                    className={`rounded-full px-4 py-2 text-xs font-bold transition duration-200 ${
+                    className={`rounded-full px-4 py-2 text-xs font-bold transition duration-200 shrink-0 ${
                       isActive
                         ? 'bg-[#141414] border border-[#D4AF37]/70 text-[#ECC872] shadow-sm'
                         : 'border border-[#E2D2AD] bg-white text-[#4A3810] hover:border-[#D4AF37] hover:bg-[#FAF4E5]'
@@ -368,10 +368,10 @@ export default function HandmadeGallery() {
           </div>
 
           {/* Secondary Filter Row: Badge Chips + Sort + Layout Toggle */}
-          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#E8DEC7] pt-4 text-xs">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-[#E8DEC7] pt-4 text-xs">
             {/* Tag Badges */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="font-bold text-[#694806]">Filter by:</span>
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+              <span className="font-bold text-[#694806] shrink-0">Filter by:</span>
               {BADGE_TAGS.map((tag) => {
                 const isSelected = activeBadge === tag
                 return (
@@ -457,9 +457,9 @@ export default function HandmadeGallery() {
           </div>
         ) : (
           <div
-            className={`grid gap-6 ${
+            className={`grid gap-3 sm:gap-6 ${
               layoutMode === 'grid'
-                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
                 : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
             }`}
           >
@@ -569,7 +569,7 @@ export default function HandmadeGallery() {
         {quickViewProduct ? (
           <motion.div
             key="quick-view-modal-backdrop"
-            className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/70 p-4"
+            className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center overflow-y-auto bg-black/70 p-0 sm:p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -577,7 +577,7 @@ export default function HandmadeGallery() {
           >
             <motion.div
               key="quick-view-modal-card"
-              className="relative my-8 w-full max-w-3xl overflow-hidden rounded-[2.2rem] bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F7F1E1] border border-[#DFCFA6]/70 shadow-[0_25px_60px_rgba(180,135,45,0.18)]"
+              className="relative my-0 sm:my-8 w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F7F1E1] border border-[#DFCFA6]/70 shadow-[0_25px_60px_rgba(180,135,45,0.18)]"
               initial={{ scale: 0.95, y: 16 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 16 }}

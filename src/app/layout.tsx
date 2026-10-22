@@ -29,9 +29,11 @@ const cinzel = Cinzel({
 })
 
 export const viewport: Viewport = {
-  themeColor: '#FAF7F2',
+  themeColor: '#0E0C09',
   width: 'device-width',
   initialScale: 1,
+  maximumScale: 5,
+  viewportFit: 'cover',
 }
 
 export const metadata: Metadata = {

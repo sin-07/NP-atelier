@@ -67,7 +67,7 @@ export default function QuickSearchModal() {
       {isQuickSearchOpen ? (
         <motion.div
           key="quick-search-backdrop"
-          className="fixed inset-0 z-[100] flex items-start justify-center bg-black/70 p-4 pt-16 sm:pt-24"
+          className="fixed inset-0 z-[100] flex items-start justify-center bg-black/70 p-2 sm:p-4 pt-3 sm:pt-24"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -83,20 +83,20 @@ export default function QuickSearchModal() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Search Input Bar */}
-            <div className="relative border-b border-[#DFCFA6]/60 bg-gradient-to-r from-[#FFFDF9] to-[#FAF6ED] p-4 sm:p-5">
-              <Search className="pointer-events-none absolute left-7 top-1/2 h-5 w-5 -translate-y-1/2 text-[#B8860B]" />
+            <div className="relative border-b border-[#DFCFA6]/60 bg-gradient-to-r from-[#FFFDF9] to-[#FAF6ED] p-3.5 sm:p-5">
+              <Search className="pointer-events-none absolute left-6 sm:left-7 top-1/2 h-5 w-5 -translate-y-1/2 text-[#B8860B]" />
               <input
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search live fish, rimless tanks, plants, jewelry, candles, resin..."
-                className="h-12 w-full rounded-2xl border border-[#DFCFA6]/80 bg-white pl-12 pr-12 text-sm sm:text-base text-[#141414] outline-none placeholder:text-[#8C827A] transition focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/30 font-medium"
+                placeholder="Search fish, aquariums, plants, candles, jewelry..."
+                className="h-11 sm:h-12 w-full rounded-2xl border border-[#DFCFA6]/80 bg-white pl-11 sm:pl-12 pr-11 sm:pr-12 text-sm sm:text-base text-[#141414] outline-none placeholder:text-[#8C827A] transition focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/30 font-medium"
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery('')}
-                  className="absolute right-7 top-1/2 -translate-y-1/2 text-[#8C827A] transition hover:text-[#B8860B]"
+                  className="absolute right-6 sm:right-7 top-1/2 -translate-y-1/2 text-[#8C827A] transition hover:text-[#B8860B]"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -104,7 +104,7 @@ export default function QuickSearchModal() {
             </div>
 
             {/* Quick Category Filter Bar */}
-            <div className="flex items-center gap-1.5 overflow-x-auto border-b border-[#DFCFA6]/40 bg-white px-4 py-2.5 sm:px-6">
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar border-b border-[#DFCFA6]/40 bg-white px-3 sm:px-6 py-2.5">
               {SEARCH_CATEGORIES.map((cat) => (
                 <button
                   key={cat}

@@ -367,7 +367,7 @@ export default function CraftCustomizer() {
             </div>
 
             <div className="mt-8 border-t border-[#E8DEC7] pt-5">
-              <div className="flex items-baseline justify-between">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-baseline justify-between gap-3.5">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-wider text-[#8C827A]">Total Craft Price</p>
                   <p className="font-serif text-3xl font-extrabold text-[#141414]">₹{calculatedPrice.toFixed(0)}</p>
@@ -375,7 +375,7 @@ export default function CraftCustomizer() {
                 <button
                   type="button"
                   onClick={handleAddCustomToBag}
-                  className="btn-gold shadow-sm"
+                  className="btn-gold shadow-sm justify-center"
                 >
                   <ShoppingBag className="h-4 w-4" />
                   Add Custom Craft to Bag

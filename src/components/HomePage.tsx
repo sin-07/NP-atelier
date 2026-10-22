@@ -19,6 +19,7 @@ import AuthModal from './AuthModal'
 import SellCraftModal from './SellCraftModal'
 import ToastContainer from './ToastContainer'
 import BackToTop from './BackToTop'
+import MobileBottomDock from './MobileBottomDock'
 
 export default function HomePage() {
   return (
@@ -30,7 +31,7 @@ export default function HomePage() {
       <Navbar />
 
       {/* Main Content Flow */}
-      <main>
+      <main className="pb-24 sm:pb-0">
         <Hero />
         <HandmadeGallery />
         <CraftCustomizer />
@@ -44,6 +45,9 @@ export default function HomePage() {
 
       {/* Footer */}
       <Footer />
+
+      {/* Mobile Floating Bottom Dock */}
+      <MobileBottomDock />
 
       {/* Modals & Overlays */}
       <CartSidebar />

@@ -330,11 +330,11 @@ export default function Hero() {
             </p>
 
             {/* CTAs */}
-            <div className="mt-8 flex flex-wrap items-center gap-3.5">
+            <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3.5">
               <button
                 type="button"
                 onClick={() => handleDepartmentJump('crafts')}
-                className="gsap-hero-cta btn-primary py-4 px-7 text-sm font-semibold tracking-wide shadow-md group cursor-pointer"
+                className="gsap-hero-cta btn-primary py-4 px-7 text-sm font-semibold tracking-wide shadow-md group cursor-pointer text-center justify-center"
               >
                 <span>Explore Artisan Drops</span>
                 <ArrowUpRight className="h-4 w-4 stroke-[2.5] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -403,8 +403,8 @@ export default function Hero() {
             className="relative"
           >
             {/* Interactive Drop Selector Pills */}
-            <div className="mb-4 flex items-center justify-between gap-2">
-              <div className="flex items-center gap-1.5 rounded-full border border-[#D4AF37]/45 bg-white/95 p-1 shadow-xs">
+            <div className="mb-4 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full rounded-full border border-[#D4AF37]/45 bg-white/95 p-1 shadow-xs">
                 {(Object.keys(HERO_DROPS) as DropKey[]).map((key) => {
                   const isActive = activeTab === key
                   return (
@@ -412,7 +412,7 @@ export default function Hero() {
                       key={key}
                       type="button"
                       onClick={() => setActiveTab(key)}
-                      className={`rounded-full px-3.5 py-1.5 text-xs font-bold transition duration-150 cursor-pointer ${
+                      className={`rounded-full px-3.5 py-1.5 text-xs font-bold transition duration-150 cursor-pointer shrink-0 ${
                         isActive
                           ? 'bg-[#141414] text-[#ECC872] shadow-xs'
                           : 'text-[#615748] hover:text-[#141414] hover:bg-[#FAF4E2]'

@@ -46,7 +46,7 @@ export default function AuthModal() {
       {isAuthOpen ? (
         <motion.div
           key="auth-modal-backdrop"
-          className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/70 p-4"
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center overflow-y-auto bg-black/70 p-0 sm:p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -54,7 +54,7 @@ export default function AuthModal() {
         >
           <motion.div
             key="auth-modal-card"
-            className="relative my-8 w-full max-w-md overflow-hidden rounded-[2.2rem] bg-white border border-[#D4AF37]/40 shadow-[0_20px_60px_rgba(180,135,45,0.22)]"
+            className="relative my-0 sm:my-8 w-full max-w-md max-h-[92vh] overflow-y-auto rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-white border border-[#D4AF37]/40 shadow-[0_20px_60px_rgba(180,135,45,0.22)]"
             initial={{ scale: 0.96, y: 14 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, y: 14 }}
