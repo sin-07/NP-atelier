@@ -12,6 +12,8 @@ import {
   Tag,
   Trash2,
   Truck,
+  Mail,
+  MessageCircle,
   X,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
@@ -352,6 +354,34 @@ export default function CartSidebar() {
                     <span>Login is required before ordering to track delivery &amp; warranty</span>
                   </p>
                 )}
+
+                {/* Concierge Order Assistance */}
+                <div className="mt-3 rounded-xl border border-[#D4AF37]/35 bg-gradient-to-r from-[#FAF6ED] to-[#F5ECD5] p-2.5 text-center">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#7A5408]">
+                    Questions or Custom Requirements?
+                  </p>
+                  <div className="mt-1.5 flex items-center justify-center gap-3 text-[11px] font-bold">
+                    <a
+                      href="https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20need%20assistance%20with%20my%20bag%20order!"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 transition"
+                      title="WhatsApp +91 93412 97124"
+                    >
+                      <MessageCircle className="h-3.5 w-3.5" />
+                      <span>93412 97124</span>
+                    </a>
+                    <span className="text-[#D4AF37]">•</span>
+                    <a
+                      href="mailto:npatelierindia@gmail.com"
+                      className="inline-flex items-center gap-1 text-[#5C4106] hover:text-[#141414] transition"
+                      title="Email npatelierindia@gmail.com"
+                    >
+                      <Mail className="h-3.5 w-3.5" />
+                      <span>Email Us</span>
+                    </a>
+                  </div>
+                </div>
               </div>
             )}
           </motion.aside>

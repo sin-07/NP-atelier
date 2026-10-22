@@ -13,6 +13,7 @@ import {
   Info,
   LayoutGrid,
   Minus,
+  MessageCircle,
   Package,
   Plus,
   RotateCcw,
@@ -1008,6 +1009,7 @@ export default function HandmadeGallery() {
                             ? 'border-rose-400 bg-rose-50 text-rose-500'
                             : 'hover:border-[#141414]'
                         }`}
+                        title="Save to wishlist"
                       >
                         <Heart
                           className={`h-5 w-5 ${
@@ -1015,6 +1017,18 @@ export default function HandmadeGallery() {
                           }`}
                         />
                       </button>
+
+                      <a
+                        href={`https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20order%3A%20${encodeURIComponent(
+                          quickViewProduct.title
+                        )}%20(Qty%3A%20${quickViewQuantity})`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-emerald-400 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:border-emerald-500 transition shadow-xs cursor-pointer"
+                        title="Order via WhatsApp (+91 93412 97124)"
+                      >
+                        <MessageCircle className="h-5 w-5" />
+                      </a>
                     </div>
                   </div>
                 </div>

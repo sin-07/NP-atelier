@@ -19,8 +19,8 @@ import {
 import { useMarketplace } from '../context/MarketplaceContext'
 
 const DEMO_CREDENTIALS = {
-  email: 'admin@ateliernp.market',
-  password: 'admin123',
+  email: 'npatelierindia@gmail.com',
+  password: '9341297124',
 }
 
 export default function AdminLoginForm({ onLoginSuccess }: { onLoginSuccess?: () => void } = {}) {
@@ -304,7 +304,7 @@ export default function AdminLoginForm({ onLoginSuccess }: { onLoginSuccess?: ()
                   autoComplete="off"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@ateliernp.market"
+                  placeholder="npatelierindia@gmail.com"
                   className="w-full rounded-xl border border-[#DDD7CE] bg-[#FAF8F5] py-2.5 pl-10 pr-4 text-xs font-semibold text-[#141414] placeholder-[#8C827A] outline-none transition focus:border-[#B8860B] focus:bg-white shadow-sm"
                 />
               </div>
@@ -323,7 +323,7 @@ export default function AdminLoginForm({ onLoginSuccess }: { onLoginSuccess?: ()
                   autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="admin123"
+                  placeholder="9341297124"
                   className="w-full rounded-xl border border-[#DDD7CE] bg-[#FAF8F5] py-2.5 pl-10 pr-10 text-xs font-semibold text-[#141414] placeholder-[#8C827A] outline-none transition focus:border-[#B8860B] focus:bg-white shadow-sm"
                 />
                 <button

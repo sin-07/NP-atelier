@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronDown, HelpCircle, Plus, Minus } from 'lucide-react'
+import { ChevronDown, HelpCircle, Plus, Minus, Mail, MessageCircle } from 'lucide-react'
 import { useGsapReveal } from '../hooks/useGsapReveal'
 
 const FAQS = [
@@ -108,13 +108,31 @@ export default function FaqSection() {
         </div>
 
         {/* Still Have Questions Banner */}
-        <div className="gsap-faq-item mx-auto max-w-lg rounded-2xl border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] to-[#FAF4E5] p-4 text-center shadow-xs">
-          <p className="text-xs text-[#4A4339]">
-            Still have questions about a custom piece?{' '}
-            <a href="#contact" className="font-bold text-[#7A5408] underline transition hover:text-[#5C4106]">
-              Contact our studio team →
-            </a>
+        <div className="gsap-faq-item mx-auto max-w-lg rounded-2xl border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] via-[#FAF4E5] to-[#F5ECD5] p-5 text-center shadow-xs">
+          <p className="text-sm font-bold text-[#141414]">
+            Still have questions about a custom order or living aquatic care?
           </p>
+          <p className="mt-1 text-xs text-[#5A554E]">
+            Our studio artisans and master aquarists are available for immediate guidance.
+          </p>
+          <div className="mt-3.5 flex flex-wrap items-center justify-center gap-2.5 text-xs font-bold">
+            <a
+              href="https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20have%20a%20question%20about%20your%20products!"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#14120E] text-[#ECC872] border border-[#D4AF37]/70 px-4 py-2 shadow-xs hover:bg-[#251D0B] transition"
+            >
+              <MessageCircle className="h-4 w-4 text-emerald-400" />
+              <span>WhatsApp: +91 93412 97124</span>
+            </a>
+            <a
+              href="mailto:npatelierindia@gmail.com"
+              className="inline-flex items-center gap-1.5 rounded-full bg-white text-[#5C4106] border border-[#D4AF37]/50 px-4 py-2 shadow-xs hover:bg-[#FAF5E8] transition"
+            >
+              <Mail className="h-4 w-4 text-[#B8860B]" />
+              <span>npatelierindia@gmail.com</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>

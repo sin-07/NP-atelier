@@ -5,6 +5,7 @@ import {
   Mail,
   MapPin,
   Phone,
+  MessageCircle,
   ArrowUpRight,
   Fish,
   Sparkles,
@@ -86,9 +87,9 @@ export default function Footer() {
         </div>
 
         {/* Central Contact Headline */}
-        <div className="gsap-footer-item text-center space-y-3 pb-12 border-b border-[#D4AF37]/20">
+        <div className="gsap-footer-item text-center space-y-4 pb-12 border-b border-[#D4AF37]/20">
           <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
-            Private Inquiries & Commissions
+            Private Inquiries &amp; Commissions
           </p>
           <a
             href={`mailto:${email}`}
@@ -96,14 +97,24 @@ export default function Footer() {
           >
             {email}
           </a>
-          <a
-            href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(siteName)}%2C%20I%20want%20to%20place%20an%20order!`}
-            target="_blank"
-            rel="noreferrer"
-            className="block text-xl sm:text-3xl font-sans font-normal tracking-wide text-[#E8C566] hover:text-[#FFF2BE] transition-colors"
-          >
-            {phone}
-          </a>
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <a
+              href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(siteName)}%2C%20I%20want%20to%20place%20an%20order!`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-emerald-500/70 bg-gradient-to-r from-emerald-950/70 to-emerald-900/60 px-5 py-2.5 text-sm sm:text-base font-bold text-emerald-300 hover:text-white hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(16,185,129,0.35)] transition cursor-pointer"
+            >
+              <MessageCircle className="h-4 w-4 text-emerald-400" />
+              <span>WhatsApp: {phone}</span>
+            </a>
+            <a
+              href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
+              className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/70 bg-gradient-to-r from-[#221B10] to-[#1A140B] px-5 py-2.5 text-sm sm:text-base font-bold text-[#F0D590] hover:text-white hover:border-[#ECC872] hover:shadow-[0_0_20px_rgba(212,175,55,0.35)] transition cursor-pointer"
+            >
+              <Phone className="h-4 w-4 text-[#ECC872]" />
+              <span>Direct Call: {phone}</span>
+            </a>
+          </div>
         </div>
 
         {/* Navigation & Details Grid */}

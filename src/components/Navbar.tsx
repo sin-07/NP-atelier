@@ -23,6 +23,9 @@ import {
   Layers,
   Gem,
   Fish,
+  Mail,
+  MessageCircle,
+  Phone,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
 import gsap from 'gsap'
@@ -225,24 +228,33 @@ export default function Navbar() {
               </div>
 
               {/* Right Quick Links */}
-              <div className="flex items-center gap-4 text-[#A89876] shrink-0">
+              <div className="flex items-center gap-3 sm:gap-4 text-[#A89876] shrink-0">
                 <a
-                  href="#makers"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    scrollToAnchor('#makers')
-                  }}
-                  className="hidden md:inline hover:text-[#ECC872] transition text-[11px]"
+                  href="https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20inquire%20about%20an%20order!"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hidden sm:inline-flex items-center gap-1 text-[11px] text-[#ECC872] hover:text-[#FFF] transition"
+                  title="WhatsApp Concierge"
                 >
-                  Makers Collective
+                  <MessageCircle className="h-3 w-3 text-emerald-400" />
+                  <span>+91 93412 97124</span>
                 </a>
-                <span className="hidden md:inline text-[#423724]">•</span>
+                <span className="hidden sm:inline text-[#423724]">•</span>
+                <a
+                  href="mailto:npatelierindia@gmail.com"
+                  className="hidden lg:inline-flex items-center gap-1 text-[11px] hover:text-[#ECC872] transition"
+                  title="Email Concierge"
+                >
+                  <Mail className="h-3 w-3 text-[#ECC872]" />
+                  <span>npatelierindia@gmail.com</span>
+                </a>
+                <span className="hidden lg:inline text-[#423724]">•</span>
                 <Link
                   href="/admin"
                   className="inline-flex items-center gap-1.5 text-[11px] text-[#D4AF37] hover:text-[#FFF] transition"
                 >
                   <LayoutDashboard className="h-3 w-3" />
-                  <span className="underline underline-offset-2">Admin Portal</span>
+                  <span className="underline underline-offset-2">Admin</span>
                 </Link>
               </div>
             </div>
@@ -760,6 +772,38 @@ export default function Navbar() {
                       <span>Sign In / Create Account</span>
                     </button>
                   )}
+
+                  {/* Direct Concierge Contact Card */}
+                  <div className="gsap-menu-item mt-3 rounded-2xl border border-[#D4AF37]/40 bg-gradient-to-b from-[#FAF6ED] to-[#F5ECD5] p-3 text-center shadow-2xs">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#7A5408]">
+                      Concierge &amp; Order Support
+                    </p>
+                    <div className="mt-2 grid grid-cols-2 gap-2 text-xs font-bold">
+                      <a
+                        href="https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20inquire%20about%20an%20order!"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center justify-center gap-1.5 rounded-full bg-white border border-[#D4AF37]/40 py-2 text-emerald-700 shadow-2xs hover:bg-[#F0FDF4] transition"
+                      >
+                        <MessageCircle className="h-3.5 w-3.5 text-emerald-600" />
+                        <span>WhatsApp</span>
+                      </a>
+                      <a
+                        href="tel:+919341297124"
+                        className="flex items-center justify-center gap-1.5 rounded-full bg-white border border-[#D4AF37]/40 py-2 text-[#5C4106] shadow-2xs hover:bg-white transition"
+                      >
+                        <Phone className="h-3.5 w-3.5 text-[#B8860B]" />
+                        <span>Call</span>
+                      </a>
+                    </div>
+                    <a
+                      href="mailto:npatelierindia@gmail.com"
+                      className="mt-2 flex items-center justify-center gap-1.5 text-[11px] font-medium text-[#7A5408] hover:underline"
+                    >
+                      <Mail className="h-3 w-3 text-[#B8860B]" />
+                      <span>npatelierindia@gmail.com</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

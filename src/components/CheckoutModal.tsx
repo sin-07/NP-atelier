@@ -15,6 +15,8 @@ import {
   Sparkles,
   Truck,
   Waves,
+  Mail,
+  MessageCircle,
   X,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
@@ -491,7 +493,32 @@ export default function CheckoutModal() {
                   </div>
                 </div>
 
-                <div className="mt-8 flex justify-center gap-3">
+                {/* Instant WhatsApp & Email Tracking */}
+                <div className="mx-auto mt-4 max-w-md rounded-2xl border border-emerald-300/80 bg-gradient-to-r from-emerald-50/90 to-teal-50/80 p-3.5 text-center shadow-xs">
+                  <p className="text-xs font-bold text-emerald-900">
+                    Want instant live specimen videos or dispatch tracking on WhatsApp?
+                  </p>
+                  <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2">
+                    <a
+                      href={`https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20my%20order%20is%20%23${confirmedOrder?.orderId}%20%E2%80%94%20please%20send%20tracking%20updates!`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-700 transition"
+                    >
+                      <MessageCircle className="h-3.5 w-3.5" />
+                      <span>WhatsApp: +91 93412 97124</span>
+                    </a>
+                    <a
+                      href="mailto:npatelierindia@gmail.com"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-white border border-emerald-300 px-3.5 py-2 text-xs font-bold text-emerald-800 shadow-xs hover:bg-emerald-50 transition"
+                    >
+                      <Mail className="h-3.5 w-3.5" />
+                      <span>npatelierindia@gmail.com</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex justify-center gap-3">
                   <button
                     type="button"
                     onClick={handleClose}
