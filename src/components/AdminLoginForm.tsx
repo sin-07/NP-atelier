@@ -147,7 +147,7 @@ export default function AdminLoginForm({ onLoginSuccess }: { onLoginSuccess?: ()
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F6F3EE] px-4 py-12 text-[#141414]">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F6F3EE] px-3 sm:px-4 py-8 sm:py-12 text-[#141414]">
       {/* Subtle Pattern Overlay */}
       <div
         className="pointer-events-none fixed inset-0 opacity-[0.05]"
@@ -160,58 +160,58 @@ export default function AdminLoginForm({ onLoginSuccess }: { onLoginSuccess?: ()
 
       <div className="relative z-10 w-full max-w-md">
         {/* Top nav bar */}
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-4 sm:mb-6 flex items-center justify-between gap-2">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-full border border-[#DDD7CE] bg-white px-4 py-2 text-xs font-bold text-[#141414] shadow-sm transition hover:bg-[#EFECE6]"
+            className="inline-flex items-center gap-1.5 rounded-full border border-[#DDD7CE] bg-white px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-bold text-[#141414] shadow-xs transition hover:bg-[#EFECE6] shrink-0"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            Back to Storefront
+            <span>Storefront</span>
           </Link>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#DDD7CE] bg-[#FAF8F5] px-3 py-1 text-[11px] font-bold text-[#8C827A] shadow-sm">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#DDD7CE] bg-[#FAF8F5] px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-bold text-[#8C827A] shadow-xs shrink-0">
             <ShieldCheck className="h-3.5 w-3.5 text-[#141414]" />
-            256-Bit Encrypted
+            <span>256-Bit SSL</span>
           </span>
         </div>
 
         {/* Login Card */}
-        <div className="overflow-hidden rounded-3xl border border-[#DFCFA6]/60 bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5EEDC]/80 p-7 sm:p-9 shadow-[0_16px_40px_rgba(180,135,45,0.08)]">
+        <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-[#DFCFA6]/60 bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5EEDC]/80 p-5 sm:p-9 shadow-[0_16px_40px_rgba(180,135,45,0.08)]">
           {/* Brand Header */}
           <div className="text-center">
             {branding?.logoImageUrl && (branding.logoType === 'image' || branding.logoType === 'both') ? (
               <img
                 src={branding.logoImageUrl}
                 alt={siteName}
-                className="mx-auto mb-4 h-14 w-auto max-w-[150px] rounded-2xl object-contain border border-[#D4AF37]/50 shadow-[0_4px_16px_rgba(212,175,55,0.35)] bg-white p-1"
+                className="mx-auto mb-3 sm:mb-4 h-12 sm:h-14 w-auto max-w-[130px] sm:max-w-[150px] rounded-xl sm:rounded-2xl object-contain border border-[#D4AF37]/50 shadow-[0_4px_16px_rgba(212,175,55,0.35)] bg-white p-1"
               />
             ) : (
-              <div className="mx-auto mb-3.5 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-[#1C1811] via-[#14100A] to-[#261E10] text-[#ECC872] text-xl font-serif font-black border border-[#D4AF37]/50 shadow-[0_4px_16px_rgba(212,175,55,0.25)]">
+              <div className="mx-auto mb-3 sm:mb-3.5 grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#1C1811] via-[#14100A] to-[#261E10] text-[#ECC872] text-lg sm:text-xl font-serif font-black border border-[#D4AF37]/50 shadow-[0_4px_16px_rgba(212,175,55,0.25)]">
                 {branding?.logoText || 'NP'}
               </div>
             )}
 
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-[#DFCFA6]/80 bg-[#FAF7F0] px-3.5 py-1 text-[10px] font-bold text-[#7A5408]">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-[#DFCFA6]/80 bg-[#FAF7F0] px-3 py-0.5 sm:px-3.5 sm:py-1 text-[9px] sm:text-[10px] font-bold text-[#7A5408]">
               <Sparkles className="h-3 w-3 text-[#B8860B]" />
               Staff &amp; Executive Portal
             </div>
 
-            <h1 className="mt-2.5 font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#141414]">
+            <h1 className="mt-2 font-serif text-xl sm:text-3xl font-bold tracking-tight text-[#141414]">
               {siteName}
             </h1>
-            <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.25em] text-[#7A6A53]">
+            <p className="mt-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#7A6A53]">
               Admin &amp; Operations Console
             </p>
           </div>
 
           {/* ✦ PRE-ADDED DEMO CREDENTIALS BOX */}
-          <div className="mt-5 overflow-hidden rounded-2xl border border-[#D4AF37]/50 bg-gradient-to-br from-white via-[#FCF9F2] to-[#FAF4E6] p-4 shadow-sm">
-            <div className="flex items-center justify-between">
+          <div className="mt-4 sm:mt-5 overflow-hidden rounded-xl sm:rounded-2xl border border-[#D4AF37]/50 bg-gradient-to-br from-white via-[#FCF9F2] to-[#FAF4E6] p-3 sm:p-4 shadow-xs">
+            <div className="flex items-center justify-between gap-1">
               <span className="flex items-center gap-1.5 text-xs font-bold text-[#141414]">
                 <KeyRound className="h-3.5 w-3.5 text-[#B8860B]" />
-                Demo Credentials (Pre-filled)
+                Demo Credentials
               </span>
-              <span className="rounded-full bg-emerald-100 border border-emerald-300 px-2 py-0.5 text-[9px] font-bold text-emerald-800">
-                Ready to Sign In
+              <span className="rounded-full bg-emerald-100 border border-emerald-300 px-2 py-0.5 text-[9px] font-bold text-emerald-800 shrink-0">
+                Auto-Filled
               </span>
             </div>
 

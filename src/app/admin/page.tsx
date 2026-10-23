@@ -572,51 +572,51 @@ export default function AdminPage() {
         {/* TAB 1: OVERVIEW & ANALYTICS */}
         {/* ========================================================================= */}
         {activeTab === 'overview' && (
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {/* 4 Metric Cards */}
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="glass-card p-5">
+            <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
+              <div className="glass-card p-3.5 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#8C827A]">Gross Revenue</span>
-                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-100 text-emerald-800">
-                    <IndianRupee className="h-4 w-4" />
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#8C827A] truncate">Gross Revenue</span>
+                  <div className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-xl bg-emerald-100 text-emerald-800 shrink-0">
+                    <IndianRupee className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </div>
                 </div>
-                <p className="mt-3 font-serif text-3xl font-bold text-[#141414]">₹{metrics.totalSales.toFixed(0)}</p>
-                <p className="mt-1 text-[11px] font-semibold text-emerald-700">Across Crafts &amp; Living Aquatics</p>
+                <p className="mt-2 sm:mt-3 font-serif text-xl sm:text-3xl font-bold text-[#141414]">₹{metrics.totalSales.toFixed(0)}</p>
+                <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-[11px] font-semibold text-emerald-700 truncate">Crafts &amp; Aquatics</p>
               </div>
 
-              <div className="glass-card p-5">
+              <div className="glass-card p-3.5 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#8C827A]">Total Orders</span>
-                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-amber-100 text-[#855A10]">
-                    <PackageCheck className="h-4 w-4" />
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#8C827A] truncate">Total Orders</span>
+                  <div className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-xl bg-amber-100 text-[#855A10] shrink-0">
+                    <PackageCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </div>
                 </div>
-                <p className="mt-3 font-serif text-3xl font-bold text-[#141414]">{metrics.totalOrdersCount}</p>
-                <p className="mt-1 text-[11px] font-semibold text-[#855A10]">Direct fulfillment tracked</p>
+                <p className="mt-2 sm:mt-3 font-serif text-xl sm:text-3xl font-bold text-[#141414]">{metrics.totalOrdersCount}</p>
+                <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-[11px] font-semibold text-[#855A10] truncate">Direct fulfillment</p>
               </div>
 
-              <div className="glass-card p-5">
+              <div className="glass-card p-3.5 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#8C827A]">Crafts Catalog</span>
-                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-rose-100 text-rose-700">
-                    <Palette className="h-4 w-4" />
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#8C827A] truncate">Crafts Catalog</span>
+                  <div className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-xl bg-rose-100 text-rose-700 shrink-0">
+                    <Palette className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </div>
                 </div>
-                <p className="mt-3 font-serif text-3xl font-bold text-[#141414]">{metrics.craftCount} Crafts</p>
-                <p className="mt-1 text-[11px] font-semibold text-[#8C827A]">Jewelry, Decor, Resins &amp; Wax</p>
+                <p className="mt-2 sm:mt-3 font-serif text-xl sm:text-3xl font-bold text-[#141414]">{metrics.craftCount} Crafts</p>
+                <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-[11px] font-semibold text-[#8C827A] truncate">Jewelry &amp; Decor</p>
               </div>
 
-              <div className="glass-card p-5">
+              <div className="glass-card p-3.5 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#8C827A]">Fish &amp; Aquariums</span>
-                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-cyan-100 text-cyan-800">
-                    <Fish className="h-4 w-4" />
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#8C827A] truncate">Aquatics</span>
+                  <div className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-xl bg-cyan-100 text-cyan-800 shrink-0">
+                    <Fish className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </div>
                 </div>
-                <p className="mt-3 font-serif text-3xl font-bold text-[#141414]">{metrics.aquaticCount} Aquatics</p>
-                <p className="mt-1 text-[11px] font-semibold text-cyan-700">Live fish, tanks &amp; equipment</p>
+                <p className="mt-2 sm:mt-3 font-serif text-xl sm:text-3xl font-bold text-[#141414]">{metrics.aquaticCount} Aquatics</p>
+                <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-[11px] font-semibold text-cyan-700 truncate">Live fish &amp; tanks</p>
               </div>
             </div>
 
@@ -745,7 +745,7 @@ export default function AdminPage() {
                 />
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-3">
                 {/* Department Filter */}
                 <select
                   value={productDepartment}
@@ -753,7 +753,7 @@ export default function AdminPage() {
                     setProductDepartment(e.target.value)
                     setProductCategory('All')
                   }}
-                  className="h-10 rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-sm"
+                  className="h-10 w-full sm:w-auto rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-xs"
                 >
                   <option value="All">All Departments</option>
                   <option value="aquarium">Living Aquatics</option>
@@ -764,7 +764,7 @@ export default function AdminPage() {
                 <select
                   value={productCategory}
                   onChange={(e) => setProductCategory(e.target.value)}
-                  className="h-10 rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-sm"
+                  className="h-10 w-full sm:w-auto rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs font-bold text-[#241705] outline-none shadow-xs"
                 >
                   <option value="All">All Categories</option>
                   {productDepartment !== 'crafts' &&
@@ -789,7 +789,7 @@ export default function AdminPage() {
                       productCategory !== 'All' ? productCategory : undefined
                     )
                   }
-                  className="btn-primary text-xs py-2 px-4 whitespace-nowrap flex items-center gap-1.5"
+                  className="col-span-2 sm:col-span-1 btn-primary text-xs py-2 px-4 whitespace-nowrap flex items-center justify-center gap-1.5 w-full sm:w-auto"
                 >
                   <Plus className="h-4 w-4" />
                   <span>
@@ -802,20 +802,20 @@ export default function AdminPage() {
             </div>
 
             {/* Category-Wise Quick Filter Chips */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs -mx-2 px-2 sm:mx-0 sm:px-0">
               <span className="text-[10px] font-extrabold text-[#855A10] uppercase tracking-wider shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#faeed1]/70 border border-[#d4a338]/30">
-                <Tag className="h-3 w-3 text-[#B8860B]" /> Category Filter:
+                <Tag className="h-3 w-3 text-[#B8860B]" /> Filter:
               </span>
               <button
                 type="button"
                 onClick={() => setProductCategory('All')}
-                className={`rounded-full px-3 py-1 font-bold whitespace-nowrap text-xs transition ${
+                className={`rounded-full px-3 py-1 font-bold whitespace-nowrap text-xs transition shrink-0 ${
                   productCategory === 'All'
                     ? 'bg-[#855A10] text-white shadow-xs'
                     : 'bg-white/85 border border-[#d4a338]/30 text-[#5E4318] hover:bg-[#faeed1]'
                 }`}
               >
-                All Categories ({products.length})
+                All ({products.length})
               </button>
               {(productDepartment === 'crafts'
                 ? allCraftCategories
@@ -830,7 +830,7 @@ export default function AdminPage() {
                     key={cat}
                     type="button"
                     onClick={() => setProductCategory(cat)}
-                    className={`rounded-full px-3 py-1 font-bold whitespace-nowrap text-xs transition flex items-center gap-1.5 ${
+                    className={`rounded-full px-3 py-1 font-bold whitespace-nowrap text-xs transition flex items-center gap-1.5 shrink-0 ${
                       isActive
                         ? 'bg-[#855A10] text-white shadow-xs'
                         : 'bg-white/85 border border-[#d4a338]/30 text-[#5E4318] hover:bg-[#faeed1]'
@@ -849,8 +849,99 @@ export default function AdminPage() {
               })}
             </div>
 
-            {/* Products Table */}
-            <div className="glass-card overflow-hidden">
+            {/* Mobile Product Cards View (< md) */}
+            <div className="space-y-3 md:hidden">
+              {filteredProducts.length === 0 ? (
+                <div className="glass-card p-8 text-center text-xs text-[#73562a]">
+                  <Package className="mx-auto h-8 w-8 text-[#d4a338]/60 mb-2" />
+                  <p className="font-bold text-sm text-[#241705]">No matching products found</p>
+                  <p className="mt-1 text-[11px]">Try adjusting your search query or department filter.</p>
+                </div>
+              ) : (
+                filteredProducts.map((p: Product) => {
+                  const isAqua = p.department === 'aquarium' || aquariumCategories.includes(p.category)
+                  return (
+                    <div
+                      key={p.id}
+                      className="glass-card p-3.5 space-y-2.5 rounded-2xl border border-[#d4a338]/30 bg-white/90 shadow-xs"
+                    >
+                      <div className="flex items-start gap-3">
+                        <img
+                          src={p.image}
+                          alt={p.title}
+                          onError={(e) => {
+                            e.currentTarget.src = fallbackCraftImage
+                          }}
+                          className="h-16 w-16 rounded-xl object-cover border border-[#d4a338]/25 shrink-0"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5">
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-[9px] font-bold shrink-0 ${
+                                isAqua
+                                  ? 'bg-cyan-100 text-cyan-900 border border-cyan-300'
+                                  : 'bg-amber-100 text-amber-900 border border-amber-300'
+                              }`}
+                            >
+                              {isAqua ? 'Aquatics' : 'Craft'}
+                            </span>
+                            <span className="text-[10px] font-bold text-[#855A10] truncate">
+                              {p.category}
+                            </span>
+                          </div>
+                          <h4 className="font-bold text-xs text-[#241705] truncate mt-1">
+                            {p.title}
+                          </h4>
+                          <div className="flex items-center justify-between mt-1">
+                            <span className="font-extrabold text-sm text-[#855a10]">
+                              {p.price}
+                            </span>
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-[9px] font-bold ${
+                                (p.stock ?? 20) > 0
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : 'bg-rose-100 text-rose-800'
+                              }`}
+                            >
+                              {p.stock ?? 25} in stock
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-2 border-t border-[#d4a338]/15 text-[11px]">
+                        <span className="text-[#73562a] font-medium">
+                          ★ {p.rating ?? 4.9} ({p.reviews ?? 12})
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => openEditProductModal(p)}
+                            className="inline-flex items-center gap-1 rounded-lg border border-[#d4a338]/40 bg-[#faeed1]/70 px-2.5 py-1 font-bold text-[#241705] text-xs hover:bg-[#faeed1]"
+                          >
+                            <Edit className="h-3 w-3" /> Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (confirm(`Delete "${p.title}"?`)) {
+                                deleteProduct(p.id)
+                              }
+                            }}
+                            className="inline-flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1 font-bold text-rose-600 text-xs hover:bg-rose-500 hover:text-white"
+                          >
+                            <Trash2 className="h-3 w-3" /> Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })
+              )}
+            </div>
+
+            {/* Desktop Products Table View (>= md) */}
+            <div className="hidden md:block glass-card overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="border-b border-[#d4a338]/20 bg-[#faeed1]/50 font-bold uppercase tracking-wider text-[#73562a]">
@@ -960,16 +1051,16 @@ export default function AdminPage() {
         {/* TAB 3: ADMIN BRANDING SETTINGS (DYNAMIC NAME, LOGO UPLOAD & PERMANENCE) */}
         {/* ========================================================================= */}
         {activeTab === 'branding' && (
-          <div className="space-y-8">
-            <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="space-y-6 sm:space-y-8">
+            <div className="grid gap-6 sm:gap-8 lg:grid-cols-[1.2fr_0.8fr]">
               {/* Branding Configuration Form */}
-              <div className="glass-card p-6 sm:p-8 space-y-6">
+              <div className="glass-card p-4 sm:p-8 space-y-6">
                 <div>
                   <div className="inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-gradient-to-r from-[#FFFDF8] to-[#FAF3DE] px-3.5 py-1 text-xs font-bold text-[#855A10] shadow-xs">
                     <Palette className="h-3.5 w-3.5 text-[#B8860B]" />
                     <span>Real-Time Brand System</span>
                   </div>
-                  <h3 className="mt-2 font-serif text-2xl font-bold text-[#141414]">
+                  <h3 className="mt-2 font-serif text-xl sm:text-2xl font-bold text-[#141414]">
                     Store Branding &amp; Visual Identity Settings
                   </h3>
                   <p className="mt-1 text-xs leading-relaxed text-[#5A554E]">
@@ -989,7 +1080,7 @@ export default function AdminPage() {
                       value={brandingForm.siteName}
                       onChange={(e) => setBrandingForm({ ...brandingForm, siteName: e.target.value })}
                       placeholder="e.g. Atelier NP & AquaCraft"
-                      className="h-11 w-full rounded-xl border border-[#d4a338]/40 bg-white px-3.5 text-sm font-bold text-[#141414] outline-none focus:border-[#c59325] shadow-sm"
+                      className="h-11 w-full rounded-xl border border-[#d4a338]/40 bg-white px-3.5 text-sm font-bold text-[#141414] outline-none focus:border-[#c59325] shadow-xs"
                     />
                     <p className="mt-1 text-[11px] text-[#8C827A]">
                       Appears on the header, brand watermark, invoice, emails, and browser tab.
@@ -1006,7 +1097,7 @@ export default function AdminPage() {
                       value={brandingForm.tagline}
                       onChange={(e) => setBrandingForm({ ...brandingForm, tagline: e.target.value })}
                       placeholder="e.g. Luxury Crafts & Exotic Aquatics"
-                      className="h-11 w-full rounded-xl border border-[#d4a338]/40 bg-white px-3.5 text-sm text-[#141414] outline-none focus:border-[#c59325] shadow-sm"
+                      className="h-11 w-full rounded-xl border border-[#d4a338]/40 bg-white px-3.5 text-sm text-[#141414] outline-none focus:border-[#c59325] shadow-xs"
                     />
                   </div>
 
@@ -1015,7 +1106,7 @@ export default function AdminPage() {
                     <label className="block text-xs font-bold text-[#141414] mb-2">
                       Logo Display Format
                     </label>
-                    <div className="grid grid-cols-3 gap-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5">
                       {[
                         { id: 'icon', label: 'Badge / Icon Only' },
                         { id: 'image', label: 'Uploaded Image Logo' },
@@ -1025,9 +1116,9 @@ export default function AdminPage() {
                           key={mode.id}
                           type="button"
                           onClick={() => setBrandingForm({ ...brandingForm, logoType: mode.id as any })}
-                          className={`rounded-xl border p-2.5 text-center text-xs font-bold transition ${
+                          className={`rounded-xl border p-2 sm:p-2.5 text-center text-xs font-bold transition ${
                             brandingForm.logoType === mode.id
-                              ? 'border-[#D4AF37] bg-gradient-to-b from-[#FFFDF9] to-[#FAF4E5] text-[#855A10] ring-1 ring-[#D4AF37]/50 shadow-sm'
+                              ? 'border-[#D4AF37] bg-gradient-to-b from-[#FFFDF9] to-[#FAF4E5] text-[#855A10] ring-1 ring-[#D4AF37]/50 shadow-xs'
                               : 'border-[#DFCFA6]/60 bg-white text-[#5A554E] hover:border-[#D4AF37]'
                           }`}
                         >
@@ -1043,14 +1134,14 @@ export default function AdminPage() {
                       <label className="block text-xs font-bold text-[#141414] mb-1">
                         Logo Icon Symbol / Badge Text
                       </label>
-                      <div className="flex gap-2">
+                      <div className="flex flex-col sm:flex-row gap-2">
                         <input
                           type="text"
                           maxLength={4}
                           value={brandingForm.logoText}
                           onChange={(e) => setBrandingForm({ ...brandingForm, logoText: e.target.value })}
                           placeholder="NP or ATELIER"
-                          className="h-11 w-24 rounded-xl border border-[#d4a338]/40 bg-white px-3.5 text-center text-lg font-bold text-[#141414] outline-none focus:border-[#c59325] shadow-sm"
+                          className="h-11 w-full sm:w-24 rounded-xl border border-[#d4a338]/40 bg-white px-3.5 text-center text-lg font-bold text-[#141414] outline-none focus:border-[#c59325] shadow-xs"
                         />
                         <div className="flex flex-wrap items-center gap-1.5">
                           {['NP', 'ATELIER', 'NPA', 'LUX', 'ART'].map((sym) => (
@@ -1058,7 +1149,7 @@ export default function AdminPage() {
                               key={sym}
                               type="button"
                               onClick={() => setBrandingForm({ ...brandingForm, logoText: sym })}
-                              className="h-11 w-11 rounded-xl border border-[#d4a338]/30 bg-white hover:bg-[#faeed1] text-base transition shadow-sm"
+                              className="h-10 sm:h-11 px-3 sm:px-0 sm:w-11 rounded-xl border border-[#d4a338]/30 bg-white hover:bg-[#faeed1] text-xs sm:text-sm font-bold transition shadow-xs"
                             >
                               {sym}
                             </button>
@@ -1070,13 +1161,13 @@ export default function AdminPage() {
 
                   {/* Logo Image Upload & URL */}
                   {(brandingForm.logoType === 'image' || brandingForm.logoType === 'both') && (
-                    <div className="space-y-3 rounded-2xl border border-[#d4a338]/30 bg-white/60 p-4">
+                    <div className="space-y-3 rounded-2xl border border-[#d4a338]/30 bg-white/60 p-3 sm:p-4">
                       <label className="block text-xs font-bold text-[#141414]">
                         Website Logo Image (File Upload or URL)
                       </label>
 
                       {/* File Upload Button */}
-                      <div className="flex items-center gap-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                         <input
                           type="file"
                           ref={logoFileInputRef}
@@ -1088,12 +1179,12 @@ export default function AdminPage() {
                           type="button"
                           disabled={isUploadingLogo}
                           onClick={() => logoFileInputRef.current?.click()}
-                          className="btn-gold text-xs py-2.5 px-4 shadow-sm"
+                          className="btn-gold text-xs py-2.5 px-4 shadow-xs"
                         >
                           <Upload className="h-4 w-4" />
                           <span>{isUploadingLogo ? 'Uploading Logo...' : 'Upload Logo File'}</span>
                         </button>
-                        <span className="text-xs text-[#8C827A]">
+                        <span className="text-[11px] sm:text-xs text-[#8C827A]">
                           Supports PNG, JPG, SVG, WebP with transparent background
                         </span>
                       </div>
@@ -1124,7 +1215,7 @@ export default function AdminPage() {
                       value={brandingForm.announcementText}
                       onChange={(e) => setBrandingForm({ ...brandingForm, announcementText: e.target.value })}
                       placeholder="e.g. Artisan Drops & Aquarium Specials Live • Use code ATELIER10 for 10% off"
-                      className="h-11 w-full rounded-xl border border-[#d4a338]/40 bg-white px-3.5 text-xs text-[#141414] outline-none focus:border-[#c59325] shadow-sm"
+                      className="h-11 w-full rounded-xl border border-[#d4a338]/40 bg-white px-3.5 text-xs text-[#141414] outline-none focus:border-[#c59325] shadow-xs"
                     />
                   </div>
 
@@ -1153,7 +1244,7 @@ export default function AdminPage() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-[#d4a338]/20">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-4 border-t border-[#d4a338]/20">
                     <button
                       type="submit"
                       disabled={isSavingBranding}
@@ -1166,7 +1257,7 @@ export default function AdminPage() {
                     <button
                       type="button"
                       onClick={handleResetBranding}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-[#d4a338]/30 bg-white px-4 py-3 text-xs font-bold text-[#8C827A] hover:bg-[#faeed1] hover:text-[#241705] transition"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[#d4a338]/30 bg-white px-4 py-3 text-xs font-bold text-[#8C827A] hover:bg-[#faeed1] hover:text-[#241705] transition"
                     >
                       <RefreshCw className="h-3.5 w-3.5" />
                       <span>Reset to Default</span>
@@ -1255,18 +1346,94 @@ export default function AdminPage() {
         {/* TAB 4: ORDERS & FULFILLMENT */}
         {/* ========================================================================= */}
         {activeTab === 'orders' && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div className="glass-card overflow-hidden">
-              <div className="border-b border-[#d4a338]/20 bg-[#faeed1]/50 p-4">
-                <h3 className="font-serif text-xl font-bold text-[#241705]">
+              <div className="border-b border-[#d4a338]/20 bg-[#faeed1]/50 p-3.5 sm:p-4">
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#241705]">
                   All Customer Orders ({orders.length})
                 </h3>
-                <p className="text-xs text-[#5e4318]">
+                <p className="text-[11px] sm:text-xs text-[#5e4318]">
                   Manage craft packing, oxygenated aquatic bagging, and shipment tracking
                 </p>
               </div>
 
-              <div className="overflow-x-auto">
+              {/* Mobile View: Dedicated Luxury Order Cards (md:hidden) */}
+              <div className="block md:hidden divide-y divide-[#d4a338]/15">
+                {orders.length === 0 ? (
+                  <div className="p-8 text-center text-[#73562a]">
+                    <Package className="mx-auto h-8 w-8 text-[#d4a338]/60 mb-2" />
+                    <p className="font-serif text-sm font-bold text-[#241705]">No Customer Orders Yet</p>
+                    <p className="text-[11px] text-[#5e4318] mt-1">
+                      Live orders placed by buyers on the store will appear here in real time.
+                    </p>
+                  </div>
+                ) : (
+                  orders.map((order: any) => {
+                    const hasAquatics = order.items?.some(
+                      (i: any) => i.department === 'aquarium' || aquariumCategories.includes(i.category)
+                    )
+                    return (
+                      <div key={order.orderId} className="p-3.5 space-y-3 bg-white/40 transition hover:bg-white/80">
+                        {/* Top: Order ID & Date & View */}
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="font-mono text-xs font-bold text-[#241705] bg-[#faeed1] px-2 py-0.5 rounded-lg border border-[#d4a338]/30">
+                              #{order.orderId}
+                            </span>
+                            {hasAquatics && (
+                              <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[8px] font-bold text-cyan-800">
+                                🐟 Aquatic
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[10px] text-[#73562a] font-medium">{order.date}</span>
+                        </div>
+
+                        {/* Customer & Items Summary */}
+                        <div className="flex items-start justify-between gap-2 text-xs">
+                          <div>
+                            <p className="font-bold text-[#241705]">{order.customer?.fullName || 'Customer'}</p>
+                            <p className="text-[10px] text-[#73562a]">
+                              {order.customer?.city || 'India'}{order.customer?.phone ? ` • ${order.customer.phone}` : ''}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-extrabold text-[#855a10]">₹{order.total?.toFixed(0)}</p>
+                            <p className="text-[10px] text-[#73562a] font-semibold">{order.items?.length || 1} item(s)</p>
+                          </div>
+                        </div>
+
+                        {/* Status Select & Action Button */}
+                        <div className="flex items-center gap-2 pt-1 border-t border-[#d4a338]/10">
+                          <div className="flex-1">
+                            <select
+                              value={order.status}
+                              onChange={(e) => updateOrderStatus(order.orderId, e.target.value)}
+                              className="h-8 w-full rounded-xl border border-[#d4a338]/35 bg-white px-2 text-[11px] font-bold text-[#241705] outline-none shadow-xs truncate"
+                            >
+                              <option value="Aquatic Packing & Oxygenation">Aquatic Packing</option>
+                              <option value="Handcrafting & Packing">Craft Packing</option>
+                              <option value="Shipped (Express Courier)">Shipped</option>
+                              <option value="Delivered">Delivered</option>
+                              <option value="Cancelled">Cancelled</option>
+                            </select>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOrder(order)}
+                            className="inline-flex items-center gap-1 rounded-xl border border-[#d4a338]/40 bg-white px-3 py-1.5 text-xs font-bold text-[#241705] hover:bg-[#faeed1] transition shadow-xs shrink-0"
+                          >
+                            <Eye className="h-3.5 w-3.5 text-[#855a10]" /> View
+                          </button>
+                        </div>
+                      </div>
+                    )
+                  })
+                )}
+              </div>
+
+              {/* Desktop View: Full 7-Column Data Table (hidden md:block) */}
+              <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="border-b border-[#d4a338]/20 font-bold uppercase tracking-wider text-[#73562a]">
                     <tr>
@@ -1353,15 +1520,15 @@ export default function AdminPage() {
         {/* TAB 5: PROMOS & COUPONS */}
         {/* ========================================================================= */}
         {activeTab === 'coupons' && (
-          <div className="grid gap-6 lg:grid-cols-[1fr_1.1fr]">
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-[1fr_1.1fr]">
             {/* Create Coupon Form */}
-            <div className="glass-card p-6">
-              <h3 className="font-serif text-xl font-bold text-[#241705]">Create Promotional Coupon</h3>
+            <div className="glass-card p-4 sm:p-6">
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#241705]">Create Promotional Coupon</h3>
               <p className="mt-1 text-xs text-[#5e4318]">
                 New codes will be immediately valid for customers in the storefront checkout.
               </p>
 
-              <form onSubmit={handleCreateCoupon} className="mt-5 space-y-4">
+              <form onSubmit={handleCreateCoupon} className="mt-4 sm:mt-5 space-y-3.5 sm:space-y-4">
                 <div>
                   <label className="mb-1 block text-xs font-bold text-[#241705]">Coupon Code</label>
                   <input
@@ -1373,7 +1540,7 @@ export default function AdminPage() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="mb-1 block text-xs font-bold text-[#241705]">Discount Type</label>
                     <select
@@ -1409,28 +1576,28 @@ export default function AdminPage() {
                   />
                 </div>
 
-                <button type="submit" className="btn-primary w-full py-3 text-xs">
+                <button type="submit" className="btn-primary w-full py-3 text-xs shadow-sm">
                   <Tag className="h-4 w-4" /> Activate Coupon Code
                 </button>
               </form>
             </div>
 
             {/* Active Coupons List */}
-            <div className="glass-card p-6">
-              <h3 className="font-serif text-xl font-bold text-[#241705]">Active Coupon Codes</h3>
+            <div className="glass-card p-4 sm:p-6">
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#241705]">Active Coupon Codes</h3>
               <p className="mt-1 text-xs text-[#5e4318]">Active codes applicable by store shoppers</p>
 
-              <div className="mt-5 space-y-3">
+              <div className="mt-4 sm:mt-5 space-y-2.5 sm:space-y-3">
                 {Object.values(availableCoupons as Record<string, any>).map((c: any) => (
                   <div
                     key={c.code}
-                    className="flex items-center justify-between rounded-2xl border border-[#d4a338]/25 bg-white p-3.5 shadow-sm"
+                    className="flex items-center justify-between gap-3 rounded-2xl border border-[#d4a338]/25 bg-white p-3 sm:p-3.5 shadow-sm"
                   >
-                    <div>
-                      <span className="rounded-lg border border-dashed border-[#855a10] bg-[#faeed1] px-2.5 py-1 font-mono text-xs font-bold text-[#855a10]">
+                    <div className="min-w-0">
+                      <span className="inline-block rounded-lg border border-dashed border-[#855a10] bg-[#faeed1] px-2.5 py-0.5 font-mono text-xs font-bold text-[#855a10]">
                         {c.code}
                       </span>
-                      <p className="mt-1 text-xs font-bold text-[#241705]">{c.label}</p>
+                      <p className="mt-1 text-xs font-bold text-[#241705] truncate">{c.label}</p>
                       <p className="text-[10px] text-emerald-700 font-semibold">
                         {c.type === 'percent'
                           ? `${c.value}% discount`
@@ -1443,7 +1610,7 @@ export default function AdminPage() {
                     <button
                       type="button"
                       onClick={() => deleteCoupon(c.code)}
-                      className="grid h-8 w-8 place-items-center rounded-lg border border-rose-200 bg-rose-50 text-rose-600 transition hover:bg-rose-500 hover:text-white"
+                      className="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-rose-200 bg-rose-50 text-rose-600 transition hover:bg-rose-500 hover:text-white"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -1458,7 +1625,7 @@ export default function AdminPage() {
         {/* TAB 6: MAKERS & AQUARISTS COLLECTIVE */}
         {/* ========================================================================= */}
         {activeTab === 'artisans' && (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { name: 'Dr. Vikram Aqua Studio', specialty: 'Captive Discus & Planted Tanks', items: 8, location: 'Kochi & Bengaluru', status: 'Master Aquarist' },
               { name: 'Ananya & Maya', specialty: 'Silk Thread & Kundan Jewelry', items: 8, location: 'Jaipur / CA', status: 'Master Maker' },
@@ -1467,16 +1634,16 @@ export default function AdminPage() {
               { name: 'AquaScape Hardscape Co', specialty: 'Ohko Stone & Bonsai Driftwood', items: 5, location: 'Hyderabad', status: 'Hardscape Guild' },
               { name: 'Aiden Apothecary', specialty: 'Botanical Soy Wax Candles', items: 5, location: 'Shimla Studios', status: 'Clean Certified' },
             ].map((artisan, idx) => (
-              <div key={idx} className="glass-card p-6">
+              <div key={idx} className="glass-card p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800">
                     {artisan.status}
                   </span>
                   <span className="text-xs font-bold text-[#855a10]">{artisan.items} Offerings</span>
                 </div>
-                <h4 className="mt-3 font-serif text-xl font-bold text-[#241705]">{artisan.name}</h4>
+                <h4 className="mt-2.5 sm:mt-3 font-serif text-lg sm:text-xl font-bold text-[#241705]">{artisan.name}</h4>
                 <p className="text-xs font-semibold text-[#5e4318]">{artisan.specialty}</p>
-                <p className="mt-2 text-xs text-[#8C827A]">{artisan.location}</p>
+                <p className="mt-1.5 sm:mt-2 text-xs text-[#8C827A]">{artisan.location}</p>
               </div>
             ))}
           </div>
@@ -1487,28 +1654,28 @@ export default function AdminPage() {
       {/* ADD / EDIT PRODUCT MODAL (COMPLETE WITH FISH & AQUARIUM & CRAFTS SUPPORT) */}
       {/* ========================================================================= */}
       {isProductModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#17120a]/60 p-4 backdrop-blur-md">
-          <div className="relative my-8 w-full max-w-2xl overflow-hidden rounded-[2.2rem] bg-gradient-to-br from-[#fffdf9] via-[#faeed1] to-[#f6e1b3] border border-[#d4a338]/40 shadow-[0_25px_60px_rgba(133,90,16,0.25)]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#17120a]/60 p-2.5 sm:p-4 backdrop-blur-md">
+          <div className="relative my-2 sm:my-8 w-full max-w-2xl overflow-hidden rounded-2xl sm:rounded-[2.2rem] bg-gradient-to-br from-[#fffdf9] via-[#faeed1] to-[#f6e1b3] border border-[#d4a338]/40 shadow-[0_25px_60px_rgba(133,90,16,0.25)]">
             <button
               type="button"
               onClick={() => setIsProductModalOpen(false)}
-              className="absolute right-5 top-5 grid h-9 w-9 place-items-center rounded-full border border-[#d4a338]/30 bg-white/80 text-[#241705] hover:bg-white"
+              className="absolute right-3.5 top-3.5 sm:right-5 sm:top-5 grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-full border border-[#d4a338]/30 bg-white/80 text-[#241705] hover:bg-white z-10 transition shadow-xs"
             >
               <X className="h-4 w-4" />
             </button>
 
-            <div className="border-b border-[#d4a338]/20 bg-[#faeed1]/50 p-6">
+            <div className="border-b border-[#d4a338]/20 bg-[#faeed1]/50 p-4 sm:p-6 pr-12">
               <span className="section-eyebrow">Catalog Product Management</span>
-              <h3 className="mt-2 font-serif text-2xl font-bold text-[#241705]">
+              <h3 className="mt-1 sm:mt-2 font-serif text-xl sm:text-2xl font-bold text-[#241705]">
                 {editingProduct ? 'Edit Product Details' : 'Add New Offering'}
               </h3>
             </div>
 
-            <form onSubmit={handleProductSubmit} className="space-y-4 p-6 max-h-[75vh] overflow-y-auto">
+            <form onSubmit={handleProductSubmit} className="space-y-3.5 sm:space-y-4 p-3.5 sm:p-6 max-h-[80vh] sm:max-h-[75vh] overflow-y-auto">
               {/* Department Selector */}
               <div>
                 <label className="mb-1.5 block text-xs font-bold text-[#241705]">Department</label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <button
                     type="button"
                     onClick={() => {
@@ -1519,14 +1686,14 @@ export default function AdminPage() {
                         category: isCustomCategory ? productForm.category : (newDeptCats[0] || aquariumCategories[0]),
                       })
                     }}
-                    className={`flex items-center justify-center gap-2 rounded-xl border p-2.5 text-xs font-bold transition ${
+                    className={`flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl border p-2 sm:p-2.5 text-xs font-bold transition ${
                       productForm.department === 'aquarium'
                         ? 'border-cyan-600 bg-cyan-700 text-white shadow-sm'
                         : 'border-[#d4a338]/40 bg-white text-[#241705] hover:bg-[#faeed1]'
                     }`}
                   >
-                    <Fish className="h-4 w-4" />
-                    <span>Living Aquatics</span>
+                    <Fish className="h-4 w-4 shrink-0" />
+                    <span className="truncate">Living Aquatics</span>
                   </button>
 
                   <button
@@ -1539,14 +1706,14 @@ export default function AdminPage() {
                         category: isCustomCategory ? productForm.category : (newDeptCats[0] || craftCategories[0]),
                       })
                     }}
-                    className={`flex items-center justify-center gap-2 rounded-xl border p-2.5 text-xs font-bold transition ${
+                    className={`flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl border p-2 sm:p-2.5 text-xs font-bold transition ${
                       productForm.department === 'crafts'
                         ? 'border-[#855a10] bg-[#855a10] text-white shadow-sm'
                         : 'border-[#d4a338]/40 bg-white text-[#241705] hover:bg-[#faeed1]'
                     }`}
                   >
-                    <Palette className="h-4 w-4" />
-                    <span>Handmade Crafts</span>
+                    <Palette className="h-4 w-4 shrink-0" />
+                    <span className="truncate">Handmade Crafts</span>
                   </button>
                 </div>
               </div>
@@ -1568,10 +1735,10 @@ export default function AdminPage() {
               </div>
 
               {/* Category-Wise Selection Hub */}
-              <div className="rounded-2xl border border-[#d4a338]/35 bg-white/70 p-4 space-y-3.5 shadow-xs">
-                <div className="flex items-center justify-between">
+              <div className="rounded-2xl border border-[#d4a338]/35 bg-white/70 p-3 sm:p-4 space-y-3 sm:space-y-3.5 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <Layers className="h-4 w-4 text-[#855a10]" />
+                    <Layers className="h-4 w-4 text-[#855a10] shrink-0" />
                     <div>
                       <span className="text-xs font-extrabold text-[#241705]">Product Category (Category-Wise)</span>
                       <p className="text-[10px] text-[#73562a]">Organize product category-wise or create a brand new category</p>
@@ -1592,7 +1759,7 @@ export default function AdminPage() {
                         }))
                       }
                     }}
-                    className="inline-flex items-center gap-1 rounded-lg border border-[#d4a338]/40 bg-[#faeed1] px-2.5 py-1 text-[11px] font-bold text-[#855a10] hover:bg-[#f5e0b8] transition shadow-xs"
+                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#d4a338]/40 bg-[#faeed1] px-2.5 py-1 text-[11px] font-bold text-[#855a10] hover:bg-[#f5e0b8] transition shadow-xs shrink-0 self-start sm:self-auto"
                   >
                     {isCustomCategory ? (
                       <>
@@ -1700,7 +1867,7 @@ export default function AdminPage() {
                     <label className="text-[11px] font-bold text-[#241705]">
                       Subcategory / Specific Type <span className="text-[10px] font-normal text-[#8c827a]">(Optional)</span>
                     </label>
-                    <span className="text-[10px] text-[#8c827a]">e.g. Serving Tray, Studs, Discus Pair</span>
+                    <span className="text-[10px] text-[#8c827a] hidden sm:inline">e.g. Serving Tray, Studs, Discus Pair</span>
                   </div>
                   <input
                     type="text"
@@ -1717,7 +1884,7 @@ export default function AdminPage() {
               </div>
 
               {/* Price & Stock Inventory Row */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="mb-1 block text-xs font-bold text-[#241705]">Price (₹ INR)</label>
                   <input
@@ -1773,13 +1940,13 @@ export default function AdminPage() {
 
               {/* Aquatic Parameters Section (Only shown if department === 'aquarium') */}
               {productForm.department === 'aquarium' && (
-                <div className="rounded-2xl border border-cyan-400/50 bg-cyan-50/70 p-4 space-y-3">
+                <div className="rounded-2xl border border-cyan-400/50 bg-cyan-50/70 p-3.5 sm:p-4 space-y-3">
                   <div className="flex items-center gap-2 text-xs font-bold text-cyan-900">
                     <Fish className="h-4 w-4 text-cyan-700" />
                     <span>Aquatic Parameters &amp; Transit Specs</span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 text-xs">
                     <div>
                       <label className="block text-[11px] font-bold text-cyan-900 mb-1">Water Type</label>
                       <select
@@ -1884,7 +2051,7 @@ export default function AdminPage() {
                 </div>
 
                 {/* Presets */}
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
                   {PRESET_IMAGES.filter(
                     (img) => productForm.department === 'all' || img.department === productForm.department
                   ).map((img) => (
@@ -1892,7 +2059,7 @@ export default function AdminPage() {
                       key={img.label}
                       type="button"
                       onClick={() => setProductForm({ ...productForm, image: img.url })}
-                      className="rounded-full border border-[#d4a338]/30 bg-white/80 px-2.5 py-1 text-[10px] font-bold text-[#241705] hover:bg-[#faeed1] shadow-sm"
+                      className="rounded-full border border-[#d4a338]/30 bg-white/80 px-2.5 py-1 text-[10px] font-bold text-[#241705] hover:bg-[#faeed1] shadow-xs"
                     >
                       {img.label}
                     </button>
@@ -1900,13 +2067,13 @@ export default function AdminPage() {
                 </div>
 
                 {/* Image URL Input with Preview */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <input
                     required
                     value={productForm.image}
                     onChange={(e) => setProductForm({ ...productForm, image: e.target.value })}
                     placeholder="https://images.unsplash.com/..."
-                    className="h-10 flex-1 rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs text-[#241705] outline-none shadow-sm"
+                    className="h-10 flex-1 min-w-0 rounded-xl border border-[#d4a338]/35 bg-white px-3 text-xs text-[#241705] outline-none shadow-sm"
                   />
                   {productForm.image && (
                     <img
@@ -1915,14 +2082,14 @@ export default function AdminPage() {
                       onError={(e) => {
                         e.currentTarget.src = fallbackCraftImage
                       }}
-                      className="h-10 w-10 rounded-xl object-cover border border-[#d4a338]/30"
+                      className="h-10 w-10 shrink-0 rounded-xl object-cover border border-[#d4a338]/30"
                     />
                   )}
                 </div>
               </div>
 
-              <div className="flex gap-2 pt-3">
-                <button type="submit" className="btn-primary flex-1 py-3 text-xs shadow-glow">
+              <div className="flex gap-2 pt-2 sm:pt-3">
+                <button type="submit" className="btn-primary w-full py-3 sm:py-3.5 text-xs shadow-glow">
                   {editingProduct ? 'Save Product Changes' : 'Publish Product to Live Store'}
                 </button>
               </div>
@@ -1935,29 +2102,29 @@ export default function AdminPage() {
       {/* ORDER DETAILS MODAL */}
       {/* ========================================================================= */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#17120a]/60 p-4 backdrop-blur-md">
-          <div className="relative my-8 w-full max-w-xl overflow-hidden rounded-[2.2rem] bg-gradient-to-br from-[#fffdf9] via-[#faeed1] to-[#f6e1b3] border border-[#d4a338]/40 shadow-[0_25px_60px_rgba(133,90,16,0.25)]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#17120a]/60 p-2.5 sm:p-4 backdrop-blur-md">
+          <div className="relative my-2 sm:my-8 w-full max-w-xl overflow-hidden rounded-2xl sm:rounded-[2.2rem] bg-gradient-to-br from-[#fffdf9] via-[#faeed1] to-[#f6e1b3] border border-[#d4a338]/40 shadow-[0_25px_60px_rgba(133,90,16,0.25)]">
             <button
               type="button"
               onClick={() => setSelectedOrder(null)}
-              className="absolute right-5 top-5 grid h-9 w-9 place-items-center rounded-full border border-[#d4a338]/30 bg-white/80 text-[#241705] hover:bg-white"
+              className="absolute right-3.5 top-3.5 sm:right-5 sm:top-5 grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-full border border-[#d4a338]/30 bg-white/80 text-[#241705] hover:bg-white z-10 transition shadow-xs"
             >
               <X className="h-4 w-4" />
             </button>
 
-            <div className="border-b border-[#d4a338]/20 bg-[#faeed1]/50 p-6">
+            <div className="border-b border-[#d4a338]/20 bg-[#faeed1]/50 p-4 sm:p-6 pr-12">
               <span className="section-eyebrow">Order Inspection &amp; Tracking</span>
-              <h3 className="mt-2 font-serif text-2xl font-bold text-[#241705]">
+              <h3 className="mt-1 sm:mt-2 font-serif text-xl sm:text-2xl font-bold text-[#241705]">
                 Order #{selectedOrder.orderId}
               </h3>
               <p className="text-xs text-[#5e4318]">Placed on {selectedOrder.date}</p>
             </div>
 
-            <div className="space-y-4 p-6 text-xs">
+            <div className="space-y-3.5 sm:space-y-4 p-4 sm:p-6 text-xs max-h-[80vh] sm:max-h-[75vh] overflow-y-auto">
               {/* Customer Info */}
-              <div className="rounded-2xl border border-[#d4a338]/30 bg-white/80 p-4 shadow-sm">
+              <div className="rounded-2xl border border-[#d4a338]/30 bg-white/80 p-3.5 sm:p-4 shadow-sm">
                 <h4 className="font-bold text-[#241705]">Customer &amp; Shipping Destination</h4>
-                <p className="mt-1 text-[#241705] font-semibold">{selectedOrder.customer?.fullName}</p>
+                <p className="mt-1.5 text-[#241705] font-semibold">{selectedOrder.customer?.fullName}</p>
                 <p className="text-[#5e4318]">{selectedOrder.customer?.email}</p>
                 <p className="text-[#5e4318]">{selectedOrder.customer?.phone}</p>
                 <p className="text-[#5e4318]">{selectedOrder.customer?.address}</p>
@@ -1965,24 +2132,24 @@ export default function AdminPage() {
               </div>
 
               {/* Items */}
-              <div className="rounded-2xl border border-[#d4a338]/30 bg-white/80 p-4 shadow-sm">
+              <div className="rounded-2xl border border-[#d4a338]/30 bg-white/80 p-3.5 sm:p-4 shadow-sm">
                 <h4 className="font-bold text-[#241705]">Ordered Items ({selectedOrder.items?.length || 1})</h4>
                 <div className="mt-3 space-y-2">
                   {selectedOrder.items?.map((item: any, i: number) => {
                     const isAqua = item.department === 'aquarium' || aquariumCategories.includes(item.category)
                     return (
-                      <div key={i} className="flex items-center justify-between border-b border-[#d4a338]/15 pb-2">
-                        <div className="flex items-center gap-2.5">
+                      <div key={i} className="flex items-center justify-between gap-2 border-b border-[#d4a338]/15 pb-2">
+                        <div className="flex items-center gap-2.5 min-w-0">
                           <img
                             src={item.image}
                             alt={item.title}
-                            className="h-10 w-10 rounded-lg object-cover border border-[#d4a338]/25"
+                            className="h-10 w-10 shrink-0 rounded-lg object-cover border border-[#d4a338]/25"
                           />
-                          <div>
-                            <div className="flex items-center gap-1.5">
-                              <p className="font-bold text-[#241705]">{item.title}</p>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <p className="font-bold text-[#241705] truncate">{item.title}</p>
                               {isAqua && (
-                                <span className="rounded-full bg-cyan-100 px-1.5 py-0.2 text-[8px] font-bold text-cyan-800">
+                                <span className="rounded-full bg-cyan-100 px-1.5 py-0.2 text-[8px] font-bold text-cyan-800 shrink-0">
                                   Aquatic
                                 </span>
                               )}
@@ -1992,7 +2159,7 @@ export default function AdminPage() {
                             </p>
                           </div>
                         </div>
-                        <span className="font-bold text-[#855a10]">{item.price}</span>
+                        <span className="font-bold text-[#855a10] shrink-0">{item.price}</span>
                       </div>
                     )
                   })}
