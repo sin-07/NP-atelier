@@ -458,53 +458,60 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-[#F6F3EE] text-[#141414]">
       {/* Top Admin Header with Dynamic Branding */}
-      <header className="sticky top-0 z-30 border-b border-[#E5E0D8] bg-white/95 shadow-sm backdrop-blur-md">
-        <div className="section-shell flex h-20 items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
+      <header className="sticky top-0 z-30 border-b border-[#E5E0D8] bg-white/95 shadow-xs backdrop-blur-md">
+        <div className="section-shell flex h-16 sm:h-20 items-center justify-between gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3.5 min-w-0 flex-1">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-full border border-[#d4a338]/30 bg-white/80 px-4 py-2 text-xs font-bold text-[#5e4318] shadow-sm transition hover:bg-[#faeed1] hover:text-[#17120a]"
+              title="Return to Public Storefront"
+              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[#d4a338]/30 bg-white/90 p-2 sm:px-3.5 sm:py-2 text-xs font-bold text-[#5e4318] shadow-xs transition hover:bg-[#faeed1] hover:text-[#17120a] shrink-0 active:scale-95"
             >
               <ArrowLeft className="h-4 w-4" />
-              <span>Back to Storefront</span>
+              <span className="hidden md:inline">Storefront</span>
             </Link>
 
-            <div className="hidden h-6 w-px bg-[#d4a338]/30 sm:block" />
+            <div className="hidden h-5 w-px bg-[#d4a338]/30 sm:block shrink-0" />
 
             {/* Dynamic Branding Display in Admin Header */}
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
               {branding?.logoImageUrl && (branding.logoType === 'image' || branding.logoType === 'both') ? (
                 <img
                   src={branding.logoImageUrl}
                   alt={branding.siteName}
-                  className="h-10 w-auto max-w-[120px] rounded-xl object-contain border border-[#d4a338]/30 bg-white p-0.5 shadow-sm"
+                  className="h-8 w-auto max-w-[80px] sm:h-10 sm:max-w-[120px] rounded-xl object-contain border border-[#d4a338]/30 bg-white p-0.5 shadow-xs shrink-0"
                 />
               ) : (
-                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-[#fff3cf] via-[#e8bc57] to-[#b38320] text-sm font-black text-[#17120a] shadow-soft border border-[#fbf3d5]">
+                <span className="grid h-8 w-8 sm:h-10 sm:w-10 place-items-center rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#fff3cf] via-[#e8bc57] to-[#b38320] text-xs sm:text-sm font-black text-[#17120a] shadow-soft border border-[#fbf3d5] shrink-0">
                   {branding?.logoText || 'NP'}
                 </span>
               )}
-              <div>
-                <h1 className="font-serif text-xl sm:text-2xl font-bold leading-tight text-[#241705]">
-                  {branding?.siteName || 'NP Atelier'} Admin
-                </h1>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[#8c5f0b]">
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <h1 className="font-serif text-sm sm:text-lg lg:text-xl font-bold leading-tight text-[#241705] truncate">
+                    {branding?.siteName || 'NP Atelier'}
+                  </h1>
+                  <span className="rounded-md border border-[#D4AF37]/50 bg-[#FAF3E3] px-1.5 py-0.5 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider text-[#7A5408] shrink-0">
+                    Admin
+                  </span>
+                </div>
+                <p className="hidden sm:block text-[10px] font-bold uppercase tracking-wider text-[#8c5f0b] truncate mt-0.5">
                   Crafts, Aquatics &amp; Store Management
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden rounded-2xl border border-[#d4a338]/30 bg-white/80 px-4 py-2 text-right md:block">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#73562a]">Gross Store Sales</p>
-              <p className="text-sm font-extrabold text-[#855a10]">₹{metrics.totalSales.toFixed(0)}</p>
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            <div className="hidden rounded-2xl border border-[#d4a338]/30 bg-white/80 px-3.5 py-1.5 text-right xl:block">
+              <p className="text-[9px] font-bold uppercase tracking-wider text-[#73562a]">Gross Store Sales</p>
+              <p className="text-xs sm:text-sm font-extrabold text-[#855a10]">₹{metrics.totalSales.toFixed(0)}</p>
             </div>
 
             <button
               type="button"
               onClick={() => openAddProductModal('aquarium')}
-              className="inline-flex items-center gap-1.5 rounded-full bg-cyan-700 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-cyan-800"
+              className="inline-flex h-8 sm:h-9 items-center justify-center gap-1.5 rounded-full bg-cyan-700 px-2.5 sm:px-3.5 text-xs font-bold text-white shadow-xs transition hover:bg-cyan-800 active:scale-95 shrink-0 cursor-pointer"
+              title="Add Aquatic Specimen"
             >
               <Fish className="h-3.5 w-3.5 text-cyan-200" />
               <span className="hidden sm:inline">Add Aquatic</span>
@@ -513,7 +520,8 @@ export default function AdminPage() {
             <button
               type="button"
               onClick={() => openAddProductModal('crafts')}
-              className="btn-primary text-xs py-2 px-3.5 shadow-sm"
+              className="inline-flex h-8 sm:h-9 items-center justify-center gap-1.5 rounded-full bg-[#17120A] px-2.5 sm:px-3.5 text-xs font-bold text-[#F3D789] border border-[#d4a338]/60 shadow-xs transition hover:bg-[#251D0B] active:scale-95 shrink-0 cursor-pointer"
+              title="Add Artisan Craft"
             >
               <Plus className="h-4 w-4" />
               <span className="hidden sm:inline">Add Craft</span>
@@ -522,20 +530,20 @@ export default function AdminPage() {
             <button
               type="button"
               onClick={handleAdminLogout}
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#d4a338]/30 bg-white/80 px-3 py-2 text-xs font-bold text-rose-600 shadow-sm transition hover:bg-rose-50 hover:border-rose-300"
+              className="inline-flex h-8 sm:h-9 items-center justify-center gap-1.5 rounded-full border border-rose-200 bg-white/90 px-2.5 sm:px-3 text-xs font-bold text-rose-600 shadow-xs transition hover:bg-rose-50 hover:border-rose-300 active:scale-95 shrink-0 cursor-pointer"
               title="Sign out of admin session"
             >
               <LogOut className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Sign Out</span>
+              <span className="hidden md:inline">Sign Out</span>
             </button>
           </div>
         </div>
       </header>
 
       {/* Main Admin Content */}
-      <div className="section-shell py-8">
-        {/* Navigation Tabs */}
-        <div className="mb-8 flex flex-wrap items-center gap-2 border-b border-[#d4a338]/30 pb-4">
+      <div className="section-shell py-6 sm:py-8">
+        {/* Navigation Tabs - Smooth Horizontal Rail */}
+        <div className="mb-6 sm:mb-8 flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 -mx-2 px-2 sm:mx-0 sm:px-0 border-b border-[#d4a338]/30">
           {[
             { id: 'overview', label: 'Executive Analytics', icon: LayoutDashboard },
             { id: 'products', label: `Catalog (${products.length})`, icon: Package },
@@ -548,14 +556,14 @@ export default function AdminPage() {
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition duration-200 ${
+              className={`flex items-center gap-2 rounded-full px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold transition duration-150 shrink-0 cursor-pointer ${
                 activeTab === tab.id
-                  ? 'bg-gradient-to-r from-[#faeed1] to-[#e8bc57] text-[#241705] shadow-sm border border-[#d4a338]'
-                  : 'border border-[#d4a338]/30 bg-white/70 text-[#5e4318] hover:bg-[#faeed1] hover:text-[#241705]'
+                  ? 'bg-gradient-to-r from-[#faeed1] to-[#e8bc57] text-[#241705] shadow-xs border border-[#d4a338]'
+                  : 'border border-[#d4a338]/30 bg-white/80 text-[#5e4318] hover:bg-[#faeed1] hover:text-[#241705]'
               }`}
             >
               <tab.icon className="h-4 w-4" />
-              {tab.label}
+              <span>{tab.label}</span>
             </button>
           ))}
         </div>
