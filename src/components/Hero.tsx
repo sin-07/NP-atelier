@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import {
   ArrowUpRight,
@@ -18,6 +19,7 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll'
+import useReducedMotion from '../hooks/useReducedMotion'
 import { fallbackCraftImage } from '../utils/fallbackImage'
 import { useMarketplace } from '../context/MarketplaceContext'
 
@@ -40,12 +42,14 @@ const HERO_DROPS: Record<
   DropKey,
   {
     tabLabel: string
+    shortLabel: string
     craft: ShowcaseCard
     aquatic: ShowcaseCard
   }
 > = {
   featured: {
     tabLabel: 'Signature Duo',
+    shortLabel: 'Signature',
     craft: {
       id: 1,
       title: 'Evil Eye Mandala Pendant',
@@ -73,6 +77,7 @@ const HERO_DROPS: Record<
   },
   botanical: {
     tabLabel: 'Botanical Sanctuary',
+    shortLabel: 'Botanical',
     craft: {
       id: 2,
       title: 'Pressed Botanical Resin Tray',
@@ -100,6 +105,7 @@ const HERO_DROPS: Record<
   },
   monogram: {
     tabLabel: 'Bespoke Keepsakes',
+    shortLabel: 'Bespoke',
     craft: {
       id: 3,
       title: 'Ruby Initial Gold Flake Monogram',
@@ -156,6 +162,7 @@ const VALUE_PERKS = [
 
 export default function Hero() {
   const { ref, isVisible } = useRevealOnScroll()
+  const reduced = useReducedMotion()
   const { cart, addToCart, setCartQuantity, removeFromCart, setIsCartOpen, setActiveDepartment } = useMarketplace()
   const [activeTab, setActiveTab] = useState<DropKey>('featured')
 
@@ -182,6 +189,7 @@ export default function Hero() {
 
   // GSAP Snappy Luxury Entrance Animation on Mount
   useEffect(() => {
+    if (reduced) return
     if (!heroContainerRef.current) return
 
     const ctx = gsap.context(() => {
@@ -213,7 +221,7 @@ export default function Hero() {
     }, heroContainerRef)
 
     return () => ctx.revert()
-  }, [])
+  }, [reduced])
 
   // Preload Hero drop images so switching is instant and 0-latency
   useEffect(() => {
@@ -233,7 +241,7 @@ export default function Hero() {
     })
   }, [])
 
-  // GSAP Silky Smooth Tab Change Animation (skips initial mount)
+  // Silky Smooth Tab Change Animation (skips initial mount)
   const isHeroTabInitial = useRef(true)
   useEffect(() => {
     if (isHeroTabInitial.current) {
@@ -242,10 +250,11 @@ export default function Hero() {
     }
     if (!stageRef.current) return
     const cards = stageRef.current.querySelectorAll('.gsap-hero-card')
+    gsap.killTweensOf(cards)
     gsap.fromTo(
       cards,
-      { opacity: 0.6, y: 6 },
-      { opacity: 1, y: 0, duration: 0.22, stagger: 0.04, ease: 'power2.out', clearProps: 'opacity,transform' }
+      { opacity: 0.75, scale: 0.99 },
+      { opacity: 1, scale: 1, duration: 0.22, stagger: 0.03, ease: 'power2.out', clearProps: 'opacity,scale' }
     )
   }, [activeTab])
 
@@ -261,7 +270,7 @@ export default function Hero() {
 
   // GSAP Interactive 3D Parallax on Stage - Throttled with RAF for 60/120fps smoothness
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!stageRef.current || typeof window === 'undefined' || window.innerWidth < 1024) return
+    if (reduced || !stageRef.current || typeof window === 'undefined' || window.innerWidth < 1024) return
     const clientX = e.clientX
     const clientY = e.clientY
 
@@ -424,8 +433,20 @@ export default function Hero() {
             className="relative"
           >
             {/* Interactive Drop Selector Pills */}
-            <div className="mb-4 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
-              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full rounded-full border border-[#D4AF37]/45 bg-white/95 p-1 shadow-xs">
+            <div className="mb-3 sm:mb-4">
+              <div className="flex items-center justify-between gap-2 mb-2 px-1">
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#8C6F2D] flex items-center gap-1.5">
+                  <Sparkles className="h-3 w-3 text-[#B8860B]" />
+                  <span>Curated Drop Collections</span>
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-semibold text-[#7A6F62] hidden xs:inline-flex items-center gap-1">
+                  <span>Tap to switch showcase</span>
+                  <span className="text-[#B8860B]">✦</span>
+                </span>
+              </div>
+
+              {/* Seamless Full-Width 3-Tab Segmented Switcher with Smooth Sliding Pill */}
+              <div className="grid grid-cols-3 gap-1 rounded-2xl sm:rounded-full border border-[#D4AF37]/50 bg-white/95 p-1 shadow-xs relative">
                 {(Object.keys(HERO_DROPS) as DropKey[]).map((key) => {
                   const isActive = activeTab === key
                   return (
@@ -433,21 +454,25 @@ export default function Hero() {
                       key={key}
                       type="button"
                       onClick={() => setActiveTab(key)}
-                      className={`rounded-full px-3.5 py-1.5 text-xs font-bold transition duration-150 cursor-pointer shrink-0 ${
+                      className={`relative rounded-xl sm:rounded-full py-1.5 sm:py-2 px-1 sm:px-3 text-center text-[11px] sm:text-xs font-bold transition-colors duration-200 cursor-pointer truncate ${
                         isActive
-                          ? 'bg-[#141414] text-[#ECC872] shadow-xs'
-                          : 'text-[#615748] hover:text-[#141414] hover:bg-[#FAF4E2]'
+                          ? 'text-[#ECC872]'
+                          : 'text-[#615748] hover:text-[#141414]'
                       }`}
                     >
-                      {HERO_DROPS[key].tabLabel}
+                      {isActive && (
+                        <motion.div
+                          layoutId="heroDropTabPill"
+                          className="absolute inset-0 rounded-xl sm:rounded-full bg-[#141414] shadow-xs"
+                          transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                        />
+                      )}
+                      <span className="relative z-10 hidden sm:inline">{HERO_DROPS[key].tabLabel}</span>
+                      <span className="relative z-10 sm:hidden">{HERO_DROPS[key].shortLabel}</span>
                     </button>
                   )
                 })}
               </div>
-
-              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-[#7A5408]">
-                <span>Tap to switch showcase</span>
-              </span>
             </div>
 
             {/* Dual Stage Cards Container */}

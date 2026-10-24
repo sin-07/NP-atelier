@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Building2,
@@ -31,6 +31,16 @@ export default function AuthModal() {
   const [mode, setMode] = useState<'login' | 'register'>('register')
   const [isLocatingPin, setIsLocatingPin] = useState(false)
   const [pinStatus, setPinStatus] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (isAuthOpen) {
+      const prevOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = prevOverflow
+      }
+    }
+  }, [isAuthOpen])
 
   const [formState, setFormState] = useState({
     name: user?.name || '',
@@ -95,7 +105,7 @@ export default function AuthModal() {
       {isAuthOpen ? (
         <motion.div
           key="auth-modal-backdrop"
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center overflow-y-auto bg-black/75 backdrop-blur-xs p-0 sm:p-4"
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/75 backdrop-blur-xs p-0 sm:p-4 overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -103,7 +113,7 @@ export default function AuthModal() {
         >
           <motion.div
             key="auth-modal-card"
-            className="relative my-0 sm:my-8 w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-white border border-[#D4AF37]/40 shadow-[0_25px_70px_rgba(180,135,45,0.25)]"
+            className="relative my-0 sm:my-8 w-full max-w-lg max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-white border border-[#D4AF37]/40 shadow-[0_25px_70px_rgba(180,135,45,0.25)]"
             initial={{ scale: 0.96, y: 14 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, y: 14 }}

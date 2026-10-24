@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import {
   Compass,
@@ -38,27 +39,22 @@ export default function MobileBottomDock() {
 
   // Auto-sync active tab with scroll position smoothly
   useEffect(() => {
-    let ticking = false
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollY = window.scrollY
-          const collectionEl = document.getElementById('collection')
-          const collectionTop = collectionEl ? collectionEl.offsetTop - 140 : 600
+    const collectionEl = document.getElementById('collection')
+    if (!collectionEl) return
 
-          if (scrollY >= collectionTop - 100) {
-            setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'drops'))
-          } else {
-            setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'home'))
-          }
-          ticking = false
-        })
-        ticking = true
-      }
-    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'drops'))
+        } else if (typeof window !== 'undefined' && window.scrollY < 300) {
+          setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'home'))
+        }
+      },
+      { rootMargin: '-100px 0px -50% 0px' }
+    )
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    observer.observe(collectionEl)
+    return () => observer.disconnect()
   }, [])
 
   const {
@@ -105,28 +101,42 @@ export default function MobileBottomDock() {
         <button
           type="button"
           onClick={() => handleNavClick('home')}
-          className={`gsap-dock-btn flex flex-col items-center justify-center py-1.5 px-3.5 rounded-full transition-all duration-200 active:scale-95 cursor-pointer ${
+          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3.5 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'home'
-              ? 'text-[#ECC872] bg-[#221B10] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]'
+              ? 'text-[#ECC872]'
               : 'text-[#A89876] hover:text-[#ECC872]'
           }`}
         >
-          <Compass className="h-5 w-5" />
-          <span className="text-[10px] font-bold tracking-tight mt-0.5">Atelier</span>
+          {activeTab === 'home' && (
+            <motion.div
+              layoutId="mobileDockPill"
+              className="absolute inset-0 rounded-full bg-[#221B10] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]"
+              transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+            />
+          )}
+          <Compass className="h-5 w-5 relative z-10" />
+          <span className="text-[10px] font-bold tracking-tight mt-0.5 relative z-10">Atelier</span>
         </button>
 
         {/* 2. Drops / Collections */}
         <button
           type="button"
           onClick={() => handleNavClick('drops')}
-          className={`gsap-dock-btn flex flex-col items-center justify-center py-1.5 px-3.5 rounded-full transition-all duration-200 active:scale-95 cursor-pointer ${
+          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3.5 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'drops'
-              ? 'text-[#ECC872] bg-[#221B10] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]'
+              ? 'text-[#ECC872]'
               : 'text-[#A89876] hover:text-[#ECC872]'
           }`}
         >
-          <Sparkles className="h-5 w-5" />
-          <span className="text-[10px] font-bold tracking-tight mt-0.5">Drops</span>
+          {activeTab === 'drops' && (
+            <motion.div
+              layoutId="mobileDockPill"
+              className="absolute inset-0 rounded-full bg-[#221B10] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]"
+              transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+            />
+          )}
+          <Sparkles className="h-5 w-5 relative z-10" />
+          <span className="text-[10px] font-bold tracking-tight mt-0.5 relative z-10">Drops</span>
         </button>
 
         {/* 3. Search Spotlight */}

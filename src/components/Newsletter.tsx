@@ -22,13 +22,9 @@ export default function Newsletter() {
     setIsSubscribed(true)
     showToast({
       title: 'Welcome to the Circle',
-      message: 'Here is your ₹150 welcome coupon: WELCOME150',
+      message: 'Thank you for subscribing to NP Atelier Studio Notes.',
       type: 'success',
     })
-  }
-
-  const handleApplyWelcome = () => {
-    applyCouponCode('WELCOME150')
   }
 
   return (
@@ -43,7 +39,7 @@ export default function Newsletter() {
               Join the Soft <span className="italic font-normal text-gold-gradient">Handmade Circle</span>
             </h2>
             <p className="body-lead mt-4 max-w-xl text-[#4A4339]">
-              Get notified of limited batch drops, maker studio journals, and seasonal DIY tutorials. Plus receive a <strong className="text-[#7A5408] font-bold">₹150 voucher</strong> on your first order.
+              Get notified of limited batch drops, maker studio journals, and seasonal DIY tutorials directly from our atelier.
             </p>
             <div className="mt-5 flex items-center gap-3">
               <img
@@ -63,22 +59,10 @@ export default function Newsletter() {
                 <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-[#FAF4E2] to-[#F5E8C4] border border-[#D4AF37]/50 text-[#8F650D]">
                   <CheckCircle2 className="h-6 w-6 text-[#8F650D]" />
                 </div>
-                <h3 className="mt-3 font-serif text-2xl font-bold text-[#141414]">You're on the list!</h3>
+                <h3 className="mt-3 font-serif text-2xl font-bold text-[#141414]">You&apos;re on the list!</h3>
                 <p className="mt-1 text-xs text-[#4A4339]">
-                  Use coupon code below at checkout for ₹150 off:
+                  Thank you for joining. You will receive exclusive early access to artisan drops and studio journals.
                 </p>
-                <div className="mt-3 flex items-center justify-center gap-2">
-                  <span className="rounded-xl border-2 border-dashed border-[#D4AF37] bg-white px-3.5 py-1.5 font-mono text-sm font-bold text-[#5C4106] shadow-xs">
-                    WELCOME150
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleApplyWelcome}
-                    className="btn-gold px-4 py-1.5 text-xs font-bold shadow-xs"
-                  >
-                    Apply Now
-                  </button>
-                </div>
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex flex-col gap-3 sm:flex-row">
@@ -95,10 +79,10 @@ export default function Newsletter() {
                 </div>
                 <button
                   type="submit"
-                  className="btn-gold h-14 px-8 text-sm font-bold shrink-0 shadow-sm"
+                  className="btn-gold h-14 px-8 text-sm font-bold shrink-0 shadow-sm cursor-pointer"
                 >
                   <Send className="h-4 w-4" />
-                  Subscribe & Get ₹150
+                  Subscribe
                 </button>
               </form>
             )}

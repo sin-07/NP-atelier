@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowRight,
@@ -40,15 +40,26 @@ export default function CartSidebar() {
     appliedCoupon,
     applyCouponCode,
     removeCoupon,
+    branding,
   } = useMarketplace()
+
+  const contactPhone = (branding?.contactPhone || '+91 93412 97124').replace(/[^0-9]/g, '') || '919341297124'
+  const displayPhone = branding?.contactPhone || '+91 93412 97124'
+  const siteName = branding?.siteName || 'NP Atelier'
+
+  useEffect(() => {
+    if (isCartOpen) {
+      const prevOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = prevOverflow
+      }
+    }
+  }, [isCartOpen])
 
   const [couponInput, setCouponInput] = useState('')
 
-  const freeShippingThreshold = 1499
-  const freeShippingProgress = Math.min(100, (cartSubtotal / freeShippingThreshold) * 100)
-  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - cartSubtotal)
-
-  const handleApplyCoupon = (e) => {
+  const handleApplyCoupon = (e: React.FormEvent) => {
     e.preventDefault()
     if (!couponInput.trim()) return
     applyCouponCode(couponInput)
@@ -86,14 +97,14 @@ export default function CartSidebar() {
 
           <motion.aside
             key="cart-sidebar"
-            className="fixed right-0 top-0 z-[90] flex h-full w-full max-w-md flex-col border-l border-[#D4AF37]/30 bg-[#FAF7F2] shadow-2xl"
+            className="fixed right-0 top-0 z-[90] flex h-full w-full max-w-md flex-col overflow-hidden border-l border-[#D4AF37]/30 bg-[#FAF7F2] shadow-2xl"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-[#DFCFA6]/60 bg-gradient-to-r from-white via-[#FDFBF7] to-[#FAF6ED] px-6 py-5">
+            <div className="flex shrink-0 items-center justify-between border-b border-[#DFCFA6]/60 bg-gradient-to-r from-white via-[#FDFBF7] to-[#FAF6ED] px-6 py-5 z-10 shadow-xs">
               <div className="flex items-center gap-2.5">
                 <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#996515] text-[#1A120B] font-extrabold shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
                   <ShoppingBag className="h-5 w-5" />
@@ -115,30 +126,12 @@ export default function CartSidebar() {
               </button>
             </div>
 
-            {/* Free Shipping Progress Ticker */}
-            <div className="border-b border-[#DFCFA6]/50 bg-gradient-to-r from-[#FAF5E8] to-[#F5ECD5] px-6 py-3">
-              <div className="flex items-center justify-between text-xs font-bold text-[#3E2D07]">
-                <span className="flex items-center gap-1.5">
-                  <Truck className="h-3.5 w-3.5 text-[#B8860B]" />
-                  {cartSubtotal >= freeShippingThreshold ? (
-                    <span className="text-[#875A10] font-extrabold">You unlocked Gilded Complimentary Shipping!</span>
-                  ) : (
-                    <span>Add ₹{Math.max(0, remainingForFreeShipping).toFixed(0)} more for FREE Shipping</span>
-                  )}
-                </span>
-                <span className="text-[10px] text-[#875A10] font-bold">{Math.round(freeShippingProgress)}%</span>
-              </div>
-              <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/80 border border-[#DFCFA6]/40">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F2D785] to-[#B8860B] shadow-[0_0_8px_rgba(212,175,55,0.5)] transition-[width] duration-300 ease-out"
-                  style={{ width: `${Math.min(100, freeShippingProgress)}%` }}
-                />
-              </div>
-            </div>
+            {/* Items List with Soft Vignettes and Refined Scroller */}
+            <div className="relative flex-1 min-h-0">
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-3 bg-gradient-to-b from-[#FAF7F2] to-transparent" />
 
-            {/* Items List */}
-            <div className="flex-1 overflow-y-auto p-5 sm:p-6">
-              {cartItems.length === 0 ? (
+              <div className="h-full sidebar-scroller p-4 sm:p-5 sm:pr-4">
+                {cartItems.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center rounded-3xl border border-dashed border-[#DDD7CE] bg-white p-8 text-center">
                   <div className="grid h-16 w-16 place-items-center rounded-full bg-[#EFECE6] text-[#141414]">
                     <ShoppingBag className="h-8 w-8" />
@@ -233,11 +226,15 @@ export default function CartSidebar() {
                   })}
                 </div>
               )}
+              </div>
+
+              {/* Subtle bottom scroll fade */}
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-3 bg-gradient-to-t from-[#FAF7F2] to-transparent" />
             </div>
 
             {/* Footer Summary & Checkout */}
             {cartItems.length > 0 && (
-              <div className="border-t border-[#EAE5DC] bg-white p-5 shadow-lg">
+              <div className="shrink-0 border-t border-[#EAE5DC] bg-white p-5 shadow-lg z-10">
                 {/* Promo Code Input */}
                 <div className="mb-3.5">
                   {appliedCoupon ? (
@@ -273,34 +270,8 @@ export default function CartSidebar() {
                           Apply
                         </button>
                       </form>
-                      <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-[#5A554E]">
-                        <span className="shrink-0 font-medium">Quick apply:</span>
-                        {['ATELIER10', 'HANDMADE20', 'FREESHIP'].map((code) => (
-                          <button
-                            key={code}
-                            type="button"
-                            onClick={() => applyCouponCode(code)}
-                            className="rounded-md border border-[#DFCFA6]/60 bg-[#FAF8F5] px-1.5 py-0.5 font-bold text-[#5A451A] transition hover:bg-[#FAF5E8] hover:border-[#D4AF37] hover:text-[#875A10]"
-                          >
-                            {code}
-                          </button>
-                        ))}
-                      </div>
                     </div>
                   )}
-                </div>
-
-                {/* Gift Wrap Toggle */}
-                <div className="mb-4 flex items-center justify-between rounded-xl bg-gradient-to-r from-[#FFFDF9] to-[#FAF6ED] p-2.5 text-xs border border-[#DFCFA6]/80 shadow-sm">
-                  <label className="flex cursor-pointer items-center gap-2 font-bold text-[#3E2D07]">
-                    <input
-                      type="checkbox"
-                      checked={isGiftWrap}
-                      onChange={(e) => setIsGiftWrap(e.target.checked)}
-                      className="accent-[#B8860B]"
-                    />
-                    <Gift className="h-3.5 w-3.5 text-[#B8860B]" /> Add Gilded Boutique Gift Wrap (+₹49)
-                  </label>
                 </div>
 
                 {/* Subtotals */}
@@ -317,14 +288,8 @@ export default function CartSidebar() {
                   )}
                   <div className="flex justify-between">
                     <span>Shipping</span>
-                    <span>{shippingCost === 0 ? <strong className="text-[#875A10]">FREE</strong> : `₹${shippingCost.toFixed(0)}`}</span>
+                    <span>₹{shippingCost.toFixed(0)}</span>
                   </div>
-                  {giftWrapCost > 0 && (
-                    <div className="flex justify-between">
-                      <span>Gift Wrap</span>
-                      <span>+₹{giftWrapCost.toFixed(0)}</span>
-                    </div>
-                  )}
                   <div className="border-t border-[#DFCFA6]/60 pt-2 flex justify-between text-base font-bold text-[#141414]">
                     <span>Estimated Total</span>
                     <span className="text-xl text-[#875A10] font-extrabold">₹{cartFinalTotal.toFixed(0)}</span>
@@ -343,12 +308,18 @@ export default function CartSidebar() {
                     </>
                   ) : (
                     <>
-                      <span>Proceed to Secure Checkout</span>
+                      <MessageCircle className="h-4 w-4 fill-current" />
+                      <span>Proceed to Order on WhatsApp</span>
                       <ArrowRight className="h-4 w-4" />
                     </>
                   )}
                 </button>
-                {!user && (
+                {user ? (
+                  <p className="mt-2 text-center text-[11px] text-[#7A5408] flex items-center justify-center gap-1 font-semibold">
+                    <MessageCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                    <span>Direct WhatsApp checkout with verified instant receipt</span>
+                  </p>
+                ) : (
                   <p className="mt-2 text-center text-[11px] text-[#8C827A] flex items-center justify-center gap-1 font-medium">
                     <Lock className="h-3 w-3 text-[#B8860B]" />
                     <span>Login is required before ordering to track delivery &amp; warranty</span>
@@ -362,14 +333,14 @@ export default function CartSidebar() {
                   </p>
                   <div className="mt-1.5 flex items-center justify-center gap-3 text-[11px] font-bold">
                     <a
-                      href="https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20need%20assistance%20with%20my%20bag%20order!"
+                      href={`https://wa.me/${contactPhone}?text=Hi%20${encodeURIComponent(siteName)}%2C%20I%20need%20assistance%20with%20my%20bag%20order!`}
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 transition"
-                      title="WhatsApp +91 93412 97124"
+                      title={`WhatsApp ${displayPhone}`}
                     >
                       <MessageCircle className="h-3.5 w-3.5" />
-                      <span>93412 97124</span>
+                      <span>{displayPhone}</span>
                     </a>
                     <span className="text-[#D4AF37]">•</span>
                     <a

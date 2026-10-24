@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import {
   ArrowLeft,
   Eye,
@@ -17,6 +18,7 @@ import {
   Copy,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
+import AdminDashboardLoader from './AdminDashboardLoader'
 
 const DEMO_CREDENTIALS = {
   email: 'npatelierindia@gmail.com',
@@ -24,6 +26,7 @@ const DEMO_CREDENTIALS = {
 }
 
 export default function AdminLoginForm({ onLoginSuccess }: { onLoginSuccess?: () => void } = {}) {
+  const router = useRouter()
   const { branding, showToast } = useMarketplace()
   const siteName = branding?.siteName || 'NP Atelier'
 
@@ -34,6 +37,7 @@ export default function AdminLoginForm({ onLoginSuccess }: { onLoginSuccess?: ()
   const [rememberMe, setRememberMe] = useState(true)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isTransitioning, setIsTransitioning] = useState(false)
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
 
   const handleFillDemo = () => {
@@ -84,12 +88,7 @@ export default function AdminLoginForm({ onLoginSuccess }: { onLoginSuccess?: ()
           window.localStorage.setItem('ateliernp-admin-authenticated', 'true')
           window.localStorage.setItem('ateliernp-admin-user', JSON.stringify(data.user))
         }
-        setIsLoading(false)
-        if (onLoginSuccess) {
-          onLoginSuccess()
-        } else if (typeof window !== 'undefined') {
-          window.location.href = '/admin'
-        }
+        setIsTransitioning(true)
         return
       }
     } catch {
@@ -129,21 +128,37 @@ export default function AdminLoginForm({ onLoginSuccess }: { onLoginSuccess?: ()
           })
         )
       }
-      setIsLoading(false)
-      if (onLoginSuccess) {
-        onLoginSuccess()
-      } else if (typeof window !== 'undefined') {
-        window.location.href = '/admin'
-      }
+      setIsTransitioning(true)
     } else {
       setIsLoading(false)
       setError('Invalid admin credentials. Please enter authorized credentials.')
     }
   }
 
+  const handleTransitionComplete = () => {
+    setIsLoading(false)
+    setIsTransitioning(false)
+    if (onLoginSuccess) {
+      onLoginSuccess()
+    } else {
+      router.push('/admin')
+    }
+  }
+
   const handleInstantDemoLogin = () => {
     handleFillDemo()
     handleLogin(undefined, DEMO_CREDENTIALS.email, DEMO_CREDENTIALS.password)
+  }
+
+  if (isTransitioning) {
+    return (
+      <AdminDashboardLoader
+        title="Authorizing Operations Access"
+        subtitle={`${siteName} Administrative Terminal & Real-Time Analytics`}
+        durationMs={1300}
+        onComplete={handleTransitionComplete}
+      />
+    )
   }
 
   return (

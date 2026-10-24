@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import {
   Heart,
   LayoutDashboard,
@@ -38,6 +39,7 @@ export default function Navbar() {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false)
   const [megamenuOpen, setMegamenuOpen] = useState(false)
   const [copiedCoupon, setCopiedCoupon] = useState(false)
+  const [activeNavTab, setActiveNavTab] = useState<'collections' | 'crafts' | 'aquarium' | 'makers'>('collections')
   const megamenuTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const userMenuRef = useRef<HTMLDivElement>(null)
   const mobileDrawerRef = useRef<HTMLDivElement>(null)
@@ -148,11 +150,24 @@ export default function Navbar() {
   const handleLinkClick = (href: string, dept?: 'all' | 'crafts' | 'aquarium') => {
     if (dept && setActiveDepartment) {
       setActiveDepartment(dept)
+      if (dept === 'all') setActiveNavTab('collections')
+      else if (dept === 'crafts') setActiveNavTab('crafts')
+      else if (dept === 'aquarium') setActiveNavTab('aquarium')
+    } else if (href === '#makers') {
+      setActiveNavTab('makers')
     }
     scrollToAnchor(href)
     setIsMenuOpen(false)
     setMegamenuOpen(false)
   }
+
+  useEffect(() => {
+    if (activeDepartment === 'crafts') setActiveNavTab('crafts')
+    else if (activeDepartment === 'aquarium') setActiveNavTab('aquarium')
+    else if (activeDepartment === 'all' && activeNavTab !== 'makers') setActiveNavTab('collections')
+  }, [activeDepartment])
+
+  const currentNav = megamenuOpen ? 'collections' : activeNavTab
 
   const handleCopyCoupon = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -311,9 +326,9 @@ export default function Navbar() {
               </div>
             </a>
 
-            {/* Center Navigation Dock with Megamenu */}
+            {/* Center Navigation Dock with Megamenu and Sliding Pill */}
             <nav className="hidden lg:flex items-center relative">
-              <div className="flex items-center rounded-full border border-[#E8DEC7]/90 bg-white/80 p-1 shadow-[0_2px_10px_rgba(20,18,12,0.03)] backdrop-blur-md">
+              <div className="flex items-center rounded-full border border-[#E8DEC7]/90 bg-white/80 p-1 shadow-[0_2px_10px_rgba(20,18,12,0.03)] backdrop-blur-md relative">
                 {/* Collections with Mega Menu Trigger */}
                 <div
                   className="relative"
@@ -323,16 +338,23 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => handleLinkClick('#collection', 'all')}
-                    className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold tracking-wide transition duration-150 cursor-pointer ${
-                      megamenuOpen || activeDepartment === 'all'
-                        ? 'bg-[#141414] text-[#ECC872] shadow-xs'
-                        : 'text-[#4A4339] hover:text-[#141414] hover:bg-[#F5EFE1]'
+                    className={`relative flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold tracking-wide transition-colors duration-200 cursor-pointer ${
+                      currentNav === 'collections'
+                        ? 'text-[#ECC872]'
+                        : 'text-[#4A4339] hover:text-[#141414]'
                     }`}
                   >
-                    <span>Collections</span>
+                    {currentNav === 'collections' && (
+                      <motion.div
+                        layoutId="navbarCenterDockPill"
+                        className="absolute inset-0 rounded-full bg-[#141414] shadow-xs"
+                        transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                      />
+                    )}
+                    <span className="relative z-10">Collections</span>
                     <ChevronDown
-                      className={`h-3 w-3 transition-transform duration-200 ${
-                        megamenuOpen ? 'rotate-180 text-[#ECC872]' : 'text-[#8A7960]'
+                      className={`relative z-10 h-3 w-3 transition-transform duration-200 ${
+                        megamenuOpen ? 'rotate-180 text-[#ECC872]' : currentNav === 'collections' ? 'text-[#ECC872]' : 'text-[#8A7960]'
                       }`}
                     />
                   </button>
@@ -453,36 +475,60 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => handleLinkClick('#collection', 'crafts')}
-                  className={`rounded-full px-3.5 py-2 text-xs font-bold tracking-wide transition duration-150 cursor-pointer ${
-                    activeDepartment === 'crafts'
-                      ? 'bg-[#141414] text-[#ECC872] shadow-xs'
-                      : 'text-[#4A4339] hover:text-[#141414] hover:bg-[#F5EFE1]'
+                  className={`relative rounded-full px-3.5 py-2 text-xs font-bold tracking-wide transition-colors duration-200 cursor-pointer ${
+                    currentNav === 'crafts'
+                      ? 'text-[#ECC872]'
+                      : 'text-[#4A4339] hover:text-[#141414]'
                   }`}
                 >
-                  Artisan Crafts
+                  {currentNav === 'crafts' && (
+                    <motion.div
+                      layoutId="navbarCenterDockPill"
+                      className="absolute inset-0 rounded-full bg-[#141414] shadow-xs"
+                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    />
+                  )}
+                  <span className="relative z-10">Artisan Crafts</span>
                 </button>
 
                 {/* Aquatics Direct Tab */}
                 <button
                   type="button"
                   onClick={() => handleLinkClick('#collection', 'aquarium')}
-                  className={`rounded-full px-3.5 py-2 text-xs font-bold tracking-wide transition duration-150 cursor-pointer ${
-                    activeDepartment === 'aquarium'
-                      ? 'bg-[#141414] text-[#ECC872] shadow-xs'
-                      : 'text-[#4A4339] hover:text-[#141414] hover:bg-[#F5EFE1]'
+                  className={`relative rounded-full px-3.5 py-2 text-xs font-bold tracking-wide transition-colors duration-200 cursor-pointer ${
+                    currentNav === 'aquarium'
+                      ? 'text-[#ECC872]'
+                      : 'text-[#4A4339] hover:text-[#141414]'
                   }`}
                 >
-                  Nature Aquatics
+                  {currentNav === 'aquarium' && (
+                    <motion.div
+                      layoutId="navbarCenterDockPill"
+                      className="absolute inset-0 rounded-full bg-[#141414] shadow-xs"
+                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    />
+                  )}
+                  <span className="relative z-10">Nature Aquatics</span>
                 </button>
-
 
                 {/* The Collective */}
                 <button
                   type="button"
                   onClick={() => handleLinkClick('#makers')}
-                  className="rounded-full px-3.5 py-2 text-xs font-bold tracking-wide text-[#4A4339] hover:text-[#141414] hover:bg-[#F5EFE1] transition duration-150 cursor-pointer"
+                  className={`relative rounded-full px-3.5 py-2 text-xs font-bold tracking-wide transition-colors duration-200 cursor-pointer ${
+                    currentNav === 'makers'
+                      ? 'text-[#ECC872]'
+                      : 'text-[#4A4339] hover:text-[#141414]'
+                  }`}
                 >
-                  The Collective
+                  {currentNav === 'makers' && (
+                    <motion.div
+                      layoutId="navbarCenterDockPill"
+                      className="absolute inset-0 rounded-full bg-[#141414] shadow-xs"
+                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    />
+                  )}
+                  <span className="relative z-10">The Collective</span>
                 </button>
               </div>
             </nav>

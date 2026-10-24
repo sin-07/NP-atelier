@@ -32,9 +32,9 @@ const FAQS = [
       'Yes! Every listing is vetted to ensure genuine artisan crafting. Our makers prioritize sustainable materials including non-toxic soy waxes, pure raw silks, organic dried botanicals, and biodegradable packaging.',
   },
   {
-    question: 'How do coupon codes and free shipping work?',
+    question: 'How do coupon codes work?',
     answer:
-      'Use code ATELIER10 at checkout for 10% off your entire order, or HANDMADE20 for 20% off during seasonal drops. All orders with a subtotal over ₹1,499 automatically receive Free Delivery across India!',
+      'Use code ATELIER10 at checkout for 10% off your entire order, or HANDMADE20 for 20% off during seasonal drops.',
   },
 ]
 

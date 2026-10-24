@@ -1,11 +1,13 @@
 "use client"
 
-import { useMemo, useState, useRef, useEffect } from 'react'
+import { useMemo, useState, useRef, useEffect, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowUpRight,
   BookOpen,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Droplets,
   Fish,
   Grid2X2,
@@ -97,6 +99,17 @@ export default function HandmadeGallery() {
   const [quickViewQuantity, setQuickViewQuantity] = useState(1)
   const [activeQuickTab, setActiveQuickTab] = useState('details')
 
+  // Smart Pagination & Load More States to prevent endless scrolling fatigue
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState<number | 'all'>(12)
+  const [visibleCount, setVisibleCount] = useState(12)
+
+  // Reset pagination whenever filters or search terms change
+  useEffect(() => {
+    setCurrentPage(1)
+    setVisibleCount(12)
+  }, [activeDepartment, activeCategory, activeBadge, searchTerm, sortBy])
+
   const hasActiveFilters =
     (activeCategory !== 'All' && activeCategory !== 'All Aquatics' && activeCategory !== 'All Crafts') ||
     activeBadge !== 'All' ||
@@ -117,12 +130,25 @@ export default function HandmadeGallery() {
     )
     setActiveBadge('All')
     setSearchTerm('')
+    setCurrentPage(1)
+    setVisibleCount(12)
   }
 
   // Review Form in Quick View
   const [reviewName, setReviewName] = useState('')
   const [reviewRating, setReviewRating] = useState(5)
   const [reviewComment, setReviewComment] = useState('')
+
+  // Prevent background page double-scrolling when Quick View is open
+  useEffect(() => {
+    if (quickViewProduct) {
+      const prevOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = prevOverflow
+      }
+    }
+  }, [quickViewProduct])
 
   // Determine which showcase cards to show based on department
   const currentCategoryGroups = useMemo(() => {
@@ -245,6 +271,55 @@ export default function HandmadeGallery() {
     return result
   }, [activeDepartment, activeCategory, activeBadge, products, searchTerm, sortBy])
 
+  // Pagination & progressive display metrics
+  const totalItems = filteredProducts.length
+  const totalPages = pageSize === 'all' ? 1 : Math.ceil(totalItems / (pageSize as number)) || 1
+
+  const { displayedProducts, displayedEnd } = useMemo(() => {
+    if (pageSize === 'all') {
+      return {
+        displayedProducts: filteredProducts,
+        displayedEnd: totalItems,
+      }
+    }
+
+    // If user clicked "Load More" from page 1, visibleCount tracks continuous loading
+    if (visibleCount > (pageSize as number) && currentPage === 1) {
+      const slice = filteredProducts.slice(0, visibleCount)
+      return {
+        displayedProducts: slice,
+        displayedEnd: slice.length,
+      }
+    }
+
+    const start = (currentPage - 1) * (pageSize as number)
+    const end = Math.min(start + (pageSize as number), totalItems)
+    const slice = filteredProducts.slice(start, end)
+    return {
+      displayedProducts: slice,
+      displayedEnd: end,
+    }
+  }, [filteredProducts, pageSize, currentPage, visibleCount, totalItems])
+
+  const scrollToCollection = () => {
+    if (typeof window === 'undefined') return
+    const el = document.getElementById('collection')
+    if (el) {
+      const topOffset = el.getBoundingClientRect().top + window.pageYOffset - 80
+      window.scrollTo({ top: topOffset, behavior: 'smooth' })
+    }
+  }
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage)
+    setVisibleCount(pageSize === 'all' ? totalItems : (pageSize as number))
+    scrollToCollection()
+  }
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => Math.min(prev + 12, totalItems))
+  }
+
   const handlePostReview = (e: React.FormEvent) => {
     e.preventDefault()
     if (!quickViewProduct || !reviewName.trim()) return
@@ -259,6 +334,34 @@ export default function HandmadeGallery() {
     setReviewComment('')
     setReviewRating(5)
   }
+
+  const handleWishlistToggle = useCallback(
+    (id: string | number) => {
+      toggleWishlist(id)
+    },
+    [toggleWishlist]
+  )
+
+  const handleQuickView = useCallback((prod: Product) => {
+    setQuickViewProduct(prod)
+    setQuickViewQuantity(1)
+    setActiveQuickTab('details')
+  }, [])
+
+  const handleAddToCart = useCallback(
+    (p: any, qty?: number) => {
+      addToCart(p, qty)
+    },
+    [addToCart]
+  )
+
+  const handleBuyNow = useCallback(
+    (p: any) => {
+      addToCart(p, 1)
+      setIsCartOpen(true)
+    },
+    [addToCart, setIsCartOpen]
+  )
 
   return (
     <section id="collection" ref={containerRef} className="section-shell py-16 sm:py-24">
@@ -278,21 +381,30 @@ export default function HandmadeGallery() {
 
           {/* Department Switcher Tabs (All | Crafts | Fish & Aquarium) */}
           <div className="mt-8 flex justify-center">
-            <div className="inline-flex max-w-full overflow-x-auto no-scrollbar items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-white/95 p-1.5 shadow-[0_6px_20px_rgba(184,134,11,0.12)]">
+            <div className="inline-flex max-w-full overflow-x-auto no-scrollbar items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-white/95 p-1.5 shadow-[0_6px_20px_rgba(184,134,11,0.12)] relative">
               <button
                 type="button"
                 onClick={() => {
                   setActiveDepartment?.('all')
                   setActiveCategory('All')
                 }}
-                className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition duration-200 ${
+                className={`relative flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition-colors duration-200 cursor-pointer ${
                   activeDepartment === 'all'
-                    ? 'bg-[#141414] text-[#ECC872] shadow-sm'
-                    : 'text-[#5A554E] hover:text-[#141414] hover:bg-[#FAF6ED]'
+                    ? 'text-[#ECC872]'
+                    : 'text-[#5A554E] hover:text-[#141414]'
                 }`}
               >
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>All Departments</span>
+                {activeDepartment === 'all' && (
+                  <motion.div
+                    layoutId="galleryDepartmentPill"
+                    className="absolute inset-0 rounded-full bg-[#141414] shadow-sm"
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-2">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  <span>All Departments</span>
+                </span>
               </button>
 
               <button
@@ -301,13 +413,20 @@ export default function HandmadeGallery() {
                   setActiveDepartment?.('crafts')
                   setActiveCategory('All Crafts')
                 }}
-                className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition duration-200 ${
+                className={`relative flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition-colors duration-200 cursor-pointer ${
                   activeDepartment === 'crafts'
-                    ? 'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#1A120B] shadow-[0_2px_10px_rgba(212,175,55,0.35)]'
-                    : 'text-[#5A554E] hover:text-[#141414] hover:bg-[#FAF6ED]'
+                    ? 'text-[#1A120B]'
+                    : 'text-[#5A554E] hover:text-[#141414]'
                 }`}
               >
-                <span>Handmade Crafts</span>
+                {activeDepartment === 'crafts' && (
+                  <motion.div
+                    layoutId="galleryDepartmentPill"
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B8860B] shadow-[0_2px_10px_rgba(212,175,55,0.35)]"
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <span className="relative z-10">Handmade Crafts</span>
               </button>
 
               <button
@@ -316,14 +435,23 @@ export default function HandmadeGallery() {
                   setActiveDepartment?.('aquarium')
                   setActiveCategory('All Aquatics')
                 }}
-                className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition duration-200 ${
+                className={`relative flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition-colors duration-200 cursor-pointer ${
                   activeDepartment === 'aquarium'
-                    ? 'bg-gradient-to-r from-[#008080] via-[#0F52BA] to-[#008080] text-white shadow-[0_4px_16px_rgba(15,82,186,0.35)]'
-                    : 'text-[#5A554E] hover:text-[#141414] hover:bg-[#FAF6ED]'
+                    ? 'text-white'
+                    : 'text-[#5A554E] hover:text-[#141414]'
                 }`}
               >
-                <Fish className="h-4 w-4 text-cyan-300" />
-                <span>Living Aquatics</span>
+                {activeDepartment === 'aquarium' && (
+                  <motion.div
+                    layoutId="galleryDepartmentPill"
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-[#008080] via-[#0F52BA] to-[#008080] shadow-[0_4px_16px_rgba(15,82,186,0.35)]"
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-2">
+                  <Fish className="h-4 w-4 text-cyan-300" />
+                  <span>Living Aquatics</span>
+                </span>
               </button>
             </div>
           </div>
@@ -407,7 +535,9 @@ export default function HandmadeGallery() {
                   </button>
                 ) : (
                   <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1.5 text-[11px] font-semibold text-[#8C7A58] bg-[#FAF7F0] border border-[#E7DCBF] rounded-lg px-2 py-0.5">
-                    <span>{filteredProducts.length} pieces</span>
+                    <span>
+                      {filteredProducts.length} pieces{pageSize !== 'all' && totalPages > 1 ? ` • Pg ${currentPage}/${totalPages}` : ''}
+                    </span>
                   </div>
                 )}
               </div>
@@ -435,7 +565,7 @@ export default function HandmadeGallery() {
                 <div className="flex items-center rounded-2xl border border-[#E0D3B4] bg-white/95 p-1 shadow-xs">
                   <button
                     type="button"
-                    title="Grid View (4-wide)"
+                    title="Standard View (Showcase Details)"
                     onClick={() => setLayoutMode('grid')}
                     className={`grid h-8 w-8 place-items-center rounded-xl transition ${
                       layoutMode === 'grid'
@@ -447,7 +577,7 @@ export default function HandmadeGallery() {
                   </button>
                   <button
                     type="button"
-                    title="Compact View (Dense)"
+                    title="Compact View (Dense - Fits More, Less Scroll)"
                     onClick={() => setLayoutMode('masonry')}
                     className={`grid h-8 w-8 place-items-center rounded-xl transition ${
                       layoutMode === 'masonry'
@@ -498,14 +628,23 @@ export default function HandmadeGallery() {
                       onClick={() => {
                         setActiveCategory(cat)
                       }}
-                      className={`rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
+                      className={`relative rounded-xl px-4 py-2 text-xs font-bold transition-colors duration-200 shrink-0 flex items-center gap-1.5 cursor-pointer ${
                         isActive
-                          ? 'bg-gradient-to-r from-[#171410] to-[#25201A] text-[#F3D789] border border-[#D4AF37]/80 shadow-[0_4px_16px_rgba(20,18,14,0.18)] scale-[1.02]'
+                          ? 'text-[#F3D789]'
                           : 'border border-[#E2D4B7] bg-white/90 text-[#4A3810] hover:border-[#D4AF37] hover:bg-[#FAF4E5] shadow-xs'
                       }`}
                     >
-                      {isActive && <span className="h-1.5 w-1.5 rounded-full bg-[#ECC872] animate-pulse" />}
-                      <span>{cat}</span>
+                      {isActive && (
+                        <motion.div
+                          layoutId="categoryRailPill"
+                          className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#171410] to-[#25201A] border border-[#D4AF37]/80 shadow-[0_4px_16px_rgba(20,18,14,0.18)]"
+                          transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                        />
+                      )}
+                      <span className="relative z-10 flex items-center gap-1.5">
+                        {isActive && <span className="h-1.5 w-1.5 rounded-full bg-[#ECC872] animate-pulse" />}
+                        <span>{cat}</span>
+                      </span>
                     </button>
                   )
                 })}
@@ -562,33 +701,165 @@ export default function HandmadeGallery() {
             </button>
           </div>
         ) : (
-          <div
-            className={`grid gap-3 sm:gap-6 transition-all duration-200 ${
-              layoutMode === 'grid'
-                ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
-            }`}
-          >
-            {filteredProducts.map((prod: Product, idx: number) => (
-              <ProductCard
-                key={prod.id}
-                product={prod}
-                priority={idx < 4}
-                isWishlisted={isWishlisted(prod.id)}
-                onWishlistToggle={() => toggleWishlist(prod.id)}
-                onQuickView={() => {
-                  setQuickViewProduct(prod)
-                  setQuickViewQuantity(1)
-                  setActiveQuickTab('details')
-                }}
-                onAddToCart={(p, qty) => addToCart(p, qty)}
-                onBuyNow={(p) => {
-                  addToCart(p, 1)
-                  setIsCartOpen(true)
-                }}
-              />
-            ))}
-          </div>
+          <>
+            <div
+              id="collection-browse"
+              className={`grid transition-all duration-200 ${
+                layoutMode === 'grid'
+                  ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5'
+                  : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3.5'
+              }`}
+            >
+              {displayedProducts.map((prod: Product, idx: number) => (
+                <ProductCard
+                  key={prod.id}
+                  product={prod}
+                  priority={idx < 4}
+                  isCompact={layoutMode === 'masonry'}
+                  isWishlisted={isWishlisted(prod.id)}
+                  onWishlistToggle={() => handleWishlistToggle(prod.id)}
+                  onQuickView={() => handleQuickView(prod)}
+                  onAddToCart={handleAddToCart}
+                  onBuyNow={handleBuyNow}
+                />
+              ))}
+            </div>
+
+            {/* LUXURY PAGINATION & PROGRESSIVE DISCOVERY CONSOLE */}
+            <div className="mt-8 pt-8 border-t border-[#E8DEC7]/80 flex flex-col items-center justify-center gap-5">
+              {/* Progress Tracker */}
+              <div className="flex flex-col items-center gap-2 text-center">
+                <span className="text-xs font-bold text-[#6E6352]">
+                  Showing <strong className="text-[#141414] font-extrabold">{displayedEnd}</strong> of{' '}
+                  <strong className="text-[#141414] font-extrabold">{totalItems}</strong> creations
+                </span>
+
+                {/* Gold Gradient Progress Bar */}
+                <div className="w-48 sm:w-64 h-1.5 rounded-full bg-[#E5DEC9] overflow-hidden shadow-inner">
+                  <div
+                    className="h-full bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#F5DE9C] rounded-full transition-all duration-500 ease-out shadow-[0_0_8px_rgba(212,175,55,0.4)]"
+                    style={{
+                      width: `${Math.min(100, Math.round((displayedEnd / Math.max(1, totalItems)) * 100))}%`,
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons: Load More & Page Navigation */}
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                {/* "Load More" Button if not showing all */}
+                {displayedEnd < totalItems && (
+                  <button
+                    type="button"
+                    onClick={handleLoadMore}
+                    className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#17130C] via-[#241D12] to-[#17130C] border border-[#D4AF37]/80 px-6 py-2.5 text-xs font-bold text-[#F5DE9C] shadow-md hover:border-[#D4AF37] hover:shadow-[0_4px_20px_rgba(20,18,14,0.35)] transition-all duration-200 active:scale-95 cursor-pointer"
+                  >
+                    <Sparkles className="h-3.5 w-3.5 text-[#ECC872] group-hover:rotate-12 transition-transform" />
+                    <span>Load More Creations (+{Math.min(12, totalItems - displayedEnd)})</span>
+                  </button>
+                )}
+
+                {/* Page Numbered Navigator (if multiple pages exist) */}
+                {totalPages > 1 && (
+                  <div className="flex items-center gap-1 sm:gap-1.5 rounded-full border border-[#DFCFA6]/80 bg-white/95 p-1 shadow-xs">
+                    {/* Previous Button */}
+                    <button
+                      type="button"
+                      disabled={currentPage <= 1}
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      className={`grid h-8 w-8 place-items-center rounded-full transition ${
+                        currentPage <= 1
+                          ? 'opacity-35 cursor-not-allowed text-[#8C827A]'
+                          : 'text-[#141414] hover:bg-[#FAF4E5] hover:text-[#B8860B] cursor-pointer'
+                      }`}
+                      title="Previous Page"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </button>
+
+                    {/* Page Numbers */}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+                      const isActive = pageNum === currentPage
+                      return (
+                        <button
+                          key={pageNum}
+                          type="button"
+                          onClick={() => handlePageChange(pageNum)}
+                          className={`h-8 min-w-[32px] px-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                            isActive
+                              ? 'bg-[#14120E] text-[#F3D789] border border-[#D4AF37]/80 shadow-xs'
+                              : 'text-[#5A554E] hover:text-[#141414] hover:bg-[#FAF4E5]'
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      )
+                    })}
+
+                    {/* Next Button */}
+                    <button
+                      type="button"
+                      disabled={currentPage >= totalPages}
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      className={`grid h-8 w-8 place-items-center rounded-full transition ${
+                        currentPage >= totalPages
+                          ? 'opacity-35 cursor-not-allowed text-[#8C827A]'
+                          : 'text-[#141414] hover:bg-[#FAF4E5] hover:text-[#B8860B] cursor-pointer'
+                      }`}
+                      title="Next Page"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Quick Jump & View Density Options */}
+              <div className="flex items-center gap-4 text-xs font-semibold text-[#8C7A58]">
+                <button
+                  type="button"
+                  onClick={scrollToCollection}
+                  className="hover:text-[#141414] transition underline decoration-[#D4AF37]/50 underline-offset-4 cursor-pointer"
+                >
+                  ↑ Scroll to Top of Catalog
+                </button>
+
+                {pageSize !== 'all' && totalItems > 12 && (
+                  <>
+                    <span>•</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPageSize('all')
+                        setVisibleCount(totalItems)
+                      }}
+                      className="hover:text-[#141414] transition underline decoration-[#D4AF37]/50 underline-offset-4 cursor-pointer"
+                    >
+                      View All ({totalItems})
+                    </button>
+                  </>
+                )}
+
+                {pageSize === 'all' && (
+                  <>
+                    <span>•</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPageSize(12)
+                        setVisibleCount(12)
+                        setCurrentPage(1)
+                        scrollToCollection()
+                      }}
+                      className="hover:text-[#141414] transition underline decoration-[#D4AF37]/50 underline-offset-4 cursor-pointer"
+                    >
+                      Show in Pages (12 per view)
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </>
         )}
 
         {/* INSPIRATION & JOURNALS */}
@@ -678,7 +949,7 @@ export default function HandmadeGallery() {
         {quickViewProduct ? (
           <motion.div
             key="quick-view-modal-backdrop"
-            className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center overflow-y-auto bg-black/70 p-0 sm:p-4"
+            className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/70 p-0 sm:p-4 overflow-hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -686,7 +957,7 @@ export default function HandmadeGallery() {
           >
             <motion.div
               key="quick-view-modal-card"
-              className="relative my-0 sm:my-8 w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F7F1E1] border border-[#DFCFA6]/70 shadow-[0_25px_60px_rgba(180,135,45,0.18)]"
+              className="relative my-0 sm:my-8 w-full max-w-3xl max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F7F1E1] border border-[#DFCFA6]/70 shadow-[0_25px_60px_rgba(180,135,45,0.18)]"
               initial={{ scale: 0.95, y: 16 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 16 }}
@@ -757,7 +1028,7 @@ export default function HandmadeGallery() {
                             ? quickViewProduct.price
                             : `₹${quickViewProduct.price}`}
                         </span>
-                        <span className="ml-2 text-xs text-[#8C827A]">Free shipping over ₹1,499</span>
+                        <span className="ml-2 text-xs text-[#8C827A]">Direct Studio Dispatch</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Star className="h-4 w-4 fill-[#141414] text-[#141414]" />

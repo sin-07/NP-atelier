@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, Heart, ShoppingBag, Sparkles, Trash2, X } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
@@ -14,6 +15,16 @@ export default function WishlistSidebar() {
     addToCart,
     moveAllWishlistToCart,
   } = useMarketplace()
+
+  useEffect(() => {
+    if (isWishlistOpen) {
+      const prevOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = prevOverflow
+      }
+    }
+  }, [isWishlistOpen])
 
   return (
     <AnimatePresence>
@@ -30,13 +41,13 @@ export default function WishlistSidebar() {
 
           <motion.aside
             key="wishlist-drawer"
-            className="fixed right-0 top-0 z-[90] flex h-full w-full max-w-md flex-col border-l border-[#D4AF37]/30 bg-[#FAF7F2] shadow-2xl"
+            className="fixed right-0 top-0 z-[90] flex h-full w-full max-w-md flex-col overflow-hidden border-l border-[#D4AF37]/30 bg-[#FAF7F2] shadow-2xl"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="flex items-center justify-between border-b border-[#DFCFA6]/60 bg-gradient-to-r from-white via-[#FDFBF7] to-[#FAF6ED] px-6 py-5">
+            <div className="flex shrink-0 items-center justify-between border-b border-[#DFCFA6]/60 bg-gradient-to-r from-white via-[#FDFBF7] to-[#FAF6ED] px-6 py-5 z-10 shadow-xs">
               <div className="flex items-center gap-2.5">
                 <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#996515] text-[#1A120B] font-extrabold shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
                   <Heart className="h-5 w-5 fill-[#1A120B] text-[#1A120B]" />
@@ -58,8 +69,12 @@ export default function WishlistSidebar() {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-5 sm:p-6">
-              {wishlistedProducts.length === 0 ? (
+            {/* Items List with Soft Vignettes and Refined Scroller */}
+            <div className="relative flex-1 min-h-0">
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-3 bg-gradient-to-b from-[#FAF7F2] to-transparent" />
+
+              <div className="h-full sidebar-scroller p-4 sm:p-5 sm:pr-4">
+                {wishlistedProducts.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center rounded-3xl border border-dashed border-[#DFCFA6]/80 bg-white p-8 text-center">
                   <div className="grid h-16 w-16 place-items-center rounded-full bg-[#FAF5E8] border border-[#DFCFA6]/60 text-[#B8860B]">
                     <Heart className="h-8 w-8 text-[#B8860B]" />
@@ -135,10 +150,14 @@ export default function WishlistSidebar() {
                   ))}
                 </div>
               )}
+              </div>
+
+              {/* Subtle bottom scroll fade */}
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-3 bg-gradient-to-t from-[#FAF7F2] to-transparent" />
             </div>
 
             {wishlistedProducts.length > 0 && (
-              <div className="border-t border-[#DFCFA6]/60 bg-white p-5 shadow-lg">
+              <div className="shrink-0 border-t border-[#DFCFA6]/60 bg-white p-5 shadow-lg z-10">
                 <button
                   type="button"
                   onClick={moveAllWishlistToCart}

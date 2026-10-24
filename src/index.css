@@ -72,10 +72,15 @@
     box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.22) !important;
   }
 
-  /* Gilded Gallery Scrollbar */
+  /* Cross-browser Gallery Scrollbar */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: #D4AF37 #F4EEDF;
+  }
+
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
   }
 
   ::-webkit-scrollbar-track {
@@ -85,11 +90,46 @@
   ::-webkit-scrollbar-thumb {
     background: #D4AF37;
     border-radius: 9999px;
-    border: 2px solid #F4EEDF;
+    border: 1.5px solid #F4EEDF;
   }
 
   ::-webkit-scrollbar-thumb:hover {
     background: #B8860B;
+  }
+
+  /* Sleek Sidebar & Modal Scroller (Ultra-thin 5px, transparent track, smooth gilded pill) */
+  .sidebar-scroller,
+  .custom-scrollbar {
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.55) transparent;
+  }
+
+  .sidebar-scroller::-webkit-scrollbar,
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  .sidebar-scroller::-webkit-scrollbar-track,
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 8px 0;
+  }
+
+  .sidebar-scroller::-webkit-scrollbar-thumb,
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #D4AF37 0%, #B8860B 100%);
+    border-radius: 9999px;
+    box-shadow: 0 0 4px rgba(212, 175, 55, 0.3);
+  }
+
+  .sidebar-scroller::-webkit-scrollbar-thumb:hover,
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #B8860B 0%, #855A10 100%);
+    box-shadow: 0 0 6px rgba(184, 134, 11, 0.5);
   }
 }
 
@@ -380,7 +420,7 @@
 @keyframes smoothCardAppear {
   0% {
     opacity: 0;
-    transform: translate3d(0, 8px, 0);
+    transform: translate3d(0, 6px, 0);
   }
   100% {
     opacity: 1;
@@ -389,7 +429,7 @@
 }
 
 .card-smooth-appear {
-  animation: smoothCardAppear 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: transform, opacity;
-  contain: content;
+  animation: smoothCardAppear 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+  content-visibility: auto;
+  contain-intrinsic-size: 340px;
 }

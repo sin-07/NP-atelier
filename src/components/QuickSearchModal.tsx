@@ -223,7 +223,7 @@ export default function QuickSearchModal() {
         </div>
 
         {/* Suggestions & Results List */}
-        <div className="max-h-[60vh] sm:max-h-[55vh] overflow-y-auto no-scrollbar sm:scrollbar-thin sm:scrollbar-thumb-[#D4AF37]/40 p-3 sm:p-5 bg-[#FAF7F2]">
+        <div className="max-h-[60vh] sm:max-h-[55vh] sidebar-scroller p-3 sm:p-5 bg-[#FAF7F2]">
           <div className="flex items-center justify-between pb-2.5 text-xs font-bold uppercase tracking-wider text-[#8C827A]">
             <span>{query ? `Found ${searchResults.length} items` : 'Trending Marketplace Drops'}</span>
             <span className="text-[10px] text-[#B8860B] font-semibold hidden sm:inline">Press ESC to exit</span>
