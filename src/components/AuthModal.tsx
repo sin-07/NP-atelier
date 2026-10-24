@@ -27,6 +27,7 @@ export default function AuthModal() {
     showToast,
     cartItems,
     setIsCheckoutOpen,
+    openProfile,
   } = useMarketplace()
   const [mode, setMode] = useState<'login' | 'register'>('register')
   const [isLocatingPin, setIsLocatingPin] = useState(false)
@@ -96,6 +97,10 @@ export default function AuthModal() {
     if (cartItems && cartItems.length > 0) {
       setTimeout(() => {
         setIsCheckoutOpen(true)
+      }, 350)
+    } else {
+      setTimeout(() => {
+        openProfile('profile')
       }, 350)
     }
   }
@@ -351,13 +356,13 @@ export default function AuthModal() {
 
               <div className="border-t border-[#DFCFA6]/40 pt-3 text-center">
                 <p className="text-[11px] text-[#5A554E]">
-                  Looking for creator &amp; inventory management?{' '}
+                  Authorized store operator or staff?{' '}
                   <a
                     href="/admin/login"
                     onClick={() => setIsAuthOpen(false)}
                     className="font-bold text-[#875A10] underline hover:text-[#B8860B] transition"
                   >
-                    Open Admin Login Portal →
+                    Admin Console Login →
                   </a>
                 </p>
               </div>

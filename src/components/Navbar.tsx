@@ -27,6 +27,9 @@ import {
   Mail,
   MessageCircle,
   Phone,
+  User,
+  Package,
+  MapPin,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
 import gsap from 'gsap'
@@ -131,11 +134,19 @@ export default function Navbar() {
     setIsCartOpen,
     setIsWishlistOpen,
     setIsAuthOpen,
+    isProfileOpen,
+    setIsProfileOpen,
+    openProfile,
     setIsSellOpen,
     setIsQuickSearchOpen,
     showToast,
     logout,
   } = useMarketplace()
+
+  const isAdmin =
+    user?.role === 'admin' ||
+    user?.role === 'Master Admin & Creator Ops' ||
+    user?.email === 'npatelierindia@gmail.com'
 
   // Native smooth scroll to anchor
   const scrollToAnchor = (href: string) => {
@@ -618,21 +629,42 @@ export default function Navbar() {
 
                   {/* Dropdown Menu */}
                   {userDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-52 rounded-2xl border border-[#D4AF37]/40 bg-white p-2 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                      <div className="px-3 py-2 border-b border-[#F0E9D8]">
+                    <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-[#D4AF37]/40 bg-white p-2 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                      <div className="px-3.5 py-2.5 border-b border-[#F0E9D8]">
                         <p className="text-xs font-bold text-[#141414] truncate">{user.name}</p>
                         <p className="text-[10px] text-[#7A6A53] truncate">
                           {user.email || 'Artisan Collector'}
                         </p>
+                        <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-[#FAF5E8] border border-[#D4AF37]/50 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#875A10]">
+                          <ShieldCheck className="h-3 w-3 text-[#B8860B]" />
+                          {isAdmin ? 'Administrator' : 'Artisan Patron & Collector'}
+                        </span>
                       </div>
-                      <Link
-                        href="/admin"
-                        onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-[#141414] hover:bg-[#FAF5E8] transition"
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setUserDropdownOpen(false)
+                          openProfile('profile')
+                        }}
+                        className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-[#141414] hover:bg-[#FAF5E8] transition cursor-pointer"
                       >
-                        <LayoutDashboard className="h-3.5 w-3.5 text-[#B8860B]" />
-                        <span>Admin Console</span>
-                      </Link>
+                        <User className="h-3.5 w-3.5 text-[#B8860B]" />
+                        <span>My Profile &amp; Address</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setUserDropdownOpen(false)
+                          openProfile('orders')
+                        }}
+                        className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-[#141414] hover:bg-[#FAF5E8] transition cursor-pointer"
+                      >
+                        <Package className="h-3.5 w-3.5 text-[#B8860B]" />
+                        <span>My Bespoke Orders</span>
+                      </button>
+
                       <button
                         type="button"
                         onClick={() => {
@@ -644,6 +676,20 @@ export default function Navbar() {
                         <Store className="h-3.5 w-3.5 text-[#B8860B]" />
                         <span>Artisan Studio Portal</span>
                       </button>
+
+                      {isAdmin && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setUserDropdownOpen(false)}
+                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-[#875A10] bg-[#FAF5E8]/60 hover:bg-[#FAF5E8] transition"
+                        >
+                          <LayoutDashboard className="h-3.5 w-3.5 text-[#B8860B]" />
+                          <span>Admin Console</span>
+                        </Link>
+                      )}
+
+                      <div className="my-1 border-t border-[#F0E9D8]" />
+
                       <button
                         type="button"
                         onClick={() => {
@@ -794,17 +840,76 @@ export default function Navbar() {
                   </button>
 
                   {mounted && user ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        logout()
-                        setIsMenuOpen(false)
-                      }}
-                      className="gsap-menu-item flex w-full items-center justify-center gap-2 rounded-full border border-[#DDD7CE] bg-white py-2.5 text-xs font-bold text-rose-600 cursor-pointer"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      <span>Sign Out ({user.name})</span>
-                    </button>
+                    <div className="space-y-2">
+                      <div className="gsap-menu-item flex items-center gap-3 rounded-2xl border border-[#D4AF37]/40 bg-[#FAF6ED] p-3">
+                        {user.avatarImage ? (
+                          <img
+                            src={user.avatarImage}
+                            alt={user.name}
+                            className="h-10 w-10 rounded-full object-cover border border-[#D4AF37]"
+                          />
+                        ) : (
+                          <div className="grid h-10 w-10 place-items-center rounded-full bg-[#14100A] text-xs font-black text-[#ECC872] border border-[#D4AF37]">
+                            {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                          </div>
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs font-bold text-[#141414] truncate">{user.name}</p>
+                          <p className="text-[10px] text-[#7A6A53] truncate">{user.email}</p>
+                          <span className="text-[9px] font-black uppercase tracking-wider text-[#875A10]">
+                            {isAdmin ? 'Administrator' : 'Artisan Collector'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsMenuOpen(false)
+                            openProfile('profile')
+                          }}
+                          className="gsap-menu-item flex items-center justify-center gap-1.5 rounded-xl border border-[#D4AF37]/50 bg-white py-2.5 text-xs font-bold text-[#141414] shadow-xs cursor-pointer hover:bg-[#FAF5E8]"
+                        >
+                          <User className="h-3.5 w-3.5 text-[#B8860B]" />
+                          <span>My Profile</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsMenuOpen(false)
+                            openProfile('orders')
+                          }}
+                          className="gsap-menu-item flex items-center justify-center gap-1.5 rounded-xl border border-[#D4AF37]/50 bg-white py-2.5 text-xs font-bold text-[#141414] shadow-xs cursor-pointer hover:bg-[#FAF5E8]"
+                        >
+                          <Package className="h-3.5 w-3.5 text-[#B8860B]" />
+                          <span>My Orders</span>
+                        </button>
+                      </div>
+
+                      {isAdmin && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="gsap-menu-item flex w-full items-center justify-center gap-2 rounded-xl border border-[#D4AF37]/50 bg-[#FAF5E8] py-2.5 text-xs font-bold text-[#875A10]"
+                        >
+                          <LayoutDashboard className="h-4 w-4 text-[#B8860B]" />
+                          <span>Open Admin Console</span>
+                        </Link>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          logout()
+                          setIsMenuOpen(false)
+                        }}
+                        className="gsap-menu-item flex w-full items-center justify-center gap-2 rounded-full border border-rose-200 bg-rose-50/70 py-2.5 text-xs font-bold text-rose-600 cursor-pointer"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
                   ) : (
                     <button
                       type="button"

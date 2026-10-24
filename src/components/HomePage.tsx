@@ -15,6 +15,7 @@ import WishlistSidebar from './WishlistSidebar'
 import CheckoutModal from './CheckoutModal'
 import QuickSearchModal from './QuickSearchModal'
 import AuthModal from './AuthModal'
+import UserProfileModal from './UserProfileModal'
 import SellCraftModal from './SellCraftModal'
 import ToastContainer from './ToastContainer'
 import BackToTop from './BackToTop'
@@ -53,6 +54,7 @@ export default function HomePage() {
       <CheckoutModal />
       <QuickSearchModal />
       <AuthModal />
+      <UserProfileModal />
       <SellCraftModal />
       <BackToTop />
     </div>

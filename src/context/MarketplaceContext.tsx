@@ -101,9 +101,16 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isWishlistOpen, setIsWishlistOpen] = useState(false)
   const [isAuthOpen, setIsAuthOpen] = useState(false)
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const [profileTab, setProfileTab] = useState<'profile' | 'orders' | 'wishlist'>('profile')
   const [isSellOpen, setIsSellOpen] = useState(false)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isQuickSearchOpen, setIsQuickSearchOpen] = useState(false)
+
+  const openProfile = (tab: 'profile' | 'orders' | 'wishlist' = 'profile') => {
+    setProfileTab(tab)
+    setIsProfileOpen(true)
+  }
 
   // Toasts
   const [toasts, setToasts] = useState<any[]>([])
@@ -644,8 +651,9 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   }) => {
     const cleanedName = (userData.name || '').trim()
     const cleanedEmail = (userData.email || '').trim().toLowerCase()
+    const isAdminEmail = cleanedEmail === 'npatelierindia@gmail.com'
 
-    setUser({
+    const newUser = {
       name: cleanedName,
       email: cleanedEmail,
       phone: userData.phone || '',
@@ -656,7 +664,13 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       avatar: buildAvatar(cleanedName),
       avatarImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
       memberSince: '2026',
-    })
+      role: isAdminEmail ? 'admin' : 'customer',
+    }
+
+    setUser(newUser)
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(STORAGE_KEYS.auth, JSON.stringify(newUser))
+    }
 
     showToast({
       title: `Welcome, ${cleanedName}!`,
@@ -665,8 +679,27 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     })
   }
 
+  const updateUser = (updatedFields: Partial<any>) => {
+    setUser((prev: any) => {
+      const next = { ...prev, ...updatedFields }
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(STORAGE_KEYS.auth, JSON.stringify(next))
+      }
+      return next
+    })
+    showToast({
+      title: 'Profile Updated',
+      message: 'Your personal details and address have been saved.',
+      type: 'success',
+    })
+  }
+
   const logout = () => {
     setUser(null)
+    setIsProfileOpen(false)
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(STORAGE_KEYS.auth)
+    }
     showToast({
       title: 'Signed Out',
       message: 'Come back soon for more handcrafted & aquatic drops!',
@@ -836,12 +869,17 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       isCartOpen,
       isWishlistOpen,
       isAuthOpen,
+      isProfileOpen,
+      profileTab,
       isSellOpen,
       isCheckoutOpen,
       isQuickSearchOpen,
       setIsCartOpen,
       setIsWishlistOpen,
       setIsAuthOpen,
+      setIsProfileOpen,
+      setProfileTab,
+      openProfile,
       setIsSellOpen,
       setIsCheckoutOpen,
       setIsQuickSearchOpen,
@@ -859,6 +897,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       createOrder,
       updateOrderStatus,
       login,
+      updateUser,
       logout,
       addProduct,
       editProduct,
@@ -889,6 +928,8 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       isCartOpen,
       isWishlistOpen,
       isAuthOpen,
+      isProfileOpen,
+      profileTab,
       isSellOpen,
       isCheckoutOpen,
       isQuickSearchOpen,

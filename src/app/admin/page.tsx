@@ -75,26 +75,8 @@ const PRESET_IMAGES = [
 ]
 
 export default function AdminPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [authChecked, setAuthChecked] = useState(false)
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const auth = window.localStorage.getItem('ateliernp-admin-authenticated') === 'true'
-      setIsAuthenticated(auth)
-      setAuthChecked(true)
-    }
-  }, [])
-
-  const handleAdminLogout = () => {
-    if (typeof window !== 'undefined') {
-      window.localStorage.removeItem('ateliernp-admin-authenticated')
-      window.localStorage.removeItem('ateliernp-admin-user')
-    }
-    setIsAuthenticated(false)
-  }
-
   const {
+    user,
     branding,
     updateBranding,
     resetBranding,
@@ -109,6 +91,31 @@ export default function AdminPage() {
     deleteCoupon,
     showToast,
   } = useMarketplace()
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [authChecked, setAuthChecked] = useState(false)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const auth = window.localStorage.getItem('ateliernp-admin-authenticated') === 'true'
+      // A customer session must not automatically enter admin without verified admin role
+      const isRegularCustomer = user && user.role === 'customer'
+      if (isRegularCustomer) {
+        setIsAuthenticated(false)
+      } else {
+        setIsAuthenticated(auth)
+      }
+      setAuthChecked(true)
+    }
+  }, [user])
+
+  const handleAdminLogout = () => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem('ateliernp-admin-authenticated')
+      window.localStorage.removeItem('ateliernp-admin-user')
+    }
+    setIsAuthenticated(false)
+  }
 
   // Tabs: 'overview' | 'products' | 'branding' | 'orders' | 'coupons' | 'artisans'
   const [activeTab, setActiveTab] = useState('overview')
