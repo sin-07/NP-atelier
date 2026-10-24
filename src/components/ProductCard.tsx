@@ -11,8 +11,8 @@ export interface ProductCardProps {
   isWishlisted?: boolean
   priority?: boolean
   isCompact?: boolean
-  onWishlistToggle?: () => void
-  onQuickView?: () => void
+  onWishlistToggle?: (id: string | number) => void
+  onQuickView?: (product: Product | any) => void
   onAddToCart?: (product: any, quantity?: number) => void
   onBuyNow?: (product: any) => void
   className?: string
@@ -32,7 +32,7 @@ function ProductCard({
   const { cart, addToCart, setCartQuantity, removeFromCart, branding } = useMarketplace()
   const [plusPop, setPlusPop] = useState(false)
 
-  // Find item quantity in active shopping bag
+  // Direct fast lookup in active cart (instant sync, 0 duplicate re-renders)
   const productIdStr = String(product?.id ?? product?._id ?? '')
   const productAltIdStr = product?._id ? String(product._id) : ''
   const cartItem = cart?.find(
@@ -42,21 +42,12 @@ function ProductCard({
        (productAltIdStr && (String(item.productId) === productAltIdStr || String(item.cartItemId) === productAltIdStr))) &&
       !item.customization
   )
-  const cartQuantity = cartItem ? cartItem.quantity : 0
-
-  // Optimistic quantity state for instant Flipkart-style response
-  const [optimisticQty, setOptimisticQty] = useState<number | null>(null)
-  const activeQuantity = optimisticQty !== null ? optimisticQty : cartQuantity
-
-  useEffect(() => {
-    setOptimisticQty(cartQuantity)
-  }, [cartQuantity])
+  const activeQuantity = cartItem ? cartItem.quantity : 0
 
   const handleAdd = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setOptimisticQty(1)
     setPlusPop(true)
-    setTimeout(() => setPlusPop(false), 900)
+    setTimeout(() => setPlusPop(false), 800)
     if (onAddToCart) {
       onAddToCart(product, 1)
     } else {
@@ -67,9 +58,8 @@ function ProductCard({
   const handleIncrement = (e: React.MouseEvent) => {
     e.stopPropagation()
     const nextQty = (activeQuantity || 1) + 1
-    setOptimisticQty(nextQty)
     setPlusPop(true)
-    setTimeout(() => setPlusPop(false), 900)
+    setTimeout(() => setPlusPop(false), 800)
     const targetId = product.id ?? product._id
     setCartQuantity(targetId, nextQty)
   }
@@ -78,13 +68,21 @@ function ProductCard({
     e.stopPropagation()
     const targetId = product.id ?? product._id
     if (activeQuantity <= 1) {
-      setOptimisticQty(0)
       removeFromCart(targetId)
     } else {
-      const nextQty = activeQuantity - 1
-      setOptimisticQty(nextQty)
-      setCartQuantity(targetId, nextQty)
+      setCartQuantity(targetId, activeQuantity - 1)
     }
+  }
+
+  const handleWishlistClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const targetId = product.id ?? product._id
+    onWishlistToggle?.(targetId)
+  }
+
+  const handleQuickViewClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onQuickView?.(product)
   }
 
   const curr = branding?.currency || '₹'
@@ -109,7 +107,7 @@ function ProductCard({
         isCompact
           ? 'rounded-[1.15rem] sm:rounded-[1.35rem] p-1.5 sm:p-2.5'
           : 'rounded-[1.25rem] sm:rounded-[1.65rem] p-2 sm:p-2.5'
-      } border border-[#DFCFA6]/60 bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5ECE0]/60 shadow-[0_4px_16px_rgba(184,134,11,0.06)] hover:shadow-[0_12px_28px_rgba(184,134,11,0.14)] hover:border-[#D4AF37] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 ${className}`}
+      } border border-[#DFCFA6]/60 bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5ECE0]/60 shadow-[0_4px_16px_rgba(184,134,11,0.06)] sm:hover:shadow-[0_12px_28px_rgba(184,134,11,0.14)] sm:hover:border-[#D4AF37] transition-[border-color,box-shadow] duration-150 ease-out transform-gpu will-change-transform ${className}`}
     >
       <div>
         {/* Image Showcase Frame - Square/Sleek ratio eliminates unnecessary vertical dead space */}
@@ -126,24 +124,24 @@ function ProductCard({
             onError={(event) => {
               event.currentTarget.src = fallbackCraftImage
             }}
-            className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-200 ease-out sm:group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 transition-opacity duration-150 sm:group-hover:opacity-100" />
 
-          {/* Luxury Curated Badges (Never Crowding Photo) */}
+          {/* Luxury Curated Badges (Zero blur overhead for instant rendering) */}
           <div className="absolute left-1.5 sm:left-2 top-1.5 sm:top-2 z-10 flex flex-wrap items-center gap-1 max-w-[70%]">
             {product.badges?.[0] ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-[#120F0A]/90 backdrop-blur-md border border-[#D4AF37]/60 px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-extrabold uppercase tracking-wider text-[#ECC872] shadow-xs">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[#120F0A]/95 border border-[#D4AF37]/60 px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-extrabold uppercase tracking-wider text-[#ECC872] shadow-xs">
                 <span className="h-1 w-1 rounded-full bg-[#D4AF37]" />
                 <span className="truncate max-w-[90px] sm:max-w-none">{product.badges[0]}</span>
               </span>
             ) : (
-              <span className="inline-flex items-center rounded-full bg-[#120F0A]/90 backdrop-blur-md border border-[#D4AF37]/50 px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-extrabold uppercase tracking-wider text-[#ECC872] shadow-xs">
+              <span className="inline-flex items-center rounded-full bg-[#120F0A]/95 border border-[#D4AF37]/50 px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-extrabold uppercase tracking-wider text-[#ECC872] shadow-xs">
                 Artisan
               </span>
             )}
             {!isCompact && product.badges?.[1] && (
-              <span className="hidden sm:inline-flex items-center rounded-full bg-white/90 backdrop-blur-md border border-[#DFCFA6]/80 px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-bold uppercase tracking-wider text-[#694806] shadow-2xs">
+              <span className="hidden sm:inline-flex items-center rounded-full bg-white/95 border border-[#DFCFA6]/80 px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-bold uppercase tracking-wider text-[#694806] shadow-2xs">
                 {product.badges[1]}
               </span>
             )}
@@ -151,7 +149,7 @@ function ProductCard({
 
           {/* Active Bag Quantity Pill on Image */}
           {activeQuantity > 0 && (
-            <div className="absolute left-1.5 sm:left-2 bottom-1.5 sm:bottom-2 z-10 flex items-center gap-1.5 rounded-full bg-[#0F2D19]/90 backdrop-blur-md border border-emerald-400/50 px-1.5 sm:px-2 py-0.5 text-[8px] sm:text-[9.5px] font-bold text-emerald-300 shadow-md">
+            <div className="absolute left-1.5 sm:left-2 bottom-1.5 sm:bottom-2 z-10 flex items-center gap-1.5 rounded-full bg-[#0F2D19]/95 border border-emerald-400/50 px-1.5 sm:px-2 py-0.5 text-[8px] sm:text-[9.5px] font-bold text-emerald-300 shadow-md">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>+{activeQuantity} in Bag</span>
             </div>
@@ -163,11 +161,8 @@ function ProductCard({
               type="button"
               aria-pressed={isWishlisted}
               aria-label={`Save ${product.title} to wishlist`}
-              onClick={(e) => {
-                e.stopPropagation()
-                onWishlistToggle?.()
-              }}
-              className="grid h-6 w-6 sm:h-7.5 sm:w-7.5 place-items-center rounded-full bg-white/90 backdrop-blur-md border border-[#DFCFA6]/60 text-[#3D2C0A] shadow-xs transition duration-150 active:scale-90 hover:scale-105 hover:border-rose-400 hover:bg-rose-50 hover:text-rose-500 cursor-pointer"
+              onClick={handleWishlistClick}
+              className="grid h-6 w-6 sm:h-7.5 sm:w-7.5 place-items-center rounded-full bg-white/95 border border-[#DFCFA6]/70 text-[#3D2C0A] shadow-xs transition duration-150 active:scale-90 sm:hover:scale-105 sm:hover:border-rose-400 sm:hover:bg-rose-50 sm:hover:text-rose-500 cursor-pointer"
             >
               <Heart
                 className={`h-3 w-3 sm:h-3.5 sm:w-3.5 transition ${
@@ -178,11 +173,8 @@ function ProductCard({
             <button
               type="button"
               aria-label={`Quick view ${product.title}`}
-              onClick={(e) => {
-                e.stopPropagation()
-                onQuickView?.()
-              }}
-              className="grid h-6 w-6 sm:h-7.5 sm:w-7.5 place-items-center rounded-full bg-white/90 backdrop-blur-md border border-[#DFCFA6]/60 text-[#3D2C0A] shadow-xs transition duration-150 active:scale-90 hover:scale-105 hover:border-[#D4AF37] hover:bg-white cursor-pointer"
+              onClick={handleQuickViewClick}
+              className="grid h-6 w-6 sm:h-7.5 sm:w-7.5 place-items-center rounded-full bg-white/95 border border-[#DFCFA6]/70 text-[#3D2C0A] shadow-xs transition duration-150 active:scale-90 sm:hover:scale-105 sm:hover:border-[#D4AF37] sm:hover:bg-white cursor-pointer"
             >
               <Eye className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
             </button>
@@ -209,8 +201,8 @@ function ProductCard({
 
           {/* Product Title */}
           <h3
-            onClick={() => onQuickView?.()}
-            className={`cursor-pointer font-serif font-bold tracking-tight text-[#141414] leading-snug transition-colors duration-200 hover:text-[#8C6F2D] ${
+            onClick={handleQuickViewClick}
+            className={`cursor-pointer font-serif font-bold tracking-tight text-[#141414] leading-snug transition-colors duration-150 hover:text-[#8C6F2D] ${
               isCompact
                 ? 'text-xs sm:text-[13px] line-clamp-1 min-h-0'
                 : 'text-[12.5px] sm:text-[14px] line-clamp-2 min-h-[2.1rem] sm:min-h-[2.4rem]'

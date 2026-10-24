@@ -717,8 +717,8 @@ export default function HandmadeGallery() {
                   priority={idx < 4}
                   isCompact={layoutMode === 'masonry'}
                   isWishlisted={isWishlisted(prod.id)}
-                  onWishlistToggle={() => handleWishlistToggle(prod.id)}
-                  onQuickView={() => handleQuickView(prod)}
+                  onWishlistToggle={handleWishlistToggle}
+                  onQuickView={handleQuickView}
                   onAddToCart={handleAddToCart}
                   onBuyNow={handleBuyNow}
                 />
