@@ -39,42 +39,35 @@ export default function MobileBottomDock() {
     }
   }, [])
 
-  // Auto-sync active tab with scroll position smoothly
-  useEffect(() => {
-    const collectionEl = document.getElementById('collection')
-    const acquarioEl = document.getElementById('acquario-tropicale')
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            if (entry.target.id === 'acquario-tropicale') {
-              setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'aquarium'))
-            } else if (entry.target.id === 'collection') {
-              setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'crafts'))
-            }
-          }
-        }
-      },
-      { rootMargin: '-100px 0px -50% 0px' }
-    )
-
-    if (collectionEl) observer.observe(collectionEl)
-    if (acquarioEl) observer.observe(acquarioEl)
-    return () => observer.disconnect()
-  }, [])
-
   const {
     wishlist,
     cartCount,
     setIsCartOpen,
     setIsWishlistOpen,
     setIsQuickSearchOpen,
+    activeDepartment,
     setActiveDepartment,
   } = useMarketplace()
 
+  // Auto-sync active tab with activeDepartment
+  useEffect(() => {
+    if (activeDepartment === 'aquarium') {
+      setActiveTab('aquarium')
+    } else if (activeDepartment === 'crafts') {
+      setActiveTab('crafts')
+    }
+  }, [activeDepartment])
+
   const scrollToAnchor = (href: string) => {
     if (typeof window === 'undefined') return
+    if (window.location.pathname !== '/') {
+      if (href === '#acquario-tropicale' || href === '#aquarium') {
+        window.location.href = '/?dept=aquarium'
+        return
+      }
+      window.location.href = href === '#home' ? '/' : `/${href}`
+      return
+    }
     if (href === '#home') {
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
@@ -84,19 +77,24 @@ export default function MobileBottomDock() {
       const rect = target.getBoundingClientRect()
       const top = rect.top + window.pageYOffset - 85
       window.scrollTo({ top, behavior: 'smooth' })
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
   const handleNavClick = (tab: 'home' | 'crafts' | 'aquarium') => {
     setActiveTab(tab)
     if (tab === 'home') {
+      setActiveDepartment?.('crafts')
       scrollToAnchor('#home')
     } else if (tab === 'crafts') {
       setActiveDepartment?.('crafts')
       scrollToAnchor('#collection')
     } else if (tab === 'aquarium') {
       setActiveDepartment?.('aquarium')
-      scrollToAnchor('#acquario-tropicale')
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     }
   }
 

@@ -44,62 +44,62 @@ const HERO_DROPS: Record<
     tabLabel: string
     shortLabel: string
     craft: ShowcaseCard
-    aquatic: ShowcaseCard
+    craft2: ShowcaseCard
   }
 > = {
   featured: {
-    tabLabel: 'Signature Duo',
+    tabLabel: 'Signature Duos',
     shortLabel: 'Signature',
     craft: {
-      id: 1,
-      title: 'Evil Eye Mandala Pendant',
+      id: 4,
+      title: 'Celestial Evil Eye Mandala Pendant',
       subtitle: 'Hand-poured enamel in 24K gold bezel',
       artisan: 'Atelier NP Studio',
-      price: '₹1,599',
+      price: '₹599',
       category: 'Handmade Jewelry',
       image: '/products/atelier-evil-eye-pendant.jpg',
       badge: '✦ Signature Talisman',
       accentColor: '#D4AF37',
       rating: '4.9',
     },
-    aquatic: {
-      id: 101,
-      title: 'Royal Discus Nature Aquascape',
-      subtitle: 'Low-iron rimless nature aquarium specimen',
-      artisan: 'Captive-Bred Sanctuary',
-      price: '₹2,999',
-      category: 'Exotic Aquatics',
-      image: '/products/royal-discus-aquarium.jpg',
-      badge: 'Live Arrival Guarantee',
-      accentColor: '#0D9488',
+    craft2: {
+      id: 10,
+      title: 'Ocean Wave Resin Art Serving Tray',
+      subtitle: 'Layered crystal ocean epoxy resin on mango wood',
+      artisan: 'NP Resin Art Studio',
+      price: '₹1,199',
+      category: 'DIY Home Decor & Crafts',
+      image: '/products/resin-art-tray.jpg',
+      badge: '✦ Statement Piece',
+      accentColor: '#B8860B',
       rating: '5.0',
     },
   },
   botanical: {
-    tabLabel: 'Botanical Sanctuary',
+    tabLabel: 'Botanical & Flora',
     shortLabel: 'Botanical',
     craft: {
-      id: 2,
-      title: 'Pressed Botanical Resin Tray',
+      id: 5,
+      title: 'Pressed Flower Resin Teardrop Earrings',
       subtitle: 'Real foraged wild meadow blooms in crystal resin',
-      artisan: 'Clara & Fern Botanicals',
-      price: '₹799',
-      category: 'Botanical Decor',
-      image: '/products/resin-art-tray.jpg',
+      artisan: 'Flora Atelier Studio',
+      price: '₹649',
+      category: 'Handmade Jewelry',
+      image: '/products/resin-earrings.jpg',
       badge: '✦ 100% Hand-Foraged',
       accentColor: '#B8860B',
       rating: '4.95',
     },
-    aquatic: {
-      id: 102,
-      title: 'Samurai Koi Halfmoon Betta',
-      subtitle: 'Show-grade iridescent captive-bred betta',
-      artisan: 'Aqua Botanica Lab',
-      price: '₹899',
-      category: 'Freshwater Show Fish',
-      image: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=800&q=80',
-      badge: 'Certified Show Grade',
-      accentColor: '#0D9488',
+    craft2: {
+      id: 1,
+      title: 'Atelier NP Sea Life DIY Paint Kit',
+      subtitle: 'Handcrafted plaster marine figurines & acrylics',
+      artisan: 'Atelier NP Craft Labs',
+      price: '₹449',
+      category: 'Beauty DIY Products',
+      image: '/products/atelier-diy-paint-kit-sea.jpg',
+      badge: '✦ Best Seller DIY Kit',
+      accentColor: '#D4AF37',
       rating: '4.98',
     },
   },
@@ -108,26 +108,26 @@ const HERO_DROPS: Record<
     shortLabel: 'Bespoke',
     craft: {
       id: 3,
-      title: 'Ruby Initial Gold Flake Monogram',
+      title: 'Ruby Dip Resin Alphabet Keychains',
       subtitle: 'Pure gold leaf dipping with crystal resin initials',
       artisan: 'Atelier NP Studio',
-      price: '₹1,299',
-      category: 'Custom Accessories',
+      price: '₹299',
+      category: 'Cute Handmade Accessories',
       image: '/products/atelier-ruby-glitter-keychains.jpg',
       badge: '✦ 1-of-1 Bespoke',
       accentColor: '#D4AF37',
       rating: '5.0',
     },
-    aquatic: {
-      id: 103,
-      title: 'Bonded Clownfish Marine Pair',
-      subtitle: 'Captive-bred reef safe saltwater specimens',
-      artisan: 'Ocean Reef Collective',
-      price: '₹3,499',
-      category: 'Marine & Saltwater',
-      image: 'https://images.unsplash.com/photo-1524704654690-b56c05c78a00?auto=format&fit=crop&w=800&q=80',
-      badge: 'Reef Safe Pair',
-      accentColor: '#0284C7',
+    craft2: {
+      id: 2,
+      title: 'Atelier NP Explorer DIY Paint Kit',
+      subtitle: 'Hand-cast steam train & coastal lighthouse figurines',
+      artisan: 'Atelier NP Craft Labs',
+      price: '₹449',
+      category: 'DIY Home Decor & Crafts',
+      image: '/products/atelier-diy-paint-kit-explorer.jpg',
+      badge: '✦ Artisan Favorite',
+      accentColor: '#B8860B',
       rating: '4.9',
     },
   },
@@ -141,16 +141,16 @@ const VALUE_PERKS = [
     highlight: '100% fair artisan value',
   },
   {
-    icon: ShieldCheck,
-    title: 'Live Arrival Guarantee',
-    desc: 'Oxygenated thermal packs',
-    highlight: 'Full transit protection',
-  },
-  {
     icon: Sparkles,
-    title: 'Direct Artisan Marketplace',
+    title: 'Authentic Handcrafted Art',
     desc: 'Handmade by skilled makers',
     highlight: 'Zero mass production',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Pan-India Fragile Courier',
+    desc: 'Shockproof bubble & box',
+    highlight: 'Safe transit guarantee',
   },
   {
     icon: PackageCheck,
@@ -179,13 +179,13 @@ export default function Hero() {
   )
   const craftQty = craftInCart ? craftInCart.quantity : 0
 
-  const aquaticInCart = cart?.find(
+  const craft2InCart = cart?.find(
     (item: any) =>
-      (String(item.cartItemId) === String(currentDrop.aquatic.id) ||
-        String(item.productId) === String(currentDrop.aquatic.id)) &&
+      (String(item.cartItemId) === String(currentDrop.craft2.id) ||
+        String(item.productId) === String(currentDrop.craft2.id)) &&
       !item.customization
   )
-  const aquaticQty = aquaticInCart ? aquaticInCart.quantity : 0
+  const craft2Qty = craft2InCart ? craft2InCart.quantity : 0
 
   // GSAP Snappy Luxury Entrance Animation on Mount
   useEffect(() => {
@@ -227,11 +227,11 @@ export default function Hero() {
   useEffect(() => {
     const imagesToPreload = [
       HERO_DROPS.featured.craft.image,
-      HERO_DROPS.featured.aquatic.image,
+      HERO_DROPS.featured.craft2.image,
       HERO_DROPS.botanical.craft.image,
-      HERO_DROPS.botanical.aquatic.image,
+      HERO_DROPS.botanical.craft2.image,
       HERO_DROPS.monogram.craft.image,
-      HERO_DROPS.monogram.aquatic.image,
+      HERO_DROPS.monogram.craft2.image,
     ]
     imagesToPreload.forEach((src) => {
       if (typeof window !== 'undefined' && src) {
@@ -355,7 +355,7 @@ export default function Hero() {
           <div className="flex flex-wrap items-center gap-2.5">
             <span className="section-eyebrow">
               <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" />
-              Haute Artisan Craft & Living Waters
+              Haute Artisan Craft & Couture Atelier
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/40 bg-white/95 px-3 py-1 text-xs font-bold text-[#4D3605] shadow-xs">
               <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" />
@@ -365,7 +365,7 @@ export default function Hero() {
 
           <div className="hidden sm:flex items-center gap-2 rounded-full border border-[#D4AF37]/35 bg-white/90 px-3.5 py-1 text-xs font-semibold text-[#5C4106]">
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Spring Drops Shipping Nationwide</span>
+            <span>Artisan Drops Shipping Nationwide</span>
           </div>
         </div>
 
@@ -376,12 +376,12 @@ export default function Hero() {
             <h1 className="gsap-hero-title font-serif text-4xl sm:text-5xl lg:text-[3.75rem] font-bold tracking-tight text-[#141414] leading-[1.08]">
               Where Fine Art <br />
               <span className="italic font-normal text-gold-gradient font-serif">
-                Meets Living Waters.
+                Meets Master Craft.
               </span>
             </h1>
 
             <p className="gsap-hero-text body-lead mt-5 sm:text-lg text-[#4A4339] leading-relaxed">
-              Discover genuine artisan handmade jewelry, wild botanical resin decor, and clean soy candles alongside exotic captive-bred fish, lush planted aquascapes, and rimless nature aquariums.
+              Discover genuine artisan handmade jewelry, wild botanical resin art, personalized monogram keepsakes, and creative DIY craft kits handcrafted with love by verified independent makers.
             </p>
 
             {/* CTAs */}
@@ -397,11 +397,16 @@ export default function Hero() {
 
               <button
                 type="button"
-                onClick={() => handleDepartmentJump('aquarium')}
-                className="gsap-hero-cta inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-4 text-sm font-bold tracking-wide cursor-pointer border border-teal-600/40 bg-gradient-to-r from-[#F0FDFA] to-[#CCFBF1] text-[#0F766E] shadow-sm transition hover:border-teal-600 hover:shadow-md hover:-translate-y-0.5"
+                onClick={() => {
+                  const makersEl = document.getElementById('makers')
+                  if (makersEl) {
+                    makersEl.scrollIntoView({ behavior: 'smooth' })
+                  }
+                }}
+                className="gsap-hero-cta inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-4 text-sm font-bold tracking-wide cursor-pointer border border-[#D4AF37]/50 bg-gradient-to-r from-white via-[#FCF9EE] to-[#FAF4E2] text-[#5C4106] shadow-sm transition hover:border-[#D4AF37] hover:shadow-md hover:-translate-y-0.5"
               >
-                <Waves className="h-4 w-4 text-[#0F766E]" />
-                <span>Exotic Fish & Aquatics</span>
+                <span>Meet Atelier Makers</span>
+                <ArrowRight className="h-4 w-4 stroke-[2.5]" />
               </button>
             </div>
 
@@ -418,9 +423,9 @@ export default function Hero() {
 
               <div className="text-xs font-semibold text-[#4A4339]">
                 <p className="font-bold text-[#141414] flex items-center gap-1.5">
-                  <ShieldCheck className="h-3.5 w-3.5 text-[#B8860B]" /> Live Transit & Arrival Guarantee
+                  <ShieldCheck className="h-3.5 w-3.5 text-[#B8860B]" /> Fragile Transit Protection
                 </p>
-                <p className="text-[#635B4F] text-[11px]">Oxygenated packs & express fragile couriers</p>
+                <p className="text-[#635B4F] text-[11px]">Shockproof layers & express tracking nationwide</p>
               </div>
             </div>
           </div>
@@ -561,12 +566,12 @@ export default function Hero() {
                 </div>
               </article>
 
-              {/* Card 2: Exotic Aquatics Showcase */}
-              <article className="gsap-hero-card group relative overflow-hidden rounded-[2rem] border border-teal-500/40 bg-gradient-to-b from-white via-[#F0FDFA] to-[#E6FFFA] p-3.5 shadow-[0_12px_32px_rgba(15,118,110,0.10)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-teal-500 hover:shadow-[0_16px_40px_rgba(15,118,110,0.18)]">
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#F0FDFA] border border-teal-600/20">
+              {/* Card 2: Artisanal Decor & Keepsake Showcase */}
+              <article className="gsap-hero-card group relative overflow-hidden rounded-[2rem] border border-[#D4AF37]/50 bg-gradient-to-b from-white via-[#FCF9EE] to-[#FAF2DB] p-3.5 shadow-[0_12px_32px_rgba(184,134,11,0.12)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF37] hover:shadow-[0_16px_40px_rgba(184,134,11,0.20)]">
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#F7F2E6] border border-[#E8DEC7]">
                   <img
-                    src={currentDrop.aquatic.image}
-                    alt={currentDrop.aquatic.title}
+                    src={currentDrop.craft2.image}
+                    alt={currentDrop.craft2.title}
                     loading="eager"
                     decoding="async"
                     onError={(e) => {
@@ -578,18 +583,18 @@ export default function Hero() {
 
                   {/* Top Floating Badge */}
                   <div className="absolute left-2.5 top-2.5">
-                    <span className="inline-flex items-center rounded-full border border-teal-600/40 bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#0F766E] shadow-xs">
-                      {currentDrop.aquatic.badge}
+                    <span className="inline-flex items-center rounded-full border border-[#D4AF37]/60 bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#5C4106] shadow-xs">
+                      {currentDrop.craft2.badge}
                     </span>
                   </div>
 
                   {/* Bottom Image Overlay Tag */}
-                  <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between rounded-xl bg-white/95 border border-teal-600/40 px-3 py-1.5 shadow-sm">
+                  <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between rounded-xl bg-white/95 border border-[#D4AF37]/50 px-3 py-1.5 shadow-sm">
                     <span className="text-[11px] font-bold text-[#141414] truncate max-w-[130px]">
-                      {currentDrop.aquatic.title}
+                      {currentDrop.craft2.title}
                     </span>
-                    <span className="font-extrabold text-[#0F766E] text-xs">
-                      {currentDrop.aquatic.price}
+                    <span className="font-extrabold text-[#946B08] text-xs">
+                      {currentDrop.craft2.price}
                     </span>
                   </div>
                 </div>
@@ -597,36 +602,36 @@ export default function Hero() {
                 {/* Card Sub-Info & Action */}
                 <div className="mt-3 px-1 flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#0F766E] block">
-                      {currentDrop.aquatic.category}
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A5408] block">
+                      {currentDrop.craft2.category}
                     </span>
-                    <p className="text-xs text-[#524B40] font-medium">{currentDrop.aquatic.artisan}</p>
+                    <p className="text-xs text-[#524B40] font-medium">{currentDrop.craft2.artisan}</p>
                   </div>
 
-                  {aquaticQty > 0 ? (
+                  {craft2Qty > 0 ? (
                     <div
                       onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 rounded-full bg-[#141414] border border-teal-500/70 p-1 shadow-xs"
+                      className="inline-flex items-center gap-1 rounded-full bg-[#141414] border border-[#D4AF37]/70 p-1 shadow-xs"
                     >
                       <button
                         type="button"
                         aria-label="Decrease quantity"
                         onClick={() => {
-                          if (aquaticQty <= 1) removeFromCart(currentDrop.aquatic.id)
-                          else setCartQuantity(currentDrop.aquatic.id, aquaticQty - 1)
+                          if (craft2Qty <= 1) removeFromCart(currentDrop.craft2.id)
+                          else setCartQuantity(currentDrop.craft2.id, craft2Qty - 1)
                         }}
-                        className="grid h-6 w-6 place-items-center rounded-full bg-teal-950 text-teal-300 hover:bg-teal-900 transition active:scale-90 cursor-pointer"
+                        className="grid h-6 w-6 place-items-center rounded-full bg-[#251E14] text-[#ECC872] hover:bg-[#382D1C] hover:text-white transition active:scale-90 cursor-pointer"
                       >
                         <Minus className="h-3 w-3 stroke-[2.8]" />
                       </button>
-                      <span className="px-1 text-xs font-black text-teal-200 min-w-5 text-center font-mono">
-                        {aquaticQty}
+                      <span className="px-1 text-xs font-black text-[#FCE6A8] min-w-5 text-center font-mono">
+                        {craft2Qty}
                       </span>
                       <button
                         type="button"
                         aria-label="Increase quantity"
-                        onClick={() => setCartQuantity(currentDrop.aquatic.id, aquaticQty + 1)}
-                        className="grid h-6 w-6 place-items-center rounded-full bg-teal-500 text-teal-950 hover:brightness-110 transition active:scale-90 cursor-pointer shadow-xs"
+                        onClick={() => setCartQuantity(currentDrop.craft2.id, craft2Qty + 1)}
+                        className="grid h-6 w-6 place-items-center rounded-full bg-gradient-to-tr from-[#B8860B] to-[#D4AF37] text-[#141008] hover:brightness-110 transition active:scale-90 cursor-pointer shadow-xs"
                       >
                         <Plus className="h-3 w-3 stroke-[2.8]" />
                       </button>
@@ -634,11 +639,11 @@ export default function Hero() {
                   ) : (
                     <button
                       type="button"
-                      onClick={() => handleQuickAdd(currentDrop.aquatic)}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-[#141414] border border-teal-500/50 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#1E293B] active:scale-95 cursor-pointer"
-                      title={`Add ${currentDrop.aquatic.title} to bag`}
+                      onClick={() => handleQuickAdd(currentDrop.craft2)}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[#141414] border border-[#D4AF37]/60 px-3.5 py-1.5 text-xs font-bold text-[#ECC872] shadow-xs transition hover:bg-[#251D0B] active:scale-95 cursor-pointer"
+                      title={`Add ${currentDrop.craft2.title} to bag`}
                     >
-                      <ShoppingBag className="h-3 w-3 text-teal-400" />
+                      <ShoppingBag className="h-3 w-3" />
                       <span>Bag</span>
                     </button>
                   )}
@@ -652,13 +657,13 @@ export default function Hero() {
                 <span className="grid h-5 w-5 place-items-center rounded-full bg-[#FAF0D4] text-[#B8860B] text-[10px] font-black">
                   ✦
                 </span>
-                <span>Both artisan crafts & live aquatics ship in specialized protective packaging</span>
+                <span>All bespoke crafts ship in honeycomb protective packaging with wax seal presentation</span>
               </div>
               <a
                 href="#collection"
                 className="inline-flex items-center gap-1 text-[11px] font-bold text-[#7A5408] hover:text-[#4A3405] transition"
               >
-                <span>View All 60+ Drops</span>
+                <span>View All 40+ Crafts</span>
                 <ArrowRight className="h-3 w-3" />
               </a>
             </div>

@@ -106,7 +106,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const [availableCoupons, setAvailableCoupons] = useState<any>(DEFAULT_COUPONS)
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
   const [isGiftWrap, setIsGiftWrap] = useState(false)
-  const [activeDepartment, setActiveDepartment] = useState<'all' | 'crafts' | 'aquarium'>('all')
+  const [activeDepartment, setActiveDepartment] = useState<'all' | 'crafts' | 'aquarium'>('crafts')
 
   // Drawer / Modal toggles
   const [isCartOpen, setIsCartOpen] = useState(false)
@@ -267,6 +267,14 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
       const storedCoupons = safeReadStorage<any>(STORAGE_KEYS.coupons, null)
       if (storedCoupons) setAvailableCoupons(storedCoupons)
+
+      const urlParams = new URLSearchParams(window.location.search)
+      const deptParam = urlParams.get('dept')
+      if (deptParam === 'aquarium') {
+        setActiveDepartment('aquarium')
+      } else if (deptParam === 'crafts') {
+        setActiveDepartment('crafts')
+      }
 
       setIsHydrated(true)
       setIsAuthLoading(false)

@@ -151,27 +151,64 @@ export default function Navbar() {
   // Native smooth scroll to anchor
   const scrollToAnchor = (href: string) => {
     if (typeof window !== 'undefined') {
+      if (window.location.pathname !== '/') {
+        if (href === '#acquario-tropicale' || href === '#aquarium') {
+          window.location.href = '/?dept=aquarium'
+          return
+        }
+        window.location.href = href === '#home' ? '/' : `/${href}`
+        return
+      }
+      if (href === '#home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return
+      }
       const target = document.querySelector(href)
       if (target) {
         target.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       }
     }
   }
 
   const handleLinkClick = (href: string, dept?: 'all' | 'crafts' | 'aquarium') => {
+    if (typeof window !== 'undefined' && window.location.pathname !== '/') {
+      if (href === '#acquario-tropicale' || href === '#aquarium' || dept === 'aquarium') {
+        window.location.href = '/?dept=aquarium'
+        return
+      }
+      window.location.href = href === '#home' ? '/' : `/${href}`
+      return
+    }
+
     if (href === '#acquario-tropicale' || href === '#aquarium' || dept === 'aquarium') {
       setActiveNavTab('aquarium')
       setActiveDepartment?.('aquarium')
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     } else if (href === '#collection' || href === '#crafts' || dept === 'crafts') {
       setActiveNavTab('crafts')
       setActiveDepartment?.('crafts')
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     } else if (href === '#makers') {
       setActiveNavTab('makers')
+      if (activeDepartment === 'aquarium') {
+        setActiveDepartment?.('crafts')
+      }
+      setTimeout(() => {
+        scrollToAnchor('#makers')
+      }, 50)
     } else if (dept === 'all') {
-      setActiveNavTab('collections')
-      setActiveDepartment?.('all')
+      setActiveNavTab('crafts')
+      setActiveDepartment?.('crafts')
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     }
-    scrollToAnchor(href)
     setIsMenuOpen(false)
     setMegamenuOpen(false)
   }
@@ -179,7 +216,7 @@ export default function Navbar() {
   useEffect(() => {
     if (activeDepartment === 'crafts') setActiveNavTab('crafts')
     else if (activeDepartment === 'aquarium') setActiveNavTab('aquarium')
-    else if (activeDepartment === 'all' && activeNavTab !== 'makers') setActiveNavTab('collections')
+    else if (activeDepartment === 'all' && activeNavTab !== 'makers') setActiveNavTab('crafts')
   }, [activeDepartment])
 
   const currentNav = megamenuOpen ? 'collections' : activeNavTab
@@ -311,6 +348,8 @@ export default function Navbar() {
               href="#home"
               onClick={(e) => {
                 e.preventDefault()
+                setActiveDepartment?.('crafts')
+                setActiveNavTab('crafts')
                 scrollToAnchor('#home')
               }}
               className="group flex items-center gap-3 shrink-0 select-none cursor-pointer"
