@@ -221,7 +221,7 @@ function ProfileContent() {
               </Link>
             )}
 
-            {user?.email && user.email !== 'patron@npatelier.in' ? (
+            {user ? (
               <button
                 type="button"
                 onClick={() => {

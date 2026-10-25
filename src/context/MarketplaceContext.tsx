@@ -114,7 +114,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const [products, setProducts] = useState<Product[]>(allInitialProducts)
   const [cart, setCart] = useState<any[]>([])
   const [wishlist, setWishlist] = useState<any[]>([])
-  const [user, setUser] = useState<any>(DEFAULT_PATRON_USER)
+  const [user, setUser] = useState<any>(null)
   const [isHydrated, setIsHydrated] = useState(false)
   const [isAuthLoading, setIsAuthLoading] = useState(false)
   const [orders, setOrders] = useState<any[]>([])
@@ -146,8 +146,12 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       onComplete?: () => void
     }) => {
       const now = Date.now()
-      // Strictly prevent double loader triggers within 2200ms
-      if (now - lastLoaderTriggerTimeRef.current < 2200) {
+      const isPageSwitch = (options.mode || 'page_switch') === 'page_switch'
+      // Only debounce page_switch transitions; allow signout and signin to always execute immediately
+      if (isPageSwitch && now - lastLoaderTriggerTimeRef.current < 1500) {
+        if (options.onComplete) {
+          options.onComplete()
+        }
         return
       }
       lastLoaderTriggerTimeRef.current = now
@@ -280,23 +284,12 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       if (storedWishlist) setWishlist(storedWishlist)
 
       const storedUser = safeReadStorage<any>(STORAGE_KEYS.auth, null)
-      if (storedUser) {
+      if (storedUser && storedUser.email && storedUser.email !== 'patron@npatelier.in') {
         setUser(storedUser)
       } else {
-        const savedShipping = getSavedShippingAddress()
-        if (savedShipping && (savedShipping.address || savedShipping.fullName || savedShipping.phone)) {
-          setUser({
-            ...DEFAULT_PATRON_USER,
-            name: savedShipping.fullName || DEFAULT_PATRON_USER.name,
-            phone: savedShipping.phone || DEFAULT_PATRON_USER.phone,
-            email: savedShipping.email || DEFAULT_PATRON_USER.email,
-            address: savedShipping.address || DEFAULT_PATRON_USER.address,
-            city: savedShipping.city || DEFAULT_PATRON_USER.city,
-            state: savedShipping.state || DEFAULT_PATRON_USER.state,
-            pincode: savedShipping.zip || DEFAULT_PATRON_USER.pincode,
-          })
-        } else {
-          setUser(DEFAULT_PATRON_USER)
+        setUser(null)
+        if (typeof window !== 'undefined') {
+          window.localStorage.removeItem(STORAGE_KEYS.auth)
         }
       }
 
@@ -856,20 +849,25 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
   const logout = useCallback(
     (onComplete?: () => void) => {
+      // 1. Immediately terminate active user session
+      setUser(null)
+      setIsProfileOpen(false)
+      if (typeof window !== 'undefined') {
+        window.localStorage.removeItem(STORAGE_KEYS.auth)
+        window.localStorage.removeItem('ateliernp-admin-authenticated')
+        window.localStorage.removeItem('ateliernp-admin-user')
+      }
+
+      // 2. Play transition loader and show confirmation toast
       triggerGlobalLoader({
         mode: 'signout',
         title: 'NP Atelier Patron Sign Out',
         subtitle: 'Securing Session & Sealing Atelier Vault',
-        durationMs: 950,
+        durationMs: 750,
         onComplete: () => {
-          setUser(DEFAULT_PATRON_USER)
-          setIsProfileOpen(false)
-          if (typeof window !== 'undefined') {
-            window.localStorage.removeItem(STORAGE_KEYS.auth)
-          }
           showToast({
             title: 'Signed Out',
-            message: 'Come back soon for more handcrafted & aquatic drops!',
+            message: 'You have safely signed out of your account.',
             type: 'info',
           })
           if (onComplete) {
