@@ -556,17 +556,17 @@ export default function Navbar() {
                   className={`relative rounded-full px-4 py-2 text-xs font-bold tracking-wide transition-colors duration-200 cursor-pointer flex items-center gap-1.5 ${
                     currentNav === 'aquarium'
                       ? 'text-[#ECC872]'
-                      : 'text-[#0E535F] hover:text-[#0A2F36]'
+                      : 'text-[#4A4339] hover:text-[#141414]'
                   }`}
                 >
                   {currentNav === 'aquarium' && (
                     <motion.div
                       layoutId="navbarCenterDockPill"
-                      className="absolute inset-0 rounded-full bg-[#0B252C] border border-teal-500/50 shadow-xs"
+                      className="absolute inset-0 rounded-full bg-[#141414] shadow-xs"
                       transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                     />
                   )}
-                  <Fish className="h-3.5 w-3.5 text-cyan-500 relative z-10" />
+                  <Fish className={`h-3.5 w-3.5 relative z-10 ${currentNav === 'aquarium' ? 'text-[#ECC872]' : 'text-teal-600'}`} />
                   <span className="relative z-10 font-serif font-black tracking-tight">Acquario Tropicale</span>
                 </button>
 

@@ -154,17 +154,17 @@ export default function MobileBottomDock() {
           className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'aquarium'
               ? 'text-[#ECC872]'
-              : 'text-teal-400 hover:text-teal-300'
+              : 'text-[#A89876] hover:text-[#ECC872]'
           }`}
         >
           {activeTab === 'aquarium' && (
             <motion.div
               layoutId="mobileDockPill"
-              className="absolute inset-0 rounded-full bg-[#0E282F] border border-teal-500/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]"
+              className="absolute inset-0 rounded-full bg-[#221B10] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]"
               transition={{ type: 'spring', stiffness: 450, damping: 35 }}
             />
           )}
-          <Fish className="h-4.5 w-4.5 relative z-10 text-cyan-400" />
+          <Fish className="h-4.5 w-4.5 relative z-10 text-[#ECC872]" />
           <span className="text-[9.5px] font-bold tracking-tight mt-0.5 relative z-10 font-serif">Acquario</span>
         </button>
 
