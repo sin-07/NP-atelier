@@ -288,17 +288,23 @@ export default function QuickSearchModal() {
                     >
                       <Heart className={`h-3.5 w-3.5 ${isWishlisted(product.id) ? 'fill-rose-500' : ''}`} />
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        addToCart(product, 1)
-                        handleClose()
-                      }}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-[#141414] px-3 py-1.5 text-xs font-bold text-white transition hover:bg-[#B8860B] active:scale-95 cursor-pointer"
-                    >
-                      <ShoppingBag className="h-3.5 w-3.5" />
-                      <span className="hidden sm:inline">Add</span>
-                    </button>
+                    {product.department === 'aquarium' ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[#FAF4E2] border border-[#D4AF37]/60 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#8C6D2B]">
+                        Coming Soon
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          addToCart(product, 1)
+                          handleClose()
+                        }}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-[#141414] px-3 py-1.5 text-xs font-bold text-white transition hover:bg-[#B8860B] active:scale-95 cursor-pointer"
+                      >
+                        <ShoppingBag className="h-3.5 w-3.5" />
+                        <span className="hidden sm:inline">Add</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

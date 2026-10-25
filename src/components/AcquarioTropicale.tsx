@@ -23,7 +23,7 @@ import {
   Product,
 } from '../data/products'
 import { useMarketplace } from '../context/MarketplaceContext'
-import { fallbackCraftImage } from '../utils/fallbackImage'
+import { fallbackCraftImage, fallbackAquariumImage } from '../utils/fallbackImage'
 
 const AQUARIUM_BADGE_FILTERS = [
   'All',
@@ -150,7 +150,8 @@ export default function AcquarioTropicale() {
             {/* Eyebrow Badge */}
             <div className="inline-flex items-center gap-2 rounded-full border border-teal-500/40 bg-white/95 px-4 py-1.5 text-[11px] font-bold text-[#0D656E] shadow-xs mb-4">
               <Fish className="h-3.5 w-3.5 text-teal-600" />
-              <span className="uppercase tracking-[0.22em]">Acquario Tropicale • Living Waters</span>
+              <span className="uppercase tracking-[0.22em]">Acquario Tropicale • Coming Soon Collection</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
             </div>
 
             {/* Haute Title */}
@@ -163,7 +164,7 @@ export default function AcquarioTropicale() {
 
             {/* Lead Description */}
             <p className="mt-4 text-xs sm:text-base text-[#524B40] leading-relaxed max-w-2xl mx-auto font-medium">
-              A curated world exclusively for tropical aquatic wonders. Captive-bred centerpiece Discus &amp; Show Bettas, ultra-clear low-iron rimless nature aquariums, lush living flora, and professional aquascaping gear.
+              A curated world exclusively for tropical aquatic wonders. Captive-bred centerpiece Discus &amp; Show Bettas, ultra-clear low-iron rimless nature aquariums, lush living flora, and professional aquascaping gear. <span className="font-bold text-[#B8860B] block mt-1">✦ Launching Soon — Inquire on WhatsApp for early reservations &amp; launch notifications.</span>
             </p>
 
             {/* 4 Certified Aquatic Trust Badges */}
@@ -209,21 +210,37 @@ export default function AcquarioTropicale() {
                       src={cat.image}
                       alt={cat.title}
                       onError={(e) => {
-                        e.currentTarget.src = fallbackCraftImage
+                        e.currentTarget.src = fallbackAquariumImage
                       }}
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    
+                    {/* BICHO BICH (DEAD CENTER) "COMING SOON" BADGE */}
+                    <div className="absolute inset-0 z-20 flex items-center justify-center p-2 bg-black/25 pointer-events-none transition-all duration-200">
+                      <div className="flex items-center gap-1.5 sm:gap-2 rounded-full bg-[#14110C]/90 backdrop-blur-xs border-2 border-[#D4AF37] px-3 sm:px-4 py-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.55)] transform transition-transform duration-200 group-hover:scale-105">
+                        <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+                        <span className="font-serif text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-[#ECC872] drop-shadow-sm whitespace-nowrap">
+                          Coming Soon
+                        </span>
+                        <Sparkles className="h-3 w-3 text-[#D4AF37] shrink-0" />
+                      </div>
+                    </div>
+
                     <span className="absolute bottom-2 left-2.5 right-2.5 truncate font-serif text-xs sm:text-sm font-bold text-white drop-shadow-sm">
                       {cat.title}
                     </span>
                   </div>
                   <div className="flex items-center justify-between p-2.5 sm:p-3 bg-white border-t border-[#F0EBE1]">
-                    <span className="text-[9.5px] font-extrabold uppercase tracking-wider text-[#0F766E] truncate max-w-[120px]">
+                    <span className="text-[9.5px] font-extrabold uppercase tracking-wider text-[#0F766E] truncate max-w-[105px]">
                       {cat.badge}
                     </span>
-                    <span className="text-[10px] text-[#B8860B] font-bold shrink-0">
-                      {isSelected ? 'Active ✓' : 'Explore →'}
+                    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[8.5px] sm:text-[9.5px] font-extrabold uppercase tracking-wider shrink-0 ${
+                      isSelected
+                        ? 'bg-teal-100 border border-teal-400 text-teal-900'
+                        : 'bg-[#FAF4E2] border border-[#D4AF37]/50 text-[#8C6D2B]'
+                    }`}>
+                      {isSelected ? 'Active ✓' : 'Coming Soon ✦'}
                     </span>
                   </div>
                 </button>
@@ -320,6 +337,7 @@ export default function AcquarioTropicale() {
                   <ProductCard
                     key={product.id}
                     product={product}
+                    isComingSoon={true}
                     isWishlisted={isWishlisted(product.id ?? product._id)}
                     onWishlistToggle={() => toggleWishlist(product.id ?? product._id)}
                     onAddToCart={() => {

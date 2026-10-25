@@ -1,8 +1,7 @@
 "use client"
-
 import { useState, useEffect, memo } from 'react'
-import { Eye, Heart, MessageCircle, Minus, Plus, ShoppingBag, Star } from 'lucide-react'
-import { fallbackCraftImage } from '../utils/fallbackImage'
+import { Eye, Heart, MessageCircle, Minus, Plus, ShoppingBag, Star, Sparkles } from 'lucide-react'
+import { fallbackCraftImage, fallbackAquariumImage } from '../utils/fallbackImage'
 import { Product } from '../data/products'
 import { useMarketplace } from '../context/MarketplaceContext'
 
@@ -11,6 +10,7 @@ export interface ProductCardProps {
   isWishlisted?: boolean
   priority?: boolean
   isCompact?: boolean
+  isComingSoon?: boolean
   onWishlistToggle?: (id: string | number) => void
   onQuickView?: (product: Product | any) => void
   onAddToCart?: (product: any, quantity?: number) => void
@@ -23,6 +23,7 @@ function ProductCard({
   isWishlisted = false,
   priority = false,
   isCompact = false,
+  isComingSoon = false,
   onWishlistToggle,
   onQuickView,
   onAddToCart,
@@ -31,6 +32,12 @@ function ProductCard({
 }: ProductCardProps) {
   const { cart, addToCart, setCartQuantity, removeFromCart, branding } = useMarketplace()
   const [plusPop, setPlusPop] = useState(false)
+
+  const isCardComingSoon = Boolean(
+    isComingSoon ||
+    product?.department === 'aquarium' ||
+    product?.isComingSoon
+  )
 
   // Direct fast lookup in active cart (instant sync, 0 duplicate re-renders)
   const productIdStr = String(product?.id ?? product?._id ?? '')
@@ -96,7 +103,15 @@ function ProductCard({
 
   const contactPhone = (branding?.contactPhone || '+91 93412 97124').replace(/[^0-9]/g, '')
   const storeName = branding?.siteName || 'NP Atelier'
-  const waMessage = `*✦ NEW PRODUCT ORDER ✦*
+  const waMessage = isCardComingSoon
+    ? `*✦ NOTIFY ON LAUNCH INQUIRY ✦*
+*Store:* ${storeName}
+*Item:* ${product.title}
+*Price:* ${formattedPrice}
+*Department:* Acquario Tropicale
+
+_Hi NP Atelier, please notify me when ${product.title} launches & becomes available!_`
+    : `*✦ NEW PRODUCT ORDER ✦*
 *Store:* ${storeName}
 *Item:* ${product.title}
 *Price:* ${formattedPrice}${activeQuantity > 1 ? ` (Qty: ${activeQuantity})` : ''}
@@ -126,14 +141,14 @@ _Hi NP Atelier, I would like to order this item directly. Please confirm availab
             loading={priority ? 'eager' : 'lazy'}
             decoding="async"
             onError={(event) => {
-              event.currentTarget.src = fallbackCraftImage
+              event.currentTarget.src = isCardComingSoon || product?.department === 'aquarium' ? fallbackAquariumImage : fallbackCraftImage
             }}
             className="h-full w-full object-cover transition-transform duration-200 ease-out sm:group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 transition-opacity duration-150 sm:group-hover:opacity-100" />
 
           {/* Luxury Curated Badges (Zero blur overhead for instant rendering) */}
-          <div className="absolute left-1.5 sm:left-2 top-1.5 sm:top-2 z-10 flex flex-wrap items-center gap-1 max-w-[70%]">
+          <div className="absolute left-1.5 sm:left-2 top-1.5 sm:top-2 z-10 flex flex-wrap items-center gap-1 max-w-[80%]">
             {product.badges?.[0] ? (
               <span className="inline-flex items-center gap-1 rounded-full bg-[#120F0A]/95 border border-[#D4AF37]/60 px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-extrabold uppercase tracking-wider text-[#ECC872] shadow-xs">
                 <span className="h-1 w-1 rounded-full bg-[#D4AF37]" />
@@ -141,15 +156,28 @@ _Hi NP Atelier, I would like to order this item directly. Please confirm availab
               </span>
             ) : (
               <span className="inline-flex items-center rounded-full bg-[#120F0A]/95 border border-[#D4AF37]/50 px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-extrabold uppercase tracking-wider text-[#ECC872] shadow-xs">
-                Artisan
+                {product.department === 'aquarium' ? 'Aquatics' : 'Artisan'}
               </span>
             )}
-            {!isCompact && product.badges?.[1] && (
+            {!isCompact && !isCardComingSoon && product.badges?.[1] && (
               <span className="hidden sm:inline-flex items-center rounded-full bg-white/95 border border-[#DFCFA6]/80 px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-bold uppercase tracking-wider text-[#694806] shadow-2xs">
                 {product.badges[1]}
               </span>
             )}
           </div>
+
+          {/* BICHO BICH (DEAD CENTER) "COMING SOON" BADGE */}
+          {isCardComingSoon && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center p-2 sm:p-3 bg-black/25 pointer-events-none transition-all duration-200">
+              <div className="flex items-center gap-1.5 sm:gap-2 rounded-full bg-[#14110C]/90 backdrop-blur-xs border-2 border-[#D4AF37] px-3 sm:px-4 py-1.5 sm:py-2 shadow-[0_8px_24px_rgba(0,0,0,0.55)] transform transition-transform duration-200 sm:group-hover:scale-105">
+                <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+                <span className="font-serif text-[10.5px] sm:text-xs font-black uppercase tracking-[0.2em] text-[#ECC872] drop-shadow-sm whitespace-nowrap">
+                  Coming Soon
+                </span>
+                <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#D4AF37] shrink-0" />
+              </div>
+            </div>
+          )}
 
           {/* Active Bag Quantity Pill on Image */}
           {activeQuantity > 0 && (
@@ -247,13 +275,15 @@ _Hi NP Atelier, I would like to order this item directly. Please confirm availab
           </div>
 
           <span
-            className={`text-[8.5px] sm:text-[9.5px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full shrink-0 ${
-              product.department === 'aquarium'
+            className={`text-[8.5px] sm:text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full shrink-0 ${
+              isCardComingSoon
+                ? 'bg-amber-50 text-[#8C6D2B] border border-[#D4AF37]/45'
+                : product.department === 'aquarium'
                 ? 'bg-teal-50 text-teal-800 border border-teal-200/70'
                 : 'bg-[#FAF4E2] text-[#7A5408] border border-[#D4AF37]/35'
             }`}
           >
-            {product.department === 'aquarium' ? 'Aquatics' : 'Artisan'}
+            {isCardComingSoon ? 'Coming Soon' : product.department === 'aquarium' ? 'Aquatics' : 'Artisan'}
           </span>
         </div>
 
@@ -266,8 +296,35 @@ _Hi NP Atelier, I would like to order this item directly. Please confirm availab
           )}
 
           <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Primary Action: Interactive Stepper when in bag, Add to Bag when 0 */}
-            {activeQuantity > 0 ? (
+            {isCardComingSoon ? (
+              <>
+                <button
+                  type="button"
+                  disabled
+                  className={`flex-1 ${
+                    isCompact ? 'h-8 sm:h-9 text-[10px] sm:text-[11px]' : 'h-8.5 sm:h-9.5 text-[11px] sm:text-xs'
+                  } inline-flex items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-[#FAF6ED] via-[#F5ECD8] to-[#FAF6ED] border border-[#D4AF37]/80 px-2 sm:px-3 font-extrabold text-[#735206] shadow-2xs select-none cursor-default`}
+                  title="Coming Soon to NP Atelier"
+                >
+                  <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#B8860B]" />
+                  <span className="uppercase tracking-wider text-[10px] sm:text-[11px] font-black">Coming Soon</span>
+                </button>
+
+                <a
+                  href={waUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className={`${
+                    isCompact ? 'h-8 sm:h-9 px-2 sm:px-2.5' : 'h-8.5 sm:h-9.5 px-2.5 sm:px-3'
+                  } rounded-full bg-emerald-900/90 border border-emerald-500/70 text-emerald-100 hover:bg-emerald-850 hover:text-white transition-all duration-200 active:scale-95 flex items-center justify-center gap-1 shrink-0 shadow-xs cursor-pointer group/wa`}
+                  title={`Inquire about ${product.title} on WhatsApp (${contactPhone})`}
+                >
+                  <MessageCircle className="h-3.5 w-3.5 text-emerald-300 fill-emerald-300/30 group-hover/wa:scale-110 transition-transform shrink-0" />
+                  <span className="text-[9.5px] sm:text-[10.5px] font-bold tracking-tight">Inquire</span>
+                </a>
+              </>
+            ) : activeQuantity > 0 ? (
               <div
                 onClick={(e) => e.stopPropagation()}
                 className={`flex-1 ${
@@ -321,19 +378,21 @@ _Hi NP Atelier, I would like to order this item directly. Please confirm availab
             )}
 
             {/* WhatsApp Companion Button (Instant 1-Click Order) */}
-            <a
-              href={waUrl}
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className={`${
-                isCompact ? 'h-8 sm:h-9 px-2 sm:px-2.5' : 'h-8.5 sm:h-9.5 px-2.5 sm:px-3'
-              } rounded-full bg-emerald-900/90 border border-emerald-500/70 text-emerald-100 hover:bg-emerald-850 hover:text-white transition-all duration-200 active:scale-95 flex items-center justify-center gap-1 shrink-0 shadow-xs cursor-pointer group/wa`}
-              title={`Order ${product.title} on WhatsApp (${contactPhone})`}
-            >
-              <MessageCircle className="h-3.5 w-3.5 text-emerald-300 fill-emerald-300/30 group-hover/wa:scale-110 transition-transform shrink-0" />
-              <span className="text-[9.5px] sm:text-[10.5px] font-bold tracking-tight">WhatsApp</span>
-            </a>
+            {!isCardComingSoon && (
+              <a
+                href={waUrl}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className={`${
+                  isCompact ? 'h-8 sm:h-9 px-2 sm:px-2.5' : 'h-8.5 sm:h-9.5 px-2.5 sm:px-3'
+                } rounded-full bg-emerald-900/90 border border-emerald-500/70 text-emerald-100 hover:bg-emerald-850 hover:text-white transition-all duration-200 active:scale-95 flex items-center justify-center gap-1 shrink-0 shadow-xs cursor-pointer group/wa`}
+                title={`Order ${product.title} on WhatsApp (${contactPhone})`}
+              >
+                <MessageCircle className="h-3.5 w-3.5 text-emerald-300 fill-emerald-300/30 group-hover/wa:scale-110 transition-transform shrink-0" />
+                <span className="text-[9.5px] sm:text-[10.5px] font-bold tracking-tight">WhatsApp</span>
+              </a>
+            )}
           </div>
         </div>
       </div>
