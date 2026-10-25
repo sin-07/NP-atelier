@@ -40,7 +40,6 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [userDropdownOpen, setUserDropdownOpen] = useState(false)
-  const [copiedCoupon, setCopiedCoupon] = useState(false)
   const [activeNavTab, setActiveNavTab] = useState<'crafts' | 'aquarium' | 'makers'>('crafts')
   const userMenuRef = useRef<HTMLDivElement>(null)
   const mobileDrawerRef = useRef<HTMLDivElement>(null)
@@ -217,107 +216,12 @@ export default function Navbar() {
 
   const currentNav = activeNavTab
 
-  const handleCopyCoupon = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    if (navigator?.clipboard) {
-      navigator.clipboard.writeText('ATELIER10')
-      setCopiedCoupon(true)
-      if (showToast) {
-        showToast({
-          title: 'Code Copied',
-          message: 'Code ATELIER10 saved to clipboard for 10% off at checkout.',
-          type: 'success',
-        })
-      }
-      setTimeout(() => setCopiedCoupon(false), 2500)
-    }
-  }
-
   const siteName = branding?.siteName || 'NP Atelier'
 
   return (
     <div className="fixed top-0 inset-x-0 z-50 w-full pointer-events-none">
       <div className="pointer-events-auto">
-        {/* 1. Ultra-Sleek Haute Atelier Ribbon */}
-        <aside
-          aria-label="Announcement banner"
-          className={`relative z-50 bg-[#0E0C09] text-[#E5D7B7] border-b border-[#241F16]/90 transition-all duration-300 overflow-hidden ${
-            isScrolled ? 'max-h-0 opacity-0 -translate-y-full' : 'max-h-12 opacity-100 translate-y-0'
-          }`}
-        >
-          <div className="section-shell">
-            <div className="flex h-9 items-center justify-between text-[11px] font-medium tracking-wide">
-              {/* Left Tagline & Emblem */}
-              <div className="flex items-center gap-2">
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-tr from-[#B8860B] to-[#ECC872] text-[9px] text-[#141008] font-black shadow-xs">
-                  ✦
-                </span>
-                <span className="hidden sm:inline uppercase text-[10px] tracking-[0.2em] text-[#CBB994] font-semibold">
-                  Haute Atelier & Aquatics
-                </span>
-                <span className="hidden sm:inline text-[#423724]">•</span>
-                <span className="truncate text-[#EADFC7]">
-                  Live Arrival Guarantee & Free Pan-India Courier
-                </span>
-              </div>
-
-              {/* Center Code Copy Trigger */}
-              <div className="hidden lg:flex items-center gap-1.5">
-                <span className="text-[#A89876]">Unlock 10% Off:</span>
-                <button
-                  type="button"
-                  onClick={handleCopyCoupon}
-                  className="group inline-flex items-center gap-1 rounded-full border border-[#D4AF37]/40 bg-[#1A160F] px-2.5 py-0.5 text-[10px] font-mono font-bold text-[#F5E6C8] hover:border-[#ECC872] hover:bg-[#2A2215] transition cursor-pointer"
-                  title="Click to copy coupon code"
-                >
-                  <span>ATELIER10</span>
-                  {copiedCoupon ? (
-                    <Check className="h-3 w-3 text-emerald-400" />
-                  ) : (
-                    <Copy className="h-2.5 w-2.5 text-[#ECC872] opacity-75 group-hover:opacity-100" />
-                  )}
-                </button>
-              </div>
-
-              {/* Right Quick Links */}
-              <div className="flex items-center gap-3 sm:gap-4 text-[#A89876] shrink-0">
-                <a
-                  href="https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20order%20directly%20via%20WhatsApp!"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#ECC872] hover:text-white transition"
-                  title="Direct WhatsApp Order Line"
-                >
-                  <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
-                  <span>WhatsApp Orders: +91 93412 97124</span>
-                </a>
-                <span className="hidden sm:inline text-[#423724]">•</span>
-                <a
-                  href="mailto:npatelierindia@gmail.com"
-                  className="hidden lg:inline-flex items-center gap-1 text-[11px] hover:text-[#ECC872] transition"
-                  title="Email Concierge"
-                >
-                  <Mail className="h-3 w-3 text-[#ECC872]" />
-                  <span>npatelierindia@gmail.com</span>
-                </a>
-                {isAdmin && (
-                  <>
-                    <span className="hidden lg:inline text-[#423724]">•</span>
-                    <Link
-                      href="/admin"
-                      className="inline-flex items-center gap-1.5 text-[11px] text-[#D4AF37] hover:text-[#FFF] transition"
-                    >
-                      <LayoutDashboard className="h-3 w-3" />
-                      <span className="underline underline-offset-2">Admin</span>
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        {/* 2. Main Luxury Header */}
+        {/* Main Luxury Header */}
         <header
           className={`w-full transition-all duration-300 ${
             isScrolled
