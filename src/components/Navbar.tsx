@@ -256,14 +256,14 @@ export default function Navbar() {
               {/* Right Quick Links */}
               <div className="flex items-center gap-3 sm:gap-4 text-[#A89876] shrink-0">
                 <a
-                  href="https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20inquire%20about%20an%20order!"
+                  href="https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20order%20directly%20via%20WhatsApp!"
                   target="_blank"
                   rel="noreferrer"
-                  className="hidden sm:inline-flex items-center gap-1 text-[11px] text-[#ECC872] hover:text-[#FFF] transition"
-                  title="WhatsApp Concierge"
+                  className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#ECC872] hover:text-white transition"
+                  title="Direct WhatsApp Order Line"
                 >
-                  <MessageCircle className="h-3 w-3 text-emerald-400" />
-                  <span>+91 93412 97124</span>
+                  <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
+                  <span>WhatsApp Orders: +91 93412 97124</span>
                 </a>
                 <span className="hidden sm:inline text-[#423724]">•</span>
                 <a
@@ -274,14 +274,18 @@ export default function Navbar() {
                   <Mail className="h-3 w-3 text-[#ECC872]" />
                   <span>npatelierindia@gmail.com</span>
                 </a>
-                <span className="hidden lg:inline text-[#423724]">•</span>
-                <Link
-                  href="/admin"
-                  className="inline-flex items-center gap-1.5 text-[11px] text-[#D4AF37] hover:text-[#FFF] transition"
-                >
-                  <LayoutDashboard className="h-3 w-3" />
-                  <span className="underline underline-offset-2">Admin</span>
-                </Link>
+                {isAdmin && (
+                  <>
+                    <span className="hidden lg:inline text-[#423724]">•</span>
+                    <Link
+                      href="/admin"
+                      className="inline-flex items-center gap-1.5 text-[11px] text-[#D4AF37] hover:text-[#FFF] transition"
+                    >
+                      <LayoutDashboard className="h-3 w-3" />
+                      <span className="underline underline-offset-2">Admin</span>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

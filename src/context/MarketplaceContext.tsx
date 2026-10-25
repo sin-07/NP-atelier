@@ -565,15 +565,17 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const clearCart = () => setCart([])
 
   const createOrder = async (orderData: any) => {
-    if (!user) {
+    if (cartItems.length === 0) {
       showToast({
-        title: 'Sign In Required',
-        message: 'Please sign in or create an account to place your order.',
+        title: 'Bag is Empty',
+        message: 'Please add items to your shopping bag before placing an order.',
         type: 'error',
       })
-      setIsAuthOpen(true)
       return null
     }
+
+    const customerEmail = user?.email || orderData?.email || 'whatsapp-order@npatelier.in'
+    const customerName = user?.name || orderData?.fullName || orderData?.name || 'WhatsApp Customer'
 
     const hasAquariumItem = cartItems.some((i: any) => i.department === 'aquarium')
     const newOrder = {
@@ -587,8 +589,10 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       total: cartFinalTotal,
       customer: {
         ...orderData,
-        userId: user.email,
-        userEmail: user.email,
+        fullName: customerName,
+        userId: customerEmail,
+        userEmail: customerEmail,
+        phone: orderData?.phone || user?.phone || '',
       },
       status: hasAquariumItem ? 'Aquatic Packing & Oxygenation' : 'Handcrafting & Packing',
       estimatedDelivery: new Date(Date.now() + 4 * 86400000).toLocaleDateString('en-IN', {
@@ -612,8 +616,8 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }
 
     showToast({
-      title: 'Order Confirmed',
-      message: `Order #${newOrder.orderId} placed successfully. We are preparing your shipment!`,
+      title: 'WhatsApp Order Placed',
+      message: `Order #${newOrder.orderId} recorded! Opening WhatsApp concierge...`,
       type: 'success',
     })
 

@@ -14,6 +14,8 @@ import {
   Truck,
   Mail,
   MessageCircle,
+  MapPin,
+  CheckCircle2,
   X,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
@@ -40,6 +42,7 @@ export default function CartSidebar() {
     appliedCoupon,
     applyCouponCode,
     removeCoupon,
+    createOrder,
     branding,
   } = useMarketplace()
 
@@ -67,18 +70,73 @@ export default function CartSidebar() {
   }
 
   const handleProceedToCheckout = () => {
-    if (!user) {
-      showToast({
-        title: 'Sign In Required',
-        message: 'Please sign in or create an account to place your order.',
-        type: 'info',
-      })
-      setIsCartOpen(false)
-      setIsAuthOpen(true)
-      return
-    }
     setIsCartOpen(false)
     setIsCheckoutOpen(true)
+  }
+
+  const handleDirectWhatsAppOrder = async () => {
+    if (cartItems.length === 0) return
+
+    const itemsText = cartItems
+      .map((item: any, idx: number) => {
+        const customText = item.customization
+          ? ` [Custom: ${item.customization.palette || ''}${
+              item.customization.personalization ? ` / "${item.customization.personalization}"` : ''
+            }]`
+          : ''
+        return `${idx + 1}. *${item.title}* x ${item.quantity} (${item.price})${customText}`
+      })
+      .join('\n')
+
+    const customerName = user?.name || 'Customer'
+    const customerPhone = user?.phone || ''
+    const customerAddr = user?.address
+      ? `${user.address}, ${user.city || ''}, ${user.state || ''} - ${user.pincode || ''}`
+      : 'Will provide on WhatsApp'
+
+    const order = await createOrder({
+      fullName: customerName,
+      phone: customerPhone,
+      email: user?.email || 'whatsapp-order@npatelier.in',
+      address: user?.address || 'Provided via WhatsApp chat',
+      city: user?.city || 'India',
+      state: user?.state || '',
+      zip: user?.pincode || '',
+      paymentMethod: 'WhatsApp Order Confirmation',
+    })
+
+    const orderId = order?.orderId || `CRFT-${Math.floor(100000 + Math.random() * 900000)}`
+    const discountText =
+      discountAmount > 0
+        ? `• *Discount:* -₹${discountAmount.toFixed(0)} (${appliedCoupon?.code || 'COUPON'})\n`
+        : ''
+
+    const waMessage = `*✦ NEW WHATSAPP ORDER ✦*
+*Store:* ${siteName}
+*Order Reference:* #${orderId}
+*Date:* ${new Date().toLocaleDateString('en-IN')}
+
+*CUSTOMER DETAILS:*
+• *Name:* ${customerName}
+${customerPhone ? `• *Mobile:* ${customerPhone}\n` : ''}• *Delivery Address:* ${customerAddr}
+
+*ORDERED ITEMS (${cartItems.length}):*
+${itemsText}
+
+*PAYMENT & TOTAL:*
+• *Items Subtotal:* ₹${cartSubtotal.toFixed(0)}
+${discountText}• *Courier Shipping:* ₹${shippingCost.toFixed(0)}
+• *Total Payable:* ₹${cartFinalTotal.toFixed(0)}
+• *Payment Mode:* WhatsApp Order Confirmation (Pay on Delivery / UPI)
+
+_Please confirm my order, availability, and dispatch tracking details!_`
+
+    const finalWaUrl = `https://wa.me/${contactPhone}?text=${encodeURIComponent(waMessage)}`
+
+    setIsCartOpen(false)
+    if (typeof window !== 'undefined') {
+      window.open(finalWaUrl, '_blank')
+    }
   }
 
   return (
@@ -296,35 +354,30 @@ export default function CartSidebar() {
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleProceedToCheckout}
-                  className="btn-gold mt-4 w-full py-3.5 shadow-[0_6px_20px_rgba(212,175,55,0.35)] justify-center font-bold tracking-wide flex items-center gap-2"
-                >
-                  {!user ? (
-                    <>
-                      <Lock className="h-4 w-4 text-[#1A120B]" />
-                      <span>Sign In to Place Order</span>
-                    </>
-                  ) : (
-                    <>
-                      <MessageCircle className="h-4 w-4 fill-current" />
-                      <span>Proceed to Order on WhatsApp</span>
-                      <ArrowRight className="h-4 w-4" />
-                    </>
-                  )}
-                </button>
-                {user ? (
-                  <p className="mt-2 text-center text-[11px] text-[#7A5408] flex items-center justify-center gap-1 font-semibold">
-                    <MessageCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-                    <span>Direct WhatsApp checkout with verified instant receipt</span>
-                  </p>
-                ) : (
-                  <p className="mt-2 text-center text-[11px] text-[#8C827A] flex items-center justify-center gap-1 font-medium">
-                    <Lock className="h-3 w-3 text-[#B8860B]" />
-                    <span>Login is required before ordering to track delivery &amp; warranty</span>
-                  </p>
-                )}
+                <div className="mt-4 space-y-2">
+                  <button
+                    type="button"
+                    onClick={handleDirectWhatsAppOrder}
+                    className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-800 hover:from-emerald-500 hover:to-teal-700 text-white font-bold text-sm shadow-[0_8px_25px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.98]"
+                  >
+                    <MessageCircle className="h-5 w-5 fill-current" />
+                    <span>Order Entire Bag on WhatsApp • ₹{cartFinalTotal.toFixed(0)}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleProceedToCheckout}
+                    className="w-full py-2.5 px-4 rounded-xl border border-[#D4AF37]/50 bg-white hover:bg-[#FAF6ED] text-xs font-bold text-[#5C4106] transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+                  >
+                    <MapPin className="h-3.5 w-3.5 text-[#B8860B]" />
+                    <span>Add Delivery Address &amp; Order on WhatsApp</span>
+                  </button>
+
+                  <div className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-emerald-800 bg-emerald-50/90 border border-emerald-200/80 rounded-xl py-1.5 px-3">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                    <span>100% WhatsApp Direct Orders • COD &amp; Live Tracking</span>
+                  </div>
+                </div>
 
                 {/* Concierge Order Assistance */}
                 <div className="mt-3 rounded-xl border border-[#D4AF37]/35 bg-gradient-to-r from-[#FAF6ED] to-[#F5ECD5] p-2.5 text-center">

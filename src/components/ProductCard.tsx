@@ -96,9 +96,13 @@ function ProductCard({
 
   const contactPhone = (branding?.contactPhone || '+91 93412 97124').replace(/[^0-9]/g, '')
   const storeName = branding?.siteName || 'NP Atelier'
-  const waMessage = `Hi ${storeName}, I want to order: ${product.title} (${formattedPrice})${
-    activeQuantity > 1 ? ` (Qty: ${activeQuantity})` : ''
-  } — please confirm my order!`
+  const waMessage = `*✦ NEW PRODUCT ORDER ✦*
+*Store:* ${storeName}
+*Item:* ${product.title}
+*Price:* ${formattedPrice}${activeQuantity > 1 ? ` (Qty: ${activeQuantity})` : ''}
+*Department:* ${product.department === 'aquarium' ? 'Exotic Aquatics' : 'Handmade Crafts'}
+
+_Hi NP Atelier, I would like to order this item directly. Please confirm availability & dispatch tracking details!_`
   const waUrl = `https://wa.me/${contactPhone || '919341297124'}?text=${encodeURIComponent(waMessage)}`
 
   return (
@@ -324,11 +328,11 @@ function ProductCard({
               onClick={(e) => e.stopPropagation()}
               className={`${
                 isCompact ? 'h-8 sm:h-9 px-2 sm:px-2.5' : 'h-8.5 sm:h-9.5 px-2.5 sm:px-3'
-              } rounded-full bg-[#0E2817] border border-emerald-500/60 text-emerald-300 hover:bg-[#153D23] hover:text-white hover:border-emerald-400 transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 shrink-0 shadow-xs cursor-pointer group/wa`}
+              } rounded-full bg-emerald-900/90 border border-emerald-500/70 text-emerald-100 hover:bg-emerald-850 hover:text-white transition-all duration-200 active:scale-95 flex items-center justify-center gap-1 shrink-0 shadow-xs cursor-pointer group/wa`}
               title={`Order ${product.title} on WhatsApp (${contactPhone})`}
             >
-              <MessageCircle className="h-3.5 w-3.5 text-emerald-400 fill-emerald-400/20 group-hover/wa:scale-110 transition-transform shrink-0" />
-              <span className="hidden sm:inline text-[10.5px] font-bold tracking-wide">WhatsApp</span>
+              <MessageCircle className="h-3.5 w-3.5 text-emerald-300 fill-emerald-300/30 group-hover/wa:scale-110 transition-transform shrink-0" />
+              <span className="text-[9.5px] sm:text-[10.5px] font-bold tracking-tight">WhatsApp</span>
             </a>
           </div>
         </div>

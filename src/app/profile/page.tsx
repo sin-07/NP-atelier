@@ -932,21 +932,35 @@ function ProfileContent() {
                       </div>
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => {
-                        addToCart(prod, 1)
-                        showToast?.({
-                          title: 'Added to Bag',
-                          message: `"${prod.title}" moved to shopping bag.`,
-                          type: 'cart',
-                        })
-                      }}
-                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-[#D4AF37]/50 bg-[#FAF5E8] py-2.5 text-xs font-bold text-[#5C4106] hover:bg-[#F5ECD5] transition cursor-pointer"
-                    >
-                      <ShoppingBag className="h-4 w-4 text-[#B8860B]" />
-                      <span>Move to Shopping Bag</span>
-                    </button>
+                    <div className="mt-4 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          addToCart(prod, 1)
+                          showToast?.({
+                            title: 'Added to Bag',
+                            message: `"${prod.title}" moved to shopping bag.`,
+                            type: 'cart',
+                          })
+                        }}
+                        className="flex-1 flex items-center justify-center gap-1.5 rounded-xl border border-[#D4AF37]/50 bg-[#FAF5E8] py-2.5 text-xs font-bold text-[#5C4106] hover:bg-[#F5ECD5] transition cursor-pointer"
+                      >
+                        <ShoppingBag className="h-3.5 w-3.5 text-[#B8860B]" />
+                        <span>Move to Bag</span>
+                      </button>
+
+                      <a
+                        href={`https://wa.me/919341297124?text=${encodeURIComponent(
+                          `*✦ DIRECT ORDER FROM WISHLIST ✦*\n*Store:* ${branding?.siteName || 'NP Atelier'}\n*Item:* ${prod.title}\n*Price:* ${prod.price}\n\nHi NP Atelier, I would like to order this item directly via WhatsApp!`
+                        )}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-800 text-white border border-emerald-600 px-3 py-2.5 text-xs font-bold hover:bg-emerald-700 transition"
+                      >
+                        <MessageCircle className="h-3.5 w-3.5 fill-current" />
+                        <span>WhatsApp</span>
+                      </a>
+                    </div>
                   </div>
                 ))}
               </div>

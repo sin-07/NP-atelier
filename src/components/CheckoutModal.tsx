@@ -127,16 +127,6 @@ export default function CheckoutModal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!user) {
-      showToast({
-        title: 'Sign In Required',
-        message: 'Please log in to your account before placing your order.',
-        type: 'error',
-      })
-      setIsCheckoutOpen(false)
-      setIsAuthOpen(true)
-      return
-    }
 
     if (cartItems.length === 0) {
       showToast({
@@ -255,75 +245,42 @@ _Please confirm my order and share dispatch tracking details!_`
               <X className="h-5 w-5" />
             </button>
 
-            {!user ? (
-              <div className="p-8 sm:p-12 text-center space-y-6">
-                <div className="mx-auto grid h-20 w-20 place-items-center rounded-3xl bg-gradient-to-br from-[#FAF3DE] to-[#faeed1] border-2 border-[#D4AF37]/50 text-[#855A10] shadow-[0_8px_25px_rgba(212,175,55,0.25)]">
-                  <Lock className="h-9 w-9 text-[#855A10]" />
-                </div>
-
-                <div className="space-y-2">
-                  <span className="section-eyebrow">Customer Account Required</span>
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#141414]">
-                    Sign In to Place Your Order
-                  </h3>
-                  <p className="mx-auto max-w-md text-xs sm:text-sm text-[#5A554E] leading-relaxed">
-                    To track your shipment in real time, receive delivery alerts, and safeguard your purchase with our certified live transit &amp; craft warranty, please sign in or register before ordering.
-                  </p>
-                </div>
-
-                {/* Benefits Pill */}
-                <div className="mx-auto max-w-md rounded-2xl border border-[#DFCFA6]/60 bg-[#FAF7F2] p-4 text-left text-xs text-[#5A554E] space-y-2.5 shadow-xs">
-                  <div className="flex items-center gap-2 font-bold text-[#141414]">
-                    <Sparkles className="h-4 w-4 text-[#B8860B]" />
-                    <span>Member Checkout Benefits:</span>
-                  </div>
-                  <ul className="space-y-1.5 list-disc pl-4 text-[11px] text-[#4A4339]">
-                    <li>Auto-populates your verified delivery address and state PIN code</li>
-                    <li>Live SMS, email, and WhatsApp dispatch tracking</li>
-                    <li>Official GST tax invoice and live arrival transit guarantee</li>
-                  </ul>
-                </div>
-
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsCheckoutOpen(false)
-                      setIsAuthOpen(true)
-                    }}
-                    className="btn-gold w-full sm:w-auto px-8 py-3.5 font-bold shadow-md flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <Lock className="h-4 w-4" />
-                    <span>Sign In or Create Account</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleClose}
-                    className="w-full sm:w-auto rounded-xl border border-[#DFCFA6] bg-white px-6 py-3.5 text-xs font-bold text-[#5A554E] hover:bg-[#FAF6ED] transition cursor-pointer"
-                  >
-                    Continue Browsing
-                  </button>
-                </div>
-              </div>
-            ) : step === 'form' ? (
+            {step === 'form' ? (
               <div>
                 <div className="border-b border-[#DFCFA6]/60 bg-gradient-to-r from-white via-[#FDFBF7] to-[#FAF6ED] px-6 py-6 sm:px-8 text-[#141414]">
                   <div className="flex items-center gap-2">
-                    <span className="section-eyebrow">{siteName} Secure Checkout</span>
+                    <span className="section-eyebrow">WhatsApp Direct Checkout</span>
                     <span className="inline-flex items-center gap-1 text-xs font-bold text-[#8C827A]">
-                      <Lock className="h-3.5 w-3.5 text-[#B8860B]" /> 256-bit Encrypted • India
+                      <MessageCircle className="h-3.5 w-3.5 text-emerald-600" /> WhatsApp Verified Desk • India
                     </span>
                   </div>
-                  <h3 className="mt-2 font-serif text-3xl text-[#141414] font-bold">Complete Your Order</h3>
-                  <div className="mt-1 flex flex-wrap items-center gap-2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
-                      <CheckCircle2 className="h-3 w-3 text-emerald-600" />
-                      <span>Signed In as {user.name} ({user.email})</span>
-                    </span>
-                    <span className="text-xs text-[#4A4339] font-medium hidden sm:inline">
-                      • Direct from certified artisans and breeders
-                    </span>
+                  <h3 className="mt-2 font-serif text-2xl sm:text-3xl text-[#141414] font-bold">
+                    Order Confirmation via WhatsApp
+                  </h3>
+                  <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                    {user ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
+                        <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                        <span>Signed in as {user.name} ({user.email}) • Address auto-filled</span>
+                      </span>
+                    ) : (
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-[#FAF5E8] px-2.5 py-0.5 text-[11px] font-bold text-[#875A10]">
+                          <Sparkles className="h-3 w-3 text-[#B8860B]" />
+                          <span>Guest Checkout • No password required</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsCheckoutOpen(false)
+                            setIsAuthOpen(true)
+                          }}
+                          className="text-[11px] font-bold text-[#875A10] underline hover:text-[#5C4106] cursor-pointer"
+                        >
+                          Have an account? Sign in
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -385,24 +342,28 @@ _Please confirm my order and share dispatch tracking details!_`
                         />
                       </div>
                       <div>
-                        <label className="mb-1 block text-xs font-bold text-[#141414]">Email Address</label>
+                        <label className="mb-1 block text-xs font-bold text-[#141414]">
+                          Email Address <span className="text-[#8C827A] font-normal">(Optional for Invoice)</span>
+                        </label>
                         <input
                           type="email"
-                          required
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          placeholder="ananya@example.com"
+                          placeholder="your.email@example.com"
                           className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
                         />
                       </div>
                       <div>
-                        <label className="mb-1 block text-xs font-bold text-[#141414]">Mobile Number (for live tracking SMS)</label>
+                        <label className="mb-1 block text-xs font-bold text-[#141414]">
+                          WhatsApp Mobile Number <span className="text-[#875A10]">(for order confirmation)</span>
+                        </label>
                         <input
+                          type="tel"
                           required
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder="+91 98765 43210"
-                          className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                          className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium font-mono"
                         />
                       </div>
                       <div>
