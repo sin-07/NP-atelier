@@ -148,14 +148,14 @@ export default function Footer() {
               onClick={() => setActiveDepartment?.('crafts')}
               className="hover:text-[#F2D785] transition-colors"
             >
-              Crafts
+              Artisan Crafts
             </a>
             <a
-              href="#collection"
+              href="#acquario-tropicale"
               onClick={() => setActiveDepartment?.('aquarium')}
-              className="hover:text-[#F2D785] transition-colors text-teal-400"
+              className="hover:text-[#F2D785] transition-colors text-teal-300 font-serif"
             >
-              Living Aquatics
+              Acquario Tropicale
             </a>
             <a href="#makers" className="hover:text-[#F2D785] transition-colors">Makers</a>
           </div>

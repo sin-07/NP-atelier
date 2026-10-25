@@ -8,7 +8,7 @@ import { fallbackCraftImage } from '../utils/fallbackImage'
 
 const SEARCH_CATEGORIES = [
   'All',
-  'Fish & Aquarium',
+  'Acquario Tropicale',
   'Live Freshwater Fish',
   'Marine & Saltwater Fish',
   'Aquariums & Nano Tanks',
@@ -133,7 +133,7 @@ export default function QuickSearchModal() {
     let list = products
 
     if (selectedCategory !== 'All') {
-      if (selectedCategory === 'Fish & Aquarium') {
+      if (selectedCategory === 'Acquario Tropicale' || selectedCategory === 'Fish & Aquarium') {
         list = list.filter((p: any) => p.department === 'aquarium' || p.category.toLowerCase().includes('fish') || p.category.toLowerCase().includes('aquarium'))
       } else {
         list = list.filter((p: any) => p.category.toLowerCase().includes(selectedCategory.toLowerCase()))

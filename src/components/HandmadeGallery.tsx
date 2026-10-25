@@ -42,11 +42,11 @@ import { fallbackCraftImage } from '../utils/fallbackImage'
 
 const BADGE_TAGS = [
   'All',
-  'Live Arrival Guarantee',
-  'Captive Bred',
   'Trending',
   'New',
-  'Optiwhite Glass',
+  'Atelier Signature',
+  'Handmade',
+  'Best Seller',
   'Under ₹1,500',
 ]
 
@@ -150,24 +150,12 @@ export default function HandmadeGallery() {
     }
   }, [quickViewProduct])
 
-  // Determine which showcase cards to show based on department
+  // Determine which showcase cards to show based strictly on crafts
   const currentCategoryGroups = useMemo(() => {
-    if (activeDepartment === 'aquarium') {
-      return aquariumCategoryGroups
-    }
-    if (activeDepartment === 'crafts') {
-      return categoryGroups
-    }
-    // Mixed: show 2 aquatic + 2 craft
-    return [
-      aquariumCategoryGroups[0],
-      categoryGroups[0],
-      aquariumCategoryGroups[2],
-      categoryGroups[1],
-    ]
-  }, [activeDepartment])
+    return categoryGroups
+  }, [])
 
-  // Dynamic Category Pills based on active department & loaded products
+  // Dynamic Category Pills based exclusively on craft categories
   const categoryPills = useMemo(() => {
     const dynamicCrafts = Array.from(
       new Set([
@@ -182,50 +170,22 @@ export default function HandmadeGallery() {
           .filter(Boolean),
       ])
     )
-
-    const dynamicAquatics = Array.from(
-      new Set([
-        ...aquariumCategories,
-        ...products
-          .filter(
-            (p: Product) =>
-              p.department === 'aquarium' || aquariumCategories.includes(p.category)
-          )
-          .map((p: Product) => p.category)
-          .filter(Boolean),
-      ])
-    )
-
-    if (activeDepartment === 'aquarium') {
-      return ['All Aquatics', ...dynamicAquatics]
-    }
-    if (activeDepartment === 'crafts') {
-      return ['All Crafts', ...dynamicCrafts]
-    }
-    return ['All', ...Array.from(new Set([...dynamicAquatics, ...dynamicCrafts]))]
-  }, [activeDepartment, products])
+    return ['All Crafts', ...dynamicCrafts]
+  }, [products])
 
   const filteredProducts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase()
 
     let result = products.filter((product: Product) => {
-      // Department filter
-      if (activeDepartment === 'aquarium') {
-        const isAqua =
-          product.department === 'aquarium' ||
-          aquariumCategories.includes(product.category)
-        if (!isAqua) return false
-      } else if (activeDepartment === 'crafts') {
-        const isCraft =
-          product.department === 'crafts' ||
-          craftCategories.includes(product.category) ||
-          (!product.department && !aquariumCategories.includes(product.category))
-        if (!isCraft) return false
-      }
+      // Exclude ALL aquarium items - Crafts section ONLY
+      const isAquarium =
+        product.department === 'aquarium' ||
+        aquariumCategories.includes(product.category)
+      if (isAquarium) return false
 
       // Category filter
       let matchesCategory = true
-      if (activeCategory !== 'All' && activeCategory !== 'All Aquatics' && activeCategory !== 'All Crafts') {
+      if (activeCategory !== 'All' && activeCategory !== 'All Crafts') {
         matchesCategory = product.category === activeCategory
       }
 
@@ -364,97 +324,23 @@ export default function HandmadeGallery() {
   )
 
   return (
-    <section id="collection" ref={containerRef} className="section-shell py-16 sm:py-24">
+    <section id="collection" ref={containerRef} className="section-shell py-16 sm:py-24 scroll-mt-24">
+      {/* Anchor for crafts */}
+      <div id="crafts" className="relative -top-28 pointer-events-none" />
+
       <div className="space-y-12">
         {/* Section Header */}
         <div className="gsap-gallery-section mx-auto max-w-3xl text-center">
           <div className="section-eyebrow mb-3.5">
             <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" />
-            <span>Curated Marketplace & Living Waters</span>
+            <span>Artisan Crafts Atelier • Handcrafted Masterpieces</span>
           </div>
           <h2 className="heading-1">
-            Artisan Drops & <span className="italic font-normal text-gold-gradient">Aquatic Wonders</span>
+            Artisan Crafts <span className="italic font-normal text-gold-gradient">Atelier</span>
           </h2>
           <p className="body-lead mx-auto mt-4 max-w-2xl text-[#4A4339]">
-            Explore handcrafted jewelry, aromatherapy soy candles, and bespoke creations alongside exotic captive-bred fish, ultra-clear low-iron aquariums, and living aquascapes.
+            Explore genuine handcrafted jewelry, pressed floral resin, clean aromatherapy soy candles, studio ceramics, and creative kits sculpted with generational passion.
           </p>
-
-          {/* Department Switcher Tabs (All | Crafts | Fish & Aquarium) */}
-          <div className="mt-8 flex justify-center">
-            <div className="inline-flex max-w-full overflow-x-auto no-scrollbar items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-white/95 p-1.5 shadow-[0_6px_20px_rgba(184,134,11,0.12)] relative">
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveDepartment?.('all')
-                  setActiveCategory('All')
-                }}
-                className={`relative flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition-colors duration-200 cursor-pointer ${
-                  activeDepartment === 'all'
-                    ? 'text-[#ECC872]'
-                    : 'text-[#5A554E] hover:text-[#141414]'
-                }`}
-              >
-                {activeDepartment === 'all' && (
-                  <motion.div
-                    layoutId="galleryDepartmentPill"
-                    className="absolute inset-0 rounded-full bg-[#141414] shadow-sm"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                  />
-                )}
-                <span className="relative z-10 flex items-center gap-2">
-                  <Sparkles className="h-3.5 w-3.5" />
-                  <span>All Departments</span>
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveDepartment?.('crafts')
-                  setActiveCategory('All Crafts')
-                }}
-                className={`relative flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition-colors duration-200 cursor-pointer ${
-                  activeDepartment === 'crafts'
-                    ? 'text-[#1A120B]'
-                    : 'text-[#5A554E] hover:text-[#141414]'
-                }`}
-              >
-                {activeDepartment === 'crafts' && (
-                  <motion.div
-                    layoutId="galleryDepartmentPill"
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B8860B] shadow-[0_2px_10px_rgba(212,175,55,0.35)]"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                  />
-                )}
-                <span className="relative z-10">Handmade Crafts</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveDepartment?.('aquarium')
-                  setActiveCategory('All Aquatics')
-                }}
-                className={`relative flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition-colors duration-200 cursor-pointer ${
-                  activeDepartment === 'aquarium'
-                    ? 'text-white'
-                    : 'text-[#5A554E] hover:text-[#141414]'
-                }`}
-              >
-                {activeDepartment === 'aquarium' && (
-                  <motion.div
-                    layoutId="galleryDepartmentPill"
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-[#008080] via-[#0F52BA] to-[#008080] shadow-[0_4px_16px_rgba(15,82,186,0.35)]"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                  />
-                )}
-                <span className="relative z-10 flex items-center gap-2">
-                  <Fish className="h-4 w-4 text-cyan-300" />
-                  <span>Living Aquatics</span>
-                </span>
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Visual Category Showcase Cards */}

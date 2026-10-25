@@ -100,6 +100,8 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const [cart, setCart] = useState<any[]>([])
   const [wishlist, setWishlist] = useState<any[]>([])
   const [user, setUser] = useState<any>(null)
+  const [isHydrated, setIsHydrated] = useState(false)
+  const [isAuthLoading, setIsAuthLoading] = useState(true)
   const [orders, setOrders] = useState<any[]>([])
   const [availableCoupons, setAvailableCoupons] = useState<any>(DEFAULT_COUPONS)
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
@@ -233,6 +235,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   }, [availableCoupons])
 
   useEffect(() => {
+    if (!isHydrated) return
     if (typeof window !== 'undefined') {
       if (user) {
         window.localStorage.setItem(STORAGE_KEYS.auth, JSON.stringify(user))
@@ -240,7 +243,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
         window.localStorage.removeItem(STORAGE_KEYS.auth)
       }
     }
-  }, [user])
+  }, [user, isHydrated])
 
   // Hydrate from localStorage on client mount, then sync with backend API
   useEffect(() => {
@@ -264,6 +267,9 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
       const storedCoupons = safeReadStorage<any>(STORAGE_KEYS.coupons, null)
       if (storedCoupons) setAvailableCoupons(storedCoupons)
+
+      setIsHydrated(true)
+      setIsAuthLoading(false)
     }
 
     // 1. Fetch Branding
@@ -964,6 +970,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       login,
       updateUser,
       logout,
+      isAuthLoading,
       globalLoader,
       triggerGlobalLoader,
       hideGlobalLoader,
@@ -1001,6 +1008,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       isSellOpen,
       isCheckoutOpen,
       isQuickSearchOpen,
+      isAuthLoading,
       globalLoader,
       triggerGlobalLoader,
       hideGlobalLoader,

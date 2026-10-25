@@ -159,13 +159,17 @@ export default function Navbar() {
   }
 
   const handleLinkClick = (href: string, dept?: 'all' | 'crafts' | 'aquarium') => {
-    if (dept && setActiveDepartment) {
-      setActiveDepartment(dept)
-      if (dept === 'all') setActiveNavTab('collections')
-      else if (dept === 'crafts') setActiveNavTab('crafts')
-      else if (dept === 'aquarium') setActiveNavTab('aquarium')
+    if (href === '#acquario-tropicale' || href === '#aquarium' || dept === 'aquarium') {
+      setActiveNavTab('aquarium')
+      setActiveDepartment?.('aquarium')
+    } else if (href === '#collection' || href === '#crafts' || dept === 'crafts') {
+      setActiveNavTab('crafts')
+      setActiveDepartment?.('crafts')
     } else if (href === '#makers') {
       setActiveNavTab('makers')
+    } else if (dept === 'all') {
+      setActiveNavTab('collections')
+      setActiveDepartment?.('all')
     }
     scrollToAnchor(href)
     setIsMenuOpen(false)
@@ -422,46 +426,46 @@ export default function Navbar() {
                             </div>
                           </div>
 
-                          {/* Panel 2: Living Aquatics */}
+                          {/* Panel 2: Acquario Tropicale */}
                           <div
-                            onClick={() => handleLinkClick('#collection', 'aquarium')}
-                            className="group/aqua relative rounded-2xl border border-[#D7EBEB] bg-white p-4 transition-all duration-200 hover:border-teal-500 hover:shadow-md cursor-pointer flex flex-col justify-between"
+                            onClick={() => handleLinkClick('#acquario-tropicale', 'aquarium')}
+                            className="group/aqua relative rounded-2xl border border-[#BCE1E5] bg-gradient-to-br from-[#F0FBFB] to-white p-4 transition-all duration-200 hover:border-teal-500 hover:shadow-md cursor-pointer flex flex-col justify-between"
                           >
                             <div>
                               <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center gap-2">
-                                  <span className="grid h-8 w-8 place-items-center rounded-xl bg-teal-50 border border-teal-200/60 text-teal-700">
-                                    <Waves className="h-4 w-4" />
+                                  <span className="grid h-8 w-8 place-items-center rounded-xl bg-teal-500 text-white shadow-xs">
+                                    <Fish className="h-4 w-4" />
                                   </span>
                                   <div>
-                                    <h4 className="text-xs font-bold text-[#141414] uppercase tracking-wider">
-                                      Living Aquatics
+                                    <h4 className="text-xs font-bold text-[#0A2D33] uppercase tracking-wider font-serif">
+                                      Acquario Tropicale
                                     </h4>
-                                    <p className="text-[10px] text-teal-700">Exotic Fish & Habitats</p>
+                                    <p className="text-[10px] text-teal-700 font-semibold">Exotic Fish & Habitats</p>
                                   </div>
                                 </div>
                                 <span className="text-[10px] font-bold text-teal-700 group-hover/aqua:translate-x-0.5 transition-transform">
                                   →
                                 </span>
                               </div>
-                              <ul className="space-y-1.5 text-[11px] text-[#5C5242] pt-2 border-t border-stone-100">
-                                <li className="hover:text-[#141414] flex items-center gap-1.5">
+                              <ul className="space-y-1.5 text-[11px] text-[#3D5256] pt-2 border-t border-teal-100/60">
+                                <li className="hover:text-[#0A2D33] flex items-center gap-1.5">
                                   <Fish className="h-3 w-3 text-teal-600" />
-                                  Show Bettas & Royal Discus
+                                  Royal Discus & Show Bettas
                                 </li>
-                                <li className="hover:text-[#141414] flex items-center gap-1.5">
+                                <li className="hover:text-[#0A2D33] flex items-center gap-1.5">
                                   <Sparkles className="h-3 w-3 text-cyan-600" />
-                                  Nano Rimless Aquascapes
+                                  Optiwhite Rimless Aquariums
                                 </li>
-                                <li className="hover:text-[#141414] flex items-center gap-1.5">
-                                  <Layers className="h-3 w-3 text-emerald-600" />
-                                  CO2 Systems & Live Plants
+                                <li className="hover:text-[#0A2D33] flex items-center gap-1.5">
+                                  <Waves className="h-3 w-3 text-emerald-600" />
+                                  Tissue Culture Plants & CO2
                                 </li>
                               </ul>
                             </div>
-                            <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-[10px] text-teal-800 font-bold">
-                              <span>100% Live Arrival Assured</span>
-                              <span className="rounded-full bg-teal-50 px-2 py-0.5">Filter Waters</span>
+                            <div className="mt-4 pt-3 border-t border-teal-100/60 flex items-center justify-between text-[10px] text-teal-800 font-bold">
+                              <span>Living Waters Specimen</span>
+                              <span className="rounded-full bg-teal-100 text-teal-900 px-2 py-0.5">Dedicated Section</span>
                             </div>
                           </div>
                         </div>
@@ -506,24 +510,25 @@ export default function Navbar() {
                   <span className="relative z-10">Artisan Crafts</span>
                 </button>
 
-                {/* Aquatics Direct Tab */}
+                {/* Acquario Tropicale Direct Tab */}
                 <button
                   type="button"
-                  onClick={() => handleLinkClick('#collection', 'aquarium')}
-                  className={`relative rounded-full px-3.5 py-2 text-xs font-bold tracking-wide transition-colors duration-200 cursor-pointer ${
+                  onClick={() => handleLinkClick('#acquario-tropicale', 'aquarium')}
+                  className={`relative rounded-full px-4 py-2 text-xs font-bold tracking-wide transition-colors duration-200 cursor-pointer flex items-center gap-1.5 ${
                     currentNav === 'aquarium'
                       ? 'text-[#ECC872]'
-                      : 'text-[#4A4339] hover:text-[#141414]'
+                      : 'text-[#0E535F] hover:text-[#0A2F36]'
                   }`}
                 >
                   {currentNav === 'aquarium' && (
                     <motion.div
                       layoutId="navbarCenterDockPill"
-                      className="absolute inset-0 rounded-full bg-[#141414] shadow-xs"
+                      className="absolute inset-0 rounded-full bg-[#0B252C] border border-teal-500/50 shadow-xs"
                       transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                     />
                   )}
-                  <span className="relative z-10">Nature Aquatics</span>
+                  <Fish className="h-3.5 w-3.5 text-cyan-500 relative z-10" />
+                  <span className="relative z-10 font-serif font-black tracking-tight">Acquario Tropicale</span>
                 </button>
 
                 {/* The Collective */}
@@ -790,16 +795,16 @@ export default function Navbar() {
 
                   <button
                     type="button"
-                    onClick={() => handleLinkClick('#collection', 'aquarium')}
+                    onClick={() => handleLinkClick('#acquario-tropicale', 'aquarium')}
                     className={`gsap-menu-item p-3.5 rounded-2xl border text-left transition ${
                       activeDepartment === 'aquarium'
-                        ? 'border-teal-500 bg-white shadow-sm'
+                        ? 'border-teal-500 bg-[#EBF7F8] shadow-sm'
                         : 'border-[#E8DEC7] bg-white/70 hover:bg-white'
                     }`}
                   >
-                    <Waves className="h-4 w-4 text-[#0F766E] mb-1.5" />
-                    <p className="text-xs font-bold text-[#141414]">Exotic Aquatics</p>
-                    <p className="text-[10px] text-[#6E6860]">Discus, Bettas, Tanks</p>
+                    <Fish className="h-4 w-4 text-[#0F766E] mb-1.5" />
+                    <p className="text-xs font-bold text-[#0C3238] font-serif">Acquario Tropicale</p>
+                    <p className="text-[10px] text-[#4F6C72]">Exotic Fish & Rimless Tanks</p>
                   </button>
                 </div>
 
@@ -807,10 +812,21 @@ export default function Navbar() {
                 <nav className="grid gap-1 border-t border-[#E8DEC7] pt-3 text-sm font-bold text-[#141414]">
                   <button
                     type="button"
-                    onClick={() => handleLinkClick('#collection', 'all')}
+                    onClick={() => handleLinkClick('#collection', 'crafts')}
                     className="gsap-menu-item rounded-xl px-4 py-2.5 transition flex items-center justify-between hover:bg-[#FAF4E2] text-[#332C22] text-left cursor-pointer"
                   >
-                    <span>All Collections</span>
+                    <span>Artisan Crafts</span>
+                    <span className="text-xs font-normal opacity-60">→</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleLinkClick('#acquario-tropicale', 'aquarium')}
+                    className="gsap-menu-item rounded-xl px-4 py-2.5 transition flex items-center justify-between hover:bg-[#FAF4E2] text-[#0A343A] text-left cursor-pointer font-serif"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Fish className="h-4 w-4 text-teal-600" />
+                      <span>Acquario Tropicale</span>
+                    </span>
                     <span className="text-xs font-normal opacity-60">→</span>
                   </button>
                   <button

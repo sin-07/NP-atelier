@@ -53,6 +53,7 @@ function ProfileContent() {
     showToast,
     login,
     triggerGlobalLoader,
+    isAuthLoading,
   } = useMarketplace()
 
   const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'wishlist' | 'concierge'>('profile')
@@ -203,6 +204,18 @@ function ProfileContent() {
     user?.role === 'admin' ||
     user?.role === 'Master Admin & Creator Ops' ||
     user?.email === 'npatelierindia@gmail.com'
+
+  // If still hydrating stored user session from localStorage, show gentle loader
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen bg-[#F8F5F0] flex flex-col items-center justify-center p-4">
+        <div className="h-10 w-10 rounded-full border-2 border-t-[#D4AF37] border-r-transparent border-b-[#B8860B] border-l-transparent animate-spin mb-3" />
+        <p className="text-xs font-bold text-[#875A10] uppercase tracking-widest">
+          Restoring Patron Session...
+        </p>
+      </div>
+    )
+  }
 
   // If user is not logged in, show luxury Account Sign-In View directly on this page
   if (!user) {

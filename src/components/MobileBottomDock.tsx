@@ -9,12 +9,14 @@ import {
   Search,
   Heart,
   ShoppingBag,
+  Fish,
+  Palette,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
 
 export default function MobileBottomDock() {
   const [mounted, setMounted] = useState(false)
-  const [activeTab, setActiveTab] = useState<'home' | 'drops' | 'search' | 'wishlist' | 'bag'>('home')
+  const [activeTab, setActiveTab] = useState<'home' | 'crafts' | 'aquarium' | 'search' | 'wishlist' | 'bag'>('home')
   const dockRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -40,20 +42,25 @@ export default function MobileBottomDock() {
   // Auto-sync active tab with scroll position smoothly
   useEffect(() => {
     const collectionEl = document.getElementById('collection')
-    if (!collectionEl) return
+    const acquarioEl = document.getElementById('acquario-tropicale')
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'drops'))
-        } else if (typeof window !== 'undefined' && window.scrollY < 300) {
-          setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'home'))
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            if (entry.target.id === 'acquario-tropicale') {
+              setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'aquarium'))
+            } else if (entry.target.id === 'collection') {
+              setActiveTab((prev) => (prev === 'search' || prev === 'wishlist' || prev === 'bag' ? prev : 'crafts'))
+            }
+          }
         }
       },
       { rootMargin: '-100px 0px -50% 0px' }
     )
 
-    observer.observe(collectionEl)
+    if (collectionEl) observer.observe(collectionEl)
+    if (acquarioEl) observer.observe(acquarioEl)
     return () => observer.disconnect()
   }, [])
 
@@ -63,6 +70,7 @@ export default function MobileBottomDock() {
     setIsCartOpen,
     setIsWishlistOpen,
     setIsQuickSearchOpen,
+    setActiveDepartment,
   } = useMarketplace()
 
   const scrollToAnchor = (href: string) => {
@@ -79,14 +87,16 @@ export default function MobileBottomDock() {
     }
   }
 
-  const handleNavClick = (tab: 'home' | 'drops') => {
+  const handleNavClick = (tab: 'home' | 'crafts' | 'aquarium') => {
     setActiveTab(tab)
     if (tab === 'home') {
       scrollToAnchor('#home')
-    } else if (tab === 'drops') {
-      requestAnimationFrame(() => {
-        scrollToAnchor('#collection')
-      })
+    } else if (tab === 'crafts') {
+      setActiveDepartment?.('crafts')
+      scrollToAnchor('#collection')
+    } else if (tab === 'aquarium') {
+      setActiveDepartment?.('aquarium')
+      scrollToAnchor('#acquario-tropicale')
     }
   }
 
@@ -94,14 +104,14 @@ export default function MobileBottomDock() {
     <nav
       ref={dockRef}
       aria-label="Mobile primary navigation"
-      className="fixed bottom-3 inset-x-3 max-w-md mx-auto z-40 sm:hidden transform-gpu will-change-transform"
+      className="fixed bottom-3 inset-x-2 max-w-md mx-auto z-40 sm:hidden transform-gpu will-change-transform"
     >
       <div className="flex items-center justify-around rounded-full border border-[#D4AF37]/60 bg-[#120F0A] p-1.5 shadow-[0_14px_40px_rgba(0,0,0,0.55),0_0_20px_rgba(212,175,55,0.15)]">
         {/* 1. Home / Atelier */}
         <button
           type="button"
           onClick={() => handleNavClick('home')}
-          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3.5 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
+          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'home'
               ? 'text-[#ECC872]'
               : 'text-[#A89876] hover:text-[#ECC872]'
@@ -114,29 +124,50 @@ export default function MobileBottomDock() {
               transition={{ type: 'spring', stiffness: 450, damping: 35 }}
             />
           )}
-          <Compass className="h-5 w-5 relative z-10" />
-          <span className="text-[10px] font-bold tracking-tight mt-0.5 relative z-10">Atelier</span>
+          <Compass className="h-4.5 w-4.5 relative z-10" />
+          <span className="text-[9.5px] font-bold tracking-tight mt-0.5 relative z-10">Atelier</span>
         </button>
 
-        {/* 2. Drops / Collections */}
+        {/* 2. Crafts */}
         <button
           type="button"
-          onClick={() => handleNavClick('drops')}
-          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3.5 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
-            activeTab === 'drops'
+          onClick={() => handleNavClick('crafts')}
+          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
+            activeTab === 'crafts'
               ? 'text-[#ECC872]'
               : 'text-[#A89876] hover:text-[#ECC872]'
           }`}
         >
-          {activeTab === 'drops' && (
+          {activeTab === 'crafts' && (
             <motion.div
               layoutId="mobileDockPill"
               className="absolute inset-0 rounded-full bg-[#221B10] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]"
               transition={{ type: 'spring', stiffness: 450, damping: 35 }}
             />
           )}
-          <Sparkles className="h-5 w-5 relative z-10" />
-          <span className="text-[10px] font-bold tracking-tight mt-0.5 relative z-10">Drops</span>
+          <Palette className="h-4.5 w-4.5 relative z-10" />
+          <span className="text-[9.5px] font-bold tracking-tight mt-0.5 relative z-10">Crafts</span>
+        </button>
+
+        {/* 3. Acquario Tropicale */}
+        <button
+          type="button"
+          onClick={() => handleNavClick('aquarium')}
+          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
+            activeTab === 'aquarium'
+              ? 'text-[#ECC872]'
+              : 'text-teal-400 hover:text-teal-300'
+          }`}
+        >
+          {activeTab === 'aquarium' && (
+            <motion.div
+              layoutId="mobileDockPill"
+              className="absolute inset-0 rounded-full bg-[#0E282F] border border-teal-500/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]"
+              transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+            />
+          )}
+          <Fish className="h-4.5 w-4.5 relative z-10 text-cyan-400" />
+          <span className="text-[9.5px] font-bold tracking-tight mt-0.5 relative z-10 font-serif">Acquario</span>
         </button>
 
         {/* 3. Search Spotlight */}

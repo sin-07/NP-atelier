@@ -3,6 +3,7 @@
 import Navbar from './Navbar'
 import Hero from './Hero'
 import HandmadeGallery from './HandmadeGallery'
+import AcquarioTropicale from './AcquarioTropicale'
 import ArtisanSpotlight from './ArtisanSpotlight'
 import Testimonials from './Testimonials'
 import FaqSection from './FaqSection'
@@ -33,6 +34,7 @@ export default function HomePage() {
       <main className="pt-28 sm:pt-32 pb-24 sm:pb-0">
         <Hero />
         <HandmadeGallery />
+        <AcquarioTropicale />
         <div id="makers">
           <ArtisanSpotlight />
         </div>
