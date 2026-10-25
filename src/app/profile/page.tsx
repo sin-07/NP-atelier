@@ -52,6 +52,7 @@ function ProfileContent() {
     addToCart,
     showToast,
     login,
+    triggerGlobalLoader,
   } = useMarketplace()
 
   const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'wishlist' | 'concierge'>('profile')
@@ -177,7 +178,15 @@ function ProfileContent() {
   // Handle direct sign-in from /profile page if unauthenticated
   const handleAuthSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    login(authForm)
+    triggerGlobalLoader({
+      mode: 'signin',
+      title: authMode === 'register' ? 'Creating Patron Membership' : 'Authorizing Patron Access',
+      subtitle: 'Preparing Your Bespoke Atelier Lounge...',
+      durationMs: 1100,
+      onComplete: () => {
+        login(authForm)
+      },
+    })
   }
 
   // Filter orders placed by this customer
@@ -422,8 +431,9 @@ function ProfileContent() {
             <button
               type="button"
               onClick={() => {
-                logout()
-                router.push('/')
+                logout(() => {
+                  router.push('/')
+                })
               }}
               className="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-white px-3 py-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50 transition cursor-pointer shadow-2xs"
             >

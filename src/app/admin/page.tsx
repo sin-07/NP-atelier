@@ -90,6 +90,7 @@ export default function AdminPage() {
     addCoupon,
     deleteCoupon,
     showToast,
+    triggerGlobalLoader,
   } = useMarketplace()
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -110,11 +111,24 @@ export default function AdminPage() {
   }, [user])
 
   const handleAdminLogout = () => {
-    if (typeof window !== 'undefined') {
-      window.localStorage.removeItem('ateliernp-admin-authenticated')
-      window.localStorage.removeItem('ateliernp-admin-user')
-    }
-    setIsAuthenticated(false)
+    triggerGlobalLoader({
+      mode: 'admin_signout',
+      title: 'Executive Sign Out',
+      subtitle: 'Terminating Administrative Session & Locking Vault',
+      durationMs: 1000,
+      onComplete: () => {
+        if (typeof window !== 'undefined') {
+          window.localStorage.removeItem('ateliernp-admin-authenticated')
+          window.localStorage.removeItem('ateliernp-admin-user')
+        }
+        setIsAuthenticated(false)
+        showToast({
+          title: 'Admin Signed Out',
+          message: 'Administrative session terminated safely.',
+          type: 'info',
+        })
+      },
+    })
   }
 
   // Tabs: 'overview' | 'products' | 'branding' | 'orders' | 'coupons' | 'artisans'

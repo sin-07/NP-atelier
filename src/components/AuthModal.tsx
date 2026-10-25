@@ -30,6 +30,7 @@ export default function AuthModal() {
     cartItems,
     setIsCheckoutOpen,
     openProfile,
+    triggerGlobalLoader,
   } = useMarketplace()
   const [mode, setMode] = useState<'login' | 'register'>('register')
   const [isLocatingPin, setIsLocatingPin] = useState(false)
@@ -94,17 +95,23 @@ export default function AuthModal() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    login(formState)
     setIsAuthOpen(false)
-    if (cartItems && cartItems.length > 0) {
-      setTimeout(() => {
-        setIsCheckoutOpen(true)
-      }, 350)
-    } else {
-      setTimeout(() => {
-        router.push('/profile')
-      }, 350)
-    }
+    triggerGlobalLoader({
+      mode: 'signin',
+      title: mode === 'register' ? 'Creating Patron Membership' : 'Authorizing Patron Access',
+      subtitle: 'Curated Artisan Marketplace & Living Waters',
+      durationMs: 1150,
+      onComplete: () => {
+        login(formState)
+        if (cartItems && cartItems.length > 0) {
+          setTimeout(() => {
+            setIsCheckoutOpen(true)
+          }, 150)
+        } else {
+          router.push('/profile')
+        }
+      },
+    })
   }
 
   return (

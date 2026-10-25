@@ -32,6 +32,15 @@ export const DEFAULT_BRANDING: BrandingSettings = {
   currency: '₹',
 }
 
+export interface GlobalLoaderState {
+  isOpen: boolean
+  mode: 'signin' | 'signout' | 'page_switch' | 'admin_signin' | 'admin_signout' | 'custom'
+  title?: string
+  subtitle?: string
+  durationMs?: number
+  onComplete?: () => void
+}
+
 const MarketplaceContext = createContext<any>(null)
 
 const STORAGE_KEYS = {
@@ -107,12 +116,47 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isQuickSearchOpen, setIsQuickSearchOpen] = useState(false)
 
+  // Global Transition Loader (Signin, Signout, Page Switch)
+  const [globalLoader, setGlobalLoader] = useState<GlobalLoaderState | null>(null)
+
+  const triggerGlobalLoader = useCallback(
+    (options: {
+      mode?: 'signin' | 'signout' | 'page_switch' | 'admin_signin' | 'admin_signout' | 'custom'
+      title?: string
+      subtitle?: string
+      durationMs?: number
+      onComplete?: () => void
+    }) => {
+      setGlobalLoader({
+        isOpen: true,
+        mode: options.mode || 'page_switch',
+        title: options.title,
+        subtitle: options.subtitle,
+        durationMs: options.durationMs,
+        onComplete: options.onComplete,
+      })
+    },
+    []
+  )
+
+  const hideGlobalLoader = useCallback(() => {
+    setGlobalLoader(null)
+  }, [])
+
   const openProfile = (tab: 'profile' | 'orders' | 'wishlist' = 'profile') => {
     setProfileTab(tab)
     setIsProfileOpen(false)
-    if (typeof window !== 'undefined') {
-      window.location.href = tab === 'profile' ? '/profile' : `/profile?tab=${tab}`
-    }
+    triggerGlobalLoader({
+      mode: 'page_switch',
+      title: 'Patron Atelier Lounge',
+      subtitle: 'Loading your Bespoke Orders & Delivery Cards...',
+      durationMs: 700,
+      onComplete: () => {
+        if (typeof window !== 'undefined') {
+          window.location.href = tab === 'profile' ? '/profile' : `/profile?tab=${tab}`
+        }
+      },
+    })
   }
 
   // Toasts
@@ -701,18 +745,32 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     })
   }
 
-  const logout = () => {
-    setUser(null)
-    setIsProfileOpen(false)
-    if (typeof window !== 'undefined') {
-      window.localStorage.removeItem(STORAGE_KEYS.auth)
-    }
-    showToast({
-      title: 'Signed Out',
-      message: 'Come back soon for more handcrafted & aquatic drops!',
-      type: 'info',
-    })
-  }
+  const logout = useCallback(
+    (onComplete?: () => void) => {
+      triggerGlobalLoader({
+        mode: 'signout',
+        title: 'NP Atelier Patron Sign Out',
+        subtitle: 'Securing Session & Sealing Atelier Vault',
+        durationMs: 950,
+        onComplete: () => {
+          setUser(null)
+          setIsProfileOpen(false)
+          if (typeof window !== 'undefined') {
+            window.localStorage.removeItem(STORAGE_KEYS.auth)
+          }
+          showToast({
+            title: 'Signed Out',
+            message: 'Come back soon for more handcrafted & aquatic drops!',
+            type: 'info',
+          })
+          if (onComplete) {
+            onComplete()
+          }
+        },
+      })
+    },
+    [triggerGlobalLoader, showToast]
+  )
 
   const addProduct = async (productData: any) => {
     const rawPrice = String(productData.price || '').trim()
@@ -906,6 +964,9 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       login,
       updateUser,
       logout,
+      globalLoader,
+      triggerGlobalLoader,
+      hideGlobalLoader,
       addProduct,
       editProduct,
       deleteProduct,
@@ -940,6 +1001,10 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       isSellOpen,
       isCheckoutOpen,
       isQuickSearchOpen,
+      globalLoader,
+      triggerGlobalLoader,
+      hideGlobalLoader,
+      logout,
     ]
   )
 
