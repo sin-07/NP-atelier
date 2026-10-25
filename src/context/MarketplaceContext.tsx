@@ -109,7 +109,10 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
   const openProfile = (tab: 'profile' | 'orders' | 'wishlist' = 'profile') => {
     setProfileTab(tab)
-    setIsProfileOpen(true)
+    setIsProfileOpen(false)
+    if (typeof window !== 'undefined') {
+      window.location.href = tab === 'profile' ? '/profile' : `/profile?tab=${tab}`
+    }
   }
 
   // Toasts

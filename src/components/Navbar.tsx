@@ -641,29 +641,23 @@ export default function Navbar() {
                         </span>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setUserDropdownOpen(false)
-                          openProfile('profile')
-                        }}
+                      <Link
+                        href="/profile"
+                        onClick={() => setUserDropdownOpen(false)}
                         className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-[#141414] hover:bg-[#FAF5E8] transition cursor-pointer"
                       >
                         <User className="h-3.5 w-3.5 text-[#B8860B]" />
                         <span>My Profile &amp; Address</span>
-                      </button>
+                      </Link>
 
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setUserDropdownOpen(false)
-                          openProfile('orders')
-                        }}
+                      <Link
+                        href="/profile?tab=orders"
+                        onClick={() => setUserDropdownOpen(false)}
                         className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-[#141414] hover:bg-[#FAF5E8] transition cursor-pointer"
                       >
                         <Package className="h-3.5 w-3.5 text-[#B8860B]" />
                         <span>My Bespoke Orders</span>
-                      </button>
+                      </Link>
 
                       <button
                         type="button"
@@ -863,28 +857,22 @@ export default function Navbar() {
                       </div>
 
                       <div className="grid grid-cols-2 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setIsMenuOpen(false)
-                            openProfile('profile')
-                          }}
+                        <Link
+                          href="/profile"
+                          onClick={() => setIsMenuOpen(false)}
                           className="gsap-menu-item flex items-center justify-center gap-1.5 rounded-xl border border-[#D4AF37]/50 bg-white py-2.5 text-xs font-bold text-[#141414] shadow-xs cursor-pointer hover:bg-[#FAF5E8]"
                         >
                           <User className="h-3.5 w-3.5 text-[#B8860B]" />
                           <span>My Profile</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setIsMenuOpen(false)
-                            openProfile('orders')
-                          }}
+                        </Link>
+                        <Link
+                          href="/profile?tab=orders"
+                          onClick={() => setIsMenuOpen(false)}
                           className="gsap-menu-item flex items-center justify-center gap-1.5 rounded-xl border border-[#D4AF37]/50 bg-white py-2.5 text-xs font-bold text-[#141414] shadow-xs cursor-pointer hover:bg-[#FAF5E8]"
                         >
                           <Package className="h-3.5 w-3.5 text-[#B8860B]" />
                           <span>My Orders</span>
-                        </button>
+                        </Link>
                       </div>
 
                       {isAdmin && (

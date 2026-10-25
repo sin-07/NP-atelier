@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Building2,
@@ -18,6 +19,7 @@ import { useMarketplace } from '../context/MarketplaceContext'
 import { lookupPincode } from '../utils/pincodeLookup'
 
 export default function AuthModal() {
+  const router = useRouter()
   const {
     isAuthOpen,
     setIsAuthOpen,
@@ -100,7 +102,7 @@ export default function AuthModal() {
       }, 350)
     } else {
       setTimeout(() => {
-        openProfile('profile')
+        router.push('/profile')
       }, 350)
     }
   }
