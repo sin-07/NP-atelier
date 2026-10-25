@@ -34,6 +34,7 @@ import {
 } from 'lucide-react'
 import { useMarketplace, DEFAULT_PATRON_USER } from '../../context/MarketplaceContext'
 import { lookupPincode } from '../../utils/pincodeLookup'
+import { getSavedShippingAddress, saveShippingAddress } from '../../utils/addressStorage'
 import ToastContainer from '../../components/ToastContainer'
 
 function ProfileContent() {
@@ -85,7 +86,17 @@ function ProfileContent() {
   })
 
   useEffect(() => {
-    if (currentUser) {
+    const saved = getSavedShippingAddress()
+    if (saved && (saved.address || saved.phone || saved.fullName)) {
+      setFormState({
+        name: saved.fullName || currentUser?.name || '',
+        phone: saved.phone || currentUser?.phone || '',
+        address: saved.address || currentUser?.address || '',
+        pincode: saved.zip || currentUser?.pincode || '',
+        city: saved.city || currentUser?.city || '',
+        state: saved.state || currentUser?.state || '',
+      })
+    } else if (currentUser) {
       setFormState({
         name: currentUser.name || '',
         phone: currentUser.phone || '',
@@ -138,13 +149,22 @@ function ProfileContent() {
     e.preventDefault()
     setIsSaving(true)
     setTimeout(() => {
-      updateUser({
+      const cleanData = {
         name: formState.name.trim(),
         phone: formState.phone.trim(),
         address: formState.address.trim(),
         pincode: formState.pincode.trim(),
         city: formState.city.trim(),
         state: formState.state.trim(),
+      }
+      updateUser(cleanData)
+      saveShippingAddress({
+        fullName: cleanData.name,
+        phone: cleanData.phone,
+        address: cleanData.address,
+        city: cleanData.city,
+        state: cleanData.state,
+        zip: cleanData.pincode,
       })
       setIsSaving(false)
       setSavedSuccess(true)

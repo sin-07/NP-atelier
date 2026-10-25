@@ -6,6 +6,7 @@ import {
   Building2,
   CheckCircle2,
   CreditCard,
+  Edit3,
   Loader2,
   Lock,
   MapPin,
@@ -22,6 +23,7 @@ import {
 import { useMarketplace } from '../context/MarketplaceContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
 import { lookupPincode } from '../utils/pincodeLookup'
+import { getSavedShippingAddress, saveShippingAddress, findAddressByPhone } from '../utils/addressStorage'
 
 export default function CheckoutModal() {
   const {
@@ -39,6 +41,7 @@ export default function CheckoutModal() {
     appliedCoupon,
     createOrder,
     user,
+    updateUser,
   } = useMarketplace()
 
   const siteName = branding?.siteName || 'NP Atelier'
@@ -52,6 +55,9 @@ export default function CheckoutModal() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLocatingPin, setIsLocatingPin] = useState(false)
   const [pinStatus, setPinStatus] = useState<string | null>(null)
+  const [hasSavedAddress, setHasSavedAddress] = useState(false)
+  const [isEditingAddress, setIsEditingAddress] = useState(false)
+  const [saveForFuture, setSaveForFuture] = useState(true)
 
   useEffect(() => {
     if (isCheckoutOpen) {
@@ -64,13 +70,13 @@ export default function CheckoutModal() {
   }, [isCheckoutOpen])
 
   const [formData, setFormData] = useState({
-    fullName: user?.name || '',
-    email: user?.email || '',
-    phone: user?.phone || '',
-    address: user?.address || '',
-    city: user?.city || '',
-    state: user?.state || '',
-    zip: user?.pincode || '',
+    fullName: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    state: '',
+    zip: '',
     paymentMethod: 'cod', // Pay on Delivery
     upiId: '',
     cardNumber: '',
@@ -80,7 +86,25 @@ export default function CheckoutModal() {
 
   // Pre-fill user profile address whenever user logs in or modal opens
   useEffect(() => {
-    if (user) {
+    if (!isCheckoutOpen) return
+
+    const saved = getSavedShippingAddress()
+    if (saved && (saved.address || saved.phone || saved.fullName)) {
+      setFormData((prev) => ({
+        ...prev,
+        fullName: saved.fullName || prev.fullName || user?.name || '',
+        email: saved.email || prev.email || user?.email || '',
+        phone: saved.phone || prev.phone || user?.phone || '',
+        address: saved.address || prev.address || user?.address || '',
+        city: saved.city || prev.city || user?.city || '',
+        state: saved.state || prev.state || user?.state || '',
+        zip: saved.zip || prev.zip || user?.pincode || '',
+      }))
+      const hasFullSaved = Boolean(saved.address && (saved.phone || saved.fullName))
+      setHasSavedAddress(hasFullSaved)
+      setIsEditingAddress(!hasFullSaved)
+    } else if (user) {
+      const isCustomUser = Boolean(user.address && user.address !== 'Civil Lines, Royal Heritage Residency')
       setFormData((prev) => ({
         ...prev,
         fullName: prev.fullName || user.name || '',
@@ -91,8 +115,36 @@ export default function CheckoutModal() {
         state: prev.state || user.state || '',
         zip: prev.zip || user.pincode || '',
       }))
+      setHasSavedAddress(isCustomUser)
+      setIsEditingAddress(!isCustomUser)
+    } else {
+      setHasSavedAddress(false)
+      setIsEditingAddress(true)
     }
   }, [user, isCheckoutOpen])
+
+  // Handle phone number input with instant address-book lookup
+  const handlePhoneChange = (val: string) => {
+    setFormData((prev) => ({ ...prev, phone: val }))
+    const cleanDigits = val.replace(/[^0-9]/g, '')
+    if (cleanDigits.length >= 10) {
+      const match = findAddressByPhone(val)
+      if (match && match.address) {
+        setFormData((prev) => ({
+          ...prev,
+          phone: val,
+          fullName: prev.fullName || match.fullName || '',
+          email: prev.email || match.email || '',
+          address: match.address,
+          city: match.city,
+          state: match.state,
+          zip: match.zip,
+        }))
+        setHasSavedAddress(true)
+        setPinStatus(`✓ Welcome back ${match.fullName ? match.fullName : ''}! Saved address auto-filled.`)
+      }
+    }
+  }
 
   // Handle live 6-digit Indian PIN code auto-fill in Checkout
   const handlePincodeChange = async (pinRaw: string) => {
@@ -187,6 +239,21 @@ _Please confirm my order and share dispatch tracking details!_`
         setWaOrderUrl(finalWaUrl)
         setConfirmedOrder(order)
         setStep('success')
+
+        if (saveForFuture) {
+          saveShippingAddress(formData)
+          if (updateUser) {
+            updateUser({
+              name: formData.fullName,
+              phone: formData.phone,
+              email: formData.email,
+              address: formData.address,
+              city: formData.city,
+              state: formData.state,
+              pincode: formData.zip,
+            })
+          }
+        }
 
         // Direct launch WhatsApp in new window/tab
         if (typeof window !== 'undefined') {
@@ -327,108 +394,195 @@ _Please confirm my order and share dispatch tracking details!_`
 
                   {/* Shipping Section */}
                   <div>
-                    <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#141414]">
-                      <Truck className="h-4 w-4 text-[#B8860B]" /> 1. Shipping Details (India)
-                    </h4>
-                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                      <div>
-                        <label className="mb-1 block text-xs font-bold text-[#141414]">Full Name</label>
-                        <input
-                          required
-                          value={formData.fullName}
-                          onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                          placeholder="Ananya Sharma"
-                          className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
-                        />
-                      </div>
-                      <div>
-                        <label className="mb-1 block text-xs font-bold text-[#141414]">
-                          Email Address <span className="text-[#8C827A] font-normal">(Optional for Invoice)</span>
-                        </label>
-                        <input
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          placeholder="your.email@example.com"
-                          className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
-                        />
-                      </div>
-                      <div>
-                        <label className="mb-1 block text-xs font-bold text-[#141414]">
-                          WhatsApp Mobile Number <span className="text-[#875A10]">(for order confirmation)</span>
-                        </label>
-                        <input
-                          type="tel"
-                          required
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          placeholder="+91 98765 43210"
-                          className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium font-mono"
-                        />
-                      </div>
-                      <div>
-                        <div className="flex items-center justify-between mb-1">
-                          <label className="block text-xs font-bold text-[#141414] flex items-center gap-1">
-                            <MapPin className="h-3 w-3 text-[#B8860B]" />
-                            <span>Postal PIN Code (6 Digits)</span>
-                          </label>
-                          <span className="text-[10px] text-[#8C7A58]">Auto-fills Location</span>
-                        </div>
-                        <div className="relative">
-                          <input
-                            type="text"
-                            maxLength={6}
-                            required
-                            value={formData.zip}
-                            onChange={(e) => handlePincodeChange(e.target.value)}
-                            placeholder="e.g. 560038"
-                            className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 pr-20 text-sm font-bold text-[#141414] tracking-wider outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40"
-                          />
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                            {isLocatingPin ? (
-                              <Loader2 className="h-3.5 w-3.5 text-[#B8860B] animate-spin" />
-                            ) : formData.zip.length === 6 && formData.city ? (
-                              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                            ) : null}
+                    <div className="flex items-center justify-between">
+                      <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#141414]">
+                        <Truck className="h-4 w-4 text-[#B8860B]" /> 1. Shipping Details (India)
+                      </h4>
+                      {hasSavedAddress && !isEditingAddress && (
+                        <button
+                          type="button"
+                          onClick={() => setIsEditingAddress(true)}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#8C6D2B] hover:text-[#5C4106] bg-white border border-[#DFCFA6] hover:border-[#D4AF37] px-3 py-1 rounded-xl transition shadow-2xs cursor-pointer"
+                        >
+                          <Edit3 className="h-3.5 w-3.5 text-[#B8860B]" />
+                          <span>Change / Edit Address</span>
+                        </button>
+                      )}
+                    </div>
+
+                    {/* SAVED ADDRESS CARD (Fast 1-Click Checkout) */}
+                    {hasSavedAddress && !isEditingAddress ? (
+                      <div className="mt-3 rounded-2xl border border-[#D4AF37]/50 bg-gradient-to-br from-[#FFFDF9] via-[#FAF6ED] to-[#F5EEDC] p-4 shadow-sm">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-start gap-3">
+                            <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#14120E] text-[#ECC872] shadow-xs shrink-0 mt-0.5">
+                              <MapPin className="h-5 w-5" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-sm font-bold text-[#141414]">{formData.fullName || 'Patron'}</span>
+                                {formData.phone && (
+                                  <span className="text-xs font-mono font-bold text-[#7A5408] bg-[#FAF3DE] border border-[#E8D49E] px-2 py-0.5 rounded-md">
+                                    {formData.phone}
+                                  </span>
+                                )}
+                                <span className="rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 px-2.5 py-0.5 text-[10px] font-bold inline-flex items-center gap-1">
+                                  <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                                  <span>Saved Address • 1-Click Ready</span>
+                                </span>
+                              </div>
+                              <p className="mt-1 text-xs text-[#4A4339] font-medium leading-relaxed">
+                                {formData.address ? `${formData.address}, ` : ''}{formData.city ? `${formData.city}, ` : ''}{formData.state ? `${formData.state} ` : ''}
+                                {formData.zip && <span className="font-mono font-bold">- {formData.zip}</span>}
+                              </p>
+                              {formData.email && (
+                                <p className="mt-1 text-[11px] text-[#786D5E]">Invoice will be sent to: {formData.email}</p>
+                              )}
+                            </div>
                           </div>
                         </div>
-                        {pinStatus && (
-                          <p className="mt-1 text-[10px] font-semibold text-[#875A10]">
-                            {pinStatus}
-                          </p>
-                        )}
+                        <div className="mt-3 pt-2.5 border-t border-[#DFCFA6]/60 flex items-center justify-between text-[11px] text-[#7A5408]">
+                          <span className="flex items-center gap-1">
+                            <Sparkles className="h-3 w-3 text-[#B8860B]" />
+                            <span>Your delivery address is pre-filled. No need to re-type!</span>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setIsEditingAddress(true)}
+                            className="text-[11px] font-bold text-[#8C6D2B] underline hover:text-[#5C4106] cursor-pointer"
+                          >
+                            Use Different Address
+                          </button>
+                        </div>
                       </div>
-                      <div>
-                        <label className="mb-1 block text-xs font-bold text-[#141414]">City / Capital</label>
-                        <input
-                          required
-                          value={formData.city}
-                          onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                          placeholder="e.g. Bengaluru"
-                          className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
-                        />
+                    ) : (
+                      /* EDITABLE FORM INPUTS */
+                      <div className="mt-3 space-y-3">
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <div>
+                            <label className="mb-1 block text-xs font-bold text-[#141414]">Full Name</label>
+                            <input
+                              required
+                              value={formData.fullName}
+                              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                              placeholder="Ananya Sharma"
+                              className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                            />
+                          </div>
+                          <div>
+                            <label className="mb-1 block text-xs font-bold text-[#141414]">
+                              Email Address <span className="text-[#8C827A] font-normal">(Optional for Invoice)</span>
+                            </label>
+                            <input
+                              type="email"
+                              value={formData.email}
+                              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                              placeholder="your.email@example.com"
+                              className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                            />
+                          </div>
+                          <div>
+                            <div className="flex items-center justify-between mb-1">
+                              <label className="block text-xs font-bold text-[#141414]">
+                                WhatsApp Mobile Number <span className="text-[#875A10]">(Order tracking)</span>
+                              </label>
+                            </div>
+                            <input
+                              type="tel"
+                              required
+                              value={formData.phone}
+                              onChange={(e) => handlePhoneChange(e.target.value)}
+                              placeholder="+91 98765 43210"
+                              className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium font-mono"
+                            />
+                          </div>
+                          <div>
+                            <div className="flex items-center justify-between mb-1">
+                              <label className="block text-xs font-bold text-[#141414] flex items-center gap-1">
+                                <MapPin className="h-3 w-3 text-[#B8860B]" />
+                                <span>Postal PIN Code (6 Digits)</span>
+                              </label>
+                              <span className="text-[10px] text-[#8C7A58]">Auto-fills City & State</span>
+                            </div>
+                            <div className="relative">
+                              <input
+                                type="text"
+                                maxLength={6}
+                                required
+                                value={formData.zip}
+                                onChange={(e) => handlePincodeChange(e.target.value)}
+                                placeholder="e.g. 560038"
+                                className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 pr-20 text-sm font-bold text-[#141414] tracking-wider outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40"
+                              />
+                              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                                {isLocatingPin ? (
+                                  <Loader2 className="h-3.5 w-3.5 text-[#B8860B] animate-spin" />
+                                ) : formData.zip.length === 6 && formData.city ? (
+                                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                                ) : null}
+                              </div>
+                            </div>
+                            {pinStatus && (
+                              <p className="mt-1 text-[10px] font-semibold text-[#875A10]">
+                                {pinStatus}
+                              </p>
+                            )}
+                          </div>
+                          <div>
+                            <label className="mb-1 block text-xs font-bold text-[#141414]">City / Capital</label>
+                            <input
+                              required
+                              value={formData.city}
+                              onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                              placeholder="e.g. Bengaluru"
+                              className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                            />
+                          </div>
+                          <div>
+                            <label className="mb-1 block text-xs font-bold text-[#141414]">State / Union Territory</label>
+                            <input
+                              required
+                              value={formData.state}
+                              onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                              placeholder="e.g. Karnataka"
+                              className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                            />
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="mb-1 block text-xs font-bold text-[#141414]">Full Street Address</label>
+                            <input
+                              required
+                              value={formData.address}
+                              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                              placeholder="Flat 402, Lotus Residency, MG Road"
+                              className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Save Address Toggle & Cancel Option */}
+                        <div className="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-[#DFCFA6]/50">
+                          <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#4A4339]">
+                            <input
+                              type="checkbox"
+                              checked={saveForFuture}
+                              onChange={(e) => setSaveForFuture(e.target.checked)}
+                              className="h-4 w-4 rounded accent-[#B8860B] border-[#DFCFA6] cursor-pointer"
+                            />
+                            <span>Remember & save this address for 1-click orders</span>
+                          </label>
+                          {hasSavedAddress && (
+                            <button
+                              type="button"
+                              onClick={() => setIsEditingAddress(false)}
+                              className="text-xs font-bold text-[#8C6D2B] hover:text-[#5C4106] underline cursor-pointer"
+                            >
+                              Cancel & Use Saved Address
+                            </button>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <label className="mb-1 block text-xs font-bold text-[#141414]">State / Union Territory</label>
-                        <input
-                          required
-                          value={formData.state}
-                          onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                          placeholder="e.g. Karnataka"
-                          className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
-                        />
-                      </div>
-                      <div className="sm:col-span-2">
-                        <label className="mb-1 block text-xs font-bold text-[#141414]">Full Street Address</label>
-                        <input
-                          required
-                          value={formData.address}
-                          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                          placeholder="Flat 402, Lotus Residency, MG Road"
-                          className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
-                        />
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* Payment Section: Pay on Delivery Only */}

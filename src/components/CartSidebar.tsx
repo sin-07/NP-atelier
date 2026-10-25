@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
+import { getSavedShippingAddress, formatAddressOneLine } from '../utils/addressStorage'
 
 export default function CartSidebar() {
   const {
@@ -88,20 +89,23 @@ export default function CartSidebar() {
       })
       .join('\n')
 
-    const customerName = user?.name || 'Customer'
-    const customerPhone = user?.phone || ''
-    const customerAddr = user?.address
-      ? `${user.address}, ${user.city || ''}, ${user.state || ''} - ${user.pincode || ''}`
-      : 'Will provide on WhatsApp'
+    const saved = getSavedShippingAddress()
+    const customerName = (saved?.fullName || (user?.name && user.name !== 'Patron of NP Atelier' ? user.name : '')) || 'Customer'
+    const customerPhone = saved?.phone || (user?.phone && user.phone !== '+91 93412 97124' ? user.phone : '')
+    const customerAddr = saved?.address
+      ? formatAddressOneLine(saved)
+      : user?.address && user.address !== 'Civil Lines, Royal Heritage Residency'
+        ? `${user.address}, ${user.city || ''}, ${user.state || ''} - ${user.pincode || ''}`
+        : 'Will provide on WhatsApp'
 
     const order = await createOrder({
       fullName: customerName,
       phone: customerPhone,
-      email: user?.email || 'whatsapp-order@npatelier.in',
-      address: user?.address || 'Provided via WhatsApp chat',
-      city: user?.city || 'India',
-      state: user?.state || '',
-      zip: user?.pincode || '',
+      email: saved?.email || user?.email || 'whatsapp-order@npatelier.in',
+      address: saved?.address || user?.address || 'Provided via WhatsApp chat',
+      city: saved?.city || user?.city || 'India',
+      state: saved?.state || user?.state || '',
+      zip: saved?.zip || user?.pincode || '',
       paymentMethod: 'WhatsApp Order Confirmation',
     })
 
@@ -354,6 +358,37 @@ _Please confirm my order, availability, and dispatch tracking details!_`
                   </div>
                 </div>
 
+                {/* Saved Address Preview */}
+                {(() => {
+                  const saved = getSavedShippingAddress()
+                  const hasSaved = Boolean(saved?.address || (user?.address && user.address !== 'Civil Lines, Royal Heritage Residency'))
+                  const displayName = saved?.fullName || (user?.name && user.name !== 'Patron of NP Atelier' ? user.name : 'Patron')
+                  const displayCity = saved?.city || user?.city || 'Your Location'
+
+                  if (!hasSaved) return null
+
+                  return (
+                    <div className="mt-3 rounded-xl border border-[#D4AF37]/50 bg-[#FAF6ED] px-3 py-2 text-xs flex items-center justify-between shadow-2xs">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <MapPin className="h-3.5 w-3.5 text-[#B8860B] shrink-0" />
+                        <span className="truncate text-[#5C4106] text-[11px]">
+                          <strong>Deliver to:</strong> {displayName} ({displayCity})
+                        </span>
+                        <span className="shrink-0 text-[10px] font-bold text-emerald-800 bg-emerald-100 rounded-full px-1.5 py-0.5 border border-emerald-300">
+                          Saved ✓
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleProceedToCheckout}
+                        className="text-[10px] font-bold text-[#8C6D2B] underline hover:text-[#5C4106] shrink-0 ml-1.5 cursor-pointer"
+                      >
+                        Change
+                      </button>
+                    </div>
+                  )
+                })()}
+
                 <div className="mt-4 space-y-2">
                   <button
                     type="button"
@@ -370,7 +405,11 @@ _Please confirm my order, availability, and dispatch tracking details!_`
                     className="w-full py-2.5 px-4 rounded-xl border border-[#D4AF37]/50 bg-white hover:bg-[#FAF6ED] text-xs font-bold text-[#5C4106] transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
                   >
                     <MapPin className="h-3.5 w-3.5 text-[#B8860B]" />
-                    <span>Add Delivery Address &amp; Order on WhatsApp</span>
+                    <span>
+                      {getSavedShippingAddress()?.address || (user?.address && user.address !== 'Civil Lines, Royal Heritage Residency')
+                        ? 'Review / Change Delivery Address'
+                        : 'Add Delivery Address & Order on WhatsApp'}
+                    </span>
                   </button>
 
                   <div className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-emerald-800 bg-emerald-50/90 border border-emerald-200/80 rounded-xl py-1.5 px-3">

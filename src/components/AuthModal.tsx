@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { lookupPincode } from '../utils/pincodeLookup'
+import { getSavedShippingAddress } from '../utils/addressStorage'
 
 export default function AuthModal() {
   const router = useRouter()
@@ -56,6 +57,23 @@ export default function AuthModal() {
     city: user?.city || '',
     state: user?.state || '',
   })
+
+  // Pre-fill formState from saved address storage
+  useEffect(() => {
+    if (!isAuthOpen) return
+    const saved = getSavedShippingAddress()
+    if (saved && (saved.address || saved.phone || saved.fullName)) {
+      setFormState((prev) => ({
+        ...prev,
+        name: saved.fullName || prev.name || user?.name || '',
+        phone: saved.phone || prev.phone || user?.phone || '',
+        address: saved.address || prev.address || user?.address || '',
+        pincode: saved.zip || prev.pincode || user?.pincode || '',
+        city: saved.city || prev.city || user?.city || '',
+        state: saved.state || prev.state || user?.state || '',
+      }))
+    }
+  }, [isAuthOpen, user])
 
   // Handle live 6-digit Indian PIN code auto-detection
   const handlePincodeChange = async (pinRaw: string) => {

@@ -7,6 +7,7 @@ import {
   craftCategories,
   Product,
 } from '../data/products'
+import { getSavedShippingAddress, saveShippingAddress } from '../utils/addressStorage'
 
 export interface BrandingSettings {
   siteName: string
@@ -282,7 +283,21 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       if (storedUser) {
         setUser(storedUser)
       } else {
-        setUser(DEFAULT_PATRON_USER)
+        const savedShipping = getSavedShippingAddress()
+        if (savedShipping && (savedShipping.address || savedShipping.fullName || savedShipping.phone)) {
+          setUser({
+            ...DEFAULT_PATRON_USER,
+            name: savedShipping.fullName || DEFAULT_PATRON_USER.name,
+            phone: savedShipping.phone || DEFAULT_PATRON_USER.phone,
+            email: savedShipping.email || DEFAULT_PATRON_USER.email,
+            address: savedShipping.address || DEFAULT_PATRON_USER.address,
+            city: savedShipping.city || DEFAULT_PATRON_USER.city,
+            state: savedShipping.state || DEFAULT_PATRON_USER.state,
+            pincode: savedShipping.zip || DEFAULT_PATRON_USER.pincode,
+          })
+        } else {
+          setUser(DEFAULT_PATRON_USER)
+        }
       }
 
       const storedOrders = safeReadStorage<any[] | null>(STORAGE_KEYS.orders, null)
@@ -696,6 +711,36 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       console.error('Failed to sync new order to server:', err)
     }
 
+    // Automatically remember and save customer delivery address for 1-click future orders
+    if (orderData.address || orderData.phone || orderData.fullName) {
+      const shippingDetails = {
+        fullName: orderData.fullName || user?.name || '',
+        phone: orderData.phone || user?.phone || '',
+        email: orderData.email || user?.email || '',
+        address: orderData.address || user?.address || '',
+        city: orderData.city || user?.city || '',
+        state: orderData.state || user?.state || '',
+        zip: orderData.zip || orderData.pincode || user?.pincode || '',
+      }
+      saveShippingAddress(shippingDetails)
+      setUser((prev: any) => {
+        const next = {
+          ...prev,
+          name: shippingDetails.fullName || prev?.name,
+          phone: shippingDetails.phone || prev?.phone,
+          email: shippingDetails.email || prev?.email,
+          address: shippingDetails.address || prev?.address,
+          city: shippingDetails.city || prev?.city,
+          state: shippingDetails.state || prev?.state,
+          pincode: shippingDetails.zip || prev?.pincode,
+        }
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem(STORAGE_KEYS.auth, JSON.stringify(next))
+        }
+        return next
+      })
+    }
+
     showToast({
       title: 'WhatsApp Order Placed',
       message: `Order #${newOrder.orderId} recorded! Opening WhatsApp concierge...`,
@@ -760,6 +805,19 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       window.localStorage.setItem(STORAGE_KEYS.auth, JSON.stringify(newUser))
     }
 
+    // Persist address to addressBook
+    if (userData.address || userData.phone || userData.name) {
+      saveShippingAddress({
+        fullName: userData.name,
+        phone: userData.phone,
+        email: userData.email,
+        address: userData.address,
+        city: userData.city,
+        state: userData.state,
+        zip: userData.pincode,
+      })
+    }
+
     showToast({
       title: `Welcome, ${cleanedName}!`,
       message: `Signed in to ${branding.siteName}.`,
@@ -775,6 +833,20 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       }
       return next
     })
+
+    // Also sync to saved shipping address
+    if (updatedFields.address || updatedFields.phone || updatedFields.name || updatedFields.pincode) {
+      saveShippingAddress({
+        fullName: updatedFields.name,
+        phone: updatedFields.phone,
+        email: updatedFields.email,
+        address: updatedFields.address,
+        city: updatedFields.city,
+        state: updatedFields.state,
+        zip: updatedFields.pincode || updatedFields.zip,
+      })
+    }
+
     showToast({
       title: 'Profile Updated',
       message: 'Your personal details and address have been saved.',
