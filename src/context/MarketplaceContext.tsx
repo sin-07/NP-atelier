@@ -134,6 +134,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
   // Global Transition Loader (Signin, Signout, Page Switch)
   const [globalLoader, setGlobalLoader] = useState<GlobalLoaderState | null>(null)
+  const lastLoaderTriggerTimeRef = useRef(0)
 
   const triggerGlobalLoader = useCallback(
     (options: {
@@ -143,12 +144,19 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       durationMs?: number
       onComplete?: () => void
     }) => {
+      const now = Date.now()
+      // Strictly prevent double loader triggers within 2200ms
+      if (now - lastLoaderTriggerTimeRef.current < 2200) {
+        return
+      }
+      lastLoaderTriggerTimeRef.current = now
+
       setGlobalLoader({
         isOpen: true,
         mode: options.mode || 'page_switch',
         title: options.title,
         subtitle: options.subtitle,
-        durationMs: options.durationMs,
+        durationMs: options.durationMs || 650,
         onComplete: options.onComplete,
       })
     },
@@ -162,17 +170,14 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const openProfile = (tab: 'profile' | 'orders' | 'wishlist' = 'profile') => {
     setProfileTab(tab)
     setIsProfileOpen(false)
-    triggerGlobalLoader({
-      mode: 'page_switch',
-      title: 'Patron Atelier Lounge',
-      subtitle: 'Loading your Bespoke Orders & Delivery Cards...',
-      durationMs: 700,
-      onComplete: () => {
-        if (typeof window !== 'undefined') {
-          window.location.href = tab === 'profile' ? '/profile' : `/profile?tab=${tab}`
-        }
-      },
-    })
+    if (typeof window !== 'undefined') {
+      const targetUrl = tab === 'profile' ? '/profile' : `/profile?tab=${tab}`
+      if (window.location.pathname === '/profile') {
+        window.history.pushState(null, '', targetUrl)
+      } else {
+        window.location.href = targetUrl
+      }
+    }
   }
 
   // Toasts

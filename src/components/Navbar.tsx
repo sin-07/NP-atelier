@@ -40,10 +40,8 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [userDropdownOpen, setUserDropdownOpen] = useState(false)
-  const [megamenuOpen, setMegamenuOpen] = useState(false)
   const [copiedCoupon, setCopiedCoupon] = useState(false)
-  const [activeNavTab, setActiveNavTab] = useState<'collections' | 'crafts' | 'aquarium' | 'makers'>('collections')
-  const megamenuTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [activeNavTab, setActiveNavTab] = useState<'crafts' | 'aquarium' | 'makers'>('crafts')
   const userMenuRef = useRef<HTMLDivElement>(null)
   const mobileDrawerRef = useRef<HTMLDivElement>(null)
 
@@ -71,7 +69,6 @@ export default function Navbar() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setUserDropdownOpen(false)
-        setMegamenuOpen(false)
         setIsMenuOpen(false)
       }
     }
@@ -210,7 +207,6 @@ export default function Navbar() {
       }
     }
     setIsMenuOpen(false)
-    setMegamenuOpen(false)
   }
 
   useEffect(() => {
@@ -219,7 +215,7 @@ export default function Navbar() {
     else if (activeDepartment === 'all' && activeNavTab !== 'makers') setActiveNavTab('crafts')
   }, [activeDepartment])
 
-  const currentNav = megamenuOpen ? 'collections' : activeNavTab
+  const currentNav = activeNavTab
 
   const handleCopyCoupon = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -235,17 +231,6 @@ export default function Navbar() {
       }
       setTimeout(() => setCopiedCoupon(false), 2500)
     }
-  }
-
-  const handleMegamenuEnter = () => {
-    if (megamenuTimeoutRef.current) clearTimeout(megamenuTimeoutRef.current)
-    setMegamenuOpen(true)
-  }
-
-  const handleMegamenuLeave = () => {
-    megamenuTimeoutRef.current = setTimeout(() => {
-      setMegamenuOpen(false)
-    }, 180)
   }
 
   const siteName = branding?.siteName || 'NP Atelier'
@@ -384,150 +369,9 @@ export default function Navbar() {
               </div>
             </a>
 
-            {/* Center Navigation Dock with Megamenu and Sliding Pill */}
+            {/* Center Navigation Dock with Sliding Pill */}
             <nav className="hidden lg:flex items-center relative">
               <div className="flex items-center rounded-full border border-[#E8DEC7]/90 bg-white/80 p-1 shadow-[0_2px_10px_rgba(20,18,12,0.03)] backdrop-blur-md relative">
-                {/* Collections with Mega Menu Trigger */}
-                <div
-                  className="relative"
-                  onMouseEnter={handleMegamenuEnter}
-                  onMouseLeave={handleMegamenuLeave}
-                >
-                  <button
-                    type="button"
-                    onClick={() => handleLinkClick('#collection', 'all')}
-                    className={`relative flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold tracking-wide transition-colors duration-200 cursor-pointer ${
-                      currentNav === 'collections'
-                        ? 'text-[#ECC872]'
-                        : 'text-[#4A4339] hover:text-[#141414]'
-                    }`}
-                  >
-                    {currentNav === 'collections' && (
-                      <motion.div
-                        layoutId="navbarCenterDockPill"
-                        className="absolute inset-0 rounded-full bg-[#141414] shadow-xs"
-                        transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                      />
-                    )}
-                    <span className="relative z-10">Collections</span>
-                    <ChevronDown
-                      className={`relative z-10 h-3 w-3 transition-transform duration-200 ${
-                        megamenuOpen ? 'rotate-180 text-[#ECC872]' : currentNav === 'collections' ? 'text-[#ECC872]' : 'text-[#8A7960]'
-                      }`}
-                    />
-                  </button>
-
-                  {/* Mega Menu Dropdown */}
-                  {megamenuOpen && (
-                    <div className="absolute left-0 top-full pt-2.5 w-[580px] z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                      <div className="overflow-hidden rounded-3xl border border-[#D4AF37]/30 bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5EFE0] p-5 shadow-[0_25px_50px_-12px_rgba(20,18,12,0.18)]">
-                        <div className="grid grid-cols-2 gap-4">
-                          {/* Panel 1: Artisan Crafts */}
-                          <div
-                            onClick={() => handleLinkClick('#collection', 'crafts')}
-                            className="group/craft relative rounded-2xl border border-[#E8DEC7] bg-white p-4 transition-all duration-200 hover:border-[#D4AF37] hover:shadow-md cursor-pointer flex flex-col justify-between"
-                          >
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <span className="grid h-8 w-8 place-items-center rounded-xl bg-amber-50 border border-amber-200/60 text-[#B8860B]">
-                                    <Palette className="h-4 w-4" />
-                                  </span>
-                                  <div>
-                                    <h4 className="text-xs font-bold text-[#141414] uppercase tracking-wider">
-                                      Artisan Crafts
-                                    </h4>
-                                    <p className="text-[10px] text-[#7A6A53]">Makers Atelier</p>
-                                  </div>
-                                </div>
-                                <span className="text-[10px] font-bold text-[#B8860B] group-hover/craft:translate-x-0.5 transition-transform">
-                                  →
-                                </span>
-                              </div>
-                              <ul className="space-y-1.5 text-[11px] text-[#5C5242] pt-2 border-t border-stone-100">
-                                <li className="hover:text-[#141414] flex items-center gap-1.5">
-                                  <Gem className="h-3 w-3 text-amber-600" />
-                                  Handmade Jewelry & Talismans
-                                </li>
-                                <li className="hover:text-[#141414] flex items-center gap-1.5">
-                                  <Sparkles className="h-3 w-3 text-rose-500" />
-                                  UV Resin & Botanical Art
-                                </li>
-                                <li className="hover:text-[#141414] flex items-center gap-1.5">
-                                  <Layers className="h-3 w-3 text-purple-600" />
-                                  DIY Creative Craft Kits
-                                </li>
-                              </ul>
-                            </div>
-                            <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-[10px] text-[#8C6D2B] font-bold">
-                              <span>Explore 40+ Creations</span>
-                              <span className="rounded-full bg-amber-50 px-2 py-0.5">Filter Drops</span>
-                            </div>
-                          </div>
-
-                          {/* Panel 2: Acquario Tropicale */}
-                          <div
-                            onClick={() => handleLinkClick('#acquario-tropicale', 'aquarium')}
-                            className="group/aqua relative rounded-2xl border border-[#BCE1E5] bg-gradient-to-br from-[#F0FBFB] to-white p-4 transition-all duration-200 hover:border-teal-500 hover:shadow-md cursor-pointer flex flex-col justify-between"
-                          >
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <span className="grid h-8 w-8 place-items-center rounded-xl bg-teal-500 text-white shadow-xs">
-                                    <Fish className="h-4 w-4" />
-                                  </span>
-                                  <div>
-                                    <h4 className="text-xs font-bold text-[#0A2D33] uppercase tracking-wider font-serif">
-                                      Acquario Tropicale
-                                    </h4>
-                                    <p className="text-[10px] text-teal-700 font-semibold">Exotic Fish & Habitats</p>
-                                  </div>
-                                </div>
-                                <span className="text-[10px] font-bold text-teal-700 group-hover/aqua:translate-x-0.5 transition-transform">
-                                  →
-                                </span>
-                              </div>
-                              <ul className="space-y-1.5 text-[11px] text-[#3D5256] pt-2 border-t border-teal-100/60">
-                                <li className="hover:text-[#0A2D33] flex items-center gap-1.5">
-                                  <Fish className="h-3 w-3 text-teal-600" />
-                                  Royal Discus & Show Bettas
-                                </li>
-                                <li className="hover:text-[#0A2D33] flex items-center gap-1.5">
-                                  <Sparkles className="h-3 w-3 text-cyan-600" />
-                                  Optiwhite Rimless Aquariums
-                                </li>
-                                <li className="hover:text-[#0A2D33] flex items-center gap-1.5">
-                                  <Waves className="h-3 w-3 text-emerald-600" />
-                                  Tissue Culture Plants & CO2
-                                </li>
-                              </ul>
-                            </div>
-                            <div className="mt-4 pt-3 border-t border-teal-100/60 flex items-center justify-between text-[10px] text-teal-800 font-bold">
-                              <span>Living Waters Specimen</span>
-                              <span className="rounded-full bg-teal-100 text-teal-900 px-2 py-0.5">Dedicated Section</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Megamenu Footer banner */}
-                        <div className="mt-3.5 flex items-center justify-between rounded-xl bg-[#14100A] px-4 py-2.5 text-xs text-[#EADFC7]">
-                          <span className="flex items-center gap-2">
-                            <ShieldCheck className="h-4 w-4 text-[#ECC872]" />
-                            <span>Bespoke Handcrafted Orders with Artisan Tracking</span>
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => handleLinkClick('#collection', 'all')}
-                            className="inline-flex items-center gap-1 font-bold text-[#ECC872] hover:text-white transition cursor-pointer"
-                          >
-                            <span>Explore Catalog</span>
-                            <ArrowRight className="h-3 w-3" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
 
                 {/* Crafts Direct Tab */}
                 <button
