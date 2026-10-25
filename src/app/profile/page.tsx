@@ -32,7 +32,7 @@ import {
   LogIn,
   UserPlus,
 } from 'lucide-react'
-import { useMarketplace } from '../../context/MarketplaceContext'
+import { useMarketplace, DEFAULT_PATRON_USER } from '../../context/MarketplaceContext'
 import { lookupPincode } from '../../utils/pincodeLookup'
 import ToastContainer from '../../components/ToastContainer'
 
@@ -53,8 +53,10 @@ function ProfileContent() {
     showToast,
     login,
     triggerGlobalLoader,
-    isAuthLoading,
+    setIsAuthOpen,
   } = useMarketplace()
+
+  const currentUser = user || DEFAULT_PATRON_USER
 
   const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'wishlist' | 'concierge'>('profile')
   const [isLocatingPin, setIsLocatingPin] = useState(false)
@@ -62,19 +64,6 @@ function ProfileContent() {
   const [isSaving, setIsSaving] = useState(false)
   const [savedSuccess, setSavedSuccess] = useState(false)
   const [previewMode, setPreviewMode] = useState<'card' | 'skeleton'>('card')
-
-  // Auth form state if not signed in
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
-  const [authForm, setAuthForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    phone: '',
-    pincode: '',
-    city: '',
-    state: '',
-    address: '',
-  })
 
   // Synchronize initial tab from URL search parameters (e.g. ?tab=orders)
   useEffect(() => {
@@ -96,26 +85,22 @@ function ProfileContent() {
   })
 
   useEffect(() => {
-    if (user) {
+    if (currentUser) {
       setFormState({
-        name: user.name || '',
-        phone: user.phone || '',
-        address: user.address || '',
-        pincode: user.pincode || '',
-        city: user.city || '',
-        state: user.state || '',
+        name: currentUser.name || '',
+        phone: currentUser.phone || '',
+        address: currentUser.address || '',
+        pincode: currentUser.pincode || '',
+        city: currentUser.city || '',
+        state: currentUser.state || '',
       })
     }
-  }, [user])
+  }, [currentUser])
 
   // Live 6-digit Indian PIN code auto-lookup
-  const handlePincodeChange = async (pinRaw: string, isAuth = false) => {
+  const handlePincodeChange = async (pinRaw: string) => {
     const cleanPin = pinRaw.replace(/[^0-9]/g, '').slice(0, 6)
-    if (isAuth) {
-      setAuthForm((prev) => ({ ...prev, pincode: cleanPin }))
-    } else {
-      setFormState((prev) => ({ ...prev, pincode: cleanPin }))
-    }
+    setFormState((prev) => ({ ...prev, pincode: cleanPin }))
 
     if (cleanPin.length === 6) {
       setIsLocatingPin(true)
@@ -123,21 +108,12 @@ function ProfileContent() {
       try {
         const details = await lookupPincode(cleanPin)
         if (details && details.success) {
-          if (isAuth) {
-            setAuthForm((prev) => ({
-              ...prev,
-              pincode: cleanPin,
-              city: details.city,
-              state: details.state,
-            }))
-          } else {
-            setFormState((prev) => ({
-              ...prev,
-              pincode: cleanPin,
-              city: details.city,
-              state: details.state,
-            }))
-          }
+          setFormState((prev) => ({
+            ...prev,
+            pincode: cleanPin,
+            city: details.city,
+            state: details.state,
+          }))
           setPinStatus(`Auto-detected: ${details.city}, ${details.state}`)
           showToast?.({
             title: 'Location Resolved',
@@ -176,235 +152,19 @@ function ProfileContent() {
     }, 250)
   }
 
-  // Handle direct sign-in from /profile page if unauthenticated
-  const handleAuthSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    triggerGlobalLoader({
-      mode: 'signin',
-      title: authMode === 'register' ? 'Creating Patron Membership' : 'Authorizing Patron Access',
-      subtitle: 'Preparing Your Bespoke Atelier Lounge...',
-      durationMs: 1100,
-      onComplete: () => {
-        login(authForm)
-      },
-    })
-  }
-
   // Filter orders placed by this customer
   const userOrders = useMemo(() => {
-    if (!user) return []
-    const targetEmail = (user.email || '').toLowerCase().trim()
+    const targetEmail = (currentUser.email || '').toLowerCase().trim()
     return orders.filter((order: any) => {
       const custEmail = (order.customer?.userEmail || order.customer?.email || '').toLowerCase().trim()
-      return custEmail === targetEmail || !custEmail
+      return custEmail === targetEmail || !custEmail || targetEmail === 'patron@npatelier.in'
     })
-  }, [orders, user])
+  }, [orders, currentUser])
 
   const isAdmin =
-    user?.role === 'admin' ||
-    user?.role === 'Master Admin & Creator Ops' ||
-    user?.email === 'npatelierindia@gmail.com'
-
-  // If still hydrating stored user session from localStorage, show gentle loader
-  if (isAuthLoading) {
-    return (
-      <div className="min-h-screen bg-[#F8F5F0] flex flex-col items-center justify-center p-4">
-        <div className="h-10 w-10 rounded-full border-2 border-t-[#D4AF37] border-r-transparent border-b-[#B8860B] border-l-transparent animate-spin mb-3" />
-        <p className="text-xs font-bold text-[#875A10] uppercase tracking-widest">
-          Restoring Patron Session...
-        </p>
-      </div>
-    )
-  }
-
-  // If user is not logged in, show luxury Account Sign-In View directly on this page
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-[#F8F5F0] text-[#141414] pb-20">
-        <ToastContainer />
-
-        {/* Top Minimal Navigation Bar */}
-        <header className="sticky top-0 z-30 border-b border-[#DFCFA6]/60 bg-white/95 backdrop-blur-md shadow-2xs">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/40 bg-white px-3.5 py-2 text-xs font-bold text-[#5C4106] shadow-xs hover:bg-[#FAF5E8] transition"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span>Back to Atelier Storefront</span>
-            </Link>
-
-            <span className="font-serif text-lg sm:text-xl font-bold tracking-tight text-[#141414]">
-              {branding?.siteName || 'NP Atelier'}
-            </span>
-          </div>
-        </header>
-
-        {/* Sign In & Account Creation Hero Card */}
-        <main className="max-w-xl mx-auto px-4 pt-12 sm:pt-16">
-          <div className="rounded-[2.2rem] border border-[#D4AF37]/40 bg-white p-6 sm:p-10 shadow-[0_20px_60px_rgba(180,135,45,0.18)]">
-            <div className="text-center">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FAF5E8] border border-[#D4AF37]/50 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#875A10]">
-                <ShieldCheck className="h-3.5 w-3.5 text-[#B8860B]" />
-                Customer &amp; Patron Portal
-              </span>
-              <h1 className="mt-3 font-serif text-2xl sm:text-3xl font-bold text-[#141414]">
-                {authMode === 'login' ? 'Sign In to Your Account' : 'Create Atelier Account'}
-              </h1>
-              <p className="mt-2 text-xs sm:text-sm text-[#6B5E4F] max-w-sm mx-auto">
-                Access your delivery addresses, track live bespoke orders, and view saved collections.
-              </p>
-
-              {/* Toggle Login / Register */}
-              <div className="mt-6 flex rounded-full border border-[#DFCFA6]/80 bg-[#FAF8F5] p-1">
-                <button
-                  type="button"
-                  onClick={() => setAuthMode('login')}
-                  className={`flex-1 rounded-full py-2.5 text-xs font-bold transition cursor-pointer ${
-                    authMode === 'login'
-                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#1A120B] font-black shadow-sm'
-                      : 'text-[#6B5E4F] hover:text-[#141414]'
-                  }`}
-                >
-                  Sign In
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAuthMode('register')}
-                  className={`flex-1 rounded-full py-2.5 text-xs font-bold transition cursor-pointer ${
-                    authMode === 'register'
-                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#1A120B] font-black shadow-sm'
-                      : 'text-[#6B5E4F] hover:text-[#141414]'
-                  }`}
-                >
-                  Create Account
-                </button>
-              </div>
-            </div>
-
-            <form onSubmit={handleAuthSubmit} className="mt-6 space-y-4">
-              {authMode === 'register' && (
-                <>
-                  <div>
-                    <label className="mb-1 block text-xs font-bold text-[#141414]">Full Name</label>
-                    <input
-                      type="text"
-                      required
-                      value={authForm.name}
-                      onChange={(e) => setAuthForm({ ...authForm, name: e.target.value })}
-                      placeholder="e.g. Priya Sharma"
-                      className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm font-medium text-[#141414] focus:border-[#D4AF37] focus:bg-white outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-1 block text-xs font-bold text-[#141414]">Phone Number</label>
-                    <input
-                      type="tel"
-                      value={authForm.phone}
-                      onChange={(e) => setAuthForm({ ...authForm, phone: e.target.value })}
-                      placeholder="e.g. 9876543210"
-                      className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm font-medium text-[#141414] focus:border-[#D4AF37] focus:bg-white outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label className="text-xs font-bold text-[#141414]">
-                        Delivery PIN Code <span className="text-[#875A10]">(6 Digits)</span>
-                      </label>
-                      {isLocatingPin && (
-                        <span className="text-[10px] font-bold text-[#B8860B] animate-pulse">
-                          Detecting location...
-                        </span>
-                      )}
-                    </div>
-                    <input
-                      type="text"
-                      maxLength={6}
-                      value={authForm.pincode}
-                      onChange={(e) => handlePincodeChange(e.target.value, true)}
-                      placeholder="e.g. 110001, 400001, 560001"
-                      className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm font-medium text-[#141414] focus:border-[#D4AF37] focus:bg-white outline-none"
-                    />
-                    {pinStatus && (
-                      <p className="mt-1 text-[11px] font-medium text-[#875A10]">{pinStatus}</p>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="mb-1 block text-xs font-bold text-[#141414]">City</label>
-                      <input
-                        type="text"
-                        value={authForm.city}
-                        onChange={(e) => setAuthForm({ ...authForm, city: e.target.value })}
-                        placeholder="City"
-                        className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm font-medium text-[#141414] focus:border-[#D4AF37] focus:bg-white outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="mb-1 block text-xs font-bold text-[#141414]">State</label>
-                      <input
-                        type="text"
-                        value={authForm.state}
-                        onChange={(e) => setAuthForm({ ...authForm, state: e.target.value })}
-                        placeholder="State"
-                        className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm font-medium text-[#141414] focus:border-[#D4AF37] focus:bg-white outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="mb-1 block text-xs font-bold text-[#141414]">Delivery Street Address</label>
-                    <textarea
-                      rows={2}
-                      value={authForm.address}
-                      onChange={(e) => setAuthForm({ ...authForm, address: e.target.value })}
-                      placeholder="Flat/House No., Street Name, Near Landmark..."
-                      className="w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] p-3 text-sm font-medium text-[#141414] focus:border-[#D4AF37] focus:bg-white outline-none"
-                    />
-                  </div>
-                </>
-              )}
-
-              <div>
-                <label className="mb-1 block text-xs font-bold text-[#141414]">Email Address</label>
-                <input
-                  type="email"
-                  required
-                  value={authForm.email}
-                  onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
-                  placeholder="your.email@example.com"
-                  className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm font-medium text-[#141414] focus:border-[#D4AF37] focus:bg-white outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="mb-1 block text-xs font-bold text-[#141414]">Password</label>
-                <input
-                  type="password"
-                  required
-                  value={authForm.password}
-                  onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
-                  placeholder="Enter your password"
-                  className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm font-medium text-[#141414] focus:border-[#D4AF37] focus:bg-white outline-none"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="btn-gold w-full py-3.5 text-xs shadow-md justify-center font-bold tracking-wide mt-2 cursor-pointer"
-              >
-                {authMode === 'login' ? <LogIn className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
-                <span>{authMode === 'login' ? 'Sign In to Account' : 'Create Atelier Account'}</span>
-              </button>
-            </form>
-          </div>
-        </main>
-      </div>
-    )
-  }
+    currentUser?.role === 'admin' ||
+    currentUser?.role === 'Master Admin & Creator Ops' ||
+    currentUser?.email === 'npatelierindia@gmail.com'
 
   // Full Customer Profile Page
   return (
@@ -441,18 +201,29 @@ function ProfileContent() {
               </Link>
             )}
 
-            <button
-              type="button"
-              onClick={() => {
-                logout(() => {
-                  router.push('/')
-                })
-              }}
-              className="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-white px-3 py-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50 transition cursor-pointer shadow-2xs"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              <span>Sign Out</span>
-            </button>
+            {user?.email && user.email !== 'patron@npatelier.in' ? (
+              <button
+                type="button"
+                onClick={() => {
+                  logout(() => {
+                    router.push('/')
+                  })
+                }}
+                className="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-white px-3 py-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50 transition cursor-pointer shadow-2xs"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span>Sign Out</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsAuthOpen(true)}
+                className="inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#14100A] px-3.5 py-1.5 text-xs font-black shadow-xs hover:opacity-95 transition cursor-pointer"
+              >
+                <LogIn className="h-3.5 w-3.5" />
+                <span>Sign In</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -468,15 +239,15 @@ function ProfileContent() {
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
               {/* Avatar circle */}
               <div className="relative shrink-0">
-                {user.avatarImage ? (
+                {currentUser.avatarImage ? (
                   <img
-                    src={user.avatarImage}
-                    alt={user.name}
+                    src={currentUser.avatarImage}
+                    alt={currentUser.name}
                     className="h-20 w-20 sm:h-24 sm:w-24 rounded-full object-cover border-2 border-[#D4AF37] shadow-lg"
                   />
                 ) : (
                   <div className="grid h-20 w-20 sm:h-24 sm:w-24 place-items-center rounded-full bg-gradient-to-tr from-[#14100A] to-[#2B2319] text-2xl sm:text-3xl font-serif font-black text-[#ECC872] border-2 border-[#D4AF37] shadow-lg">
-                    {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                    {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
                   </div>
                 )}
                 <div className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-[#14100A] text-[#ECC872] border border-[#D4AF37] shadow-sm">
@@ -488,7 +259,7 @@ function ProfileContent() {
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                   <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#141414]">
-                    {user.name || 'Artisan Collector'}
+                    {currentUser.name || 'Artisan Collector'}
                   </h1>
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FAF5E8] border border-[#D4AF37]/60 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#875A10] shadow-2xs">
                     <ShieldCheck className="h-3.5 w-3.5 text-[#B8860B]" />
@@ -499,17 +270,17 @@ function ProfileContent() {
                 <div className="mt-2 flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-4 text-xs text-[#6B5E4F] font-medium">
                   <span className="flex items-center gap-1.5">
                     <Mail className="h-3.5 w-3.5 text-[#B8860B]" />
-                    <span>{user.email}</span>
+                    <span>{currentUser.email}</span>
                   </span>
-                  {user.phone && (
+                  {currentUser.phone && (
                     <span className="flex items-center gap-1.5">
                       <Phone className="h-3.5 w-3.5 text-[#B8860B]" />
-                      <span>{user.phone}</span>
+                      <span>{currentUser.phone}</span>
                     </span>
                   )}
                   <span className="flex items-center gap-1.5">
                     <Calendar className="h-3.5 w-3.5 text-[#B8860B]" />
-                    <span>Member since {user.memberSince || '2026'}</span>
+                    <span>Member since {currentUser.memberSince || '2026'}</span>
                   </span>
                 </div>
               </div>

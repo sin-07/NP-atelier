@@ -94,14 +94,28 @@ function buildAvatar(name = '') {
     .join('')
 }
 
+export const DEFAULT_PATRON_USER = {
+  name: 'Patron of NP Atelier',
+  email: 'patron@npatelier.in',
+  phone: '+91 93412 97124',
+  address: 'Civil Lines, Royal Heritage Residency',
+  pincode: '462001',
+  city: 'Bhopal',
+  state: 'Madhya Pradesh',
+  avatar: 'NP',
+  avatarImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+  memberSince: '2026',
+  role: 'patron',
+}
+
 export function MarketplaceProvider({ children }: { children: React.ReactNode }) {
   const [branding, setBranding] = useState<BrandingSettings>(DEFAULT_BRANDING)
   const [products, setProducts] = useState<Product[]>(allInitialProducts)
   const [cart, setCart] = useState<any[]>([])
   const [wishlist, setWishlist] = useState<any[]>([])
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<any>(DEFAULT_PATRON_USER)
   const [isHydrated, setIsHydrated] = useState(false)
-  const [isAuthLoading, setIsAuthLoading] = useState(true)
+  const [isAuthLoading, setIsAuthLoading] = useState(false)
   const [orders, setOrders] = useState<any[]>([])
   const [availableCoupons, setAvailableCoupons] = useState<any>(DEFAULT_COUPONS)
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
@@ -260,7 +274,11 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       if (storedWishlist) setWishlist(storedWishlist)
 
       const storedUser = safeReadStorage<any>(STORAGE_KEYS.auth, null)
-      if (storedUser) setUser(storedUser)
+      if (storedUser) {
+        setUser(storedUser)
+      } else {
+        setUser(DEFAULT_PATRON_USER)
+      }
 
       const storedOrders = safeReadStorage<any[] | null>(STORAGE_KEYS.orders, null)
       if (storedOrders) setOrders(storedOrders)
@@ -767,7 +785,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
         subtitle: 'Securing Session & Sealing Atelier Vault',
         durationMs: 950,
         onComplete: () => {
-          setUser(null)
+          setUser(DEFAULT_PATRON_USER)
           setIsProfileOpen(false)
           if (typeof window !== 'undefined') {
             window.localStorage.removeItem(STORAGE_KEYS.auth)
