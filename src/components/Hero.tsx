@@ -652,16 +652,16 @@ export default function Hero() {
             </div>
 
             {/* Bottom Quick Feature Strip */}
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[#D4AF37]/35 bg-white/80 px-4 py-2.5 shadow-xs">
-              <div className="flex items-center gap-2 text-xs font-bold text-[#4D3605]">
-                <span className="grid h-5 w-5 place-items-center rounded-full bg-[#FAF0D4] text-[#B8860B] text-[10px] font-black">
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[rgba(212,175,120,0.3)] bg-[#151412]/95 px-4 py-2.5 shadow-[0_4px_20px_rgba(0,0,0,0.5)] backdrop-blur-md">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#F5EBDD]">
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-[#242019] border border-[#D4AF78]/35 text-[#D4AF78] text-[10px] font-black shrink-0">
                   ✦
                 </span>
-                <span>All bespoke crafts ship in honeycomb protective packaging with wax seal presentation</span>
+                <span className="leading-tight">All bespoke crafts ship in honeycomb protective packaging with wax seal presentation</span>
               </div>
               <a
                 href="#collection"
-                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#7A5408] hover:text-[#4A3405] transition"
+                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#D4AF78] hover:text-[#E5C18A] transition-colors shrink-0"
               >
                 <span>View All 40+ Crafts</span>
                 <ArrowRight className="h-3 w-3" />
@@ -671,20 +671,32 @@ export default function Hero() {
         </div>
 
         {/* Value Perks 4-Column Grid with GSAP Stagger */}
-        <div className="mt-12 grid grid-cols-2 gap-3.5 border-t border-[#E8DCC2] pt-8 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 border-t border-[rgba(212,175,120,0.25)] pt-8">
           {VALUE_PERKS.map((perk, i) => (
             <div
               key={i}
-              className="gsap-hero-perk flex items-start gap-3 rounded-2xl border border-[#D4AF37]/40 bg-gradient-to-b from-white via-[#FCF9EE] to-[#FAF4E2] p-4 shadow-xs transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#D4AF37] hover:shadow-[0_8px_22px_rgba(184,134,11,0.12)]"
+              className="gsap-hero-perk group h-full flex flex-col justify-between rounded-2xl border border-[rgba(212,175,120,0.25)] bg-gradient-to-b from-[#191714] via-[#141311] to-[#0E0D0C] p-4 sm:p-4.5 shadow-[0_8px_25px_rgba(0,0,0,0.5)] transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-1 hover:border-[#D4AF78] hover:shadow-[0_12px_32px_rgba(212,175,120,0.18)]"
             >
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#FAF4E2] to-[#F5E8C4] border border-[#D4AF37]/40 text-[#8F650D] shadow-xs">
-                <perk.icon className="h-5 w-5 text-[#8F650D]" />
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#0B0B0A] border border-[rgba(212,175,120,0.35)] text-[#D4AF78] shadow-xs group-hover:scale-105 group-hover:border-[#D4AF78] transition-all duration-300">
+                  <perk.icon className="h-5 w-5 text-[#D4AF78]" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-bold text-[#F5EBDD] leading-snug group-hover:text-[#E5C18A] transition-colors break-words">
+                    {perk.title}
+                  </p>
+                  <p className="text-[11px] sm:text-xs text-[#B8AA96] mt-1 leading-relaxed break-words">
+                    {perk.desc}
+                  </p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <p className="text-xs font-bold text-[#141414] truncate">{perk.title}</p>
-                <p className="text-[11px] text-[#6E6860] mt-0.5">{perk.desc}</p>
-                <span className="mt-1.5 inline-block rounded-full bg-white/90 border border-[#D4AF37]/35 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-[#735206]">
-                  {perk.highlight}
+              <div className="mt-3 pt-2.5 border-t border-[rgba(212,175,120,0.15)] flex items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#D4AF78]/10 border border-[#D4AF78]/30 px-2.5 py-0.5 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider text-[#D4AF78] shadow-2xs whitespace-normal break-words">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF78] inline-block shrink-0" />
+                  <span>{perk.highlight}</span>
+                </span>
+                <span className="text-[10px] font-bold text-[#B8AA96]/60 group-hover:text-[#D4AF78] transition-colors shrink-0">
+                  0{i + 1}
                 </span>
               </div>
             </div>

@@ -42,6 +42,108 @@ export interface GlobalLoaderState {
   onComplete?: () => void
 }
 
+export type RegionKey = 'north' | 'south' | 'east' | 'west'
+
+export interface DeliveryRegionConfig {
+  id: RegionKey
+  name: string
+  fee: number
+  enabled: boolean
+  estimatedDays: string
+  description: string
+  states: string[]
+}
+
+export interface RegionalDeliverySettings {
+  regions: {
+    north: DeliveryRegionConfig
+    south: DeliveryRegionConfig
+    east: DeliveryRegionConfig
+    west: DeliveryRegionConfig
+  }
+  freeDeliveryThreshold?: number
+  updatedAt?: string | Date
+}
+
+export const DEFAULT_DELIVERY_SETTINGS: RegionalDeliverySettings = {
+  regions: {
+    north: {
+      id: 'north',
+      name: 'North',
+      fee: 49,
+      enabled: true,
+      estimatedDays: '2-4 Business Days',
+      description: 'Delhi NCR, Punjab, Haryana, UP, Uttarakhand, Rajasthan, J&K, Chandigarh',
+      states: [
+        'Delhi',
+        'Haryana',
+        'Punjab',
+        'Himachal Pradesh',
+        'Jammu and Kashmir',
+        'Ladakh',
+        'Uttar Pradesh',
+        'Uttarakhand',
+        'Rajasthan',
+        'Chandigarh',
+      ],
+    },
+    south: {
+      id: 'south',
+      name: 'South',
+      fee: 69,
+      enabled: true,
+      estimatedDays: '3-5 Business Days',
+      description: 'Karnataka, Tamil Nadu, Kerala, Telangana, Andhra Pradesh, Goa, Puducherry',
+      states: [
+        'Karnataka',
+        'Tamil Nadu',
+        'Kerala',
+        'Telangana',
+        'Andhra Pradesh',
+        'Goa',
+        'Puducherry',
+      ],
+    },
+    east: {
+      id: 'east',
+      name: 'East',
+      fee: 79,
+      enabled: true,
+      estimatedDays: '4-6 Business Days',
+      description: 'West Bengal, Bihar, Jharkhand, Odisha, Assam & North-East States',
+      states: [
+        'West Bengal',
+        'Bihar',
+        'Jharkhand',
+        'Odisha',
+        'Assam',
+        'Arunachal Pradesh',
+        'Manipur',
+        'Meghalaya',
+        'Mizoram',
+        'Nagaland',
+        'Tripura',
+        'Sikkim',
+      ],
+    },
+    west: {
+      id: 'west',
+      name: 'West',
+      fee: 59,
+      enabled: true,
+      estimatedDays: '2-4 Business Days',
+      description: 'Maharashtra, Gujarat, Madhya Pradesh, Chhattisgarh, Daman & Diu',
+      states: [
+        'Maharashtra',
+        'Gujarat',
+        'Madhya Pradesh',
+        'Chhattisgarh',
+        'Dadra and Nagar Haveli and Daman and Diu',
+      ],
+    },
+  },
+}
+
 const MarketplaceContext = createContext<any>(null)
 
 const STORAGE_KEYS = {
@@ -52,6 +154,8 @@ const STORAGE_KEYS = {
   orders: 'ateliernp-orders-v2',
   coupons: 'ateliernp-coupons-v1',
   branding: 'ateliernp-branding-v2',
+  delivery: 'ateliernp-delivery-settings-v1',
+  selectedRegion: 'ateliernp-selected-region-v1',
 }
 
 const DEFAULT_COUPONS = {
@@ -122,6 +226,20 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
   const [isGiftWrap, setIsGiftWrap] = useState(false)
   const [activeDepartment, setActiveDepartment] = useState<'all' | 'crafts' | 'aquarium'>('crafts')
+
+  // Regional Delivery Settings & Customer Region Selection
+  const [deliverySettings, setDeliverySettings] = useState<RegionalDeliverySettings>(DEFAULT_DELIVERY_SETTINGS)
+  const [selectedRegion, setSelectedRegionState] = useState<RegionKey>('north')
+
+  const setSelectedRegion = useCallback((region: string) => {
+    const clean = String(region || '').trim().toLowerCase() as RegionKey
+    if (['north', 'south', 'east', 'west'].includes(clean)) {
+      setSelectedRegionState(clean)
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(STORAGE_KEYS.selectedRegion, clean)
+      }
+    }
+  }, [])
 
   // Drawer / Modal toggles
   const [isCartOpen, setIsCartOpen] = useState(false)
@@ -299,6 +417,25 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       const storedCoupons = safeReadStorage<any>(STORAGE_KEYS.coupons, null)
       if (storedCoupons) setAvailableCoupons(storedCoupons)
 
+      const storedDelivery = safeReadStorage<RegionalDeliverySettings | null>(STORAGE_KEYS.delivery, null)
+      if (storedDelivery && storedDelivery.regions?.north) {
+        setDeliverySettings((prev) => ({
+          ...prev,
+          ...storedDelivery,
+          regions: {
+            north: { ...prev.regions.north, ...(storedDelivery.regions.north || {}) },
+            south: { ...prev.regions.south, ...(storedDelivery.regions.south || {}) },
+            east: { ...prev.regions.east, ...(storedDelivery.regions.east || {}) },
+            west: { ...prev.regions.west, ...(storedDelivery.regions.west || {}) },
+          },
+        }))
+      }
+
+      const storedReg = safeReadStorage<string | null>(STORAGE_KEYS.selectedRegion, null)
+      if (storedReg && ['north', 'south', 'east', 'west'].includes(storedReg.toLowerCase())) {
+        setSelectedRegionState(storedReg.toLowerCase() as RegionKey)
+      }
+
       const urlParams = new URLSearchParams(window.location.search)
       const deptParam = urlParams.get('dept')
       if (deptParam === 'aquarium') {
@@ -337,6 +474,25 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       .then((data) => {
         if (data?.success && Array.isArray(data?.orders)) {
           setOrders(data.orders)
+        }
+      })
+      .catch(() => {})
+
+    // 4. Fetch Regional Delivery Charges from DB
+    fetch('/api/delivery')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.success && data?.settings) {
+          setDeliverySettings((prev) => ({
+            ...prev,
+            ...data.settings,
+            regions: {
+              north: { ...prev.regions.north, ...(data.settings.regions?.north || {}) },
+              south: { ...prev.regions.south, ...(data.settings.regions?.south || {}) },
+              east: { ...prev.regions.east, ...(data.settings.regions?.east || {}) },
+              west: { ...prev.regions.west, ...(data.settings.regions?.west || {}) },
+            },
+          }))
         }
       })
       .catch(() => {})
@@ -379,6 +535,45 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       title: 'Branding Reset',
       message: 'Storefront branding restored to default settings.',
       type: 'info',
+    })
+  }
+
+  const updateDeliverySettings = async (newDelivery: Partial<RegionalDeliverySettings>) => {
+    setDeliverySettings((current) => {
+      const updated: RegionalDeliverySettings = {
+        ...current,
+        ...newDelivery,
+        regions: {
+          north: { ...current.regions.north, ...(newDelivery.regions?.north || {}) },
+          south: { ...current.regions.south, ...(newDelivery.regions?.south || {}) },
+          east: { ...current.regions.east, ...(newDelivery.regions?.east || {}) },
+          west: { ...current.regions.west, ...(newDelivery.regions?.west || {}) },
+        },
+      }
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(STORAGE_KEYS.delivery, JSON.stringify(updated))
+      }
+      return updated
+    })
+
+    try {
+      const res = await fetch('/api/delivery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newDelivery),
+      })
+      const data = await res.json()
+      if (data?.success && data?.settings) {
+        setDeliverySettings(data.settings)
+      }
+    } catch (err) {
+      console.error('Failed to sync delivery settings to server:', err)
+    }
+
+    showToast({
+      title: 'Regional Delivery Saved',
+      message: 'Regional delivery rates updated and saved live to database.',
+      type: 'success',
     })
   }
 
@@ -580,8 +775,15 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     if (cartItems.length === 0) {
       return 0
     }
-    return 49
-  }, [cartItems.length])
+    const regKey = (selectedRegion || 'north').toLowerCase() as RegionKey
+    const regionConfig = deliverySettings.regions?.[regKey]
+    if (regionConfig && regionConfig.enabled) {
+      return Number(regionConfig.fee) || 0
+    }
+    // If selected region is disabled, fall back to first enabled region or 0
+    const firstEnabled = Object.values(deliverySettings.regions || {}).find((r) => r.enabled)
+    return firstEnabled ? Number(firstEnabled.fee) || 0 : 0
+  }, [cartItems.length, selectedRegion, deliverySettings])
 
   const giftWrapCost = 0
 
@@ -667,17 +869,27 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     const customerName = user?.name || orderData?.fullName || orderData?.name || 'WhatsApp Customer'
 
     const hasAquariumItem = cartItems.some((i: any) => i.department === 'aquarium')
+    const regKey = (orderData?.deliveryRegion || selectedRegion || 'north').toLowerCase() as RegionKey
+    const regionConfig = deliverySettings.regions?.[regKey] || deliverySettings.regions?.north
+    const regionDisplayName = regionConfig?.name || 'North'
+    const finalDeliveryFee = regionConfig?.enabled ? Number(regionConfig.fee) || 0 : shippingCost
+
     const newOrder = {
       orderId: `CRFT-${Math.floor(100000 + Math.random() * 900000)}`,
       date: new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }),
       items: [...cartItems],
       subtotal: cartRawSubtotal,
       discount: discountAmount,
-      shipping: shippingCost,
+      deliveryRegion: regionDisplayName,
+      deliveryRegionKey: regKey,
+      deliveryFee: finalDeliveryFee,
+      shipping: finalDeliveryFee,
       giftWrap: giftWrapCost,
-      total: cartFinalTotal,
+      total: Math.max(0, cartRawSubtotal - discountAmount + finalDeliveryFee + giftWrapCost),
       customer: {
         ...orderData,
+        deliveryRegion: regionDisplayName,
+        deliveryFee: finalDeliveryFee,
         fullName: customerName,
         userId: customerEmail,
         userEmail: customerEmail,
@@ -1019,6 +1231,10 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       branding,
       updateBranding,
       resetBranding,
+      deliverySettings,
+      updateDeliverySettings,
+      selectedRegion,
+      setSelectedRegion,
       products,
       cartItems,
       cartSubtotal: cartRawSubtotal,
@@ -1084,6 +1300,8 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }),
     [
       branding,
+      deliverySettings,
+      selectedRegion,
       products,
       cartItems,
       cartRawSubtotal,

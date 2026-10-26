@@ -17,27 +17,31 @@ const dbName = process.env.MONGODB_DB || 'atelier_db'
 
 declare global {
   // eslint-disable-next-line no-var
-  var _mongoClientPromise: Promise<MongoClient> | undefined
+  var _mongoClientInstance: MongoClient | undefined
 }
 
-let clientPromise: Promise<MongoClient>
-
-if (process.env.NODE_ENV === 'development') {
-  // In development, preserve MongoDB client across HMR hot module reloads
-  if (!global._mongoClientPromise) {
-    const client = new MongoClient(uri)
-    global._mongoClientPromise = client.connect()
-  }
-  clientPromise = global._mongoClientPromise
-} else {
-  // In production, instantiate client per standard pool
-  const client = new MongoClient(uri)
-  clientPromise = client.connect()
-}
+let cachedClient: MongoClient | null = global._mongoClientInstance || null
 
 export async function getDb(): Promise<Db> {
-  const client = await clientPromise
-  return client.db(dbName)
+  if (cachedClient) {
+    return cachedClient.db(dbName)
+  }
+
+  const client = new MongoClient(uri, {
+    serverSelectionTimeoutMS: 2500,
+    connectTimeoutMS: 2500,
+  })
+
+  try {
+    cachedClient = await client.connect()
+    if (process.env.NODE_ENV === 'development') {
+      global._mongoClientInstance = cachedClient
+    }
+    return cachedClient.db(dbName)
+  } catch (err) {
+    cachedClient = null
+    throw err
+  }
 }
 
-export default clientPromise
+export default getDb

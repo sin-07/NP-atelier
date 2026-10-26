@@ -1,0 +1,79 @@
+{
+  "regions": {
+    "north": {
+      "id": "north",
+      "name": "North",
+      "fee": 49,
+      "enabled": true,
+      "estimatedDays": "2-4 Business Days",
+      "description": "Delhi NCR, Punjab, Haryana, UP, Uttarakhand, Rajasthan, J&K, Chandigarh",
+      "states": [
+        "Delhi",
+        "Haryana",
+        "Punjab",
+        "Himachal Pradesh",
+        "Jammu and Kashmir",
+        "Ladakh",
+        "Uttar Pradesh",
+        "Uttarakhand",
+        "Rajasthan",
+        "Chandigarh"
+      ]
+    },
+    "south": {
+      "id": "south",
+      "name": "South",
+      "fee": 69,
+      "enabled": true,
+      "estimatedDays": "3-5 Business Days",
+      "description": "Karnataka, Tamil Nadu, Kerala, Telangana, Andhra Pradesh, Goa, Puducherry",
+      "states": [
+        "Karnataka",
+        "Tamil Nadu",
+        "Kerala",
+        "Telangana",
+        "Andhra Pradesh",
+        "Goa",
+        "Puducherry"
+      ]
+    },
+    "east": {
+      "id": "east",
+      "name": "East",
+      "fee": 79,
+      "enabled": true,
+      "estimatedDays": "4-6 Business Days",
+      "description": "West Bengal, Bihar, Jharkhand, Odisha, Assam & North-East States",
+      "states": [
+        "West Bengal",
+        "Bihar",
+        "Jharkhand",
+        "Odisha",
+        "Assam",
+        "Arunachal Pradesh",
+        "Manipur",
+        "Meghalaya",
+        "Mizoram",
+        "Nagaland",
+        "Tripura",
+        "Sikkim"
+      ]
+    },
+    "west": {
+      "id": "west",
+      "name": "West",
+      "fee": 59,
+      "enabled": true,
+      "estimatedDays": "2-4 Business Days",
+      "description": "Maharashtra, Gujarat, Madhya Pradesh, Chhattisgarh, Daman & Diu",
+      "states": [
+        "Maharashtra",
+        "Gujarat",
+        "Madhya Pradesh",
+        "Chhattisgarh",
+        "Dadra and Nagar Haveli and Daman and Diu"
+      ]
+    }
+  },
+  "updatedAt": "2026-10-26T14:27:04.776Z"
+}

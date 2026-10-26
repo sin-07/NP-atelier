@@ -42,7 +42,13 @@ export default function CheckoutModal() {
     createOrder,
     user,
     updateUser,
+    deliverySettings,
+    selectedRegion,
+    setSelectedRegion,
   } = useMarketplace()
+
+  const currentRegionKey = (selectedRegion || 'north').toLowerCase() as 'north' | 'south' | 'east' | 'west'
+  const activeRegionConfig = deliverySettings?.regions?.[currentRegionKey] || deliverySettings?.regions?.north
 
   const siteName = branding?.siteName || 'NP Atelier'
   const hasAquariumItems = cartItems.some(
@@ -163,7 +169,27 @@ export default function CheckoutModal() {
             city: details.city,
             state: details.state,
           }))
-          setPinStatus(`Auto-filled: ${details.city}, ${details.state}`)
+
+          // Auto-detect matching region from state
+          const cleanState = (details.state || '').trim().toLowerCase()
+          let matchedRegion: 'north' | 'south' | 'east' | 'west' | null = null
+          if (deliverySettings?.regions) {
+            for (const [key, conf] of Object.entries(deliverySettings.regions as Record<string, any>)) {
+              if (conf.states?.some((s: string) => cleanState.includes(s.toLowerCase()) || s.toLowerCase().includes(cleanState))) {
+                matchedRegion = key as any
+                break
+              }
+            }
+          }
+
+          if (matchedRegion && deliverySettings.regions[matchedRegion]?.enabled) {
+            setSelectedRegion(matchedRegion)
+            setPinStatus(
+              `Auto-filled: ${details.city}, ${details.state} (${deliverySettings.regions[matchedRegion].name} Zone • ₹${deliverySettings.regions[matchedRegion].fee})`
+            )
+          } else {
+            setPinStatus(`Auto-filled: ${details.city}, ${details.state}`)
+          }
         } else {
           setPinStatus(null)
         }
@@ -204,7 +230,12 @@ export default function CheckoutModal() {
       .join('\n')
 
     try {
-      const order = await createOrder(formData)
+      const order = await createOrder({
+        ...formData,
+        deliveryRegion: activeRegionConfig?.name || 'North',
+        deliveryRegionKey: currentRegionKey,
+        deliveryFee: shippingCost,
+      })
       if (order) {
         const contactPhone = (branding?.contactPhone || '+91 93412 97124').replace(/[^0-9]/g, '')
         const targetPhone = contactPhone || '919341297124'
@@ -223,13 +254,14 @@ export default function CheckoutModal() {
 • *Mobile:* ${formData.phone}
 • *Email:* ${formData.email}
 • *Delivery Address:* ${formData.address}, ${formData.city}, ${formData.state} - ${formData.zip}
+• *Delivery Zone:* ${activeRegionConfig?.name || 'North'} Region (₹${shippingCost.toFixed(0)})
 
 *ORDERED ITEMS (${cartItems.length}):*
 ${itemsText}
 
 *PAYMENT & TOTAL:*
 • *Items Subtotal:* ₹${cartSubtotal.toFixed(0)}
-${discountText}• *Courier Shipping:* ₹${shippingCost.toFixed(0)}
+${discountText}• *Regional Courier (${activeRegionConfig?.name || 'North'}):* ₹${shippingCost.toFixed(0)}
 • *Total Payable:* ₹${cartFinalTotal.toFixed(0)}
 • *Payment Mode:* Pay on Delivery (Cash on Delivery)
 
@@ -585,10 +617,80 @@ _Please confirm my order and share dispatch tracking details!_`
                     )}
                   </div>
 
+                  {/* Regional Delivery Selection */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#F5EBDD]">
+                        <Truck className="h-4 w-4 text-[#D4AF78]" /> 2. Delivery Region &amp; Courier Fee
+                      </h4>
+                      <span className="text-[11px] text-[#D4AF78] font-bold">
+                        {activeRegionConfig?.enabled
+                          ? `${activeRegionConfig.name} Zone (₹${activeRegionConfig.fee})`
+                          : 'Select Zone'}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#B8AA96] mb-3">
+                      Select your delivery region to calculate dynamic courier charges verified from our logistics database:
+                    </p>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                      {(['north', 'south', 'east', 'west'] as const).map((regKey) => {
+                        const reg = deliverySettings.regions?.[regKey]
+                        const isSelected = currentRegionKey === regKey
+                        const isEnabled = reg?.enabled
+
+                        return (
+                          <button
+                            key={regKey}
+                            type="button"
+                            disabled={!isEnabled}
+                            onClick={() => {
+                              if (isEnabled) {
+                                setSelectedRegion(regKey)
+                              }
+                            }}
+                            className={`relative p-3 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between ${
+                              !isEnabled
+                                ? 'opacity-40 border-neutral-800 bg-[#0B0B0A] cursor-not-allowed'
+                                : isSelected
+                                ? 'border-[#D4AF78] bg-gradient-to-b from-[#221E17] via-[#1A1814] to-[#12110F] shadow-[0_6px_20px_rgba(212,175,120,0.25)] ring-1 ring-[#D4AF78]/50'
+                                : 'border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] hover:border-[#D4AF78]/60 hover:bg-[#141310]'
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-bold text-[#F5EBDD] font-serif">
+                                  {reg?.name || regKey.toUpperCase()}
+                                </span>
+                                {isSelected && isEnabled && (
+                                  <span className="grid h-4 w-4 place-items-center rounded-full bg-[#D4AF78] text-[#0B0B0A] text-[9px] font-black shrink-0">
+                                    ✓
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-[10px] text-[#B8AA96] mt-0.5 leading-tight truncate">
+                                {isEnabled ? (reg?.estimatedDays || '2-4 Days') : 'Suspended'}
+                              </p>
+                            </div>
+
+                            <div className="mt-3 pt-2 border-t border-[rgba(212,175,120,0.15)] flex items-center justify-between">
+                              <span className="text-xs font-black text-[#D4AF78]">
+                                {isEnabled ? `₹${reg?.fee}` : '✕'}
+                              </span>
+                              <span className="text-[9px] font-extrabold uppercase tracking-wider text-[#B8AA96]/80">
+                                {isEnabled ? (isSelected ? 'Active' : 'Select') : 'Closed'}
+                              </span>
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+
                   {/* Payment Section: Pay on Delivery Only */}
                   <div>
                     <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#F5EBDD]">
-                      <ShieldCheck className="h-4 w-4 text-[#D4AF78]" /> 2. Payment Method
+                      <ShieldCheck className="h-4 w-4 text-[#D4AF78]" /> 3. Payment Method
                     </h4>
                     <div className="mt-3 rounded-2xl border border-[rgba(212,175,120,0.3)] bg-[#12110F] p-4 shadow-sm">
                       <div className="flex items-center justify-between">
@@ -620,9 +722,12 @@ _Please confirm my order and share dispatch tracking details!_`
                         <span>-₹{discountAmount.toFixed(0)}</span>
                       </div>
                     )}
-                    <div className="flex justify-between">
-                      <span>Shipping</span>
-                      <span>₹{shippingCost.toFixed(0)}</span>
+                    <div className="flex justify-between items-center">
+                      <span className="flex items-center gap-1.5">
+                        <Truck className="h-3.5 w-3.5 text-[#D4AF78]" />
+                        <span>Regional Delivery ({activeRegionConfig?.name || 'North'} Zone)</span>
+                      </span>
+                      <span className="font-bold text-[#F5EBDD]">₹{shippingCost.toFixed(0)}</span>
                     </div>
                     <div className="border-t border-[rgba(212,175,120,0.2)] pt-2 flex justify-between text-sm font-bold text-[#F5EBDD]">
                       <span>Total Due</span>
@@ -678,6 +783,12 @@ _Please confirm my order and share dispatch tracking details!_`
                   <div className="mt-2 flex justify-between text-xs">
                     <span className="font-semibold text-[#B8AA96]">Shipping to:</span>
                     <strong className="text-[#F5EBDD]">{formData.fullName} ({formData.city})</strong>
+                  </div>
+                  <div className="mt-2 flex justify-between text-xs">
+                    <span className="font-semibold text-[#B8AA96]">Delivery Region:</span>
+                    <strong className="text-[#F5EBDD] font-bold">
+                      {confirmedOrder?.deliveryRegion || activeRegionConfig?.name || 'North'} Zone (₹{confirmedOrder?.deliveryFee ?? shippingCost})
+                    </strong>
                   </div>
                   <div className="mt-2 flex justify-between text-xs">
                     <span className="font-semibold text-[#B8AA96]">Order Total:</span>

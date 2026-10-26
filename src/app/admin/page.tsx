@@ -40,12 +40,22 @@ import {
   Tag,
   Trash2,
   TrendingUp,
+  Truck,
+  MapPin,
+  Compass,
   Upload,
   Users,
   Waves,
   X,
 } from 'lucide-react'
-import { useMarketplace, BrandingSettings, DEFAULT_BRANDING } from '../../context/MarketplaceContext'
+import {
+  useMarketplace,
+  BrandingSettings,
+  DEFAULT_BRANDING,
+  RegionalDeliverySettings,
+  DEFAULT_DELIVERY_SETTINGS,
+  RegionKey,
+} from '../../context/MarketplaceContext'
 import {
   categories,
   craftCategories,
@@ -86,6 +96,8 @@ export default function AdminPage() {
     deleteProduct,
     orders,
     updateOrderStatus,
+    deliverySettings,
+    updateDeliverySettings,
     availableCoupons,
     addCoupon,
     deleteCoupon,
@@ -131,8 +143,92 @@ export default function AdminPage() {
     })
   }
 
-  // Tabs: 'overview' | 'products' | 'branding' | 'orders' | 'coupons' | 'artisans'
+  // Tabs: 'overview' | 'products' | 'delivery' | 'branding' | 'orders' | 'coupons' | 'artisans'
   const [activeTab, setActiveTab] = useState('overview')
+
+  // Regional Delivery Settings Form State
+  const [deliveryForm, setDeliveryForm] = useState<RegionalDeliverySettings>(
+    deliverySettings || DEFAULT_DELIVERY_SETTINGS
+  )
+  const [isSavingDelivery, setIsSavingDelivery] = useState(false)
+  const [simulatedRegion, setSimulatedRegion] = useState<RegionKey>('north')
+
+  useEffect(() => {
+    if (deliverySettings?.regions) {
+      setDeliveryForm(deliverySettings)
+    }
+  }, [deliverySettings])
+
+  const handleSaveDeliveryCharges = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setIsSavingDelivery(true)
+    try {
+      await updateDeliverySettings(deliveryForm)
+      showToast({
+        title: 'Delivery Rates Synchronized',
+        message: 'Regional delivery fees saved securely to database.',
+        type: 'success',
+      })
+    } catch (err: any) {
+      showToast({
+        title: 'Save Failed',
+        message: err.message || 'Could not save delivery settings.',
+        type: 'error',
+      })
+    } finally {
+      setIsSavingDelivery(false)
+    }
+  }
+
+  const handleResetDeliveryCharges = () => {
+    setDeliveryForm(DEFAULT_DELIVERY_SETTINGS)
+    updateDeliverySettings(DEFAULT_DELIVERY_SETTINGS)
+    showToast({
+      title: 'Delivery Reset',
+      message: 'Regional delivery fees reset to standard defaults.',
+      type: 'info',
+    })
+  }
+
+  const handleRegionFeeChange = (regKey: RegionKey, feeValue: string | number) => {
+    const num = Math.max(0, Number(feeValue) || 0)
+    setDeliveryForm((prev) => ({
+      ...prev,
+      regions: {
+        ...prev.regions,
+        [regKey]: {
+          ...prev.regions[regKey],
+          fee: num,
+        },
+      },
+    }))
+  }
+
+  const handleRegionToggle = (regKey: RegionKey) => {
+    setDeliveryForm((prev) => ({
+      ...prev,
+      regions: {
+        ...prev.regions,
+        [regKey]: {
+          ...prev.regions[regKey],
+          enabled: !prev.regions[regKey].enabled,
+        },
+      },
+    }))
+  }
+
+  const handleRegionDaysChange = (regKey: RegionKey, days: string) => {
+    setDeliveryForm((prev) => ({
+      ...prev,
+      regions: {
+        ...prev.regions,
+        [regKey]: {
+          ...prev.regions[regKey],
+          estimatedDays: days,
+        },
+      },
+    }))
+  }
 
   // Product Table Filters
   const [productSearch, setProductSearch] = useState('')
@@ -604,6 +700,7 @@ export default function AdminPage() {
           {[
             { id: 'overview', label: 'Executive Analytics', icon: LayoutDashboard },
             { id: 'products', label: `Catalog (${products.length})`, icon: Package },
+            { id: 'delivery', label: 'Regional Delivery', icon: Truck },
             { id: 'branding', label: 'Branding Settings', icon: Palette },
             { id: 'orders', label: `Orders (${orders.length})`, icon: PackageCheck },
             { id: 'coupons', label: 'Promos & Coupons', icon: Tag },
@@ -2041,6 +2138,363 @@ export default function AdminPage() {
         )}
 
         {/* ========================================================================= */}
+        {/* TAB: ADMIN-CONTROLLED REGIONAL DELIVERY CHARGES */}
+        {/* ========================================================================= */}
+        {activeTab === 'delivery' && (
+          <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
+            {/* Header & Actions */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="section-eyebrow">
+                    <Truck className="h-3.5 w-3.5 text-[#D4AF78]" />
+                    Pan-India Logistics &amp; Shipping Charges
+                  </span>
+                  <span className="rounded-full bg-emerald-950/50 border border-emerald-500/30 px-2.5 py-0.5 text-[10px] font-bold text-emerald-400">
+                    Database Synced
+                  </span>
+                </div>
+                <h2 className="mt-1 font-serif text-2xl sm:text-3xl font-bold text-[#F5EBDD]">
+                  Regional Delivery <span className="italic font-normal text-gold-gradient font-serif">Management</span>
+                </h2>
+                <p className="body-lead mt-1 text-xs sm:text-sm text-[#B8AA96] max-w-2xl">
+                  Configure official delivery charges in ₹, toggle zone enablement, and set transit timelines for North, South, East, and West India.
+                  All delivery charges are stored in the database and securely verified on the backend during checkout.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+                <button
+                  type="button"
+                  onClick={handleResetDeliveryCharges}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(212,175,120,0.25)] bg-[#12110F] px-4 py-2 text-xs font-bold text-[#B8AA96] hover:text-[#F5EBDD] hover:bg-[#191713] transition shadow-xs cursor-pointer"
+                >
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  <span>Reset Defaults</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleSaveDeliveryCharges()}
+                  disabled={isSavingDelivery}
+                  className="inline-flex items-center gap-2 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] px-5 py-2.5 text-xs font-bold text-[#0B0B0A] shadow-[0_8px_20px_rgba(212,175,120,0.3)] transition active:scale-95 cursor-pointer disabled:opacity-60"
+                >
+                  <Save className="h-4 w-4" />
+                  <span>{isSavingDelivery ? 'Saving...' : 'Save All Delivery Charges'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Metrics (4 Cards) */}
+            <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
+              <div className="glass-card p-4 sm:p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96]">Active Coverage</span>
+                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#0B0B0A] border border-[#D4AF78]/30 text-[#D4AF78]">
+                    <Globe className="h-4 w-4" />
+                  </div>
+                </div>
+                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#F5EBDD]">
+                  {Object.values(deliveryForm.regions || {}).filter((r) => r.enabled).length} / 4 Zones
+                </p>
+                <p className="mt-1 text-[11px] text-[#B8AA96]">Covering all 28 states &amp; 8 UTs</p>
+              </div>
+
+              <div className="glass-card p-4 sm:p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96]">North Zone Rate</span>
+                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#0B0B0A] border border-[#D4AF78]/30 text-[#D4AF78]">
+                    <Compass className="h-4 w-4" />
+                  </div>
+                </div>
+                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#D4AF78]">
+                  ₹{deliveryForm.regions.north?.fee || 0}
+                </p>
+                <p className="mt-1 text-[11px] text-[#B8AA96]">
+                  {deliveryForm.regions.north?.enabled ? `Active • ${deliveryForm.regions.north?.estimatedDays}` : 'Suspended'}
+                </p>
+              </div>
+
+              <div className="glass-card p-4 sm:p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96]">South Zone Rate</span>
+                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#0B0B0A] border border-[#D4AF78]/30 text-[#D4AF78]">
+                    <Truck className="h-4 w-4" />
+                  </div>
+                </div>
+                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#D4AF78]">
+                  ₹{deliveryForm.regions.south?.fee || 0}
+                </p>
+                <p className="mt-1 text-[11px] text-[#B8AA96]">
+                  {deliveryForm.regions.south?.enabled ? `Active • ${deliveryForm.regions.south?.estimatedDays}` : 'Suspended'}
+                </p>
+              </div>
+
+              <div className="glass-card p-4 sm:p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96]">East &amp; West Rates</span>
+                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#0B0B0A] border border-[#D4AF78]/30 text-[#D4AF78]">
+                    <ShieldCheck className="h-4 w-4" />
+                  </div>
+                </div>
+                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#F5EBDD]">
+                  ₹{deliveryForm.regions.east?.fee || 0} <span className="text-xs text-[#B8AA96]">/</span> ₹{deliveryForm.regions.west?.fee || 0}
+                </p>
+                <p className="mt-1 text-[11px] text-[#B8AA96]">Backend price verification</p>
+              </div>
+            </div>
+
+            {/* 4 REGIONAL CARDS: NORTH, SOUTH, EAST, WEST */}
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
+              {(['north', 'south', 'east', 'west'] as RegionKey[]).map((regKey) => {
+                const reg = deliveryForm.regions[regKey]
+                if (!reg) return null
+                const isEnabled = reg.enabled
+
+                return (
+                  <div
+                    key={regKey}
+                    className={`rounded-2xl sm:rounded-3xl border transition-all duration-300 p-5 sm:p-6 flex flex-col justify-between shadow-lg ${
+                      isEnabled
+                        ? 'border-[rgba(212,175,120,0.35)] bg-gradient-to-b from-[#181613] via-[#141310] to-[#0E0D0C] shadow-[0_10px_35px_rgba(0,0,0,0.6)]'
+                        : 'border-[#6D5738]/20 bg-[#12110F]/60 opacity-80'
+                    }`}
+                  >
+                    <div>
+                      {/* Top Bar: Title & Toggle */}
+                      <div className="flex items-center justify-between gap-3 border-b border-[rgba(212,175,120,0.2)] pb-4">
+                        <div className="flex items-center gap-3">
+                          <div className={`grid h-10 w-10 sm:h-11 sm:w-11 place-items-center rounded-xl border text-sm font-bold ${
+                            isEnabled
+                              ? 'bg-[#0B0B0A] border-[#D4AF78]/50 text-[#D4AF78] shadow-xs'
+                              : 'bg-[#151412] border-neutral-700 text-neutral-500'
+                          }`}>
+                            <span className="font-serif font-black">{regKey[0].toUpperCase()}</span>
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#F5EBDD]">
+                                {reg.name} Region
+                              </h3>
+                              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider border ${
+                                isEnabled
+                                  ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-400'
+                                  : 'bg-rose-950/60 border-rose-500/40 text-rose-400'
+                              }`}>
+                                {isEnabled ? 'Active ✓' : 'Disabled ✕'}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-[#B8AA96]">
+                              {isEnabled ? 'Customers in this zone can place orders' : 'Delivery temporarily suspended'}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Enable / Disable Switch */}
+                        <button
+                          type="button"
+                          onClick={() => handleRegionToggle(regKey)}
+                          className={`relative inline-flex h-6 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                            isEnabled ? 'bg-[#D4AF78]' : 'bg-neutral-800'
+                          }`}
+                          role="switch"
+                          aria-checked={isEnabled}
+                          title={isEnabled ? 'Click to Disable Region' : 'Click to Enable Region'}
+                        >
+                          <span
+                            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-[#0B0B0A] shadow-lg ring-0 transition duration-200 ease-in-out ${
+                              isEnabled ? 'translate-x-6' : 'translate-x-0'
+                            }`}
+                          />
+                        </button>
+                      </div>
+
+                      {/* Fields: Fee in ₹ & Estimated Days */}
+                      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                        {/* Delivery Fee Input in ₹ */}
+                        <div>
+                          <label className="mb-1.5 block text-xs font-bold text-[#F5EBDD] flex items-center justify-between">
+                            <span>Delivery Fee (₹)</span>
+                            <span className="text-[10px] text-[#D4AF78] font-normal">Customer Charge</span>
+                          </label>
+                          <div className="relative">
+                            <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-[#D4AF78] text-base">
+                              ₹
+                            </span>
+                            <input
+                              type="number"
+                              min={0}
+                              step={1}
+                              disabled={!isEnabled}
+                              value={reg.fee}
+                              onChange={(e) => handleRegionFeeChange(regKey, e.target.value)}
+                              placeholder="49"
+                              className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.3)] bg-[#0B0B0A] pl-8 pr-3.5 text-base font-bold text-[#F5EBDD] outline-none transition focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40 disabled:opacity-40"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Estimated Days */}
+                        <div>
+                          <label className="mb-1.5 block text-xs font-bold text-[#F5EBDD] flex items-center justify-between">
+                            <span>Estimated Transit</span>
+                            <span className="text-[10px] text-[#B8AA96] font-normal">SLA Display</span>
+                          </label>
+                          <input
+                            type="text"
+                            disabled={!isEnabled}
+                            value={reg.estimatedDays}
+                            onChange={(e) => handleRegionDaysChange(regKey, e.target.value)}
+                            placeholder="2-4 Business Days"
+                            className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.3)] bg-[#0B0B0A] px-3.5 text-xs font-bold text-[#F5EBDD] outline-none transition focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40 disabled:opacity-40"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Covered States & Geographical Area */}
+                      <div className="mt-4 pt-4 border-t border-[rgba(212,175,120,0.15)]">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-[#B8AA96] mb-2 flex items-center gap-1.5">
+                          <MapPin className="h-3 w-3 text-[#D4AF78]" /> Covered States &amp; Territories ({reg.states?.length || 0})
+                        </p>
+                        <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto no-scrollbar">
+                          {reg.states?.map((st) => (
+                            <span
+                              key={st}
+                              className="inline-block rounded-md border border-[rgba(212,175,120,0.2)] bg-[#0B0B0A]/80 px-2 py-0.5 text-[10px] font-medium text-[#F5EBDD]/90"
+                            >
+                              {st}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-5 pt-3 border-t border-[rgba(212,175,120,0.15)] flex items-center justify-between text-[11px] text-[#B8AA96]">
+                      <span>Checkout Status:</span>
+                      <span className="font-bold text-[#D4AF78]">
+                        {isEnabled ? `Adds ₹${reg.fee} to Order` : 'Zone Suspended'}
+                      </span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* LIVE CUSTOMER CHECKOUT TOTAL CALCULATOR SIMULATOR */}
+            <div className="rounded-2xl sm:rounded-3xl border border-[rgba(212,175,120,0.3)] bg-gradient-to-b from-[#191714] to-[#12110F] p-5 sm:p-7 shadow-[0_15px_40px_rgba(0,0,0,0.7)] space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[rgba(212,175,120,0.2)] pb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-[#D4AF78]">✦ Live Checkout Preview</span>
+                    <span className="rounded-full bg-[#D4AF78]/15 border border-[#D4AF78]/30 px-2 py-0.5 text-[9px] font-bold text-[#D4AF78]">
+                      Interactive Test
+                    </span>
+                  </div>
+                  <h3 className="font-serif text-lg sm:text-xl font-bold text-[#F5EBDD] mt-0.5">
+                    Dynamic Customer Checkout Recalculation Preview
+                  </h3>
+                </div>
+                <div className="text-xs text-[#B8AA96]">
+                  Click each zone to see real-time customer total calculation:
+                </div>
+              </div>
+
+              {/* Zone Selector Buttons */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                {(['north', 'south', 'east', 'west'] as RegionKey[]).map((regKey) => {
+                  const reg = deliveryForm.regions[regKey]
+                  const isSimActive = simulatedRegion === regKey
+                  const isEnabled = reg?.enabled
+
+                  return (
+                    <button
+                      key={regKey}
+                      type="button"
+                      onClick={() => setSimulatedRegion(regKey)}
+                      className={`p-3 rounded-xl border text-left transition cursor-pointer flex flex-col justify-between ${
+                        isSimActive
+                          ? 'border-[#D4AF78] bg-[#242018] shadow-[0_4px_15px_rgba(212,175,120,0.2)]'
+                          : 'border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] hover:border-[#D4AF78]/60'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-xs text-[#F5EBDD]">{reg?.name}</span>
+                        <span className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded ${
+                          isEnabled ? 'bg-emerald-950 text-emerald-400' : 'bg-rose-950 text-rose-400'
+                        }`}>
+                          {isEnabled ? 'Active' : 'Disabled'}
+                        </span>
+                      </div>
+                      <p className="mt-2 text-sm font-extrabold text-[#D4AF78]">
+                        ₹{reg?.fee || 0}
+                      </p>
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Simulated Calculation Breakdown */}
+              {(() => {
+                const simReg = deliveryForm.regions[simulatedRegion]
+                const simFee = simReg?.enabled ? Number(simReg.fee) || 0 : 0
+                const sampleSubtotal = 1499
+                const sampleDiscount = 150
+                const simTotal = sampleSubtotal - sampleDiscount + simFee
+
+                return (
+                  <div className="rounded-xl border border-[rgba(212,175,120,0.2)] bg-[#0B0B0A] p-4 text-xs space-y-2">
+                    <div className="flex justify-between text-[#B8AA96]">
+                      <span>Sample Crafts Subtotal (2 items)</span>
+                      <span className="font-bold text-[#F5EBDD]">₹{sampleSubtotal}</span>
+                    </div>
+                    <div className="flex justify-between text-[#D4AF78]">
+                      <span>Promotional Coupon (ATELIER10)</span>
+                      <span>-₹{sampleDiscount}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-[#B8AA96] pt-1 border-t border-white/5">
+                      <span className="flex items-center gap-1.5">
+                        <Truck className="h-3.5 w-3.5 text-[#D4AF78]" />
+                        <span>Regional Delivery ({simReg?.name} Zone)</span>
+                      </span>
+                      <span className="font-bold text-[#D4AF78]">
+                        {simReg?.enabled ? `+₹${simFee}` : 'Zone Disabled (Cannot Checkout)'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm font-bold text-[#F5EBDD] pt-2 border-t border-[rgba(212,175,120,0.2)]">
+                      <span>Total Customer Due</span>
+                      <span className="text-lg font-extrabold text-[#D4AF78]">
+                        {simReg?.enabled ? `₹${simTotal}` : 'N/A (Disabled)'}
+                      </span>
+                    </div>
+                  </div>
+                )
+              })()}
+            </div>
+
+            {/* Bottom Save Action Bar */}
+            <div className="sticky bottom-4 z-20 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D4AF78]/40 bg-[#151412]/95 px-5 py-4 shadow-[0_10px_35px_rgba(0,0,0,0.8)] backdrop-blur-md">
+              <div className="flex items-center gap-2 text-xs text-[#F5EBDD]">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="font-bold">Database Delivery Rate Controller</span>
+                <span className="hidden sm:inline text-[#B8AA96]">• All rates save live to MongoDB and Local Fallback</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleSaveDeliveryCharges()}
+                  disabled={isSavingDelivery}
+                  className="inline-flex items-center gap-2 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] px-6 py-2.5 text-xs font-bold text-[#0B0B0A] shadow-md transition active:scale-95 cursor-pointer disabled:opacity-60"
+                >
+                  <Save className="h-4 w-4" />
+                  <span>{isSavingDelivery ? 'Saving...' : 'Save All Changes'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
         {/* TAB 4: ORDERS & FULFILLMENT */}
         {/* ========================================================================= */}
         {activeTab === 'orders' && (
@@ -2094,6 +2548,11 @@ export default function AdminPage() {
                             <p className="text-[10px] text-[#B8AA96]">
                               {order.customer?.city || 'India'}{order.customer?.phone ? ` • ${order.customer.phone}` : ''}
                             </p>
+                            {order.deliveryRegion && (
+                              <p className="text-[10px] text-[#D4AF78] font-bold mt-0.5">
+                                🚚 {order.deliveryRegion} Zone (₹{order.deliveryFee ?? order.shipping ?? 0})
+                              </p>
+                            )}
                           </div>
                           <div className="text-right">
                             <p className="text-sm font-extrabold text-[#D4AF78]">₹{order.total?.toFixed(0)}</p>
@@ -2166,7 +2625,14 @@ export default function AdminPage() {
                             <td className="p-4 text-[#B8AA96]">{order.date}</td>
                             <td className="p-4">
                               <p className="font-bold text-[#F5EBDD]">{order.customer?.fullName || 'Customer'}</p>
-                              <p className="text-[10px] text-[#B8AA96]">{order.customer?.city}</p>
+                              <p className="text-[10px] text-[#B8AA96]">
+                                {order.customer?.city || 'India'}
+                                {order.deliveryRegion && (
+                                  <span className="ml-1.5 inline-flex items-center rounded-md bg-[#D4AF78]/15 border border-[#D4AF78]/30 px-1.5 py-0.2 text-[9px] font-bold text-[#D4AF78]">
+                                    {order.deliveryRegion} • ₹{order.deliveryFee ?? order.shipping ?? 0}
+                                  </span>
+                                )}
+                              </p>
                             </td>
                             <td className="p-4">
                               <div className="flex items-center gap-1.5">
@@ -2827,6 +3293,14 @@ export default function AdminPage() {
                 <p className="text-[#B8AA96]">{selectedOrder.customer?.phone}</p>
                 <p className="text-[#B8AA96]">{selectedOrder.customer?.address}</p>
                 <p className="text-[#B8AA96]">{selectedOrder.customer?.city}</p>
+                {selectedOrder.deliveryRegion && (
+                  <div className="mt-2 pt-2 border-t border-[rgba(212,175,120,0.2)] flex items-center justify-between text-xs font-semibold">
+                    <span className="text-[#B8AA96]">Regional Delivery:</span>
+                    <span className="font-bold text-[#D4AF78] bg-[#D4AF78]/10 border border-[#D4AF78]/30 px-2 py-0.5 rounded-full">
+                      {selectedOrder.deliveryRegion} Zone (₹{selectedOrder.deliveryFee ?? selectedOrder.shipping ?? 0})
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Items */}

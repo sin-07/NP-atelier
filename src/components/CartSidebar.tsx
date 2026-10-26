@@ -45,6 +45,7 @@ export default function CartSidebar() {
     removeCoupon,
     createOrder,
     branding,
+    selectedRegion,
   } = useMarketplace()
 
   const contactPhone = (branding?.contactPhone || '+91 93412 97124').replace(/[^0-9]/g, '') || '919341297124'
@@ -348,9 +349,16 @@ _Please confirm my order, availability, and dispatch tracking details!_`
                       <span>-₹{discountAmount.toFixed(0)}</span>
                     </div>
                   )}
-                  <div className="flex justify-between">
-                    <span>Shipping</span>
-                    <span className="text-[#F5EBDD]">₹{shippingCost.toFixed(0)}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="flex items-center gap-1.5">
+                      <span>Regional Delivery</span>
+                      {selectedRegion && (
+                        <span className="rounded bg-[#D4AF78]/15 border border-[#D4AF78]/30 px-1.5 py-0.2 text-[9px] font-extrabold uppercase text-[#D4AF78]">
+                          {selectedRegion}
+                        </span>
+                      )}
+                    </span>
+                    <span className="text-[#F5EBDD] font-bold">₹{shippingCost.toFixed(0)}</span>
                   </div>
                   <div className="border-t border-[rgba(212,175,120,0.25)] pt-2 flex justify-between text-base font-bold text-[#F5EBDD]">
                     <span>Estimated Total</span>

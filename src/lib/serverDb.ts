@@ -33,12 +33,115 @@ export const DEFAULT_BRANDING: BrandingSettings = {
   currency: '₹',
 }
 
+export type RegionKey = 'north' | 'south' | 'east' | 'west'
+
+export interface DeliveryRegionConfig {
+  id: RegionKey
+  name: string
+  fee: number
+  enabled: boolean
+  estimatedDays: string
+  description: string
+  states: string[]
+}
+
+export interface RegionalDeliverySettings {
+  regions: {
+    north: DeliveryRegionConfig
+    south: DeliveryRegionConfig
+    east: DeliveryRegionConfig
+    west: DeliveryRegionConfig
+  }
+  freeDeliveryThreshold?: number
+  updatedAt?: string | Date
+}
+
+export const DEFAULT_DELIVERY_SETTINGS: RegionalDeliverySettings = {
+  regions: {
+    north: {
+      id: 'north',
+      name: 'North',
+      fee: 49,
+      enabled: true,
+      estimatedDays: '2-4 Business Days',
+      description: 'Delhi NCR, Punjab, Haryana, UP, Uttarakhand, Rajasthan, J&K, Chandigarh',
+      states: [
+        'Delhi',
+        'Haryana',
+        'Punjab',
+        'Himachal Pradesh',
+        'Jammu and Kashmir',
+        'Ladakh',
+        'Uttar Pradesh',
+        'Uttarakhand',
+        'Rajasthan',
+        'Chandigarh',
+      ],
+    },
+    south: {
+      id: 'south',
+      name: 'South',
+      fee: 69,
+      enabled: true,
+      estimatedDays: '3-5 Business Days',
+      description: 'Karnataka, Tamil Nadu, Kerala, Telangana, Andhra Pradesh, Goa, Puducherry',
+      states: [
+        'Karnataka',
+        'Tamil Nadu',
+        'Kerala',
+        'Telangana',
+        'Andhra Pradesh',
+        'Goa',
+        'Puducherry',
+      ],
+    },
+    east: {
+      id: 'east',
+      name: 'East',
+      fee: 79,
+      enabled: true,
+      estimatedDays: '4-6 Business Days',
+      description: 'West Bengal, Bihar, Jharkhand, Odisha, Assam & North-East States',
+      states: [
+        'West Bengal',
+        'Bihar',
+        'Jharkhand',
+        'Odisha',
+        'Assam',
+        'Arunachal Pradesh',
+        'Manipur',
+        'Meghalaya',
+        'Mizoram',
+        'Nagaland',
+        'Tripura',
+        'Sikkim',
+      ],
+    },
+    west: {
+      id: 'west',
+      name: 'West',
+      fee: 59,
+      enabled: true,
+      estimatedDays: '2-4 Business Days',
+      description: 'Maharashtra, Gujarat, Madhya Pradesh, Chhattisgarh, Daman & Diu',
+      states: [
+        'Maharashtra',
+        'Gujarat',
+        'Madhya Pradesh',
+        'Chhattisgarh',
+        'Dadra and Nagar Haveli and Daman and Diu',
+      ],
+    },
+  },
+}
+
 export const SEED_ORDERS: any[] = []
 
 const DATA_DIR = path.join(process.cwd(), 'src', 'data')
 const SETTINGS_FILE = path.join(DATA_DIR, 'db-settings.json')
 const PRODUCTS_FILE = path.join(DATA_DIR, 'db-products.json')
 const ORDERS_FILE = path.join(DATA_DIR, 'db-orders.json')
+const DELIVERY_FILE = path.join(DATA_DIR, 'db-delivery.json')
 
 function ensureDirExists(dir: string) {
   if (!fs.existsSync(dir)) {
@@ -50,6 +153,7 @@ function ensureDirExists(dir: string) {
 let memorySettings: BrandingSettings = { ...DEFAULT_BRANDING }
 let memoryProducts: Product[] = [...allInitialProducts]
 let memoryOrders: any[] = []
+let memoryDelivery: RegionalDeliverySettings = JSON.parse(JSON.stringify(DEFAULT_DELIVERY_SETTINGS))
 
 export async function getSettings(): Promise<BrandingSettings> {
   // 1. Try MongoDB Atlas
@@ -399,3 +503,154 @@ export async function updateOrderStatusInDb(orderId: string, status: string): Pr
   memoryOrders = next
   return next
 }
+
+export async function getDeliverySettings(): Promise<RegionalDeliverySettings> {
+  // 1. Try MongoDB Atlas
+  try {
+    const db = await getDb()
+    const doc = await db.collection('delivery_settings').findOne({ _id: 'regional_delivery' as any })
+    if (doc) {
+      const { _id, ...rest } = doc
+      const merged: RegionalDeliverySettings = {
+        ...DEFAULT_DELIVERY_SETTINGS,
+        ...rest,
+        regions: {
+          north: { ...DEFAULT_DELIVERY_SETTINGS.regions.north, ...(rest.regions?.north || {}) },
+          south: { ...DEFAULT_DELIVERY_SETTINGS.regions.south, ...(rest.regions?.south || {}) },
+          east: { ...DEFAULT_DELIVERY_SETTINGS.regions.east, ...(rest.regions?.east || {}) },
+          west: { ...DEFAULT_DELIVERY_SETTINGS.regions.west, ...(rest.regions?.west || {}) },
+        },
+      }
+      memoryDelivery = merged
+      return merged
+    }
+
+    // Seed default regional delivery into MongoDB
+    await db.collection('delivery_settings').updateOne(
+      { _id: 'regional_delivery' as any },
+      { $set: { ...DEFAULT_DELIVERY_SETTINGS, updatedAt: new Date() } },
+      { upsert: true }
+    )
+    return memoryDelivery
+  } catch (mongoErr) {
+    console.warn('MongoDB delivery settings fetch fallback to disk:', mongoErr)
+  }
+
+  // 2. Disk / memory fallback
+  try {
+    ensureDirExists(DATA_DIR)
+    if (!fs.existsSync(DELIVERY_FILE)) {
+      await fs.promises.writeFile(DELIVERY_FILE, JSON.stringify(DEFAULT_DELIVERY_SETTINGS, null, 2), 'utf8')
+      memoryDelivery = JSON.parse(JSON.stringify(DEFAULT_DELIVERY_SETTINGS))
+      return memoryDelivery
+    }
+    const raw = await fs.promises.readFile(DELIVERY_FILE, 'utf8')
+    const parsed = JSON.parse(raw)
+    const merged: RegionalDeliverySettings = {
+      ...DEFAULT_DELIVERY_SETTINGS,
+      ...parsed,
+      regions: {
+        north: { ...DEFAULT_DELIVERY_SETTINGS.regions.north, ...(parsed.regions?.north || {}) },
+        south: { ...DEFAULT_DELIVERY_SETTINGS.regions.south, ...(parsed.regions?.south || {}) },
+        east: { ...DEFAULT_DELIVERY_SETTINGS.regions.east, ...(parsed.regions?.east || {}) },
+        west: { ...DEFAULT_DELIVERY_SETTINGS.regions.west, ...(parsed.regions?.west || {}) },
+      },
+    }
+    memoryDelivery = merged
+    return merged
+  } catch (err) {
+    return memoryDelivery
+  }
+}
+
+export async function saveDeliverySettings(settings: Partial<RegionalDeliverySettings>): Promise<RegionalDeliverySettings> {
+  const current = await getDeliverySettings()
+  const updated: RegionalDeliverySettings = {
+    ...current,
+    ...settings,
+    regions: {
+      north: { ...current.regions.north, ...(settings.regions?.north || {}) },
+      south: { ...current.regions.south, ...(settings.regions?.south || {}) },
+      east: { ...current.regions.east, ...(settings.regions?.east || {}) },
+      west: { ...current.regions.west, ...(settings.regions?.west || {}) },
+    },
+    updatedAt: new Date().toISOString(),
+  }
+
+  // 1. Save to MongoDB Atlas
+  try {
+    const db = await getDb()
+    await db.collection('delivery_settings').updateOne(
+      { _id: 'regional_delivery' as any },
+      { $set: { ...updated, updatedAt: new Date() } },
+      { upsert: true }
+    )
+  } catch (mongoErr) {
+    console.warn('MongoDB saveDeliverySettings fallback:', mongoErr)
+  }
+
+  // 2. Save to local disk & memory fallback
+  try {
+    ensureDirExists(DATA_DIR)
+    await fs.promises.writeFile(DELIVERY_FILE, JSON.stringify(updated, null, 2), 'utf8')
+  } catch (err) {
+    // Memory fallback
+  }
+
+  memoryDelivery = updated
+  return updated
+}
+
+export async function validateAndCalculateDelivery(regionInput: string): Promise<{
+  valid: boolean
+  regionKey: RegionKey | null
+  regionName: string
+  fee: number
+  enabled: boolean
+  estimatedDays: string
+  error?: string
+}> {
+  const settings = await getDeliverySettings()
+  const clean = String(regionInput || '').trim().toLowerCase()
+
+  let key: RegionKey | null = null
+  if (clean === 'north') key = 'north'
+  else if (clean === 'south') key = 'south'
+  else if (clean === 'east') key = 'east'
+  else if (clean === 'west') key = 'west'
+
+  if (!key) {
+    return {
+      valid: false,
+      regionKey: null,
+      regionName: '',
+      fee: 0,
+      enabled: false,
+      estimatedDays: '',
+      error: `Invalid delivery region "${regionInput}". Must be one of North, South, East, or West.`,
+    }
+  }
+
+  const regionConfig = settings.regions[key]
+  if (!regionConfig || !regionConfig.enabled) {
+    return {
+      valid: false,
+      regionKey: key,
+      regionName: regionConfig?.name || key.toUpperCase(),
+      fee: regionConfig?.fee || 0,
+      enabled: false,
+      estimatedDays: regionConfig?.estimatedDays || '',
+      error: `Delivery to ${regionConfig?.name || key.toUpperCase()} region is currently suspended by administration.`,
+    }
+  }
+
+  return {
+    valid: true,
+    regionKey: key,
+    regionName: regionConfig.name,
+    fee: Number(regionConfig.fee) || 0,
+    enabled: true,
+    estimatedDays: regionConfig.estimatedDays || '2-5 Business Days',
+  }
+}
+
