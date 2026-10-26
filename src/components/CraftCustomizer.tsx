@@ -164,27 +164,27 @@ export default function CraftCustomizer() {
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center">
           <span className="section-eyebrow">
-            <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" /> Interactive Studio
+            <Sparkles className="h-3.5 w-3.5 text-[#D4AF78]" /> Interactive Studio
           </span>
           <h2 className="heading-1 mt-3.5">
             Design Your Bespoke <span className="italic font-normal text-gold-gradient">Handmade Craft</span>
           </h2>
-          <p className="body-lead mx-auto mt-4 max-w-2xl text-[#4A4339]">
+          <p className="body-lead mx-auto mt-4 max-w-2xl text-[#B8AA96]">
             Choose your artisan base piece, select a curated color mood, and personalize with custom engravings or gold leaf. We craft each one-of-a-kind piece from scratch.
           </p>
         </div>
 
         {/* Studio Workspace */}
-        <div className="glass-card grid gap-8 overflow-hidden p-6 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:p-10 border border-[#D4AF37]/50 bg-gradient-to-b from-white via-[#FAF5E8] to-[#F7ECCF]/80 shadow-[0_16px_45px_rgba(184,134,11,0.12),0_0_20px_rgba(212,175,55,0.10)]">
+        <div className="rounded-3xl grid gap-8 overflow-hidden p-6 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:p-10 border border-[rgba(212,175,120,0.25)] bg-[#191713] shadow-[0_16px_45px_rgba(0,0,0,0.6)]">
           {/* Controls Column */}
           <div className="space-y-8">
             {/* Step 1: Base Craft */}
             <div>
               <div className="flex items-center gap-2">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-gradient-to-br from-[#241A06] to-[#141414] border border-[#D4AF37]/50 text-xs font-black text-[#ECC872] shadow-xs">
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.3)] text-xs font-black text-[#D4AF78] shadow-xs">
                   1
                 </span>
-                <h3 className="font-serif text-2xl text-[#141414] font-bold">Choose Craft Base</h3>
+                <h3 className="font-serif text-2xl text-[#F5EBDD] font-bold">Choose Craft Base</h3>
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3">
                 {BASE_CRAFTS.map((craft) => (
@@ -192,15 +192,15 @@ export default function CraftCustomizer() {
                     key={craft.id}
                     type="button"
                     onClick={() => setSelectedCraft(craft)}
-                    className={`flex flex-col items-start rounded-2xl border p-3.5 text-left transition duration-200 ${
+                    className={`flex flex-col items-start rounded-2xl border p-3.5 text-left transition duration-200 cursor-pointer ${
                       selectedCraft.id === craft.id
-                        ? 'border-[#D4AF37] bg-[#FAF5E8] shadow-sm ring-1 ring-[#D4AF37]'
-                        : 'border-[#DFCFA6]/50 bg-gradient-to-b from-white to-[#FAF6ED] hover:border-[#D4AF37]/60'
+                        ? 'border-[#D4AF78] bg-[#12110F] shadow-sm ring-1 ring-[#D4AF78]'
+                        : 'border-[rgba(212,175,120,0.2)] bg-[#0B0B0A] hover:border-[rgba(212,175,120,0.5)]'
                     }`}
                   >
-                    <p className="text-sm font-bold text-[#141414]">{craft.title}</p>
-                    <p className="mt-1 text-xs text-[#8C827A] line-clamp-1">{craft.category}</p>
-                    <span className="mt-3 text-sm font-extrabold text-[#141414]">₹{craft.basePrice}</span>
+                    <p className="text-sm font-bold text-[#F5EBDD]">{craft.title}</p>
+                    <p className="mt-1 text-xs text-[#B8AA96] line-clamp-1">{craft.category}</p>
+                    <span className="mt-3 text-sm font-extrabold text-[#D4AF78]">₹{craft.basePrice}</span>
                   </button>
                 ))}
               </div>
@@ -209,10 +209,10 @@ export default function CraftCustomizer() {
             {/* Step 2: Color Palette */}
             <div>
               <div className="flex items-center gap-2">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-[#141414] text-xs font-bold text-white">
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.3)] text-xs font-bold text-[#D4AF78]">
                   2
                 </span>
-                <h3 className="font-serif text-2xl text-[#141414] font-bold">Select Artisan Color Mood</h3>
+                <h3 className="font-serif text-2xl text-[#F5EBDD] font-bold">Select Artisan Color Mood</h3>
               </div>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 {PALETTES.map((palette) => (
@@ -220,21 +220,21 @@ export default function CraftCustomizer() {
                     key={palette.id}
                     type="button"
                     onClick={() => setSelectedPalette(palette)}
-                    className={`flex items-center justify-between rounded-2xl border p-3.5 text-left transition ${
+                    className={`flex items-center justify-between rounded-2xl border p-3.5 text-left transition cursor-pointer ${
                       selectedPalette.id === palette.id
-                        ? 'border-[#DFCFA6] bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5EEDC] shadow-sm ring-1 ring-[#DFCFA6]'
-                        : 'border-[#DFCFA6]/50 bg-gradient-to-b from-[#FFFDF9]/80 to-[#FAF6ED]/70 hover:border-[#D4AF37]/70'
+                        ? 'border-[#D4AF78] bg-[#12110F] shadow-sm ring-1 ring-[#D4AF78]'
+                        : 'border-[rgba(212,175,120,0.2)] bg-[#0B0B0A] hover:border-[rgba(212,175,120,0.5)]'
                     }`}
                   >
                     <div>
-                      <p className="text-sm font-bold text-[#141414]">{palette.name}</p>
-                      <p className="text-xs text-[#8C827A]">{palette.description}</p>
+                      <p className="text-sm font-bold text-[#F5EBDD]">{palette.name}</p>
+                      <p className="text-xs text-[#B8AA96]">{palette.description}</p>
                     </div>
                     <div className="flex -space-x-1.5 pl-2">
                       {palette.tones.map((color, i) => (
                         <span
                           key={i}
-                          className="h-5 w-5 rounded-full border border-black/10 shadow-sm"
+                          className="h-5 w-5 rounded-full border border-black/40 shadow-sm"
                           style={{ backgroundColor: color }}
                         />
                       ))}
@@ -247,10 +247,10 @@ export default function CraftCustomizer() {
             {/* Step 3: Add-ons & Engraving */}
             <div>
               <div className="flex items-center gap-2">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-[#141414] text-xs font-bold text-white">
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.3)] text-xs font-bold text-[#D4AF78]">
                   3
                 </span>
-                <h3 className="font-serif text-2xl text-[#141414] font-bold">Artisan Touches & Add-ons</h3>
+                <h3 className="font-serif text-2xl text-[#F5EBDD] font-bold">Artisan Touches & Add-ons</h3>
               </div>
 
               <div className="mt-4 space-y-2.5">
@@ -264,28 +264,28 @@ export default function CraftCustomizer() {
                       onClick={() => toggleAddon(addon.id)}
                       className={`flex cursor-pointer items-center justify-between rounded-2xl border p-3 transition ${
                         isChecked
-                          ? 'border-[#DFCFA6] bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5EEDC] shadow-sm'
-                          : 'border-[#DFCFA6]/50 bg-gradient-to-b from-[#FFFDF9]/80 to-[#FAF6ED]/70 hover:border-[#D4AF37]/70'
+                          ? 'border-[#D4AF78] bg-[#12110F] shadow-sm'
+                          : 'border-[rgba(212,175,120,0.2)] bg-[#0B0B0A] hover:border-[rgba(212,175,120,0.5)]'
                       }`}
                     >
                       <div className="flex items-center gap-3">
                         <div
                           className={`grid h-8 w-8 place-items-center rounded-xl transition ${
-                            isChecked ? 'bg-[#141414] text-white font-bold' : 'bg-[#EFECE6] text-[#141414]'
+                            isChecked ? 'bg-[#D4AF78] text-[#0B0B0A] font-bold' : 'bg-[#191713] text-[#D4AF78]'
                           }`}
                         >
                           <Icon className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#141414] sm:text-sm">{addon.name}</p>
-                          <p className="text-[11px] text-[#8C827A]">{addon.description}</p>
+                          <p className="text-xs font-bold text-[#F5EBDD] sm:text-sm">{addon.name}</p>
+                          <p className="text-[11px] text-[#B8AA96]">{addon.description}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-xs font-bold text-[#141414]">+₹{addon.price}</span>
+                        <span className="text-xs font-bold text-[#D4AF78]">+₹{addon.price}</span>
                         <div
                           className={`grid h-5 w-5 place-items-center rounded-full border transition ${
-                            isChecked ? 'border-[#141414] bg-[#141414] text-white' : 'border-[#DDD7CE] bg-white'
+                            isChecked ? 'border-[#D4AF78] bg-[#D4AF78] text-[#0B0B0A]' : 'border-[rgba(212,175,120,0.3)] bg-[#0B0B0A]'
                           }`}
                         >
                           {isChecked && <Check className="h-3 w-3" />}
@@ -298,7 +298,7 @@ export default function CraftCustomizer() {
 
               {selectedAddons.includes('monogram') && (
                 <div className="mt-3.5">
-                  <label className="mb-1 block text-xs font-bold text-[#141414]">
+                  <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">
                     Custom Monogram / Inscription Text (Max 24 characters)
                   </label>
                   <input
@@ -306,7 +306,7 @@ export default function CraftCustomizer() {
                     value={customText}
                     onChange={(e) => setCustomText(e.target.value)}
                     placeholder="e.g., 'Maya • 2026' or 'Forever Glowing'"
-                    className="h-11 w-full rounded-xl border border-[#DFCFA6]/60 bg-gradient-to-b from-[#FFFDF9] to-[#FAF6ED] px-4 text-sm text-[#141414] outline-none focus:border-[#D4AF37] focus:bg-white"
+                    className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-4 text-sm text-[#F5EBDD] placeholder-[#B8AA96]/50 outline-none focus:border-[#D4AF78]"
                   />
                 </div>
               )}
@@ -314,50 +314,50 @@ export default function CraftCustomizer() {
           </div>
 
           {/* Live Preview Card */}
-          <div className="flex flex-col justify-between rounded-3xl border border-[#D4AF37]/55 bg-gradient-to-b from-[#FFFDF9] via-[#FAF5E8] to-[#F6EBCE]/80 p-6 lg:p-8 shadow-[0_12px_32px_rgba(184,134,11,0.12),0_0_15px_rgba(212,175,55,0.10)]">
+          <div className="flex flex-col justify-between rounded-3xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] p-6 lg:p-8 shadow-[0_12px_32px_rgba(0,0,0,0.5)]">
             <div>
               <div className="flex items-center justify-between">
                 <span className="section-eyebrow">
-                  <Sparkles className="h-3 w-3 text-[#B8860B]" /> Live Custom Preview
+                  <Sparkles className="h-3 w-3 text-[#D4AF78]" /> Live Custom Preview
                 </span>
-                <span className="text-xs font-bold uppercase tracking-wider text-[#9E7314]">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF78]">
                   1-of-1 Bespoke
                 </span>
               </div>
 
-              <div className="relative mt-5 aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#EFECE6] border border-[#E8DEC7] shadow-inner">
+              <div className="relative mt-5 aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#0B0B0A] border border-[rgba(212,175,120,0.2)] shadow-inner">
                 <img
                   src={selectedCraft.image}
                   alt={selectedCraft.title}
                   className="h-full w-full object-cover transition duration-500 hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                 {/* Floating Palette Tag */}
-                <div className="absolute left-3.5 top-3.5 flex items-center gap-1.5 rounded-full border border-[#D4AF37]/60 bg-white/95 px-3 py-1 text-xs font-bold text-[#141414] shadow-xs">
-                  <Palette className="h-3.5 w-3.5 text-[#B8860B]" />
+                <div className="absolute left-3.5 top-3.5 flex items-center gap-1.5 rounded-full border border-[rgba(212,175,120,0.3)] bg-[#0B0B0A]/90 px-3 py-1 text-xs font-bold text-[#F5EBDD] shadow-xs backdrop-blur-xs">
+                  <Palette className="h-3.5 w-3.5 text-[#D4AF78]" />
                   {selectedPalette.name}
                 </div>
 
                 {customText && (
-                  <div className="absolute bottom-3.5 left-3.5 right-3.5 rounded-xl border border-[#D4AF37]/60 bg-white/95 p-2 text-center shadow-xs">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#946B08]">Custom Engraving</p>
-                    <p className="font-serif text-sm font-semibold italic text-[#141414]">"{customText}"</p>
+                  <div className="absolute bottom-3.5 left-3.5 right-3.5 rounded-xl border border-[rgba(212,175,120,0.3)] bg-[#0B0B0A]/95 p-2 text-center shadow-xs backdrop-blur-xs">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#D4AF78]">Custom Engraving</p>
+                    <p className="font-serif text-sm font-semibold italic text-[#F5EBDD]">"{customText}"</p>
                   </div>
                 )}
               </div>
 
               <div className="mt-5 space-y-2">
-                <h4 className="font-serif text-2xl text-[#141414] font-bold">{selectedCraft.title}</h4>
-                <p className="text-xs leading-5 text-[#5A554E]">{selectedCraft.description}</p>
+                <h4 className="font-serif text-2xl text-[#F5EBDD] font-bold">{selectedCraft.title}</h4>
+                <p className="text-xs leading-5 text-[#B8AA96]">{selectedCraft.description}</p>
                 <div className="flex flex-wrap gap-1.5 pt-1">
-                  <span className="rounded-full bg-white/90 border border-[#D4AF37]/50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#735206]">
+                  <span className="rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.25)] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#D4AF78]">
                     Palette: {selectedPalette.name}
                   </span>
                   {selectedAddons.map((id) => (
                     <span
                       key={id}
-                      className="rounded-full bg-white/90 border border-[#D4AF37]/50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#735206]"
+                      className="rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.25)] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#D4AF78]"
                     >
                       {ADDONS.find((a) => a.id === id)?.name.split(' ')[0]}
                     </span>
@@ -366,16 +366,16 @@ export default function CraftCustomizer() {
               </div>
             </div>
 
-            <div className="mt-8 border-t border-[#E8DEC7] pt-5">
+            <div className="mt-8 border-t border-[rgba(212,175,120,0.2)] pt-5">
               <div className="flex flex-col sm:flex-row items-stretch sm:items-baseline justify-between gap-3.5">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#8C827A]">Total Craft Price</p>
-                  <p className="font-serif text-3xl font-extrabold text-[#141414]">₹{calculatedPrice.toFixed(0)}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[#B8AA96]">Total Craft Price</p>
+                  <p className="font-serif text-3xl font-extrabold text-[#D4AF78]">₹{calculatedPrice.toFixed(0)}</p>
                 </div>
                 <button
                   type="button"
                   onClick={handleAddCustomToBag}
-                  className="btn-gold shadow-sm justify-center"
+                  className="btn-primary shadow-sm justify-center cursor-pointer"
                 >
                   <ShoppingBag className="h-4 w-4" />
                   Add Custom Craft to Bag

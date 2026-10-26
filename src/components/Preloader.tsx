@@ -120,12 +120,12 @@ export default function Preloader() {
   return (
     <div
       ref={preloaderRef}
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#F6F3EE] text-[#141414] select-none will-change-transform overflow-hidden"
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0B0B0A] text-[#F5EBDD] select-none will-change-transform overflow-hidden"
     >
       {/* Ambient Radial Golden Atmosphere */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_600px_at_50%_50%,rgba(212,175,55,0.2),transparent_70%)]" />
-      <div className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-[#D4AF37]/15 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-[#B8860B]/10 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_600px_at_50%_50%,rgba(212,175,120,0.06),transparent_70%)]" />
+      <div className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-[#D4AF78]/5 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-[#D4AF78]/5 blur-3xl" />
 
       {/* Center Preloader Content */}
       <div
@@ -137,26 +137,26 @@ export default function Preloader() {
           {/* Orbital Rotating Dashed Gilded Ring */}
           <div
             ref={ringRef}
-            className="absolute -inset-3 rounded-full border border-dashed border-[#D4AF37]/55 pointer-events-none"
+            className="absolute -inset-3 rounded-full border border-dashed border-[#D4AF78]/40 pointer-events-none"
           />
 
           {/* Secondary Outer Halo */}
-          <div className="absolute -inset-1.5 rounded-full border border-[#D4AF37]/35 blur-[1px]" />
+          <div className="absolute -inset-1.5 rounded-full border border-[#D4AF78]/25 blur-[1px]" />
 
           {/* Center Medallion (Signature NP Atelier Gilded 3D Seal) */}
           <div
             ref={emblemRef}
-            className="relative grid h-20 w-20 sm:h-24 sm:w-24 place-items-center rounded-3xl border-2 border-white bg-gradient-to-br from-[#FFF5DC] via-[#E8BC57] to-[#B38320] shadow-[0_12px_32px_rgba(184,134,11,0.32)]"
+            className="relative grid h-20 w-20 sm:h-24 sm:w-24 place-items-center rounded-3xl border border-[rgba(212,175,120,0.4)] bg-gradient-to-br from-[#191713] via-[#14120E] to-[#0B0B0A] shadow-[0_12px_32px_rgba(0,0,0,0.8),0_0_20px_rgba(212,175,120,0.15)]"
           >
             {/* Sparkle Glint */}
-            <Sparkles className="absolute top-2 right-2.5 h-3.5 w-3.5 text-[#FFFFFF] animate-pulse" />
+            <Sparkles className="absolute top-2 right-2.5 h-3.5 w-3.5 text-[#E5C18A] animate-pulse" />
 
             {/* Monogram */}
             <div className="flex flex-col items-center justify-center">
-              <span className="font-serif text-2xl sm:text-3xl font-black tracking-wider text-[#17120A] drop-shadow-xs">
+              <span className="font-serif text-2xl sm:text-3xl font-black tracking-wider text-[#D4AF78] drop-shadow-xs">
                 NP
               </span>
-              <span className="text-[7.5px] font-extrabold uppercase tracking-[0.22em] text-[#3D2C0A] -mt-0.5">
+              <span className="text-[7.5px] font-extrabold uppercase tracking-[0.22em] text-[#B8AA96] -mt-0.5">
                 Atelier
               </span>
             </div>
@@ -164,33 +164,33 @@ export default function Preloader() {
         </div>
 
         {/* Brand Headline */}
-        <h1 className="font-serif text-lg sm:text-2xl font-bold uppercase tracking-[0.3em] text-[#241705]">
-          <span className="bg-gradient-to-r from-[#241705] via-[#7A5408] to-[#241705] bg-clip-text text-transparent">
+        <h1 className="font-serif text-lg sm:text-2xl font-bold uppercase tracking-[0.3em] text-[#F5EBDD]">
+          <span className="text-gold-gradient">
             NP Atelier
           </span>
         </h1>
 
         {/* Brand Subtext */}
-        <p className="mt-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-[#7A6D56]">
+        <p className="mt-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-[#B8AA96]">
           Artisan Mastery &#8226; Living Waters
         </p>
 
         {/* Minimalist Golden Progress Track */}
         <div className="mt-7 w-44 sm:w-52">
           {/* Track background */}
-          <div className="relative h-[3px] w-full overflow-hidden rounded-full bg-[#E5DEC9] border border-[#DFCFA6]/60">
+          <div className="relative h-[3px] w-full overflow-hidden rounded-full bg-[#191713] border border-[rgba(212,175,120,0.25)]">
             {/* Active glowing progress bar */}
             <div
               ref={progressBarRef}
               style={{ width: '0%' }}
-              className="h-full rounded-full bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#F5DE9C] shadow-[0_0_12px_rgba(212,175,55,0.7)] transition-[width] duration-75"
+              className="h-full rounded-full bg-gradient-to-r from-[#D4AF78] via-[#E5C18A] to-[#D4AF78] shadow-[0_0_12px_rgba(212,175,120,0.4)] transition-[width] duration-75"
             />
           </div>
 
           {/* Numerical Counter */}
-          <div className="mt-2.5 flex items-center justify-between text-[10px] font-mono font-bold tracking-widest text-[#7A5408]">
-            <span className="text-[#8C7A58] uppercase">Loading Atelier</span>
-            <span ref={percentTextRef} className="text-[#7A5408]">00%</span>
+          <div className="mt-2.5 flex items-center justify-between text-[10px] font-mono font-bold tracking-widest text-[#B8AA96]">
+            <span className="text-[#B8AA96]/80 uppercase">Loading Atelier</span>
+            <span ref={percentTextRef} className="text-[#D4AF78]">00%</span>
           </div>
         </div>
       </div>

@@ -153,12 +153,12 @@ export default function AtelierGlobalLoader({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.25, ease: 'easeInOut' }}
-      className="fixed inset-0 z-[999999] flex flex-col items-center justify-center overflow-hidden bg-[#F6F3EE] p-4 text-[#141414] select-none"
+      className="fixed inset-0 z-[999999] flex flex-col items-center justify-center overflow-hidden bg-[#0B0B0A] p-4 text-[#F5EBDD] select-none"
     >
       {/* Ambient Radiant Lighting Matching Website */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-gradient-to-tr from-[#D4AF37]/20 via-[#ECC872]/15 to-transparent blur-[140px]" />
-      <div className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-amber-400/10 blur-[120px]" />
-      <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-emerald-500/5 blur-[120px]" />
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-gradient-to-tr from-[#D4AF78]/10 via-[#E5C18A]/5 to-transparent blur-[140px]" />
+      <div className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-[#D4AF78]/5 blur-[120px]" />
+      <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-[#D4AF78]/5 blur-[120px]" />
 
       {/* Floating Glassmorphic Atelier Card */}
       <motion.div
@@ -166,15 +166,15 @@ export default function AtelierGlobalLoader({
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.95, opacity: 0, y: -10 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="relative z-10 w-full max-w-md rounded-[2.5rem] border border-[#DFCFA6]/90 bg-white/92 p-7 sm:p-9 shadow-[0_24px_70px_rgba(40,28,10,0.12),0_4px_24px_rgba(212,175,55,0.15)] backdrop-blur-xl text-center flex flex-col items-center"
+        className="relative z-10 w-full max-w-md rounded-[2.5rem] border border-[rgba(212,175,120,0.25)] bg-[#191713]/95 p-7 sm:p-9 shadow-[0_24px_70px_rgba(0,0,0,0.8),0_4px_24px_rgba(212,175,120,0.15)] backdrop-blur-xl text-center flex flex-col items-center"
       >
         {/* Centerpiece: Gilded Astrolabe / Royal Seal */}
         <div className="relative mb-5 sm:mb-6 flex items-center justify-center">
           {/* Outer Rotating Dashed Gold Filigree Ring */}
-          <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-full border border-dashed border-[#D4AF37]/50 animate-[spin_14s_linear_infinite]" />
+          <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-full border border-dashed border-[#D4AF78]/40 animate-[spin_14s_linear_infinite]" />
 
           {/* Inner Counter-Rotating Golden Ring */}
-          <div className="absolute h-24 w-24 sm:h-28 sm:w-28 rounded-full border-2 border-t-[#D4AF37] border-r-transparent border-b-[#B8860B] border-l-transparent animate-[spin_4.5s_linear_infinite_reverse]" />
+          <div className="absolute h-24 w-24 sm:h-28 sm:w-28 rounded-full border-2 border-t-[#D4AF78] border-r-transparent border-b-[#E5C18A] border-l-transparent animate-[spin_4.5s_linear_infinite_reverse]" />
 
           {/* Orbital Star Jewel */}
           <motion.div
@@ -182,14 +182,14 @@ export default function AtelierGlobalLoader({
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 4.5, ease: 'linear' }}
           >
-            <span className="absolute -top-1 left-1/2 -translate-x-1/2 h-2.5 w-2.5 rounded-full bg-gradient-to-tr from-[#FFF5DC] to-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.8)] border border-white" />
+            <span className="absolute -top-1 left-1/2 -translate-x-1/2 h-2.5 w-2.5 rounded-full bg-gradient-to-tr from-[#FFF5DC] to-[#D4AF78] shadow-[0_0_8px_rgba(212,175,120,0.8)] border border-[#191713]" />
           </motion.div>
 
           {/* Central 3D Embossed Medal Emblem */}
           <motion.div
             animate={{ scale: [1, 1.04, 1] }}
             transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
-            className="absolute grid h-18 w-18 sm:h-20 sm:w-20 place-items-center rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#FFF5DC] via-[#E8BC57] to-[#B38320] border-2 border-white shadow-[0_10px_25px_rgba(184,134,11,0.28)] overflow-hidden"
+            className="absolute grid h-18 w-18 sm:h-20 sm:w-20 place-items-center rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#191713] via-[#14120E] to-[#0B0B0A] border border-[rgba(212,175,120,0.4)] shadow-[0_10px_25px_rgba(0,0,0,0.7)] overflow-hidden"
           >
             <AnimatePresence mode="wait">
               {progress >= 100 ? (
@@ -201,9 +201,9 @@ export default function AtelierGlobalLoader({
                   transition={{ duration: 0.18 }}
                 >
                   {mode === 'signout' || mode === 'admin_signout' ? (
-                    <Lock className="h-7 w-7 sm:h-8 sm:w-8 text-[#17120A]" />
+                    <Lock className="h-7 w-7 sm:h-8 sm:w-8 text-[#D4AF78]" />
                   ) : (
-                    <CheckCircle2 className="h-7 w-7 sm:h-8 sm:w-8 text-[#17120A]" />
+                    <CheckCircle2 className="h-7 w-7 sm:h-8 sm:w-8 text-[#D4AF78]" />
                   )}
                 </motion.div>
               ) : (
@@ -214,10 +214,10 @@ export default function AtelierGlobalLoader({
                   exit={{ opacity: 0 }}
                   className="relative flex flex-col items-center justify-center select-none"
                 >
-                  <span className="font-serif text-2xl sm:text-3xl font-black tracking-wider text-[#17120A] drop-shadow-xs">
+                  <span className="font-serif text-2xl sm:text-3xl font-black tracking-wider text-[#D4AF78] drop-shadow-xs">
                     NP
                   </span>
-                  <span className="text-[7.5px] font-extrabold uppercase tracking-[0.22em] text-[#3D2C0A] -mt-0.5">
+                  <span className="text-[7.5px] font-extrabold uppercase tracking-[0.22em] text-[#B8AA96] -mt-0.5">
                     Atelier
                   </span>
                 </motion.div>
@@ -231,14 +231,14 @@ export default function AtelierGlobalLoader({
           initial={{ y: 6, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.08 }}
-          className="inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/45 bg-[#FAF3E3] px-3.5 py-1 text-xs font-bold text-[#7A5408] shadow-xs mb-2.5"
+          className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(212,175,120,0.25)] bg-[#12110F] px-3.5 py-1 text-xs font-bold text-[#D4AF78] shadow-xs mb-2.5"
         >
           {mode === 'page_switch' ? (
-            <Compass className="h-3.5 w-3.5 text-[#B8860B] animate-spin" />
+            <Compass className="h-3.5 w-3.5 text-[#D4AF78] animate-spin" />
           ) : mode === 'signout' || mode === 'admin_signout' ? (
-            <ArrowRightLeft className="h-3.5 w-3.5 text-[#B8860B]" />
+            <ArrowRightLeft className="h-3.5 w-3.5 text-[#D4AF78]" />
           ) : (
-            <Sparkles className="h-3.5 w-3.5 text-[#B8860B] animate-pulse" />
+            <Sparkles className="h-3.5 w-3.5 text-[#D4AF78] animate-pulse" />
           )}
           <span>{displayPill}</span>
         </motion.div>
@@ -248,7 +248,7 @@ export default function AtelierGlobalLoader({
           initial={{ y: 8, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.12 }}
-          className="font-serif text-xl sm:text-2xl font-bold text-[#1F170B] tracking-tight"
+          className="font-serif text-xl sm:text-2xl font-bold text-[#F5EBDD] tracking-tight"
         >
           {displayTitle}
         </motion.h3>
@@ -258,7 +258,7 @@ export default function AtelierGlobalLoader({
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.16 }}
-          className="text-xs sm:text-sm text-[#73634B] font-medium leading-relaxed mt-1 max-w-xs"
+          className="text-xs sm:text-sm text-[#B8AA96] font-medium leading-relaxed mt-1 max-w-xs"
         >
           {displaySubtitle}
         </motion.p>
@@ -267,23 +267,23 @@ export default function AtelierGlobalLoader({
         <div className="w-full mt-6 space-y-2.5">
           {/* Counter Row */}
           <div className="flex items-center justify-between text-xs font-bold">
-            <span className="text-[#8C6F2D] flex items-center gap-1.5 text-[11px]">
-              <ShieldCheck className="h-3.5 w-3.5 text-[#B8860B]" />
+            <span className="text-[#B8AA96] flex items-center gap-1.5 text-[11px]">
+              <ShieldCheck className="h-3.5 w-3.5 text-[#D4AF78]" />
               <span>
                 {mode === 'signout' || mode === 'admin_signout'
                   ? 'Session Teardown'
                   : 'Atelier Synchronized'}
               </span>
             </span>
-            <span className="font-serif text-sm font-extrabold text-[#7A5408]">
+            <span className="font-serif text-sm font-extrabold text-[#D4AF78]">
               {progress}%
             </span>
           </div>
 
           {/* Gilded Progress Bar with Traversing Shimmer */}
-          <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-[#EFE9DC] border border-[#DFCFA6]/80 p-0.5 shadow-inner">
+          <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.25)] p-0.5 shadow-inner">
             <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#F5DE9C] shadow-[0_0_12px_rgba(212,175,55,0.45)] relative overflow-hidden"
+              className="h-full rounded-full bg-gradient-to-r from-[#D4AF78] via-[#E5C18A] to-[#D4AF78] shadow-[0_0_12px_rgba(212,175,120,0.4)] relative overflow-hidden"
               style={{ width: `${progress}%` }}
               transition={{ ease: 'easeOut', duration: 0.05 }}
             >
@@ -291,7 +291,7 @@ export default function AtelierGlobalLoader({
               <motion.div
                 animate={{ x: ['-100%', '200%'] }}
                 transition={{ repeat: Infinity, duration: 1.4, ease: 'linear' }}
-                className="absolute inset-y-0 w-16 bg-gradient-to-r from-transparent via-white/60 to-transparent skew-x-12"
+                className="absolute inset-y-0 w-16 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12"
               />
             </motion.div>
           </div>
@@ -305,7 +305,7 @@ export default function AtelierGlobalLoader({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.16 }}
-                className="text-[11.5px] text-[#5C4A26] font-semibold tracking-wide"
+                className="text-[11.5px] text-[#B8AA96] font-semibold tracking-wide"
               >
                 {steps[currentStepIndex]}
               </motion.p>

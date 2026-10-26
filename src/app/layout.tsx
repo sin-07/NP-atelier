@@ -30,7 +30,7 @@ const cinzel = Cinzel({
 })
 
 export const viewport: Viewport = {
-  themeColor: '#0E0C09',
+  themeColor: '#0B0B0A',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
@@ -65,7 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className="font-sans antialiased bg-[#F8F5F0] text-[#1A1A1A] selection:bg-[#D4AF37]/25 selection:text-[#382606]">
+      <body className="font-sans antialiased bg-[#0B0B0A] text-[#F5EBDD] selection:bg-[#D4AF78]/30 selection:text-[#F5EBDD]">
         <MarketplaceProvider>
           <Preloader />
           <GlobalPageTransitionHandler />

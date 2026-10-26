@@ -59,12 +59,12 @@ export default function ArtisanSpotlight() {
       <div className="space-y-10">
         <div className="gsap-artisan-item mx-auto max-w-3xl text-center">
           <span className="section-eyebrow">
-            <Award className="h-3.5 w-3.5 text-[#B8860B]" /> Meet the Makers
+            <Award className="h-3.5 w-3.5 text-[#D4AF78]" /> Meet the Makers
           </span>
           <h2 className="heading-1 mt-3.5">
             Real Craftspeople Behind <span className="italic font-normal text-gold-gradient">Every Creation</span>
           </h2>
-          <p className="body-lead mx-auto mt-4 max-w-2xl text-[#4A4339]">
+          <p className="body-lead mx-auto mt-4 max-w-2xl text-[#B8A68B]">
             Every piece in the Atelier NP marketplace is designed and sculpted by independent artisans. When you buy, you directly support their creative studios.
           </p>
         </div>
@@ -73,9 +73,9 @@ export default function ArtisanSpotlight() {
           {ARTISANS.map((artisan) => (
             <article
               key={artisan.id}
-              className="gsap-artisan-item group overflow-hidden rounded-[2rem] border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] via-[#FAF5E8] to-[#F7ECCF]/80 p-5 shadow-[0_8px_24px_rgba(184,134,11,0.08)] transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF37] hover:shadow-[0_14px_32px_rgba(184,134,11,0.18)]"
+              className="gsap-artisan-item group overflow-hidden rounded-[2rem] border border-[#6D5738]/35 bg-gradient-to-b from-[#181714] via-[#141311] to-[#0E0D0C] p-5 shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF78]/70 hover:shadow-[0_16px_36px_rgba(0,0,0,0.8)]"
             >
-              <div className="relative h-44 w-full overflow-hidden rounded-2xl bg-[#F6F3EE] border border-[#E8DEC7]">
+              <div className="relative h-44 w-full overflow-hidden rounded-2xl bg-[#0B0B0A] border border-[#6D5738]/30">
                 <img
                   src={artisan.cover}
                   alt={artisan.name}
@@ -86,14 +86,14 @@ export default function ArtisanSpotlight() {
                   }}
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent" />
 
-                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[#F5EBDD]">
                   <span className="flex items-center gap-1 text-xs font-semibold">
-                    <MapPin className="h-3.5 w-3.5 text-[#ECC872]" /> {artisan.location}
+                    <MapPin className="h-3.5 w-3.5 text-[#D4AF78]" /> {artisan.location}
                   </span>
-                  <span className="flex items-center gap-1 text-xs font-bold text-white">
-                    <Star className="h-3.5 w-3.5 fill-[#D4AF37] text-[#D4AF37]" /> {artisan.rating} ({artisan.reviews})
+                  <span className="flex items-center gap-1 text-xs font-bold text-[#F5EBDD]">
+                    <Star className="h-3.5 w-3.5 fill-[#D4AF78] text-[#D4AF78]" /> {artisan.rating} ({artisan.reviews})
                   </span>
                 </div>
               </div>
@@ -105,29 +105,29 @@ export default function ArtisanSpotlight() {
                     alt={artisan.name}
                     loading="lazy"
                     decoding="async"
-                    className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-md"
+                    className="h-14 w-14 rounded-full border-2 border-[#D4AF78] object-cover shadow-md"
                   />
-                  <span className="rounded-full bg-white/95 border border-[#D4AF37]/50 px-3 py-1 text-[11px] font-bold text-[#735206] shadow-xs">
+                  <span className="rounded-full bg-[#0B0B0A]/90 border border-[#6D5738]/50 px-3 py-1 text-[11px] font-bold text-[#D4AF78] shadow-xs">
                     {artisan.experience}
                   </span>
                 </div>
 
                 <div className="mt-3">
-                  <h3 className="heading-3">{artisan.name}</h3>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#7A5408]">
+                  <h3 className="font-serif text-lg font-bold text-[#F5EBDD]">{artisan.name}</h3>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[#D4AF78]">
                     {artisan.role}
                   </p>
-                  <p className="mt-2.5 text-xs leading-relaxed text-[#4A4339] line-clamp-3">
+                  <p className="mt-2.5 text-xs leading-relaxed text-[#B8A68B] line-clamp-3">
                     {artisan.bio}
                   </p>
                 </div>
 
-                <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[#E8DEC7] pt-3.5">
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[#6D5738]/30 pt-3.5">
                   <div className="flex flex-wrap gap-1.5">
                     {artisan.badges.map((b) => (
                       <span
                         key={b}
-                        className="rounded-full bg-white/90 border border-[#D4AF37]/45 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#694806]"
+                        className="rounded-full bg-[#0B0B0A]/90 border border-[#6D5738]/40 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#B8A68B]"
                       >
                         {b}
                       </span>
@@ -136,7 +136,7 @@ export default function ArtisanSpotlight() {
 
                   <a
                     href="#collection"
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-[#7A5408] transition hover:text-[#4D3505]"
+                    className="inline-flex items-center gap-1 text-[11px] font-bold text-[#D4AF78] transition hover:text-[#E5C18A]"
                   >
                     <span>View Crafts</span>
                     <ArrowRight className="h-3 w-3" />

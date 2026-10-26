@@ -145,7 +145,7 @@ export default function AuthModal() {
         >
           <motion.div
             key="auth-modal-card"
-            className="relative my-0 sm:my-8 w-full max-w-lg max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-white border border-[#D4AF37]/40 shadow-[0_25px_70px_rgba(180,135,45,0.25)]"
+            className="relative my-0 sm:my-8 w-full max-w-lg max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#191713] border border-[rgba(212,175,120,0.25)] shadow-[0_25px_70px_rgba(0,0,0,0.8)]"
             initial={{ scale: 0.96, y: 14 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, y: 14 }}
@@ -154,37 +154,37 @@ export default function AuthModal() {
           >
             {/* Mobile pull indicator */}
             <div className="pt-3 pb-1 flex justify-center sm:hidden">
-              <div className="w-12 h-1 rounded-full bg-stone-300" />
+              <div className="w-12 h-1 rounded-full bg-stone-700" />
             </div>
 
             <button
               type="button"
               aria-label="Close modal"
               onClick={() => setIsAuthOpen(false)}
-              className="absolute right-5 top-5 z-20 grid h-10 w-10 place-items-center rounded-full border border-[#DFCFA6]/60 bg-white text-[#141414] shadow-sm transition hover:bg-[#FAF6ED] hover:border-[#D4AF37] cursor-pointer"
+              className="absolute right-5 top-5 z-20 grid h-10 w-10 place-items-center rounded-full border border-[rgba(212,175,120,0.25)] bg-[#12110F] text-[#F5EBDD] shadow-sm transition hover:bg-[#0B0B0A] hover:border-[#D4AF78] cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
 
             {/* Header */}
-            <div className="border-b border-[#DFCFA6]/60 bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5EEDC]/80 p-6 sm:p-8 text-[#141414]">
+            <div className="border-b border-[rgba(212,175,120,0.25)] bg-[#12110F] p-6 sm:p-8 text-[#F5EBDD]">
               <span className="section-eyebrow">Artisan Account</span>
-              <h3 className="mt-2 font-serif text-2xl sm:text-3xl text-[#141414] font-bold">
+              <h3 className="mt-2 font-serif text-2xl sm:text-3xl text-[#F5EBDD] font-bold">
                 {mode === 'login' ? 'Welcome Back' : 'Join Atelier NP Circle'}
               </h3>
-              <p className="mt-1 text-xs text-[#5A554E] sm:text-sm font-medium">
+              <p className="mt-1 text-xs text-[#B8AA96] sm:text-sm font-medium">
                 Save bespoke wishlists, auto-fill checkout delivery addresses, and sell handcrafted creations.
               </p>
 
               {/* Mode Tabs */}
-              <div className="mt-5 flex rounded-full border border-[#DFCFA6]/80 bg-white p-1 shadow-xs">
+              <div className="mt-5 flex rounded-full border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] p-1 shadow-xs">
                 <button
                   type="button"
                   onClick={() => setMode('login')}
                   className={`flex-1 rounded-full py-2 text-xs font-bold transition cursor-pointer ${
                     mode === 'login'
-                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#1A120B] font-extrabold shadow-[0_2px_10px_rgba(212,175,55,0.3)]'
-                      : 'text-[#5A451A] hover:text-[#875A10]'
+                      ? 'bg-[#D4AF78] text-[#0B0B0A] font-extrabold shadow-[0_2px_10px_rgba(212,175,120,0.3)]'
+                      : 'text-[#B8AA96] hover:text-[#F5EBDD]'
                   }`}
                 >
                   Sign In
@@ -194,8 +194,8 @@ export default function AuthModal() {
                   onClick={() => setMode('register')}
                   className={`flex-1 rounded-full py-2 text-xs font-bold transition cursor-pointer ${
                     mode === 'register'
-                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#1A120B] font-extrabold shadow-[0_2px_10px_rgba(212,175,55,0.3)]'
-                      : 'text-[#5A451A] hover:text-[#875A10]'
+                      ? 'bg-[#D4AF78] text-[#0B0B0A] font-extrabold shadow-[0_2px_10px_rgba(212,175,120,0.3)]'
+                      : 'text-[#B8AA96] hover:text-[#F5EBDD]'
                   }`}
                 >
                   Create Account
@@ -209,35 +209,35 @@ export default function AuthModal() {
                 <>
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div>
-                      <label className="mb-1 block text-xs font-bold text-[#141414]">Full Name</label>
+                      <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Full Name</label>
                       <input
                         required
                         value={formState.name}
                         onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                         placeholder="Enter full name"
-                        className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                        className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-sm text-[#F5EBDD] placeholder-[#B8AA96]/50 outline-none transition focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs font-bold text-[#141414]">
+                      <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">
                         Mobile Phone Number
                       </label>
                       <div className="relative">
-                        <Phone className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#8C7A58]" />
+                        <Phone className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B8AA96]" />
                         <input
                           type="tel"
                           required
                           value={formState.phone}
                           onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
                           placeholder="+91 98765 43210"
-                          className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] pl-9 pr-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                          className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] pl-9 pr-3.5 text-sm text-[#F5EBDD] placeholder-[#B8AA96]/50 outline-none transition focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
                         />
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <label className="mb-1 block text-xs font-bold text-[#141414]">
+                    <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">
                       Street Address & House / Flat No.
                     </label>
                     <textarea
@@ -246,18 +246,18 @@ export default function AuthModal() {
                       value={formState.address}
                       onChange={(e) => setFormState({ ...formState, address: e.target.value })}
                       placeholder="e.g. Flat 402, Lotus Orchid, 12th Main Road, Indiranagar"
-                      className="w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] p-3 text-xs leading-5 text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                      className="w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] p-3 text-xs leading-5 text-[#F5EBDD] placeholder-[#B8AA96]/50 outline-none transition focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
                     />
                   </div>
 
                   {/* PIN Code Field with Live Auto-fill */}
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="block text-xs font-bold text-[#141414] flex items-center gap-1.5">
-                        <MapPin className="h-3.5 w-3.5 text-[#B8860B]" />
+                      <label className="block text-xs font-bold text-[#F5EBDD] flex items-center gap-1.5">
+                        <MapPin className="h-3.5 w-3.5 text-[#D4AF78]" />
                         <span>Postal PIN Code (6 Digits)</span>
                       </label>
-                      <span className="text-[10px] text-[#8C7A58]">
+                      <span className="text-[10px] text-[#B8AA96]">
                         Auto-fills State & City
                       </span>
                     </div>
@@ -270,17 +270,17 @@ export default function AuthModal() {
                         value={formState.pincode}
                         onChange={(e) => handlePincodeChange(e.target.value)}
                         placeholder="e.g. 560038 or 110001"
-                        className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 pr-28 text-sm font-bold text-[#141414] tracking-wider outline-none transition focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/30"
+                        className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 pr-28 text-sm font-bold text-[#F5EBDD] tracking-wider outline-none transition focus:border-[#D4AF78] focus:ring-2 focus:ring-[#D4AF78]/30"
                       />
                       <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
                         {isLocatingPin ? (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#8C7A58]">
-                            <Loader2 className="h-3.5 w-3.5 text-[#B8860B] animate-spin" />
+                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#D4AF78]">
+                            <Loader2 className="h-3.5 w-3.5 text-[#D4AF78] animate-spin" />
                             <span>Locating...</span>
                           </span>
                         ) : formState.pincode.length === 6 && formState.city ? (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 rounded-full px-2 py-0.5">
-                            <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-300 bg-emerald-950/40 border border-emerald-500/40 rounded-full px-2 py-0.5">
+                            <CheckCircle2 className="h-3 w-3 text-emerald-400" />
                             <span>Verified</span>
                           </span>
                         ) : null}
@@ -288,8 +288,8 @@ export default function AuthModal() {
                     </div>
 
                     {pinStatus && (
-                      <p className="mt-1 text-[11px] font-semibold text-[#7A6020] flex items-center gap-1">
-                        <Sparkles className="h-3 w-3 text-[#B8860B]" />
+                      <p className="mt-1 text-[11px] font-semibold text-[#D4AF78] flex items-center gap-1">
+                        <Sparkles className="h-3 w-3 text-[#D4AF78]" />
                         <span>{pinStatus}</span>
                       </p>
                     )}
@@ -298,33 +298,33 @@ export default function AuthModal() {
                   {/* Auto-filled City & State */}
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div>
-                      <label className="mb-1 block text-xs font-bold text-[#141414] flex items-center justify-between">
+                      <label className="mb-1 block text-xs font-bold text-[#F5EBDD] flex items-center justify-between">
                         <span>City / Capital / District</span>
-                        <span className="text-[10px] font-normal text-[#8C7A58]">(Auto-filled)</span>
+                        <span className="text-[10px] font-normal text-[#B8AA96]">(Auto-filled)</span>
                       </label>
                       <div className="relative">
-                        <Building2 className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#8C7A58]" />
+                        <Building2 className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#B8AA96]" />
                         <input
                           required
                           value={formState.city}
                           onChange={(e) => setFormState({ ...formState, city: e.target.value })}
                           placeholder="e.g. Bengaluru"
-                          className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] pl-9 pr-3.5 text-sm font-semibold text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40"
+                          className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] pl-9 pr-3.5 text-sm font-semibold text-[#F5EBDD] outline-none transition focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-xs font-bold text-[#141414] flex items-center justify-between">
+                      <label className="mb-1 block text-xs font-bold text-[#F5EBDD] flex items-center justify-between">
                         <span>State / Union Territory</span>
-                        <span className="text-[10px] font-normal text-[#8C7A58]">(Auto-filled)</span>
+                        <span className="text-[10px] font-normal text-[#B8AA96]">(Auto-filled)</span>
                       </label>
                       <input
                         required
                         value={formState.state}
                         onChange={(e) => setFormState({ ...formState, state: e.target.value })}
                         placeholder="e.g. Karnataka"
-                        className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm font-semibold text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40"
+                        className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-sm font-semibold text-[#F5EBDD] outline-none transition focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40"
                       />
                     </div>
                   </div>
@@ -333,33 +333,33 @@ export default function AuthModal() {
 
               {/* Common Fields: Email & Password */}
               <div>
-                <label className="mb-1 block text-xs font-bold text-[#141414]">Email Address</label>
+                <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Email Address</label>
                 <input
                   type="email"
                   required
                   value={formState.email}
                   onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                   placeholder="your.email@example.com"
-                  className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                  className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-sm text-[#F5EBDD] placeholder-[#B8AA96]/50 outline-none transition focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
                 />
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-bold text-[#141414]">Password</label>
+                <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Password</label>
                 <input
                   type="password"
                   required
                   value={formState.password}
                   onChange={(e) => setFormState({ ...formState, password: e.target.value })}
                   placeholder="Enter your password"
-                  className="h-11 w-full rounded-xl border border-[#DFCFA6]/80 bg-[#FAF8F5] px-3.5 text-sm text-[#141414] outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                  className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-sm text-[#F5EBDD] placeholder-[#B8AA96]/50 outline-none transition focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
                 />
               </div>
 
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="btn-gold w-full py-3.5 text-xs shadow-[0_6px_20px_rgba(212,175,55,0.35)] justify-center font-bold tracking-wide cursor-pointer"
+                  className="btn-primary w-full py-3.5 text-xs shadow-[0_6px_20px_rgba(212,175,120,0.3)] justify-center font-bold tracking-wide cursor-pointer"
                 >
                   {mode === 'login' ? <LogIn className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
                   <span>{mode === 'login' ? 'Sign In to Account' : 'Create Artisan Account with Address'}</span>
@@ -367,27 +367,27 @@ export default function AuthModal() {
               </div>
 
               {user && (
-                <div className="border-t border-[#DFCFA6]/40 pt-3">
+                <div className="border-t border-[rgba(212,175,120,0.2)] pt-3">
                   <button
                     type="button"
                     onClick={() => {
                       logout()
                       setIsAuthOpen(false)
                     }}
-                    className="w-full text-center text-xs font-bold text-rose-500 hover:underline cursor-pointer"
+                    className="w-full text-center text-xs font-bold text-rose-400 hover:underline cursor-pointer"
                   >
                     Log Out of Current Session ({user.name})
                   </button>
                 </div>
               )}
 
-              <div className="border-t border-[#DFCFA6]/40 pt-3 text-center">
-                <p className="text-[11px] text-[#5A554E]">
+              <div className="border-t border-[rgba(212,175,120,0.2)] pt-3 text-center">
+                <p className="text-[11px] text-[#B8AA96]">
                   Authorized store operator or staff?{' '}
                   <a
                     href="/admin/login"
                     onClick={() => setIsAuthOpen(false)}
-                    className="font-bold text-[#875A10] underline hover:text-[#B8860B] transition"
+                    className="font-bold text-[#D4AF78] underline hover:text-[#E5C18A] transition"
                   >
                     Admin Console Login →
                   </a>

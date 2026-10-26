@@ -41,20 +41,20 @@ export default function WishlistSidebar() {
 
           <motion.aside
             key="wishlist-drawer"
-            className="fixed right-0 top-0 z-[90] flex h-full w-full max-w-md flex-col overflow-hidden border-l border-[#D4AF37]/30 bg-[#FAF7F2] shadow-2xl"
+            className="fixed right-0 top-0 z-[90] flex h-full w-full max-w-md flex-col overflow-hidden border-l border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] shadow-2xl"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="flex shrink-0 items-center justify-between border-b border-[#DFCFA6]/60 bg-gradient-to-r from-white via-[#FDFBF7] to-[#FAF6ED] px-6 py-5 z-10 shadow-xs">
+            <div className="flex shrink-0 items-center justify-between border-b border-[rgba(212,175,120,0.25)] bg-[#12110F] px-6 py-5 z-10 shadow-sm">
               <div className="flex items-center gap-2.5">
-                <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#996515] text-[#1A120B] font-extrabold shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
-                  <Heart className="h-5 w-5 fill-[#1A120B] text-[#1A120B]" />
+                <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#191713] border border-[rgba(212,175,120,0.25)] text-[#D4AF78] font-extrabold shadow-[0_2px_10px_rgba(212,175,120,0.15)]">
+                  <Heart className="h-5 w-5 fill-[#D4AF78] text-[#D4AF78]" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl text-[#141414] font-bold">Saved Treasures</h3>
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#8C827A]">
+                  <h3 className="font-serif text-2xl text-[#F5EBDD] font-bold">Saved Treasures</h3>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#B8AA96]">
                     {wishlistedProducts.length} {wishlistedProducts.length === 1 ? 'item' : 'items'} saved
                   </p>
                 </div>
@@ -63,7 +63,7 @@ export default function WishlistSidebar() {
                 type="button"
                 aria-label="Close wishlist"
                 onClick={() => setIsWishlistOpen(false)}
-                className="grid h-10 w-10 place-items-center rounded-full border border-[#DFCFA6]/60 bg-white text-[#141414] shadow-sm transition hover:bg-[#FAF6ED] hover:border-[#D4AF37]"
+                className="grid h-10 w-10 place-items-center rounded-full border border-[rgba(212,175,120,0.25)] bg-[#191713] text-[#F5EBDD] shadow-sm transition hover:bg-[#12110F] hover:border-[#D4AF78]"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -71,22 +71,22 @@ export default function WishlistSidebar() {
 
             {/* Items List with Soft Vignettes and Refined Scroller */}
             <div className="relative flex-1 min-h-0">
-              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-3 bg-gradient-to-b from-[#FAF7F2] to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-3 bg-gradient-to-b from-[#0B0B0A] to-transparent" />
 
               <div className="h-full sidebar-scroller p-4 sm:p-5 sm:pr-4">
                 {wishlistedProducts.length === 0 ? (
-                <div className="flex h-full flex-col items-center justify-center rounded-3xl border border-dashed border-[#DFCFA6]/80 bg-white p-8 text-center">
-                  <div className="grid h-16 w-16 place-items-center rounded-full bg-[#FAF5E8] border border-[#DFCFA6]/60 text-[#B8860B]">
-                    <Heart className="h-8 w-8 text-[#B8860B]" />
+                <div className="flex h-full flex-col items-center justify-center rounded-3xl border border-dashed border-[rgba(212,175,120,0.25)] bg-[#191713] p-8 text-center">
+                  <div className="grid h-16 w-16 place-items-center rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.25)] text-[#D4AF78]">
+                    <Heart className="h-8 w-8 text-[#D4AF78]" />
                   </div>
-                  <h4 className="mt-4 text-xl font-bold text-[#141414]">No saved items yet</h4>
-                  <p className="mt-2 max-w-xs text-sm leading-relaxed text-[#5A554E]">
+                  <h4 className="mt-4 text-xl font-bold text-[#F5EBDD]">No saved items yet</h4>
+                  <p className="mt-2 max-w-xs text-sm leading-relaxed text-[#B8AA96]">
                     Click the heart icon on any handmade craft to save your favorite pieces here.
                   </p>
                   <button
                     type="button"
                     onClick={() => setIsWishlistOpen(false)}
-                    className="btn-gold mt-6 text-xs uppercase tracking-wider"
+                    className="btn-primary mt-6 text-xs uppercase tracking-wider"
                   >
                     Browse Collection
                   </button>
@@ -96,10 +96,10 @@ export default function WishlistSidebar() {
                   {wishlistedProducts.map((product) => (
                     <article
                       key={product.id}
-                      className="group overflow-hidden rounded-2xl border border-[#DFCFA6]/80 bg-gradient-to-b from-[#FFFDF9] via-[#FAF6ED] to-[#F5EEDC]/90 p-3.5 shadow-[0_4px_16px_rgba(180,135,45,0.06)] transition duration-300 hover:border-[#D4AF37]"
+                      className="group overflow-hidden rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#191713] p-3.5 shadow-[0_4px_16px_rgba(0,0,0,0.3)] transition duration-300 hover:border-[rgba(212,175,120,0.55)]"
                     >
                       <div className="flex gap-3.5">
-                        <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#F7F2E6] border border-[#DFCFA6]/50">
+                        <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#0B0B0A] border border-[rgba(212,175,120,0.2)]">
                           <img
                             src={product.image}
                             alt={product.title}
@@ -113,7 +113,7 @@ export default function WishlistSidebar() {
                         <div className="flex min-w-0 flex-1 flex-col justify-between">
                           <div>
                             <div className="flex items-start justify-between gap-2">
-                              <h5 className="truncate font-serif text-lg font-bold text-[#141414]">{product.title}</h5>
+                              <h5 className="truncate font-serif text-lg font-bold text-[#F5EBDD]">{product.title}</h5>
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -121,24 +121,24 @@ export default function WishlistSidebar() {
                                   toggleWishlist(product.id)
                                 }}
                                 aria-label="Remove from wishlist"
-                                className="text-[#8C827A] transition hover:text-rose-500 cursor-pointer"
+                                className="text-[#B8AA96] transition hover:text-rose-400 cursor-pointer"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </button>
                             </div>
-                            <p className="text-[11px] font-bold uppercase tracking-wider text-[#8C827A]">
+                            <p className="text-[11px] font-bold uppercase tracking-wider text-[#B8AA96]">
                               {product.category}
                             </p>
                           </div>
 
                           <div className="mt-2 flex items-center justify-between gap-3">
-                            <span className="text-base font-extrabold text-[#875A10]">{product.price}</span>
+                            <span className="text-base font-extrabold text-[#D4AF78]">{product.price}</span>
                             <button
                               type="button"
                               onClick={() => {
                                 addToCart(product, 1)
                               }}
-                              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#1A120B] to-[#2E2010] border border-[#D4AF37]/40 px-3.5 py-1.5 text-xs font-bold text-[#F2D785] shadow-sm transition hover:border-[#D4AF37] hover:shadow-[0_0_10px_rgba(212,175,55,0.3)]"
+                              className="inline-flex items-center gap-1.5 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] border border-[#D4AF78] px-3.5 py-1.5 text-xs font-bold text-[#0B0B0A] shadow-sm transition"
                             >
                               <ShoppingBag className="h-3.5 w-3.5" />
                               Add to Bag
@@ -153,15 +153,15 @@ export default function WishlistSidebar() {
               </div>
 
               {/* Subtle bottom scroll fade */}
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-3 bg-gradient-to-t from-[#FAF7F2] to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-3 bg-gradient-to-t from-[#0B0B0A] to-transparent" />
             </div>
 
             {wishlistedProducts.length > 0 && (
-              <div className="shrink-0 border-t border-[#DFCFA6]/60 bg-white p-5 shadow-lg z-10">
+              <div className="shrink-0 border-t border-[rgba(212,175,120,0.25)] bg-[#12110F] p-5 shadow-lg z-10">
                 <button
                   type="button"
                   onClick={moveAllWishlistToCart}
-                  className="btn-gold w-full shadow-[0_6px_20px_rgba(212,175,55,0.35)] justify-center font-bold tracking-wide"
+                  className="btn-primary w-full shadow-[0_6px_20px_rgba(212,175,120,0.25)] justify-center font-bold tracking-wide"
                 >
                   <Sparkles className="h-4 w-4" />
                   Move All to Cart & Checkout

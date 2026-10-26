@@ -166,26 +166,26 @@ export default function QuickSearchModal() {
     >
       <div
         ref={cardRef}
-        className="w-full max-w-2xl overflow-hidden rounded-3xl border border-[#D4AF37]/50 bg-white shadow-[0_20px_50px_rgba(20,16,8,0.25),0_0_20px_rgba(212,175,55,0.15)] will-change-[transform,opacity]"
+        className="w-full max-w-2xl overflow-hidden rounded-3xl border border-[rgba(212,175,120,0.25)] bg-[#191713] shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_20px_rgba(212,175,120,0.1)] will-change-[transform,opacity]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar with Clear and Dedicated Close Button */}
-        <div className="relative flex items-center gap-2 border-b border-[#DFCFA6]/60 bg-gradient-to-r from-[#FFFDF9] via-[#FAF6ED] to-[#FFFDF9] p-3 sm:p-4">
+        <div className="relative flex items-center gap-2 border-b border-[rgba(212,175,120,0.25)] bg-[#12110F] p-3 sm:p-4">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3.5 sm:left-4 top-1/2 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-[#B8860B]" />
+            <Search className="pointer-events-none absolute left-3.5 sm:left-4 top-1/2 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-[#D4AF78]" />
             <input
               ref={inputRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search fish, aquariums, plants, candles, jewelry..."
-              className="h-11 sm:h-12 w-full rounded-2xl border border-[#DFCFA6]/80 bg-white pl-10 sm:pl-12 pr-10 text-xs sm:text-base text-[#141414] outline-none placeholder:text-[#8C827A] transition focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/30 font-medium"
+              className="h-11 sm:h-12 w-full rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] pl-10 sm:pl-12 pr-10 text-xs sm:text-base text-[#F5EBDD] outline-none placeholder:text-[#B8AA96]/50 transition focus:border-[#D4AF78] focus:ring-2 focus:ring-[#D4AF78]/30 font-medium"
             />
             {query && (
               <button
                 type="button"
                 aria-label="Clear query"
                 onClick={() => setQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C827A] transition hover:text-[#B8860B] cursor-pointer p-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#B8AA96] transition hover:text-[#D4AF78] cursor-pointer p-1"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -197,7 +197,7 @@ export default function QuickSearchModal() {
             type="button"
             aria-label="Close search"
             onClick={handleClose}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl border border-[#DFCFA6]/80 bg-[#FAF6EE] text-[#5A451A] hover:bg-[#F3E8CD] hover:text-[#141414] hover:border-[#D4AF37] transition duration-150 active:scale-95 cursor-pointer"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#191713] text-[#F5EBDD] hover:bg-[#0B0B0A] hover:border-[#D4AF78] transition duration-150 active:scale-95 cursor-pointer"
             title="Close Search"
           >
             <X className="h-4 w-4 stroke-[2.5]" />
@@ -205,7 +205,7 @@ export default function QuickSearchModal() {
         </div>
 
         {/* Quick Category Filter Bar */}
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar border-b border-[#DFCFA6]/40 bg-white px-3 sm:px-5 py-2.5">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar border-b border-[rgba(212,175,120,0.2)] bg-[#12110F] px-3 sm:px-5 py-2.5">
           {SEARCH_CATEGORIES.map((cat) => (
             <button
               key={cat}
@@ -213,8 +213,8 @@ export default function QuickSearchModal() {
               onClick={() => setSelectedCategory(cat)}
               className={`rounded-full px-3 py-1 text-xs font-bold transition shrink-0 cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#1A120B] shadow-[0_2px_10px_rgba(212,175,55,0.3)] font-extrabold'
-                  : 'border border-[#DFCFA6]/50 bg-[#FAF7F0] text-[#5A451A] hover:bg-[#FAF2DE] hover:border-[#D4AF37]/60'
+                  ? 'bg-[#D4AF78] text-[#0B0B0A] shadow-[0_2px_10px_rgba(212,175,120,0.3)] font-extrabold'
+                  : 'border border-[rgba(212,175,120,0.2)] bg-[#191713] text-[#B8AA96] hover:text-[#F5EBDD] hover:border-[#D4AF78]/60'
               }`}
             >
               {cat}
@@ -223,16 +223,16 @@ export default function QuickSearchModal() {
         </div>
 
         {/* Suggestions & Results List */}
-        <div className="max-h-[60vh] sm:max-h-[55vh] sidebar-scroller p-3 sm:p-5 bg-[#FAF7F2]">
-          <div className="flex items-center justify-between pb-2.5 text-xs font-bold uppercase tracking-wider text-[#8C827A]">
+        <div className="max-h-[60vh] sm:max-h-[55vh] sidebar-scroller p-3 sm:p-5 bg-[#0B0B0A]">
+          <div className="flex items-center justify-between pb-2.5 text-xs font-bold uppercase tracking-wider text-[#B8AA96]">
             <span>{query ? `Found ${searchResults.length} items` : 'Trending Marketplace Drops'}</span>
-            <span className="text-[10px] text-[#B8860B] font-semibold hidden sm:inline">Press ESC to exit</span>
+            <span className="text-[10px] text-[#D4AF78] font-semibold hidden sm:inline">Press ESC to exit</span>
           </div>
 
           {searchResults.length === 0 ? (
             <div className="py-10 text-center">
-              <p className="font-serif text-lg font-bold text-[#141414]">No items found matching "{query}"</p>
-              <p className="mt-1 text-xs text-[#5A554E]">
+              <p className="font-serif text-lg font-bold text-[#F5EBDD]">No items found matching "{query}"</p>
+              <p className="mt-1 text-xs text-[#B8AA96]">
                 Try searching for Discus, Betta, Aquarium, Candle, Resin, or Bangles.
               </p>
             </div>
@@ -241,7 +241,7 @@ export default function QuickSearchModal() {
               {searchResults.map((product: any) => (
                 <div
                   key={product.id}
-                  className="group flex items-center justify-between rounded-2xl border border-[#E5E0D8] bg-white p-2.5 sm:p-3 transition duration-150 hover:border-[#D4AF37] hover:bg-[#FFFDF9] hover:shadow-xs"
+                  className="group flex items-center justify-between rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#191713] p-2.5 sm:p-3 transition duration-150 hover:border-[rgba(212,175,120,0.55)] hover:bg-[#12110F] hover:shadow-xs"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <img
@@ -252,23 +252,23 @@ export default function QuickSearchModal() {
                       onError={(e) => {
                         e.currentTarget.src = fallbackCraftImage
                       }}
-                      className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl object-cover border border-[#E5E0D8] shrink-0"
+                      className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl object-cover border border-[rgba(212,175,120,0.2)] shrink-0"
                     />
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#9E7314] truncate">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#D4AF78] truncate">
                           {product.category}
                         </span>
                         {product.department === 'aquarium' && (
-                          <span className="rounded-full bg-teal-100 px-1.5 py-0.2 text-[8px] font-bold text-teal-800 shrink-0">
+                          <span className="rounded-full bg-teal-950/40 border border-teal-500/40 px-1.5 py-0.2 text-[8px] font-bold text-teal-300 shrink-0">
                             Aquarium
                           </span>
                         )}
                       </div>
-                      <h4 className="truncate text-xs sm:text-sm font-bold text-[#141414] group-hover:text-[#B8860B] transition">
+                      <h4 className="truncate text-xs sm:text-sm font-bold text-[#F5EBDD] group-hover:text-[#D4AF78] transition">
                         {product.title}
                       </h4>
-                      <span className="text-xs font-extrabold text-[#141414]">
+                      <span className="text-xs font-extrabold text-[#D4AF78]">
                         {product.price}
                       </span>
                     </div>
@@ -282,14 +282,14 @@ export default function QuickSearchModal() {
                         e.stopPropagation()
                         toggleWishlist(product.id)
                       }}
-                      className={`grid h-8 w-8 place-items-center rounded-full border border-[#DDD7CE] bg-[#FAF8F5] text-[#141414] transition hover:border-rose-400 hover:text-rose-500 cursor-pointer ${
-                        isWishlisted(product.id) ? 'border-rose-400 bg-rose-50 text-rose-500' : ''
+                      className={`grid h-8 w-8 place-items-center rounded-full border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] text-[#F5EBDD] transition hover:border-rose-400 hover:text-rose-400 cursor-pointer ${
+                        isWishlisted(product.id) ? 'border-rose-400 bg-rose-950/30 text-rose-400' : ''
                       }`}
                     >
-                      <Heart className={`h-3.5 w-3.5 ${isWishlisted(product.id) ? 'fill-rose-500' : ''}`} />
+                      <Heart className={`h-3.5 w-3.5 ${isWishlisted(product.id) ? 'fill-rose-400' : ''}`} />
                     </button>
                     {product.department === 'aquarium' ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-[#FAF4E2] border border-[#D4AF37]/60 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#8C6D2B]">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[#12110F] border border-[rgba(212,175,120,0.3)] px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#D4AF78]">
                         Coming Soon
                       </span>
                     ) : (
@@ -299,7 +299,7 @@ export default function QuickSearchModal() {
                           addToCart(product, 1)
                           handleClose()
                         }}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-[#141414] px-3 py-1.5 text-xs font-bold text-white transition hover:bg-[#B8860B] active:scale-95 cursor-pointer"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] px-3 py-1.5 text-xs font-bold text-[#0B0B0A] transition active:scale-95 cursor-pointer"
                       >
                         <ShoppingBag className="h-3.5 w-3.5" />
                         <span className="hidden sm:inline">Add</span>

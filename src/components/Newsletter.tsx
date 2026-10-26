@@ -29,25 +29,25 @@ export default function Newsletter() {
 
   return (
     <section id="newsletter" ref={containerRef} className="section-shell py-14 sm:py-20">
-      <div className="gsap-newsletter-card relative overflow-hidden rounded-[2.5rem] border border-[#D4AF37]/50 bg-gradient-to-b from-[#FFFDF8] via-[#FAF5E8] to-[#F7ECCF]/90 p-8 sm:p-12 lg:p-16 shadow-[0_16px_45px_rgba(184,134,11,0.12),0_0_20px_rgba(212,175,55,0.10)]">
+      <div className="gsap-newsletter-card relative overflow-hidden rounded-[2.5rem] border border-[rgba(212,175,120,0.25)] bg-[#191713] p-8 sm:p-12 lg:p-16 shadow-[0_16px_45px_rgba(0,0,0,0.6)]">
         <div className="relative grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <span className="section-eyebrow">
-              <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" /> Artisan Circle
+              <Sparkles className="h-3.5 w-3.5 text-[#D4AF78]" /> Artisan Circle
             </span>
-            <h2 className="heading-1 mt-3.5">
+            <h2 className="heading-1 mt-3.5 text-[#F5EBDD]">
               Join the Soft <span className="italic font-normal text-gold-gradient">Handmade Circle</span>
             </h2>
-            <p className="body-lead mt-4 max-w-xl text-[#4A4339]">
+            <p className="body-lead mt-4 max-w-xl text-[#B8AA96]">
               Get notified of limited batch drops, maker studio journals, and seasonal DIY tutorials directly from our atelier.
             </p>
             <div className="mt-5 flex items-center gap-3">
               <img
                 src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=300&q=80"
                 alt="Artisan studio box"
-                className="h-12 w-12 rounded-xl object-cover border border-[#D4AF37]/50 shadow-sm"
+                className="h-12 w-12 rounded-xl object-cover border border-[rgba(212,175,120,0.25)] shadow-sm"
               />
-              <p className="text-xs font-semibold text-[#7A5408]">
+              <p className="text-xs font-semibold text-[#D4AF78]">
                 Handcrafted boutique packaging • Dispatched across India
               </p>
             </div>
@@ -55,31 +55,31 @@ export default function Newsletter() {
 
           <div>
             {isSubscribed ? (
-              <div className="rounded-3xl border border-[#D4AF37]/60 bg-gradient-to-br from-[#FFFDF8] to-[#FAF4E5] p-6 shadow-sm text-center">
-                <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-[#FAF4E2] to-[#F5E8C4] border border-[#D4AF37]/50 text-[#8F650D]">
-                  <CheckCircle2 className="h-6 w-6 text-[#8F650D]" />
+              <div className="rounded-3xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] p-6 shadow-sm text-center">
+                <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.25)] text-[#D4AF78]">
+                  <CheckCircle2 className="h-6 w-6 text-[#D4AF78]" />
                 </div>
-                <h3 className="mt-3 font-serif text-2xl font-bold text-[#141414]">You&apos;re on the list!</h3>
-                <p className="mt-1 text-xs text-[#4A4339]">
+                <h3 className="mt-3 font-serif text-2xl font-bold text-[#F5EBDD]">You&apos;re on the list!</h3>
+                <p className="mt-1 text-xs text-[#B8AA96]">
                   Thank you for joining. You will receive exclusive early access to artisan drops and studio journals.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex flex-col gap-3 sm:flex-row">
                 <div className="relative flex-1">
-                  <Mail className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#9E7314]" />
+                  <Mail className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#D4AF78]" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email address"
-                    className="h-14 w-full rounded-full border border-[#D4AF37]/50 bg-white pl-12 pr-5 text-sm text-[#141414] outline-none shadow-xs transition placeholder:text-[#8C827A] focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/40 font-medium"
+                    className="h-14 w-full rounded-full border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] pl-12 pr-5 text-sm text-[#F5EBDD] outline-none shadow-xs transition placeholder:text-[#B8AA96]/50 focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="btn-gold h-14 px-8 text-sm font-bold shrink-0 shadow-sm cursor-pointer"
+                  className="btn-primary h-14 px-8 text-sm font-bold shrink-0 shadow-sm cursor-pointer"
                 >
                   <Send className="h-4 w-4" />
                   Subscribe
@@ -87,7 +87,7 @@ export default function Newsletter() {
               </form>
             )}
             {!isSubscribed && (
-              <p className="mt-2.5 text-center text-[11px] text-[#635B4F] sm:text-left">
+              <p className="mt-2.5 text-center text-[11px] text-[#B8AA96] sm:text-left">
                 We respect your privacy. Zero spam, unsubscribe anytime.
               </p>
             )}
