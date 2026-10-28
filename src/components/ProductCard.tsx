@@ -126,7 +126,7 @@ _Hi NP Atelier, I would like to order this item directly. Please confirm availab
         isCompact
           ? 'rounded-[1.15rem] sm:rounded-[1.35rem] p-1.5 sm:p-2.5'
           : 'rounded-[1.25rem] sm:rounded-[1.65rem] p-2 sm:p-2.5'
-      } border border-[rgba(212,175,120,0.25)] bg-[#191713] shadow-[0_8px_24px_rgba(0,0,0,0.65)] sm:hover:shadow-[0_16px_36px_rgba(0,0,0,0.85)] sm:hover:border-[rgba(212,175,120,0.55)] transition-all duration-200 ease-out transform-gpu will-change-transform ${className}`}
+      } border border-[rgba(212,175,120,0.25)] bg-[#191713] shadow-[0_8px_24px_rgba(0,0,0,0.65)] sm:hover:shadow-[0_16px_36px_rgba(0,0,0,0.85)] sm:hover:border-[rgba(212,175,120,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out transform-gpu hover:will-change-transform ${className}`}
     >
       <div>
         {/* Image Showcase Frame */}
@@ -138,6 +138,8 @@ _Hi NP Atelier, I would like to order this item directly. Please confirm availab
           <img
             src={product.image}
             alt={product.title}
+            width={380}
+            height={380}
             loading={priority ? 'eager' : 'lazy'}
             decoding="async"
             onError={(event) => {

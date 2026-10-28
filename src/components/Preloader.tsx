@@ -5,7 +5,16 @@ import gsap from 'gsap'
 import { Sparkles } from 'lucide-react'
 
 export default function Preloader() {
-  const [isDone, setIsDone] = useState(false)
+  const [isDone, setIsDone] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        return Boolean(sessionStorage.getItem('np_atelier_preloader_seen'))
+      } catch {
+        return false
+      }
+    }
+    return false
+  })
 
   const preloaderRef = useRef<HTMLDivElement>(null)
   const emblemRef = useRef<HTMLDivElement>(null)
@@ -15,11 +24,14 @@ export default function Preloader() {
   const percentTextRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
-    // Check if user already saw preloader in this session
-    const hasSeen = sessionStorage.getItem('np_atelier_preloader_seen')
-    if (hasSeen) {
-      setIsDone(true)
-      return
+    // If already marked as seen, do nothing
+    try {
+      if (sessionStorage.getItem('np_atelier_preloader_seen')) {
+        setIsDone(true)
+        return
+      }
+    } catch {
+      // Ignore storage errors
     }
 
     // Freeze background scroll while preloader is running
@@ -28,90 +40,91 @@ export default function Preloader() {
 
     const progressObj = { value: 0 }
 
-    // Continuous soft orbital spin
-    if (ringRef.current) {
-      gsap.to(ringRef.current, {
-        rotate: 360,
-        duration: 8,
-        repeat: -1,
-        ease: 'none',
-      })
-    }
-
-    // Main entrance & progress timeline
-    const tl = gsap.timeline({
-      onComplete: () => {
-        // Exit animation
-        const exitTl = gsap.timeline({
-          onComplete: () => {
-            sessionStorage.setItem('np_atelier_preloader_seen', 'true')
-            document.body.style.overflow = prevOverflow
-            setIsDone(true)
-          },
+    const ctx = gsap.context(() => {
+      // Continuous soft orbital spin
+      if (ringRef.current) {
+        gsap.to(ringRef.current, {
+          rotate: 360,
+          duration: 7,
+          repeat: -1,
+          ease: 'none',
         })
+      }
 
-        exitTl
-          .to(contentRef.current, {
-            opacity: 0,
-            y: -20,
-            scale: 0.96,
-            duration: 0.35,
-            ease: 'power2.in',
-          })
-          .to(
-            preloaderRef.current,
-            {
-              yPercent: -100,
-              duration: 0.65,
-              ease: 'power3.inOut',
+      // Main entrance & progress timeline (compacted to snappy ~0.85s luxury experience)
+      const tl = gsap.timeline({
+        onComplete: () => {
+          gsap.timeline({
+            onComplete: () => {
+              try {
+                sessionStorage.setItem('np_atelier_preloader_seen', 'true')
+              } catch {}
+              document.body.style.overflow = prevOverflow
+              setIsDone(true)
             },
-            '-=0.15'
-          )
-      },
-    })
-
-    // Initial content entrance
-    tl.fromTo(
-      contentRef.current,
-      { opacity: 0, scale: 0.94 },
-      { opacity: 1, scale: 1, duration: 0.45, ease: 'power2.out' }
-    )
-      // Progress increment 0 to 100
-      .to(
-        progressObj,
-        {
-          value: 100,
-          duration: 1.25,
-          ease: 'power2.inOut',
-          onUpdate: () => {
-            const currentVal = Math.round(progressObj.value)
-            if (progressBarRef.current) {
-              progressBarRef.current.style.width = `${currentVal}%`
-            }
-            if (percentTextRef.current) {
-              percentTextRef.current.textContent = `${String(currentVal).padStart(2, '0')}%`
-            }
-          },
+          })
+            .to(contentRef.current, {
+              opacity: 0,
+              y: -14,
+              scale: 0.97,
+              duration: 0.24,
+              ease: 'power2.in',
+            })
+            .to(
+              preloaderRef.current,
+              {
+                yPercent: -100,
+                duration: 0.45,
+                ease: 'power3.inOut',
+              },
+              '-=0.1'
+            )
         },
-        '-=0.2'
+      })
+
+      // Initial content entrance
+      tl.fromTo(
+        contentRef.current,
+        { opacity: 0, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' }
       )
-      // Subtle jewel pulse when 100% reached
-      .to(emblemRef.current, {
-        scale: 1.08,
-        boxShadow: '0 0 35px rgba(212,175,55,0.6)',
-        duration: 0.18,
-        ease: 'power1.out',
-      })
-      .to(emblemRef.current, {
-        scale: 1,
-        boxShadow: '0 0 15px rgba(212,175,55,0.2)',
-        duration: 0.18,
-        ease: 'power1.in',
-      })
+        // Snappy progress increment 0 to 100
+        .to(
+          progressObj,
+          {
+            value: 100,
+            duration: 0.65,
+            ease: 'power2.inOut',
+            onUpdate: () => {
+              const currentVal = Math.round(progressObj.value)
+              if (progressBarRef.current) {
+                progressBarRef.current.style.width = `${currentVal}%`
+              }
+              if (percentTextRef.current) {
+                percentTextRef.current.textContent = `${String(currentVal).padStart(2, '0')}%`
+              }
+            },
+          },
+          '-=0.15'
+        )
+        // Subtle jewel pulse when 100% reached
+        .to(emblemRef.current, {
+          scale: 1.06,
+          boxShadow: '0 0 30px rgba(212,175,120,0.6)',
+          duration: 0.12,
+          ease: 'power1.out',
+        })
+        .to(emblemRef.current, {
+          scale: 1,
+          boxShadow: '0 0 15px rgba(212,175,120,0.2)',
+          duration: 0.12,
+          ease: 'power1.in',
+        })
+    }, preloaderRef)
 
     return () => {
       document.body.style.overflow = prevOverflow
-      tl.kill()
+      ctx.revert()
     }
   }, [])
 

@@ -278,16 +278,19 @@ export default function Hero() {
 
     mouseRafRef.current = requestAnimationFrame(() => {
       mouseRafRef.current = null
-      if (!stageRef.current) return
-      const rect = stageRef.current.getBoundingClientRect()
+      const stage = stageRef.current
+      if (!stage) return
+      const rect = stage.getBoundingClientRect()
       const xRatio = (clientX - rect.left) / rect.width - 0.5
       const yRatio = (clientY - rect.top) / rect.height - 0.5
+      const cards = stage.querySelectorAll('.gsap-hero-card')
 
-      gsap.to('.gsap-hero-card', {
+      gsap.to(cards, {
         x: xRatio * 8,
         y: yRatio * 8,
         rotateY: xRatio * 4,
         rotateX: -yRatio * 4,
+        transformPerspective: 1000,
         duration: 0.3,
         ease: 'power1.out',
         overwrite: 'auto',
@@ -300,12 +303,15 @@ export default function Hero() {
       cancelAnimationFrame(mouseRafRef.current)
       mouseRafRef.current = null
     }
-    gsap.to('.gsap-hero-card', {
+    const stage = stageRef.current
+    if (!stage) return
+    const cards = stage.querySelectorAll('.gsap-hero-card')
+    gsap.to(cards, {
       x: 0,
       y: 0,
       rotateY: 0,
       rotateX: 0,
-      duration: 0.5,
+      duration: 0.45,
       ease: 'power2.out',
       overwrite: 'auto',
     })

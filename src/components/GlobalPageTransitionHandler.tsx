@@ -53,30 +53,21 @@ export default function GlobalPageTransitionHandler() {
           return
         }
 
-        // Only trigger if destination pathname is DIFFERENT from current pathname
+        // Only trigger special branded lounge transition for /profile and /admin
         if (destUrl.pathname !== currentUrl.pathname) {
-          isNavigatingRef.current = true
+          if (destUrl.pathname.startsWith('/profile') || destUrl.pathname.startsWith('/admin')) {
+            isNavigatingRef.current = true
 
-          let targetTitle = 'Entering NP Atelier'
-          let targetSubtitle = 'Curated Artisan Marketplace & Living Waters'
-
-          if (destUrl.pathname.startsWith('/profile')) {
-            targetTitle = 'Patron Atelier Lounge'
-            targetSubtitle = 'Accessing Bespoke Orders & Delivery Passport...'
-          } else if (destUrl.pathname.startsWith('/admin')) {
-            targetTitle = 'Executive Access'
-            targetSubtitle = 'NP Atelier Administrative Terminal & Live Operations...'
-          } else if (destUrl.pathname === '/') {
-            targetTitle = 'Returning to Boutique'
-            targetSubtitle = 'Living Waters & Artisan Mastery...'
+            const isAdmin = destUrl.pathname.startsWith('/admin')
+            triggerGlobalLoader({
+              mode: 'page_switch',
+              title: isAdmin ? 'Executive Access' : 'Patron Atelier Lounge',
+              subtitle: isAdmin
+                ? 'NP Atelier Administrative Terminal & Live Operations...'
+                : 'Accessing Bespoke Orders & Delivery Passport...',
+              durationMs: 380,
+            })
           }
-
-          triggerGlobalLoader({
-            mode: 'page_switch',
-            title: targetTitle,
-            subtitle: targetSubtitle,
-            durationMs: 700,
-          })
         }
       } catch {
         // Ignore URL parse errors
@@ -89,39 +80,13 @@ export default function GlobalPageTransitionHandler() {
     }
   }, [triggerGlobalLoader])
 
-  // 2. Listen to route pathname changes (browser back/forward or programmatic navigation)
+  // 2. Listen to route pathname changes
   useEffect(() => {
     if (prevPathnameRef.current !== pathname) {
       prevPathnameRef.current = pathname
-
-      // If page switched without a prior link click (e.g. browser back/forward or router.push)
-      // and loader is not currently open, trigger a snappy transition
-      if (!globalLoader?.isOpen && !isNavigatingRef.current) {
-        let routeTitle = 'Entering NP Atelier'
-        let routeSub = 'Curated Artisan Marketplace & Living Waters'
-
-        if (pathname.startsWith('/profile')) {
-          routeTitle = 'Patron Atelier Lounge'
-          routeSub = 'Accessing Bespoke Orders & Delivery Passport...'
-        } else if (pathname.startsWith('/admin')) {
-          routeTitle = 'Executive Access'
-          routeSub = 'NP Atelier Administrative Terminal & Live Operations...'
-        } else if (pathname === '/') {
-          routeTitle = 'Welcome to Boutique'
-          routeSub = 'Living Waters & Artisan Mastery...'
-        }
-
-        triggerGlobalLoader({
-          mode: 'page_switch',
-          title: routeTitle,
-          subtitle: routeSub,
-          durationMs: 650,
-        })
-      }
-
       isNavigatingRef.current = false
     }
-  }, [pathname, globalLoader?.isOpen, triggerGlobalLoader])
+  }, [pathname])
 
   return (
     <AnimatePresence mode="wait">

@@ -113,35 +113,26 @@ export default function AtelierGlobalLoader({
     const originalOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
-    const startTime = Date.now()
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime
-      const rawPct = Math.min(100, Math.floor((elapsed / durationMs) * 100))
-      setProgress(rawPct)
+    // Animate progress to 100 with hardware acceleration
+    setProgress(100)
 
-      if (rawPct < 26) {
-        setCurrentStepIndex(0)
-      } else if (rawPct < 58) {
-        setCurrentStepIndex(1)
-      } else if (rawPct < 88) {
-        setCurrentStepIndex(2)
-      } else {
-        setCurrentStepIndex(3)
-      }
+    const stepInterval = durationMs / 4
+    const timer1 = setTimeout(() => setCurrentStepIndex(1), stepInterval)
+    const timer2 = setTimeout(() => setCurrentStepIndex(2), stepInterval * 2)
+    const timer3 = setTimeout(() => setCurrentStepIndex(3), stepInterval * 3)
 
-      if (rawPct >= 100) {
-        clearInterval(interval)
-        setTimeout(() => {
-          document.body.style.overflow = originalOverflow
-          if (onComplete) {
-            onComplete()
-          }
-        }, 160)
+    const completeTimer = setTimeout(() => {
+      document.body.style.overflow = originalOverflow
+      if (onComplete) {
+        onComplete()
       }
-    }, 18)
+    }, durationMs + 120)
 
     return () => {
-      clearInterval(interval)
+      clearTimeout(timer1)
+      clearTimeout(timer2)
+      clearTimeout(timer3)
+      clearTimeout(completeTimer)
       document.body.style.overflow = originalOverflow
     }
   }, [durationMs, onComplete])
@@ -284,8 +275,9 @@ export default function AtelierGlobalLoader({
           <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.25)] p-0.5 shadow-inner">
             <motion.div
               className="h-full rounded-full bg-gradient-to-r from-[#D4AF78] via-[#E5C18A] to-[#D4AF78] shadow-[0_0_12px_rgba(212,175,120,0.4)] relative overflow-hidden"
-              style={{ width: `${progress}%` }}
-              transition={{ ease: 'easeOut', duration: 0.05 }}
+              initial={{ width: '0%' }}
+              animate={{ width: `${progress}%` }}
+              transition={{ ease: 'easeInOut', duration: durationMs / 1000 }}
             >
               {/* Shimmer traversal line */}
               <motion.div

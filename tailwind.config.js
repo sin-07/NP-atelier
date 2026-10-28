@@ -111,6 +111,7 @@ export default {
           '50%': { opacity: '1', transform: 'scale3d(1.02, 1.02, 1)' },
         },
         shimmer: {
+          '0%': { transform: 'translate3d(-100%, 0, 0)' },
           '100%': { transform: 'translate3d(100%, 0, 0)' },
         },
         marquee: {

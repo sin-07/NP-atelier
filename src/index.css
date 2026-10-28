@@ -423,6 +423,15 @@
   pointer-events: none;
 }
 
+@keyframes shimmer {
+  0% {
+    transform: translate3d(-100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
 @keyframes goldShimmerSweep {
   0% {
     transform: translateX(-100%);

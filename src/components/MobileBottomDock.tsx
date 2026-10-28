@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import {
@@ -15,6 +16,7 @@ import {
 import { useMarketplace } from '../context/MarketplaceContext'
 
 export default function MobileBottomDock() {
+  const router = useRouter()
   const [mounted, setMounted] = useState(false)
   const [activeTab, setActiveTab] = useState<'home' | 'crafts' | 'aquarium' | 'search' | 'wishlist' | 'bag'>('home')
   const dockRef = useRef<HTMLElement>(null)
@@ -62,10 +64,10 @@ export default function MobileBottomDock() {
     if (typeof window === 'undefined') return
     if (window.location.pathname !== '/') {
       if (href === '#acquario-tropicale' || href === '#aquarium') {
-        window.location.href = '/?dept=aquarium'
+        router.push('/?dept=aquarium')
         return
       }
-      window.location.href = href === '#home' ? '/' : `/${href}`
+      router.push(href === '#home' ? '/' : `/${href}`)
       return
     }
     if (href === '#home') {
@@ -102,7 +104,7 @@ export default function MobileBottomDock() {
     <nav
       ref={dockRef}
       aria-label="Mobile primary navigation"
-      className="fixed bottom-3 inset-x-2 max-w-md mx-auto z-40 sm:hidden transform-gpu will-change-transform"
+      className="fixed bottom-3 inset-x-2 max-w-md mx-auto z-40 sm:hidden transform-gpu"
     >
       <div className="flex items-center justify-around rounded-full border border-[#D4AF37]/60 bg-[#120F0A] p-1.5 shadow-[0_14px_40px_rgba(0,0,0,0.55),0_0_20px_rgba(212,175,55,0.15)]">
         {/* 1. Home / Atelier */}

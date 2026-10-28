@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import {
   Heart,
@@ -35,6 +36,7 @@ import { useMarketplace } from '../context/MarketplaceContext'
 import gsap from 'gsap'
 
 export default function Navbar() {
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isMenuMounted, setIsMenuMounted] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -149,10 +151,10 @@ export default function Navbar() {
     if (typeof window !== 'undefined') {
       if (window.location.pathname !== '/') {
         if (href === '#acquario-tropicale' || href === '#aquarium') {
-          window.location.href = '/?dept=aquarium'
+          router.push('/?dept=aquarium')
           return
         }
-        window.location.href = href === '#home' ? '/' : `/${href}`
+        router.push(href === '#home' ? '/' : `/${href}`)
         return
       }
       if (href === '#home') {
@@ -171,10 +173,10 @@ export default function Navbar() {
   const handleLinkClick = (href: string, dept?: 'all' | 'crafts' | 'aquarium') => {
     if (typeof window !== 'undefined' && window.location.pathname !== '/') {
       if (href === '#acquario-tropicale' || href === '#aquarium' || dept === 'aquarium') {
-        window.location.href = '/?dept=aquarium'
+        router.push('/?dept=aquarium')
         return
       }
-      window.location.href = href === '#home' ? '/' : `/${href}`
+      router.push(href === '#home' ? '/' : `/${href}`)
       return
     }
 

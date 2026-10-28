@@ -41,64 +41,71 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>(
     const node = containerRef.current
     if (!node || typeof window === 'undefined') return
 
-    // Check if element is already in view on mount (e.g. initial page load)
-    const rect = node.getBoundingClientRect()
-    const isAlreadyVisible = rect.top < window.innerHeight && rect.bottom > 0
+    let observer: IntersectionObserver | null = null
 
-    if (isAlreadyVisible && !hasAnimatedRef.current) {
-      hasAnimatedRef.current = true
-      const targets = resolvedSelector ? node.querySelectorAll(resolvedSelector) : [node]
-      if (targets && targets.length > 0) {
-        gsap.fromTo(
-          targets,
-          { opacity: 0, y: resolvedY },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.32,
-            stagger: 0.03,
-            ease: 'power2.out',
-            clearProps: 'all',
-          }
-        )
-      }
-      return
-    }
+    const ctx = gsap.context(() => {
+      // Check if element is already in view on mount (e.g. initial page load)
+      const rect = node.getBoundingClientRect()
+      const isAlreadyVisible = rect.top < window.innerHeight && rect.bottom > 0
 
-    // Ahead-of-scroll observer (triggers 120px before user arrives for seamless smoothness)
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimatedRef.current) {
-          hasAnimatedRef.current = true
-          observer.disconnect()
-
-          const targets = resolvedSelector
-            ? node.querySelectorAll(resolvedSelector)
-            : [node]
-
-          if (targets && targets.length > 0) {
-            gsap.fromTo(
-              targets,
-              { opacity: 0, y: resolvedY },
-              {
-                opacity: 1,
-                y: 0,
-                duration,
-                stagger,
-                delay,
-                ease: 'power2.out',
-                clearProps: 'all',
-              }
-            )
-          }
+      if (isAlreadyVisible && !hasAnimatedRef.current) {
+        hasAnimatedRef.current = true
+        const targets = resolvedSelector ? node.querySelectorAll(resolvedSelector) : [node]
+        if (targets && targets.length > 0) {
+          gsap.fromTo(
+            targets,
+            { opacity: 0, y: resolvedY },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.32,
+              stagger: 0.03,
+              ease: 'power2.out',
+              clearProps: 'all',
+            }
+          )
         }
-      },
-      { threshold, rootMargin }
-    )
+        return
+      }
 
-    observer.observe(node)
+      // Ahead-of-scroll observer (triggers 120px before user arrives for seamless smoothness)
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !hasAnimatedRef.current) {
+            hasAnimatedRef.current = true
+            observer?.disconnect()
 
-    return () => observer.disconnect()
+            const targets = resolvedSelector
+              ? node.querySelectorAll(resolvedSelector)
+              : [node]
+
+            if (targets && targets.length > 0) {
+              gsap.fromTo(
+                targets,
+                { opacity: 0, y: resolvedY },
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration,
+                  stagger,
+                  delay,
+                  ease: 'power2.out',
+                  clearProps: 'all',
+                }
+              )
+            }
+          }
+        },
+        { threshold, rootMargin }
+      )
+
+      observer.observe(node)
+    }, containerRef)
+
+    return () => {
+      observer?.disconnect()
+      ctx.revert()
+    }
   }, [threshold, rootMargin, resolvedY, duration, stagger, delay, resolvedSelector])
 
   return { containerRef, ref: containerRef }

@@ -209,6 +209,10 @@ export default function AcquarioTropicale() {
                     <img
                       src={cat.image}
                       alt={cat.title}
+                      width={400}
+                      height={250}
+                      loading="lazy"
+                      decoding="async"
                       onError={(e) => {
                         e.currentTarget.src = fallbackAquariumImage
                       }}

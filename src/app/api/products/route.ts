@@ -10,7 +10,14 @@ import { Product } from '../../../data/products'
 export async function GET() {
   try {
     const products = await getProducts()
-    return NextResponse.json({ success: true, products })
+    return NextResponse.json(
+      { success: true, products },
+      {
+        headers: {
+          'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=120',
+        },
+      }
+    )
   } catch (err: any) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 })
   }
