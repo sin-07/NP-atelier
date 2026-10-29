@@ -4,6 +4,7 @@ import { Eye, Heart, MessageCircle, Minus, Plus, ShoppingBag, Star, Sparkles } f
 import { fallbackCraftImage, fallbackAquariumImage } from '../utils/fallbackImage'
 import { Product } from '../data/products'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { buildSingleProductWhatsAppMessage, sendWhatsAppOrder } from '../utils/whatsappOrder'
 
 export interface ProductCardProps {
   product: Product | any
@@ -103,22 +104,29 @@ function ProductCard({
 
   const contactPhone = (branding?.contactPhone || '+91 93412 97124').replace(/[^0-9]/g, '')
   const storeName = branding?.siteName || 'NP Atelier'
-  const waMessage = isCardComingSoon
-    ? `*✦ NOTIFY ON LAUNCH INQUIRY ✦*
-*Store:* ${storeName}
-*Item:* ${product.title}
-*Price:* ${formattedPrice}
-*Department:* Acquario Tropicale
-
-_Hi NP Atelier, please notify me when ${product.title} launches & becomes available!_`
-    : `*✦ NEW PRODUCT ORDER ✦*
-*Store:* ${storeName}
-*Item:* ${product.title}
-*Price:* ${formattedPrice}${activeQuantity > 1 ? ` (Qty: ${activeQuantity})` : ''}
-*Department:* ${product.department === 'aquarium' ? 'Exotic Aquatics' : 'Handmade Crafts'}
-
-_Hi NP Atelier, I would like to order this item directly. Please confirm availability & dispatch tracking details!_`
+  const waMessage = buildSingleProductWhatsAppMessage({
+    storeName,
+    title: product.title,
+    price: formattedPrice,
+    quantity: activeQuantity > 1 ? activeQuantity : 1,
+    category: product.category,
+    department: product.department,
+    image: product.image,
+    isComingSoon: isCardComingSoon,
+    description: product.description,
+  })
   const waUrl = `https://wa.me/${contactPhone || '919341297124'}?text=${encodeURIComponent(waMessage)}`
+
+  const handleWhatsAppAction = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    sendWhatsAppOrder({
+      phone: contactPhone || '919341297124',
+      message: waMessage,
+      imageUrl: product.image,
+      imageFilename: `${(product.title || 'product').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}.jpg`,
+    })
+  }
 
   return (
     <article
@@ -308,7 +316,7 @@ _Hi NP Atelier, I would like to order this item directly. Please confirm availab
                   href={waUrl}
                   target="_blank"
                   rel="noreferrer"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={handleWhatsAppAction}
                   className={`${
                     isCompact ? 'h-8 sm:h-9 px-2 sm:px-2.5' : 'h-8.5 sm:h-9.5 px-2.5 sm:px-3'
                   } rounded-full bg-[#12110F] border border-[rgba(212,175,120,0.30)] text-[#D4AF78] hover:bg-[#191713] hover:border-[#D4AF78] hover:text-[#E5C18A] transition-all duration-200 active:scale-95 flex items-center justify-center gap-1 shrink-0 shadow-xs cursor-pointer group/wa`}
@@ -377,7 +385,7 @@ _Hi NP Atelier, I would like to order this item directly. Please confirm availab
                 href={waUrl}
                 target="_blank"
                 rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
+                onClick={handleWhatsAppAction}
                 className={`${
                   isCompact ? 'h-8 sm:h-9 px-2 sm:px-2.5' : 'h-8.5 sm:h-9.5 px-2.5 sm:px-3'
                 } rounded-full bg-[#12110F] border border-[rgba(212,175,120,0.30)] text-[#D4AF78] hover:bg-[#191713] hover:border-[#D4AF78] hover:text-[#E5C18A] transition-all duration-200 active:scale-95 flex items-center justify-center gap-1 shrink-0 shadow-xs cursor-pointer group/wa`}

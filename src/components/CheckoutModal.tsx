@@ -24,6 +24,7 @@ import { useMarketplace } from '../context/MarketplaceContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
 import { lookupPincode } from '../utils/pincodeLookup'
 import { getSavedShippingAddress, saveShippingAddress, findAddressByPhone } from '../utils/addressStorage'
+import { buildCartWhatsAppMessage, sendWhatsAppOrder } from '../utils/whatsappOrder'
 
 export default function CheckoutModal() {
   const {
@@ -239,33 +240,21 @@ export default function CheckoutModal() {
       if (order) {
         const contactPhone = (branding?.contactPhone || '+91 93412 97124').replace(/[^0-9]/g, '')
         const targetPhone = contactPhone || '919341297124'
-        const discountText =
-          discountAmount > 0
-            ? `• *Discount:* -₹${discountAmount.toFixed(0)} (${appliedCoupon?.code || 'COUPON'})\n`
-            : ''
 
-        const waMessage = `*✦ NEW ORDER CONFIRMATION ✦*
-*Store:* ${siteName}
-*Order ID:* #${order.orderId}
-*Date:* ${order.date || new Date().toLocaleDateString('en-IN')}
-
-*CUSTOMER DETAILS:*
-• *Name:* ${formData.fullName}
-• *Mobile:* ${formData.phone}
-• *Email:* ${formData.email}
-• *Delivery Address:* ${formData.address}, ${formData.city}, ${formData.state} - ${formData.zip}
-• *Delivery Zone:* ${activeRegionConfig?.name || 'North'} Region (₹${shippingCost.toFixed(0)})
-
-*ORDERED ITEMS (${cartItems.length}):*
-${itemsText}
-
-*PAYMENT & TOTAL:*
-• *Items Subtotal:* ₹${cartSubtotal.toFixed(0)}
-${discountText}• *Regional Courier (${activeRegionConfig?.name || 'North'}):* ₹${shippingCost.toFixed(0)}
-• *Total Payable:* ₹${cartFinalTotal.toFixed(0)}
-• *Payment Mode:* Pay on Delivery (Cash on Delivery)
-
-_Please confirm my order and share dispatch tracking details!_`
+        const waMessage = buildCartWhatsAppMessage({
+          storeName: siteName,
+          orderId: order.orderId,
+          customerName: formData.fullName,
+          customerPhone: formData.phone,
+          customerAddress: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.zip} (${activeRegionConfig?.name || 'North'} Region)`,
+          cartItems,
+          subtotal: cartSubtotal,
+          discountAmount,
+          couponCode: appliedCoupon?.code,
+          shippingCost,
+          total: cartFinalTotal,
+          paymentMethod: 'Pay on Delivery (Cash on Delivery / UPI)',
+        })
 
         const finalWaUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(waMessage)}`
         setWaOrderUrl(finalWaUrl)
@@ -287,14 +276,13 @@ _Please confirm my order and share dispatch tracking details!_`
           }
         }
 
-        // Direct launch WhatsApp in new window/tab
-        if (typeof window !== 'undefined') {
-          try {
-            window.open(finalWaUrl, '_blank')
-          } catch (popupErr) {
-            console.warn('Popup blocked by browser, user can click the button:', popupErr)
-          }
-        }
+        // Direct launch WhatsApp with rich photo support & preview
+        sendWhatsAppOrder({
+          phone: targetPhone,
+          message: waMessage,
+          imageUrl: cartItems[0]?.image,
+          imageFilename: `${(cartItems[0]?.title || 'order').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}.jpg`,
+        })
       }
     } catch (err) {
       console.error('Error placing order:', err)

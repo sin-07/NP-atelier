@@ -39,6 +39,7 @@ import {
 import { useGsapReveal } from '../hooks/useGsapReveal'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
+import { buildSingleProductWhatsAppMessage, sendWhatsAppOrder } from '../utils/whatsappOrder'
 
 const BADGE_TAGS = [
   'All',
@@ -98,6 +99,28 @@ export default function HandmadeGallery() {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null)
   const [quickViewQuantity, setQuickViewQuantity] = useState(1)
   const [activeQuickTab, setActiveQuickTab] = useState('details')
+
+  const handleQuickViewWhatsApp = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    if (!quickViewProduct) return
+    const contactPhone = branding?.contactPhone || '919341297124'
+    const waMessage = buildSingleProductWhatsAppMessage({
+      title: quickViewProduct.title,
+      price: quickViewProduct.price,
+      quantity: quickViewQuantity,
+      category: quickViewProduct.category,
+      department: quickViewProduct.department,
+      image: quickViewProduct.image,
+      description: quickViewProduct.description,
+    })
+    sendWhatsAppOrder({
+      phone: contactPhone,
+      message: waMessage,
+      imageUrl: quickViewProduct.image,
+      imageFilename: `${(quickViewProduct.title || 'product').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}.jpg`,
+    })
+  }
 
   // Smart Pagination & Load More States to prevent endless scrolling fatigue
   const [currentPage, setCurrentPage] = useState(1)
@@ -1124,17 +1147,14 @@ export default function HandmadeGallery() {
                         />
                       </button>
 
-                      <a
-                        href={`https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20order%3A%20${encodeURIComponent(
-                          quickViewProduct.title
-                        )}%20(Qty%3A%20${quickViewQuantity})`}
-                        target="_blank"
-                        rel="noreferrer"
+                      <button
+                        type="button"
+                        onClick={handleQuickViewWhatsApp}
                         className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-emerald-500/40 bg-[#151412] text-emerald-400 hover:bg-emerald-950/60 hover:border-emerald-400 transition shadow-xs cursor-pointer"
-                        title="Order via WhatsApp (+91 93412 97124)"
+                        title="Order via WhatsApp with Photo Preview (+91 93412 97124)"
                       >
                         <MessageCircle className="h-5 w-5" />
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </div>

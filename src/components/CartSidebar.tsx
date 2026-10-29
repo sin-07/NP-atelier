@@ -21,6 +21,7 @@ import {
 import { useMarketplace } from '../context/MarketplaceContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
 import { getSavedShippingAddress, formatAddressOneLine } from '../utils/addressStorage'
+import { buildCartWhatsAppMessage, sendWhatsAppOrder } from '../utils/whatsappOrder'
 
 export default function CartSidebar() {
   const {
@@ -79,17 +80,6 @@ export default function CartSidebar() {
   const handleDirectWhatsAppOrder = async () => {
     if (cartItems.length === 0) return
 
-    const itemsText = cartItems
-      .map((item: any, idx: number) => {
-        const customText = item.customization
-          ? ` [Custom: ${item.customization.palette || ''}${
-              item.customization.personalization ? ` / "${item.customization.personalization}"` : ''
-            }]`
-          : ''
-        return `${idx + 1}. *${item.title}* x ${item.quantity} (${item.price})${customText}`
-      })
-      .join('\n')
-
     const saved = getSavedShippingAddress()
     const customerName = (saved?.fullName || (user?.name && user.name !== 'Patron of NP Atelier' ? user.name : '')) || 'Customer'
     const customerPhone = saved?.phone || (user?.phone && user.phone !== '+91 93412 97124' ? user.phone : '')
@@ -111,37 +101,29 @@ export default function CartSidebar() {
     })
 
     const orderId = order?.orderId || `CRFT-${Math.floor(100000 + Math.random() * 900000)}`
-    const discountText =
-      discountAmount > 0
-        ? `• *Discount:* -₹${discountAmount.toFixed(0)} (${appliedCoupon?.code || 'COUPON'})\n`
-        : ''
 
-    const waMessage = `*✦ NEW WHATSAPP ORDER ✦*
-*Store:* ${siteName}
-*Order Reference:* #${orderId}
-*Date:* ${new Date().toLocaleDateString('en-IN')}
-
-*CUSTOMER DETAILS:*
-• *Name:* ${customerName}
-${customerPhone ? `• *Mobile:* ${customerPhone}\n` : ''}• *Delivery Address:* ${customerAddr}
-
-*ORDERED ITEMS (${cartItems.length}):*
-${itemsText}
-
-*PAYMENT & TOTAL:*
-• *Items Subtotal:* ₹${cartSubtotal.toFixed(0)}
-${discountText}• *Courier Shipping:* ₹${shippingCost.toFixed(0)}
-• *Total Payable:* ₹${cartFinalTotal.toFixed(0)}
-• *Payment Mode:* WhatsApp Order Confirmation (Pay on Delivery / UPI)
-
-_Please confirm my order, availability, and dispatch tracking details!_`
-
-    const finalWaUrl = `https://wa.me/${contactPhone}?text=${encodeURIComponent(waMessage)}`
+    const waMessage = buildCartWhatsAppMessage({
+      storeName: siteName,
+      orderId,
+      customerName,
+      customerPhone,
+      customerAddress: customerAddr,
+      cartItems,
+      subtotal: cartSubtotal,
+      discountAmount,
+      couponCode: appliedCoupon?.code,
+      shippingCost,
+      total: cartFinalTotal,
+      paymentMethod: 'WhatsApp Order Confirmation (Pay on Delivery / UPI)',
+    })
 
     setIsCartOpen(false)
-    if (typeof window !== 'undefined') {
-      window.open(finalWaUrl, '_blank')
-    }
+    await sendWhatsAppOrder({
+      phone: contactPhone,
+      message: waMessage,
+      imageUrl: cartItems[0]?.image,
+      imageFilename: `${(cartItems[0]?.title || 'cart-order').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}.jpg`,
+    })
   }
 
   return (
