@@ -104,24 +104,24 @@ function ProductCard({
 
   const contactPhone = (branding?.contactPhone || '+91 93412 97124').replace(/[^0-9]/g, '')
   const storeName = branding?.siteName || 'NP Atelier'
-  const waMessage = buildSingleProductWhatsAppMessage({
-    storeName,
-    title: product.title,
-    price: formattedPrice,
-    quantity: activeQuantity > 1 ? activeQuantity : 1,
-    category: product.category,
-    department: product.department,
-    image: product.image,
-    isComingSoon: isCardComingSoon,
-    description: product.description,
-  })
-  const waUrl = `https://wa.me/${contactPhone || '919341297124'}?text=${encodeURIComponent(waMessage)}`
 
   const handleWhatsAppAction = (e: React.MouseEvent) => {
     e.stopPropagation()
     e.preventDefault()
+    const targetPhone = contactPhone || '919341297124'
+    const waMessage = buildSingleProductWhatsAppMessage({
+      storeName,
+      title: product.title,
+      price: formattedPrice,
+      quantity: activeQuantity > 1 ? activeQuantity : 1,
+      category: product.category,
+      department: product.department,
+      image: product.image,
+      isComingSoon: isCardComingSoon,
+      description: product.description,
+    })
     sendWhatsAppOrder({
-      phone: contactPhone || '919341297124',
+      phone: targetPhone,
       message: waMessage,
       imageUrl: product.image,
       imageFilename: `${(product.title || 'product').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}.jpg`,
@@ -312,10 +312,8 @@ function ProductCard({
                   <span className="uppercase tracking-wider text-[10px] sm:text-[11px] font-black">Coming Soon</span>
                 </button>
 
-                <a
-                  href={waUrl}
-                  target="_blank"
-                  rel="noreferrer"
+                <button
+                  type="button"
                   onClick={handleWhatsAppAction}
                   className={`${
                     isCompact ? 'h-8 sm:h-9 px-2 sm:px-2.5' : 'h-8.5 sm:h-9.5 px-2.5 sm:px-3'
@@ -324,7 +322,7 @@ function ProductCard({
                 >
                   <MessageCircle className="h-3.5 w-3.5 text-[#D4AF78] fill-[#D4AF78]/20 group-hover/wa:scale-110 transition-transform shrink-0" />
                   <span className="text-[9.5px] sm:text-[10.5px] font-bold tracking-tight">Inquire</span>
-                </a>
+                </button>
               </>
             ) : activeQuantity > 0 ? (
               <div
@@ -381,10 +379,8 @@ function ProductCard({
 
             {/* WhatsApp Companion Button */}
             {!isCardComingSoon && (
-              <a
-                href={waUrl}
-                target="_blank"
-                rel="noreferrer"
+              <button
+                type="button"
                 onClick={handleWhatsAppAction}
                 className={`${
                   isCompact ? 'h-8 sm:h-9 px-2 sm:px-2.5' : 'h-8.5 sm:h-9.5 px-2.5 sm:px-3'
@@ -393,7 +389,7 @@ function ProductCard({
               >
                 <MessageCircle className="h-3.5 w-3.5 text-[#D4AF78] fill-[#D4AF78]/20 group-hover/wa:scale-110 transition-transform shrink-0" />
                 <span className="text-[9.5px] sm:text-[10.5px] font-bold tracking-tight">WhatsApp</span>
-              </a>
+              </button>
             )}
           </div>
         </div>
