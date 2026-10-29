@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
   Heart,
   LayoutDashboard,
@@ -38,13 +38,11 @@ import gsap from 'gsap'
 export default function Navbar() {
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isMenuMounted, setIsMenuMounted] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [userDropdownOpen, setUserDropdownOpen] = useState(false)
   const [activeNavTab, setActiveNavTab] = useState<'crafts' | 'aquarium' | 'makers'>('crafts')
   const userMenuRef = useRef<HTMLDivElement>(null)
-  const mobileDrawerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -85,42 +83,16 @@ export default function Navbar() {
     }
   }, [])
 
-  // GSAP Mobile Drawer Entrance and Exit Controller - Ultra Smooth & Instant
+  // Lock body scroll when mobile boutique drawer is active
   useEffect(() => {
     if (isMenuOpen) {
-      setIsMenuMounted(true)
-    } else if (isMenuMounted && mobileDrawerRef.current) {
-      gsap.to(mobileDrawerRef.current, {
-        opacity: 0,
-        y: -8,
-        duration: 0.14,
-        ease: 'power2.in',
-        onComplete: () => {
-          setIsMenuMounted(false)
-        },
-      })
+      const prev = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = prev
+      }
     }
-  }, [isMenuOpen, isMenuMounted])
-
-  useEffect(() => {
-    if (isMenuMounted && isMenuOpen && mobileDrawerRef.current) {
-      const drawer = mobileDrawerRef.current
-      const items = drawer.querySelectorAll('.gsap-menu-item')
-
-      const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
-
-      tl.fromTo(
-        drawer,
-        { opacity: 0, y: -12 },
-        { opacity: 1, y: 0, duration: 0.22, clearProps: 'all' }
-      ).fromTo(
-        items,
-        { opacity: 0, y: 8 },
-        { opacity: 1, y: 0, duration: 0.18, stagger: 0.02, clearProps: 'all' },
-        '-=0.12'
-      )
-    }
-  }, [isMenuMounted, isMenuOpen])
+  }, [isMenuOpen])
 
   const {
     branding,
@@ -221,7 +193,8 @@ export default function Navbar() {
   const siteName = branding?.siteName || 'NP Atelier'
 
   return (
-    <div className="fixed top-0 inset-x-0 z-50 w-full pointer-events-none">
+    <>
+      <div className="fixed top-0 inset-x-0 z-50 w-full pointer-events-none">
       <div className="pointer-events-auto">
         {/* Main Luxury Header */}
         <header
@@ -538,227 +511,319 @@ export default function Navbar() {
               </button>
             </div>
           </div>
-
-          {/* 3. Mobile Boutique Drawer Menu with GSAP Stagger Entrance */}
-          {isMenuMounted && (
-            <div
-              ref={mobileDrawerRef}
-              className="pb-6 lg:hidden"
-            >
-              <div className="rounded-3xl border border-[#6D5738]/40 bg-gradient-to-b from-[#151412] via-[#121110] to-[#0B0B0A] p-5 shadow-[0_16px_40px_rgba(0,0,0,0.8)] text-[#F5EBDD]">
-                {/* Mobile Search Bar */}
-                <div className="gsap-menu-item mb-4">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMenuOpen(false)
-                      setIsQuickSearchOpen(true)
-                    }}
-                    className="flex w-full items-center justify-between rounded-full border border-[#6D5738]/35 bg-[#0B0B0A] px-4 py-3 text-xs text-[#F5EBDD] shadow-xs hover:border-[#D4AF78] transition"
-                  >
-                    <span className="flex items-center gap-2 text-[#B8A68B]">
-                      <Search className="h-4 w-4 text-[#D4AF78]" />
-                      Search crafts, live fish & tanks...
-                    </span>
-                    <span className="rounded-full bg-[#1C1A17] border border-[#6D5738]/40 px-2 py-0.5 text-[10px] text-[#D4AF78] font-bold">
-                      Open
-                    </span>
-                  </button>
-                </div>
-
-                {/* Department Selection Cards */}
-                <div className="grid grid-cols-2 gap-2.5 mb-4">
-                  <button
-                    type="button"
-                    onClick={() => handleLinkClick('#collection', 'crafts')}
-                    className={`gsap-menu-item p-3.5 rounded-2xl border text-left transition ${
-                      activeDepartment === 'crafts'
-                        ? 'border-[#D4AF78] bg-[#1C1A17] shadow-sm'
-                        : 'border-[#6D5738]/30 bg-[#151412]/80 hover:bg-[#1C1A17]'
-                    }`}
-                  >
-                    <Palette className="h-4 w-4 text-[#D4AF78] mb-1.5" />
-                    <p className="text-xs font-bold text-[#F5EBDD]">Artisan Crafts</p>
-                    <p className="text-[10px] text-[#B8A68B]">Jewelry, Resin, Candles</p>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleLinkClick('#acquario-tropicale', 'aquarium')}
-                    className={`gsap-menu-item p-3.5 rounded-2xl border text-left transition ${
-                      activeDepartment === 'aquarium'
-                        ? 'border-teal-400 bg-[#0E1719] shadow-sm'
-                        : 'border-[#6D5738]/30 bg-[#151412]/80 hover:bg-[#1C1A17]'
-                    }`}
-                  >
-                    <Fish className="h-4 w-4 text-teal-400 mb-1.5" />
-                    <p className="text-xs font-bold text-[#F5EBDD] font-serif">Acquario Tropicale</p>
-                    <p className="text-[10px] text-[#B8A68B]">Exotic Fish & Rimless Tanks</p>
-                  </button>
-                </div>
-
-                {/* Navigation Links */}
-                <nav className="grid gap-1 border-t border-[#6D5738]/30 pt-3 text-sm font-bold text-[#F5EBDD]">
-                  <button
-                    type="button"
-                    onClick={() => handleLinkClick('#collection', 'crafts')}
-                    className="gsap-menu-item rounded-xl px-4 py-2.5 transition flex items-center justify-between hover:bg-[#1E1D19] text-[#F5EBDD] text-left cursor-pointer"
-                  >
-                    <span>Artisan Crafts</span>
-                    <span className="text-xs font-normal text-[#D4AF78]">→</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleLinkClick('#acquario-tropicale', 'aquarium')}
-                    className="gsap-menu-item rounded-xl px-4 py-2.5 transition flex items-center justify-between hover:bg-[#1E1D19] text-[#F5EBDD] text-left cursor-pointer font-serif"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Fish className="h-4 w-4 text-teal-400" />
-                      <span>Acquario Tropicale</span>
-                    </span>
-                    <span className="text-xs font-normal text-[#D4AF78]">→</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleLinkClick('#makers')}
-                    className="gsap-menu-item rounded-xl px-4 py-2.5 transition flex items-center justify-between hover:bg-[#1E1D19] text-[#F5EBDD] text-left cursor-pointer"
-                  >
-                    <span>The Collective</span>
-                    <span className="text-xs font-normal text-[#D4AF78]">→</span>
-                  </button>
-                </nav>
-
-                {/* Mobile Action Buttons */}
-                <div className="mt-4 grid gap-2 border-t border-[#6D5738]/30 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMenuOpen(false)
-                      setIsSellOpen(true)
-                    }}
-                    className="gsap-menu-item flex w-full items-center justify-center gap-2 rounded-full border border-[#6D5738]/45 bg-[#1C1A17] py-3 text-xs font-bold text-[#D4AF78] shadow-xs cursor-pointer hover:border-[#D4AF78] hover:bg-[#D4AF78] hover:text-[#0B0B0A] transition"
-                  >
-                    <Store className="h-4 w-4 text-[#D4AF78]" />
-                    <span>Sell With Us • Zero Setup Fees</span>
-                  </button>
-
-                  {mounted && user ? (
-                    <div className="space-y-2">
-                      <div className="gsap-menu-item flex items-center gap-3 rounded-2xl border border-[#6D5738]/40 bg-[#1C1A17] p-3">
-                        {user.avatarImage ? (
-                          <img
-                            src={user.avatarImage}
-                            alt={user.name}
-                            className="h-10 w-10 rounded-full object-cover border border-[#D4AF78]"
-                          />
-                        ) : (
-                          <div className="grid h-10 w-10 place-items-center rounded-full bg-[#0B0B0A] text-xs font-black text-[#D4AF78] border border-[#6D5738]/50">
-                            {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                          </div>
-                        )}
-                        <div className="min-w-0 flex-1">
-                          <p className="text-xs font-bold text-[#F5EBDD] truncate">{user.name}</p>
-                          <p className="text-[10px] text-[#B8A68B] truncate">{user.email}</p>
-                          <span className="text-[9px] font-black uppercase tracking-wider text-[#D4AF78]">
-                            {isAdmin ? 'Administrator' : 'Artisan Collector'}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <Link
-                          href="/profile"
-                          onClick={() => setIsMenuOpen(false)}
-                          className="gsap-menu-item flex items-center justify-center gap-1.5 rounded-xl border border-[#6D5738]/40 bg-[#151412] py-2.5 text-xs font-bold text-[#F5EBDD] shadow-xs cursor-pointer hover:bg-[#1E1D19]"
-                        >
-                          <User className="h-3.5 w-3.5 text-[#D4AF78]" />
-                          <span>My Profile</span>
-                        </Link>
-                        <Link
-                          href="/profile?tab=orders"
-                          onClick={() => setIsMenuOpen(false)}
-                          className="gsap-menu-item flex items-center justify-center gap-1.5 rounded-xl border border-[#6D5738]/40 bg-[#151412] py-2.5 text-xs font-bold text-[#F5EBDD] shadow-xs cursor-pointer hover:bg-[#1E1D19]"
-                        >
-                          <Package className="h-3.5 w-3.5 text-[#D4AF78]" />
-                          <span>My Orders</span>
-                        </Link>
-                      </div>
-
-                      {isAdmin && (
-                        <Link
-                          href="/admin"
-                          onClick={() => setIsMenuOpen(false)}
-                          className="gsap-menu-item flex w-full items-center justify-center gap-2 rounded-xl border border-[#6D5738]/50 bg-[#1E1D19] py-2.5 text-xs font-bold text-[#D4AF78]"
-                        >
-                          <LayoutDashboard className="h-4 w-4 text-[#D4AF78]" />
-                          <span>Open Admin Console</span>
-                        </Link>
-                      )}
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          logout()
-                          setIsMenuOpen(false)
-                        }}
-                        className="gsap-menu-item flex w-full items-center justify-center gap-2 rounded-full border border-rose-900/60 bg-rose-950/40 py-2.5 text-xs font-bold text-rose-400 cursor-pointer hover:bg-rose-900/50"
-                      >
-                        <LogOut className="h-4 w-4" />
-                        <span>Sign Out</span>
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsMenuOpen(false)
-                        setIsAuthOpen(true)
-                      }}
-                      className="gsap-menu-item btn-primary w-full text-xs justify-center py-3 cursor-pointer"
-                    >
-                      <LogIn className="h-4 w-4" />
-                      <span>Sign In / Create Account</span>
-                    </button>
-                  )}
-
-                  {/* Direct Concierge Contact Card */}
-                  <div className="gsap-menu-item mt-3 rounded-2xl border border-[#6D5738]/35 bg-[#151412] p-3 text-center shadow-2xs">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#D4AF78]">
-                      Concierge &amp; Order Support
-                    </p>
-                    <div className="mt-2 grid grid-cols-2 gap-2 text-xs font-bold">
-                      <a
-                        href="https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20inquire%20about%20an%20order!"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center justify-center gap-1.5 rounded-full bg-[#1C1A17] border border-emerald-600/40 py-2 text-emerald-400 shadow-2xs hover:bg-[#25221E] transition"
-                      >
-                        <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
-                        <span>WhatsApp</span>
-                      </a>
-                      <a
-                        href="tel:+919341297124"
-                        className="flex items-center justify-center gap-1.5 rounded-full bg-[#1C1A17] border border-[#6D5738]/40 py-2 text-[#F5EBDD] shadow-2xs hover:bg-[#25221E] transition"
-                      >
-                        <Phone className="h-3.5 w-3.5 text-[#D4AF78]" />
-                        <span>Call</span>
-                      </a>
-                    </div>
-                    <a
-                      href="mailto:npatelierindia@gmail.com"
-                      className="mt-2 flex items-center justify-center gap-1.5 text-[11px] font-medium text-[#B8A68B] hover:text-[#D4AF78]"
-                    >
-                      <Mail className="h-3 w-3 text-[#D4AF78]" />
-                      <span>npatelierindia@gmail.com</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </header>
     </div>
   </div>
+
+  {/* 3. Luxury Boutique Mobile Slide-over Drawer (Fixed Side Sheet from Right) */}
+  <AnimatePresence>
+    {isMenuOpen && (
+      <div className="fixed inset-0 z-[120] lg:hidden flex justify-end">
+        {/* Cinematic Veil Backdrop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.22, ease: 'easeOut' }}
+          onClick={() => setIsMenuOpen(false)}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+        />
+
+        {/* Haute Couture Slide Sheet */}
+        <motion.div
+          initial={{ x: '100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '100%' }}
+          transition={{ type: 'spring', damping: 30, stiffness: 300, mass: 0.8 }}
+          className="relative w-[88%] max-w-[390px] h-full bg-gradient-to-b from-[#181613] via-[#12110F] to-[#0A0A09] border-l border-[rgba(212,175,120,0.30)] shadow-[-20px_0_60px_rgba(0,0,0,0.95)] flex flex-col z-10 overflow-hidden transform-gpu"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Drawer Top Atelier Header */}
+          <div className="flex items-center justify-between border-b border-[rgba(212,175,120,0.25)] bg-[#12110F] px-5 py-4">
+            <div className="flex items-center gap-2.5">
+              <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[#D4AF78] to-[#99794D] text-[#0B0B0A] font-serif font-black text-sm shadow-[0_4px_12px_rgba(212,175,120,0.3)]">
+                NP
+              </div>
+              <div>
+                <h3 className="font-serif text-sm font-extrabold tracking-wider text-[#F5EBDD]">
+                  {siteName}
+                </h3>
+                <p className="text-[9px] font-bold uppercase tracking-widest text-[#D4AF78]">
+                  Haute Atelier &amp; Aquatics
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setIsMenuOpen(false)}
+              className="grid h-9 w-9 place-items-center rounded-full border border-[rgba(212,175,120,0.3)] bg-[#191713] text-[#F5EBDD] hover:border-[#D4AF78] hover:text-[#D4AF78] transition active:scale-90 cursor-pointer"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* Scrollable Content Body */}
+          <div className="flex-1 overflow-y-auto sidebar-scroller p-4 space-y-4">
+            {/* 1-Click Search Launcher */}
+            <button
+              type="button"
+              onClick={() => {
+                setIsMenuOpen(false)
+                setIsQuickSearchOpen(true)
+              }}
+              className="group flex w-full items-center justify-between rounded-2xl border border-[rgba(212,175,120,0.30)] bg-[#0B0B0A] px-4 py-3 text-xs text-[#F5EBDD] shadow-inner transition hover:border-[#D4AF78] hover:bg-[#151412] cursor-pointer"
+            >
+              <span className="flex items-center gap-2.5 text-[#B8AA96] group-hover:text-[#F5EBDD] transition">
+                <Search className="h-4 w-4 text-[#D4AF78]" />
+                <span className="font-medium">Search 40+ crafts &amp; aquatics...</span>
+              </span>
+              <span className="rounded-lg bg-[#1C1A17] border border-[rgba(212,175,120,0.35)] px-2 py-0.5 text-[9px] font-mono font-bold text-[#D4AF78]">
+                ⌘K
+              </span>
+            </button>
+
+            {/* Quick Utility Highlights Bar: Bag + Wishlist counters */}
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMenuOpen(false)
+                  setIsCartOpen(true)
+                }}
+                className="flex items-center justify-between rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#151412] p-3 text-left hover:border-[#D4AF78] transition cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <ShoppingBag className="h-4 w-4 text-[#D4AF78]" />
+                  <span className="text-xs font-bold text-[#F5EBDD]">Bag</span>
+                </div>
+                <span className="rounded-full bg-[#D4AF78] text-[#0B0B0A] px-2 py-0.5 text-[10px] font-black">
+                  {mounted ? cartCount : 0}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMenuOpen(false)
+                  setIsWishlistOpen(true)
+                }}
+                className="flex items-center justify-between rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#151412] p-3 text-left hover:border-rose-400 transition cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <Heart className="h-4 w-4 text-rose-400" />
+                  <span className="text-xs font-bold text-[#F5EBDD]">Wishlist</span>
+                </div>
+                <span className="rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2 py-0.5 text-[10px] font-black">
+                  {mounted ? wishlist.length : 0}
+                </span>
+              </button>
+            </div>
+
+            {/* Department Featured Cards */}
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#B8AA96] px-1 mb-2">
+                Browse Curations
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleLinkClick('#collection', 'crafts')}
+                  className={`p-3 rounded-2xl border text-left transition cursor-pointer ${
+                    activeDepartment === 'crafts'
+                      ? 'border-[#D4AF78] bg-[#1C1A17] shadow-sm'
+                      : 'border-[rgba(212,175,120,0.2)] bg-[#151412] hover:bg-[#1C1A17]'
+                  }`}
+                >
+                  <Palette className="h-4 w-4 text-[#D4AF78] mb-1.5" />
+                  <p className="text-xs font-bold text-[#F5EBDD]">Artisan Crafts</p>
+                  <p className="text-[10px] text-[#B8AA96] truncate">Resin, Candles, Decor</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleLinkClick('#acquario-tropicale', 'aquarium')}
+                  className={`p-3 rounded-2xl border text-left transition cursor-pointer ${
+                    activeDepartment === 'aquarium'
+                      ? 'border-teal-400 bg-[#0E1719] shadow-sm'
+                      : 'border-[rgba(212,175,120,0.2)] bg-[#151412] hover:bg-[#1C1A17]'
+                  }`}
+                >
+                  <Fish className="h-4 w-4 text-teal-400 mb-1.5" />
+                  <p className="text-xs font-bold text-[#F5EBDD] font-serif">Acquario</p>
+                  <p className="text-[10px] text-[#B8AA96] truncate">Fish &amp; Nano Tanks</p>
+                </button>
+              </div>
+            </div>
+
+            {/* Primary Navigation Links */}
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#B8AA96] px-1 mb-2">
+                Menu Directory
+              </p>
+              <nav className="space-y-1">
+                <button
+                  type="button"
+                  onClick={() => handleLinkClick('#home')}
+                  className="w-full rounded-2xl px-3.5 py-2.5 transition flex items-center justify-between bg-[#151412]/60 hover:bg-[#1E1D19] border border-[rgba(212,175,120,0.15)] text-[#F5EBDD] text-left cursor-pointer"
+                >
+                  <span className="text-xs font-bold">Home Sanctuary</span>
+                  <span className="text-xs text-[#D4AF78]">→</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleLinkClick('#collection', 'crafts')}
+                  className="w-full rounded-2xl px-3.5 py-2.5 transition flex items-center justify-between bg-[#151412]/60 hover:bg-[#1E1D19] border border-[rgba(212,175,120,0.15)] text-[#F5EBDD] text-left cursor-pointer"
+                >
+                  <span className="text-xs font-bold">Artisan Collection</span>
+                  <span className="text-xs text-[#D4AF78]">→</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleLinkClick('#acquario-tropicale', 'aquarium')}
+                  className="w-full rounded-2xl px-3.5 py-2.5 transition flex items-center justify-between bg-[#151412]/60 hover:bg-[#1E1D19] border border-[rgba(212,175,120,0.15)] text-[#F5EBDD] text-left cursor-pointer font-serif"
+                >
+                  <span className="flex items-center gap-2 text-xs font-bold">
+                    <Fish className="h-3.5 w-3.5 text-teal-400" />
+                    <span>Acquario Tropicale</span>
+                  </span>
+                  <span className="text-xs text-[#D4AF78]">→</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleLinkClick('#makers')}
+                  className="w-full rounded-2xl px-3.5 py-2.5 transition flex items-center justify-between bg-[#151412]/60 hover:bg-[#1E1D19] border border-[rgba(212,175,120,0.15)] text-[#F5EBDD] text-left cursor-pointer"
+                >
+                  <span className="text-xs font-bold">The Collective &amp; Makers</span>
+                  <span className="text-xs text-[#D4AF78]">→</span>
+                </button>
+              </nav>
+            </div>
+
+            {/* Sell with Us Banner */}
+            <button
+              type="button"
+              onClick={() => {
+                setIsMenuOpen(false)
+                setIsSellOpen(true)
+              }}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[rgba(212,175,120,0.4)] bg-gradient-to-r from-[#1C1A17] via-[#24201A] to-[#1C1A17] py-3 text-xs font-bold text-[#D4AF78] shadow-sm hover:border-[#D4AF78] hover:text-[#F5EBDD] transition cursor-pointer"
+            >
+              <Store className="h-4 w-4 text-[#D4AF78]" />
+              <span>List Your Craft • Zero Setup Fees</span>
+            </button>
+
+            {/* User Authentication / Profile Section */}
+            {mounted && user ? (
+              <div className="space-y-2 rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#151412] p-3">
+                <div className="flex items-center gap-3">
+                  {user.avatarImage ? (
+                    <img
+                      src={user.avatarImage}
+                      alt={user.name}
+                      className="h-9 w-9 rounded-full object-cover border border-[#D4AF78]"
+                    />
+                  ) : (
+                    <div className="grid h-9 w-9 place-items-center rounded-full bg-[#0B0B0A] text-xs font-black text-[#D4AF78] border border-[rgba(212,175,120,0.4)]">
+                      {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold text-[#F5EBDD] truncate">{user.name}</p>
+                    <p className="text-[10px] text-[#B8AA96] truncate">{user.email}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[rgba(212,175,120,0.2)]">
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center justify-center gap-1.5 rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] py-2 text-[11px] font-bold text-[#F5EBDD] hover:border-[#D4AF78] transition"
+                  >
+                    <User className="h-3 w-3 text-[#D4AF78]" />
+                    <span>Profile</span>
+                  </Link>
+                  <Link
+                    href="/profile?tab=orders"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center justify-center gap-1.5 rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] py-2 text-[11px] font-bold text-[#F5EBDD] hover:border-[#D4AF78] transition"
+                  >
+                    <Package className="h-3 w-3 text-[#D4AF78]" />
+                    <span>Orders</span>
+                  </Link>
+                </div>
+
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#D4AF78]/50 bg-[#1E1D19] py-2 text-xs font-bold text-[#D4AF78]"
+                  >
+                    <LayoutDashboard className="h-3.5 w-3.5 text-[#D4AF78]" />
+                    <span>Admin Console</span>
+                  </Link>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout()
+                    setIsMenuOpen(false)
+                  }}
+                  className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-rose-900/50 bg-rose-950/30 py-2 text-[11px] font-bold text-rose-400 hover:bg-rose-950/60 transition cursor-pointer"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMenuOpen(false)
+                  setIsAuthOpen(true)
+                }}
+                className="btn-primary w-full text-xs justify-center py-3 cursor-pointer"
+              >
+                <LogIn className="h-4 w-4" />
+                <span>Sign In / Create Account</span>
+              </button>
+            )}
+
+            {/* Direct Concierge WhatsApp Card */}
+            <div className="rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#151412] p-3 text-center">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#D4AF78]">
+                WhatsApp Concierge &amp; Dispatch
+              </p>
+              <div className="mt-2 grid grid-cols-2 gap-2 text-xs font-bold">
+                <a
+                  href="https://wa.me/919341297124?text=Hi%20NP%20Atelier%2C%20I%20want%20to%20inquire%20about%20an%20order!"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-center gap-1.5 rounded-xl bg-[#0B0B0A] border border-emerald-600/40 py-2 text-emerald-400 hover:bg-emerald-950/40 transition"
+                >
+                  <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
+                  <span>WhatsApp</span>
+                </a>
+                <a
+                  href="tel:+919341297124"
+                  className="flex items-center justify-center gap-1.5 rounded-xl bg-[#0B0B0A] border border-[rgba(212,175,120,0.3)] py-2 text-[#F5EBDD] hover:border-[#D4AF78] transition"
+                >
+                  <Phone className="h-3.5 w-3.5 text-[#D4AF78]" />
+                  <span>Call Us</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    )}
+  </AnimatePresence>
+</>
   )
 }
