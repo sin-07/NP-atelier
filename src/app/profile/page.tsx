@@ -48,6 +48,7 @@ function ProfileContent() {
     updateUser,
     logout,
     orders,
+    refreshOrders,
     wishlistedProducts,
     cartCount,
     addToCart,
@@ -74,6 +75,12 @@ function ProfileContent() {
       setActiveTab('profile')
     }
   }, [initialTabParam])
+
+  useEffect(() => {
+    if (activeTab === 'orders' && refreshOrders) {
+      refreshOrders()
+    }
+  }, [activeTab, refreshOrders])
 
   // Profile Form State
   const [formState, setFormState] = useState({

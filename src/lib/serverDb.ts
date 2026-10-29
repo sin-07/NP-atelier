@@ -149,6 +149,24 @@ function ensureDirExists(dir: string) {
   }
 }
 
+// High-speed In-Memory Cache Layer with Micro-TTL & Mutation Invalidation
+let cachedSettings: { data: BrandingSettings; expiresAt: number } | null = null
+let cachedDelivery: { data: RegionalDeliverySettings; expiresAt: number } | null = null
+let cachedProducts: { data: Product[]; expiresAt: number } | null = null
+let cachedOrders: { data: any[]; expiresAt: number } | null = null
+
+const SETTINGS_TTL_MS = 120 * 1000 // 2 minutes
+const DELIVERY_TTL_MS = 120 * 1000 // 2 minutes
+const PRODUCTS_TTL_MS = 60 * 1000  // 60 seconds
+const ORDERS_TTL_MS = 15 * 1000    // 15 seconds
+
+export function invalidateAllCaches() {
+  cachedSettings = null
+  cachedDelivery = null
+  cachedProducts = null
+  cachedOrders = null
+}
+
 // In-memory fallback in case filesystem is restricted or read-only
 let memorySettings: BrandingSettings = { ...DEFAULT_BRANDING }
 let memoryProducts: Product[] = [...allInitialProducts]
@@ -156,6 +174,11 @@ let memoryOrders: any[] = []
 let memoryDelivery: RegionalDeliverySettings = JSON.parse(JSON.stringify(DEFAULT_DELIVERY_SETTINGS))
 
 export async function getSettings(): Promise<BrandingSettings> {
+  const now = Date.now()
+  if (cachedSettings && cachedSettings.expiresAt > now) {
+    return cachedSettings.data
+  }
+
   // 1. Try MongoDB Atlas
   try {
     const db = await getDb()
@@ -163,6 +186,7 @@ export async function getSettings(): Promise<BrandingSettings> {
     if (doc) {
       const { _id, ...rest } = doc
       memorySettings = { ...DEFAULT_BRANDING, ...rest } as BrandingSettings
+      cachedSettings = { data: memorySettings, expiresAt: now + SETTINGS_TTL_MS }
       return memorySettings
     }
     // Seed default settings into MongoDB
@@ -171,6 +195,7 @@ export async function getSettings(): Promise<BrandingSettings> {
       { $set: { ...DEFAULT_BRANDING, updatedAt: new Date() } },
       { upsert: true }
     )
+    cachedSettings = { data: memorySettings, expiresAt: now + SETTINGS_TTL_MS }
     return memorySettings
   } catch (mongoErr) {
     console.warn('MongoDB settings fetch fallback to disk:', mongoErr)
@@ -182,18 +207,22 @@ export async function getSettings(): Promise<BrandingSettings> {
     if (!fs.existsSync(SETTINGS_FILE)) {
       await fs.promises.writeFile(SETTINGS_FILE, JSON.stringify(DEFAULT_BRANDING, null, 2), 'utf8')
       memorySettings = { ...DEFAULT_BRANDING }
+      cachedSettings = { data: memorySettings, expiresAt: now + SETTINGS_TTL_MS }
       return memorySettings
     }
     const raw = await fs.promises.readFile(SETTINGS_FILE, 'utf8')
     const parsed = JSON.parse(raw)
     memorySettings = { ...DEFAULT_BRANDING, ...parsed }
+    cachedSettings = { data: memorySettings, expiresAt: now + SETTINGS_TTL_MS }
     return memorySettings
   } catch (err) {
+    cachedSettings = { data: memorySettings, expiresAt: now + SETTINGS_TTL_MS }
     return memorySettings
   }
 }
 
 export async function saveSettings(settings: Partial<BrandingSettings>): Promise<BrandingSettings> {
+  cachedSettings = null
   const current = await getSettings()
   const updated: BrandingSettings = {
     ...current,
@@ -221,24 +250,30 @@ export async function saveSettings(settings: Partial<BrandingSettings>): Promise
   }
 
   memorySettings = updated
+  cachedSettings = { data: updated, expiresAt: Date.now() + SETTINGS_TTL_MS }
   return updated
 }
 
 export async function getProducts(): Promise<Product[]> {
-  // 1. Try MongoDB Atlas
+  const now = Date.now()
+  if (cachedProducts && cachedProducts.expiresAt > now) {
+    return cachedProducts.data
+  }
+
+  // 1. Try MongoDB Atlas (single round-trip: no redundant countDocuments)
   try {
     const db = await getDb()
     const collection = db.collection<Product>('products')
-    const count = await collection.countDocuments()
 
-    if (count === 0) {
+    const docs = await collection.find({}).sort({ _id: -1 }).toArray()
+    if (docs.length === 0) {
       // Auto-seed initial catalog to MongoDB Atlas
       await collection.insertMany(allInitialProducts.map((p) => ({ ...p })))
       memoryProducts = [...allInitialProducts]
+      cachedProducts = { data: memoryProducts, expiresAt: now + PRODUCTS_TTL_MS }
       return memoryProducts
     }
 
-    const docs = await collection.find({}).sort({ _id: -1 }).toArray()
     const cleanDocs = docs.map((doc: any) => {
       const { _id, ...rest } = doc
       return {
@@ -259,6 +294,7 @@ export async function getProducts(): Promise<Product[]> {
     }
 
     memoryProducts = uniqueDocs
+    cachedProducts = { data: uniqueDocs, expiresAt: now + PRODUCTS_TTL_MS }
     return uniqueDocs
   } catch (mongoErr) {
     console.warn('MongoDB getProducts fallback to disk:', mongoErr)
@@ -270,21 +306,26 @@ export async function getProducts(): Promise<Product[]> {
     if (!fs.existsSync(PRODUCTS_FILE)) {
       await fs.promises.writeFile(PRODUCTS_FILE, JSON.stringify(allInitialProducts, null, 2), 'utf8')
       memoryProducts = [...allInitialProducts]
+      cachedProducts = { data: memoryProducts, expiresAt: now + PRODUCTS_TTL_MS }
       return memoryProducts
     }
     const raw = await fs.promises.readFile(PRODUCTS_FILE, 'utf8')
     const parsed = JSON.parse(raw)
     if (Array.isArray(parsed) && parsed.length > 0) {
       memoryProducts = parsed
+      cachedProducts = { data: parsed, expiresAt: now + PRODUCTS_TTL_MS }
       return parsed
     }
+    cachedProducts = { data: memoryProducts, expiresAt: now + PRODUCTS_TTL_MS }
     return memoryProducts
   } catch (err) {
+    cachedProducts = { data: memoryProducts, expiresAt: now + PRODUCTS_TTL_MS }
     return memoryProducts
   }
 }
 
 export async function saveAllProducts(products: Product[]): Promise<Product[]> {
+  cachedProducts = null
   try {
     const db = await getDb()
     const collection = db.collection('products')
@@ -307,10 +348,12 @@ export async function saveAllProducts(products: Product[]): Promise<Product[]> {
   }
 
   memoryProducts = products
+  cachedProducts = { data: products, expiresAt: Date.now() + PRODUCTS_TTL_MS }
   return products
 }
 
 export async function addProductToDb(product: Product): Promise<Product[]> {
+  cachedProducts = null
   // 1. Insert to MongoDB
   try {
     const db = await getDb()
@@ -333,10 +376,12 @@ export async function addProductToDb(product: Product): Promise<Product[]> {
   } catch {}
 
   memoryProducts = next
+  cachedProducts = { data: next, expiresAt: Date.now() + PRODUCTS_TTL_MS }
   return next
 }
 
 export async function updateProductInDb(id: number | string, data: Partial<Product>): Promise<Product[]> {
+  cachedProducts = null
   // 1. Update in MongoDB
   try {
     const db = await getDb()
@@ -369,10 +414,12 @@ export async function updateProductInDb(id: number | string, data: Partial<Produ
   } catch {}
 
   memoryProducts = next
+  cachedProducts = { data: next, expiresAt: Date.now() + PRODUCTS_TTL_MS }
   return next
 }
 
 export async function deleteProductFromDb(id: number | string): Promise<Product[]> {
+  cachedProducts = null
   // 1. Delete from MongoDB
   try {
     const db = await getDb()
@@ -397,22 +444,27 @@ export async function deleteProductFromDb(id: number | string): Promise<Product[
   } catch {}
 
   memoryProducts = next
+  cachedProducts = { data: next, expiresAt: Date.now() + PRODUCTS_TTL_MS }
   return next
 }
 
 export async function getOrders(): Promise<any[]> {
-  // 1. Try MongoDB Atlas
+  const now = Date.now()
+  if (cachedOrders && cachedOrders.expiresAt > now) {
+    return cachedOrders.data
+  }
+
+  // 1. Try MongoDB Atlas (single query, no redundant countDocuments)
   try {
     const db = await getDb()
     const collection = db.collection('orders')
-    const count = await collection.countDocuments()
-
-    if (count === 0) {
+    const docs = await collection.find({}).sort({ _id: -1 }).toArray()
+    if (docs.length === 0) {
       memoryOrders = []
+      cachedOrders = { data: [], expiresAt: now + ORDERS_TTL_MS }
       return []
     }
 
-    const docs = await collection.find({}).sort({ _id: -1 }).toArray()
     const cleanDocs = docs.map((doc: any) => {
       const { _id, ...rest } = doc
       return {
@@ -421,6 +473,7 @@ export async function getOrders(): Promise<any[]> {
       }
     })
     memoryOrders = cleanDocs
+    cachedOrders = { data: cleanDocs, expiresAt: now + ORDERS_TTL_MS }
     return cleanDocs
   } catch (mongoErr) {
     console.warn('MongoDB getOrders fallback to disk:', mongoErr)
@@ -432,21 +485,26 @@ export async function getOrders(): Promise<any[]> {
     if (!fs.existsSync(ORDERS_FILE)) {
       await fs.promises.writeFile(ORDERS_FILE, JSON.stringify([], null, 2), 'utf8')
       memoryOrders = []
+      cachedOrders = { data: [], expiresAt: now + ORDERS_TTL_MS }
       return []
     }
     const raw = await fs.promises.readFile(ORDERS_FILE, 'utf8')
     const parsed = JSON.parse(raw)
     if (Array.isArray(parsed)) {
       memoryOrders = parsed
+      cachedOrders = { data: parsed, expiresAt: now + ORDERS_TTL_MS }
       return parsed
     }
+    cachedOrders = { data: memoryOrders, expiresAt: now + ORDERS_TTL_MS }
     return memoryOrders
   } catch (err) {
+    cachedOrders = { data: memoryOrders, expiresAt: now + ORDERS_TTL_MS }
     return memoryOrders
   }
 }
 
 export async function addOrderToDb(order: any): Promise<any[]> {
+  cachedOrders = null
   // 1. Insert to MongoDB Atlas
   try {
     const db = await getDb()
@@ -467,10 +525,12 @@ export async function addOrderToDb(order: any): Promise<any[]> {
   } catch {}
 
   memoryOrders = next
+  cachedOrders = { data: next, expiresAt: Date.now() + ORDERS_TTL_MS }
   return next
 }
 
 export async function updateOrderStatusInDb(orderId: string, status: string): Promise<any[]> {
+  cachedOrders = null
   // 1. Update in MongoDB Atlas
   try {
     const db = await getDb()
@@ -501,10 +561,16 @@ export async function updateOrderStatusInDb(orderId: string, status: string): Pr
   } catch {}
 
   memoryOrders = next
+  cachedOrders = { data: next, expiresAt: Date.now() + ORDERS_TTL_MS }
   return next
 }
 
 export async function getDeliverySettings(): Promise<RegionalDeliverySettings> {
+  const now = Date.now()
+  if (cachedDelivery && cachedDelivery.expiresAt > now) {
+    return cachedDelivery.data
+  }
+
   // 1. Try MongoDB Atlas
   try {
     const db = await getDb()
@@ -522,6 +588,7 @@ export async function getDeliverySettings(): Promise<RegionalDeliverySettings> {
         },
       }
       memoryDelivery = merged
+      cachedDelivery = { data: merged, expiresAt: now + DELIVERY_TTL_MS }
       return merged
     }
 
@@ -531,6 +598,7 @@ export async function getDeliverySettings(): Promise<RegionalDeliverySettings> {
       { $set: { ...DEFAULT_DELIVERY_SETTINGS, updatedAt: new Date() } },
       { upsert: true }
     )
+    cachedDelivery = { data: memoryDelivery, expiresAt: now + DELIVERY_TTL_MS }
     return memoryDelivery
   } catch (mongoErr) {
     console.warn('MongoDB delivery settings fetch fallback to disk:', mongoErr)
@@ -542,6 +610,7 @@ export async function getDeliverySettings(): Promise<RegionalDeliverySettings> {
     if (!fs.existsSync(DELIVERY_FILE)) {
       await fs.promises.writeFile(DELIVERY_FILE, JSON.stringify(DEFAULT_DELIVERY_SETTINGS, null, 2), 'utf8')
       memoryDelivery = JSON.parse(JSON.stringify(DEFAULT_DELIVERY_SETTINGS))
+      cachedDelivery = { data: memoryDelivery, expiresAt: now + DELIVERY_TTL_MS }
       return memoryDelivery
     }
     const raw = await fs.promises.readFile(DELIVERY_FILE, 'utf8')
@@ -557,13 +626,16 @@ export async function getDeliverySettings(): Promise<RegionalDeliverySettings> {
       },
     }
     memoryDelivery = merged
+    cachedDelivery = { data: merged, expiresAt: now + DELIVERY_TTL_MS }
     return merged
   } catch (err) {
+    cachedDelivery = { data: memoryDelivery, expiresAt: now + DELIVERY_TTL_MS }
     return memoryDelivery
   }
 }
 
 export async function saveDeliverySettings(settings: Partial<RegionalDeliverySettings>): Promise<RegionalDeliverySettings> {
+  cachedDelivery = null
   const current = await getDeliverySettings()
   const updated: RegionalDeliverySettings = {
     ...current,
@@ -598,6 +670,7 @@ export async function saveDeliverySettings(settings: Partial<RegionalDeliverySet
   }
 
   memoryDelivery = updated
+  cachedDelivery = { data: updated, expiresAt: Date.now() + DELIVERY_TTL_MS }
   return updated
 }
 

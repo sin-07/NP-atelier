@@ -96,6 +96,7 @@ export default function AdminPage() {
     deleteProduct,
     orders,
     updateOrderStatus,
+    refreshOrders,
     deliverySettings,
     updateDeliverySettings,
     availableCoupons,
@@ -121,6 +122,12 @@ export default function AdminPage() {
       setAuthChecked(true)
     }
   }, [user])
+
+  useEffect(() => {
+    if (isAuthenticated && refreshOrders) {
+      refreshOrders()
+    }
+  }, [isAuthenticated, refreshOrders])
 
   const handleAdminLogout = () => {
     triggerGlobalLoader({

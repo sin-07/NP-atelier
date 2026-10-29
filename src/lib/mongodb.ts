@@ -17,31 +17,38 @@ const dbName = process.env.MONGODB_DB || 'atelier_db'
 
 declare global {
   // eslint-disable-next-line no-var
-  var _mongoClientInstance: MongoClient | undefined
+  var _mongoClientPromise: Promise<MongoClient> | undefined
+  // eslint-disable-next-line no-var
+  var _mongoDbInstance: Db | undefined
 }
 
-let cachedClient: MongoClient | null = global._mongoClientInstance || null
+function createClientPromise(): Promise<MongoClient> {
+  const client = new MongoClient(uri, {
+    maxPoolSize: 10,
+    minPoolSize: 2,
+    maxIdleTimeMS: 60000,
+    serverSelectionTimeoutMS: 3000,
+    connectTimeoutMS: 3000,
+  })
+  return client.connect()
+}
 
 export async function getDb(): Promise<Db> {
-  if (cachedClient) {
-    return cachedClient.db(dbName)
+  if (global._mongoDbInstance) {
+    return global._mongoDbInstance
   }
 
-  const client = new MongoClient(uri, {
-    serverSelectionTimeoutMS: 2500,
-    connectTimeoutMS: 2500,
-  })
-
-  try {
-    cachedClient = await client.connect()
-    if (process.env.NODE_ENV === 'development') {
-      global._mongoClientInstance = cachedClient
-    }
-    return cachedClient.db(dbName)
-  } catch (err) {
-    cachedClient = null
-    throw err
+  if (!global._mongoClientPromise) {
+    global._mongoClientPromise = createClientPromise().catch((err) => {
+      global._mongoClientPromise = undefined
+      throw err
+    })
   }
+
+  const client = await global._mongoClientPromise
+  const db = client.db(dbName)
+  global._mongoDbInstance = db
+  return db
 }
 
 export default getDb

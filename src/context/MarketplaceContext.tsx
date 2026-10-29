@@ -346,11 +346,6 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }
   }, [branding])
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(STORAGE_KEYS.products, JSON.stringify(products))
-    }
-  }, [products])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -448,54 +443,47 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       setIsAuthLoading(false)
     }
 
-    // 1. Fetch Branding
-    fetch('/api/settings')
+    // 1. Consolidated High-Performance Bootstrap (Branding, Delivery, & Products in 1 round-trip)
+    fetch('/api/bootstrap')
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (data?.success && data?.settings) {
-          setBranding((prev) => ({ ...prev, ...data.settings }))
+        if (data?.success) {
+          if (data.settings) {
+            setBranding((prev) => ({ ...prev, ...data.settings }))
+          }
+          if (data.delivery?.regions) {
+            setDeliverySettings((prev) => ({
+              ...prev,
+              ...data.delivery,
+              regions: {
+                north: { ...prev.regions.north, ...(data.delivery.regions?.north || {}) },
+                south: { ...prev.regions.south, ...(data.delivery.regions?.south || {}) },
+                east: { ...prev.regions.east, ...(data.delivery.regions?.east || {}) },
+                west: { ...prev.regions.west, ...(data.delivery.regions?.west || {}) },
+              },
+            }))
+          }
+          if (Array.isArray(data.products) && data.products.length > 0) {
+            setProducts(data.products)
+          }
         }
       })
       .catch(() => {})
 
-    // 2. Fetch Products
-    fetch('/api/products')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.success && Array.isArray(data?.products) && data.products.length > 0) {
-          setProducts(data.products)
-        }
-      })
-      .catch(() => {})
-
-    // 3. Fetch Orders
-    fetch('/api/orders')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.success && Array.isArray(data?.orders)) {
-          setOrders(data.orders)
-        }
-      })
-      .catch(() => {})
-
-    // 4. Fetch Regional Delivery Charges from DB
-    fetch('/api/delivery')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.success && data?.settings) {
-          setDeliverySettings((prev) => ({
-            ...prev,
-            ...data.settings,
-            regions: {
-              north: { ...prev.regions.north, ...(data.settings.regions?.north || {}) },
-              south: { ...prev.regions.south, ...(data.settings.regions?.south || {}) },
-              east: { ...prev.regions.east, ...(data.settings.regions?.east || {}) },
-              west: { ...prev.regions.west, ...(data.settings.regions?.west || {}) },
-            },
-          }))
-        }
-      })
-      .catch(() => {})
+    // 2. Only fetch full order history if visitor is browsing admin or customer profile
+    if (typeof window !== 'undefined') {
+      const pathname = window.location.pathname
+      if (pathname.includes('/admin') || pathname.includes('/profile')) {
+        fetch('/api/orders')
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data) => {
+            if (data?.success && Array.isArray(data?.orders)) {
+              setOrders(data.orders)
+            }
+          })
+          .catch(() => {})
+      }
+    }
   }, [])
 
   const updateBranding = async (newBranding: Partial<BrandingSettings>) => {
@@ -977,6 +965,18 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     })
   }
 
+  const refreshOrders = useCallback(async () => {
+    try {
+      const res = await fetch('/api/orders')
+      if (res.ok) {
+        const data = await res.json()
+        if (data?.success && Array.isArray(data.orders)) {
+          setOrders(data.orders)
+        }
+      }
+    } catch {}
+  }, [])
+
   const login = (userData: {
     name: string
     email: string
@@ -1284,6 +1284,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       deleteCoupon,
       createOrder,
       updateOrderStatus,
+      refreshOrders,
       login,
       updateUser,
       logout,

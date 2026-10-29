@@ -33,10 +33,36 @@ const QuickSearchModal = dynamic(() => import('./QuickSearchModal'), { ssr: fals
 const AuthModal = dynamic(() => import('./AuthModal'), { ssr: false })
 const SellCraftModal = dynamic(() => import('./SellCraftModal'), { ssr: false })
 
+import { useState, useEffect } from 'react'
 import { useMarketplace } from '../context/MarketplaceContext'
 
 export default function HomePage() {
-  const { activeDepartment, setActiveDepartment } = useMarketplace()
+  const {
+    activeDepartment,
+    isCartOpen,
+    isWishlistOpen,
+    isCheckoutOpen,
+    isQuickSearchOpen,
+    isAuthOpen,
+    isSellOpen,
+  } = useMarketplace()
+
+  // Defer heavy modal chunks until first user interaction to minimize initial bundle size
+  const [hasOpenedCart, setHasOpenedCart] = useState(false)
+  const [hasOpenedWishlist, setHasOpenedWishlist] = useState(false)
+  const [hasOpenedCheckout, setHasOpenedCheckout] = useState(false)
+  const [hasOpenedSearch, setHasOpenedSearch] = useState(false)
+  const [hasOpenedAuth, setHasOpenedAuth] = useState(false)
+  const [hasOpenedSell, setHasOpenedSell] = useState(false)
+
+  useEffect(() => {
+    if (isCartOpen) setHasOpenedCart(true)
+    if (isWishlistOpen) setHasOpenedWishlist(true)
+    if (isCheckoutOpen) setHasOpenedCheckout(true)
+    if (isQuickSearchOpen) setHasOpenedSearch(true)
+    if (isAuthOpen) setHasOpenedAuth(true)
+    if (isSellOpen) setHasOpenedSell(true)
+  }, [isCartOpen, isWishlistOpen, isCheckoutOpen, isQuickSearchOpen, isAuthOpen, isSellOpen])
 
   const isAquariumView = activeDepartment === 'aquarium'
 
@@ -74,13 +100,13 @@ export default function HomePage() {
       {/* Mobile Floating Bottom Dock */}
       <MobileBottomDock />
 
-      {/* Modals & Overlays */}
-      <CartSidebar />
-      <WishlistSidebar />
-      <CheckoutModal />
-      <QuickSearchModal />
-      <AuthModal />
-      <SellCraftModal />
+      {/* On-Demand Modals & Overlays (Code-split to drastically reduce initial JS payload) */}
+      {hasOpenedCart && <CartSidebar />}
+      {hasOpenedWishlist && <WishlistSidebar />}
+      {hasOpenedCheckout && <CheckoutModal />}
+      {hasOpenedSearch && <QuickSearchModal />}
+      {hasOpenedAuth && <AuthModal />}
+      {hasOpenedSell && <SellCraftModal />}
       <BackToTop />
     </div>
   )
