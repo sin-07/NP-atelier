@@ -32,22 +32,13 @@ export default function QuickSearchModal() {
   const inputRef = useRef<HTMLInputElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
 
-  // Escape Listener, Autofocus & Rock-Solid Non-Shifting Scroll Lock
+  // Escape Listener, Body Scroll Lock & Responsive Focus
   useEffect(() => {
     if (!isQuickSearchOpen) return
 
-    // Prevent background wheel and touch drag from scrolling the underlying page
-    const handleWheel = (e: WheelEvent) => {
-      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
-        e.preventDefault()
-      }
-    }
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
-        e.preventDefault()
-      }
-    }
+    // Prevent body scroll behind modal without layout shift (scrollbar-gutter: stable in index.css)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -56,25 +47,21 @@ export default function QuickSearchModal() {
     }
 
     window.addEventListener('keydown', handleKeyDown)
-    window.addEventListener('wheel', handleWheel, { passive: false })
-    window.addEventListener('touchmove', handleTouchMove, { passive: false })
 
-    // Smooth autofocus for desktop only without causing mobile layout jumps
+    // Smooth autofocus after modal completes its snappy entrance
     const isTouch =
       typeof window !== 'undefined' &&
       ('ontouchstart' in window || navigator.maxTouchPoints > 0)
-    let rafId: number | null = null
-    if (!isTouch) {
-      rafId = requestAnimationFrame(() => {
-        inputRef.current?.focus({ preventScroll: true })
-      })
-    }
+
+    // On desktop autofocus immediately; on touch devices give 70ms so viewport doesn't jump
+    const focusTimer = setTimeout(() => {
+      inputRef.current?.focus({ preventScroll: true })
+    }, isTouch ? 70 : 15)
 
     return () => {
-      if (rafId) cancelAnimationFrame(rafId)
+      clearTimeout(focusTimer)
+      document.body.style.overflow = prevOverflow
       window.removeEventListener('keydown', handleKeyDown)
-      window.removeEventListener('wheel', handleWheel)
-      window.removeEventListener('touchmove', handleTouchMove)
     }
   }, [isQuickSearchOpen, setIsQuickSearchOpen])
 
@@ -109,7 +96,7 @@ export default function QuickSearchModal() {
 
     const cleanQuery = query.trim().toLowerCase()
     if (!cleanQuery) {
-      return list.slice(0, 10)
+      return list.slice(0, 4)
     }
 
     return list.filter((p: any) =>
@@ -128,21 +115,21 @@ export default function QuickSearchModal() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.16, ease: 'easeOut' }}
+          transition={{ duration: 0.12, ease: 'easeOut' }}
           role="dialog"
           aria-modal="true"
           aria-label="Quick Search"
-          className="fixed inset-0 z-[130] flex items-start justify-center bg-black/75 p-3 sm:p-4 pt-3 sm:pt-20"
+          className="fixed inset-0 z-[130] flex items-start justify-center bg-black/80 p-3 sm:p-4 pt-3 sm:pt-20 touch-none overscroll-contain"
           onClick={() => setIsQuickSearchOpen(false)}
         >
           <motion.div
             key="quick-search-card"
             ref={cardRef}
-            initial={{ opacity: 0, y: -16, scale: 0.97 }}
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -12, scale: 0.97 }}
-            transition={{ type: 'spring', damping: 28, stiffness: 360, mass: 0.75 }}
-            className="w-full max-w-2xl overflow-hidden rounded-3xl border border-[rgba(212,175,120,0.30)] bg-[#191713] shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_25px_rgba(212,175,120,0.12)] transform-gpu"
+            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full max-w-2xl overflow-hidden rounded-3xl border border-[rgba(212,175,120,0.30)] bg-[#191713] shadow-2xl sm:shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_25px_rgba(212,175,120,0.12)] transform-gpu touch-auto overscroll-contain"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Search Input Bar with Clear and Dedicated Close Button */}
@@ -199,7 +186,7 @@ export default function QuickSearchModal() {
             </div>
 
             {/* Suggestions & Results List */}
-            <div className="max-h-[60vh] sm:max-h-[55vh] sidebar-scroller p-3 sm:p-5 bg-[#0B0B0A]">
+            <div className="max-h-[60vh] sm:max-h-[55vh] sidebar-scroller p-3 sm:p-5 bg-[#0B0B0A] overscroll-contain">
               <div className="flex items-center justify-between pb-2.5 text-xs font-bold uppercase tracking-wider text-[#B8AA96]">
                 <span>
                   {query ? `Found ${searchResults.length} items` : 'Trending Marketplace Drops'}
@@ -234,7 +221,7 @@ export default function QuickSearchModal() {
                           onError={(e) => {
                             e.currentTarget.src = fallbackCraftImage
                           }}
-                          className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl object-cover border border-[rgba(212,175,120,0.2)] shrink-0"
+                          className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl object-cover border border-[rgba(212,175,120,0.2)] shrink-0 bg-[#12110F]"
                         />
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">

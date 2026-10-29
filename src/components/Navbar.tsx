@@ -519,24 +519,23 @@ export default function Navbar() {
   {/* 3. Luxury Boutique Mobile Slide-over Drawer (Fixed Side Sheet from Right) */}
   <AnimatePresence>
     {isMenuOpen && (
-      <div className="fixed inset-0 z-[120] lg:hidden flex justify-end">
+      <div className="fixed inset-0 z-[120] lg:hidden flex justify-end touch-none">
         {/* Cinematic Veil Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.22, ease: 'easeOut' }}
+          transition={{ duration: 0.15, ease: 'easeOut' }}
           onClick={() => setIsMenuOpen(false)}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+          className="fixed inset-0 bg-black/80 backdrop-blur-xs"
         />
 
         {/* Haute Couture Slide Sheet */}
         <motion.div
           initial={{ x: '100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '100%' }}
-          transition={{ type: 'spring', damping: 30, stiffness: 300, mass: 0.8 }}
-          className="relative w-[88%] max-w-[390px] h-full bg-gradient-to-b from-[#181613] via-[#12110F] to-[#0A0A09] border-l border-[rgba(212,175,120,0.30)] shadow-[-20px_0_60px_rgba(0,0,0,0.95)] flex flex-col z-10 overflow-hidden transform-gpu"
+          animate={{ x: 0, transition: { type: 'spring', damping: 32, stiffness: 350, mass: 0.8 } }}
+          exit={{ x: '100%', opacity: 0, transition: { duration: 0.14, ease: 'easeIn' } }}
+          className="relative w-[88%] max-w-[390px] h-full bg-[#141210] border-l border-[rgba(212,175,120,0.30)] shadow-[-12px_0_35px_rgba(0,0,0,0.9)] flex flex-col z-10 overflow-hidden transform-gpu touch-auto overscroll-contain"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Drawer Top Atelier Header */}
@@ -574,7 +573,7 @@ export default function Navbar() {
                 setIsMenuOpen(false)
                 setIsQuickSearchOpen(true)
               }}
-              className="group flex w-full items-center justify-between rounded-2xl border border-[rgba(212,175,120,0.30)] bg-[#0B0B0A] px-4 py-3 text-xs text-[#F5EBDD] shadow-inner transition hover:border-[#D4AF78] hover:bg-[#151412] cursor-pointer"
+              className="group flex w-full items-center justify-between rounded-2xl border border-[rgba(212,175,120,0.30)] bg-[#0B0B0A] px-4 py-3 text-xs text-[#F5EBDD] shadow-inner transition active:scale-[0.98] hover:border-[#D4AF78] hover:bg-[#151412] cursor-pointer"
             >
               <span className="flex items-center gap-2.5 text-[#B8AA96] group-hover:text-[#F5EBDD] transition">
                 <Search className="h-4 w-4 text-[#D4AF78]" />
