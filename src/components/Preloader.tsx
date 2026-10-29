@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect, useRef } from 'react'
-import gsap from 'gsap'
 import { Sparkles } from 'lucide-react'
 
 export default function Preloader() {
@@ -22,109 +21,84 @@ export default function Preloader() {
   const contentRef = useRef<HTMLDivElement>(null)
   const progressBarRef = useRef<HTMLDivElement>(null)
   const percentTextRef = useRef<HTMLSpanElement>(null)
+  const hasDismissedRef = useRef(false)
 
   useEffect(() => {
-    // If already marked as seen, do nothing
+    // If already seen in this session, immediately exit
     try {
       if (sessionStorage.getItem('np_atelier_preloader_seen')) {
         setIsDone(true)
         return
       }
-    } catch {
-      // Ignore storage errors
-    }
+    } catch {}
 
-    // Freeze background scroll while preloader is running
-    const prevOverflow = document.body.style.overflow
+    const originalOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
-    const progressObj = { value: 0 }
+    const dismiss = () => {
+      if (hasDismissedRef.current) return
+      hasDismissedRef.current = true
 
-    const ctx = gsap.context(() => {
-      // Continuous soft orbital spin
-      if (ringRef.current) {
-        gsap.to(ringRef.current, {
-          rotate: 360,
-          duration: 7,
-          repeat: -1,
-          ease: 'none',
-        })
+      try {
+        sessionStorage.setItem('np_atelier_preloader_seen', 'true')
+      } catch {}
+
+      document.body.style.overflow = originalOverflow
+
+      if (preloaderRef.current) {
+        preloaderRef.current.style.transition =
+          'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease'
+        preloaderRef.current.style.transform = 'translateY(-100%)'
+        preloaderRef.current.style.opacity = '0'
+
+        setTimeout(() => {
+          setIsDone(true)
+        }, 460)
+      } else {
+        setIsDone(true)
+      }
+    }
+
+    // High-performance hardware animation for progress
+    const startTime = performance.now()
+    const duration = 650 // 0.65s snappy luxury animation
+    let rafId: number | null = null
+
+    const updateFrame = (now: number) => {
+      const elapsed = now - startTime
+      const progress = Math.min(1, elapsed / duration)
+      // Smooth cubic ease out
+      const eased = 1 - Math.pow(1 - progress, 3)
+      const currentVal = Math.round(eased * 100)
+
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = `${currentVal}%`
+      }
+      if (percentTextRef.current) {
+        percentTextRef.current.textContent = `${String(currentVal).padStart(2, '0')}%`
       }
 
-      // Main entrance & progress timeline (compacted to snappy ~0.85s luxury experience)
-      const tl = gsap.timeline({
-        onComplete: () => {
-          gsap.timeline({
-            onComplete: () => {
-              try {
-                sessionStorage.setItem('np_atelier_preloader_seen', 'true')
-              } catch {}
-              document.body.style.overflow = prevOverflow
-              setIsDone(true)
-            },
-          })
-            .to(contentRef.current, {
-              opacity: 0,
-              y: -14,
-              scale: 0.97,
-              duration: 0.24,
-              ease: 'power2.in',
-            })
-            .to(
-              preloaderRef.current,
-              {
-                yPercent: -100,
-                duration: 0.45,
-                ease: 'power3.inOut',
-              },
-              '-=0.1'
-            )
-        },
-      })
+      if (progress < 1) {
+        rafId = requestAnimationFrame(updateFrame)
+      } else {
+        // Small 80ms pause at 100% before smooth glide
+        setTimeout(() => {
+          dismiss()
+        }, 80)
+      }
+    }
 
-      // Initial content entrance
-      tl.fromTo(
-        contentRef.current,
-        { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' }
-      )
-        // Snappy progress increment 0 to 100
-        .to(
-          progressObj,
-          {
-            value: 100,
-            duration: 0.65,
-            ease: 'power2.inOut',
-            onUpdate: () => {
-              const currentVal = Math.round(progressObj.value)
-              if (progressBarRef.current) {
-                progressBarRef.current.style.width = `${currentVal}%`
-              }
-              if (percentTextRef.current) {
-                percentTextRef.current.textContent = `${String(currentVal).padStart(2, '0')}%`
-              }
-            },
-          },
-          '-=0.15'
-        )
-        // Subtle jewel pulse when 100% reached
-        .to(emblemRef.current, {
-          scale: 1.06,
-          boxShadow: '0 0 30px rgba(212,175,120,0.6)',
-          duration: 0.12,
-          ease: 'power1.out',
-        })
-        .to(emblemRef.current, {
-          scale: 1,
-          boxShadow: '0 0 15px rgba(212,175,120,0.2)',
-          duration: 0.12,
-          ease: 'power1.in',
-        })
-    }, preloaderRef)
+    rafId = requestAnimationFrame(updateFrame)
+
+    // Absolute bulletproof fallback timer: NEVER freeze under any circumstances
+    const fallbackTimer = setTimeout(() => {
+      dismiss()
+    }, 950)
 
     return () => {
-      document.body.style.overflow = prevOverflow
-      ctx.revert()
+      if (rafId) cancelAnimationFrame(rafId)
+      clearTimeout(fallbackTimer)
+      document.body.style.overflow = originalOverflow
     }
   }, [])
 
@@ -150,7 +124,7 @@ export default function Preloader() {
           {/* Orbital Rotating Dashed Gilded Ring */}
           <div
             ref={ringRef}
-            className="absolute -inset-3 rounded-full border border-dashed border-[#D4AF78]/40 pointer-events-none"
+            className="absolute -inset-3 rounded-full border border-dashed border-[#D4AF78]/40 pointer-events-none animate-spin [animation-duration:8s]"
           />
 
           {/* Secondary Outer Halo */}
@@ -196,7 +170,7 @@ export default function Preloader() {
             <div
               ref={progressBarRef}
               style={{ width: '0%' }}
-              className="h-full rounded-full bg-gradient-to-r from-[#D4AF78] via-[#E5C18A] to-[#D4AF78] shadow-[0_0_12px_rgba(212,175,120,0.4)] transition-[width] duration-75"
+              className="h-full rounded-full bg-gradient-to-r from-[#D4AF78] via-[#E5C18A] to-[#D4AF78] shadow-[0_0_12px_rgba(212,175,120,0.4)]"
             />
           </div>
 
