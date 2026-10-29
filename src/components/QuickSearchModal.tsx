@@ -30,20 +30,34 @@ export default function QuickSearchModal() {
   const [query, setQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
   const inputRef = useRef<HTMLInputElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
 
-  // Body Scroll Lock & Escape Listener
+  // Escape Listener, Autofocus & Rock-Solid Non-Shifting Scroll Lock
   useEffect(() => {
     if (!isQuickSearchOpen) return
 
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    // Prevent background wheel and touch drag from scrolling the underlying page
+    const handleWheel = (e: WheelEvent) => {
+      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+        e.preventDefault()
+      }
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+        e.preventDefault()
+      }
+    }
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setIsQuickSearchOpen(false)
       }
     }
+
     window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    window.addEventListener('touchmove', handleTouchMove, { passive: false })
 
     // Smooth autofocus for desktop only without causing mobile layout jumps
     const isTouch =
@@ -59,7 +73,8 @@ export default function QuickSearchModal() {
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
       window.removeEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = prevOverflow
+      window.removeEventListener('wheel', handleWheel)
+      window.removeEventListener('touchmove', handleTouchMove)
     }
   }, [isQuickSearchOpen, setIsQuickSearchOpen])
 
@@ -117,11 +132,12 @@ export default function QuickSearchModal() {
           role="dialog"
           aria-modal="true"
           aria-label="Quick Search"
-          className="fixed inset-0 z-[130] flex items-start justify-center bg-black/75 backdrop-blur-xs p-3 sm:p-4 pt-3 sm:pt-20"
+          className="fixed inset-0 z-[130] flex items-start justify-center bg-black/75 p-3 sm:p-4 pt-3 sm:pt-20"
           onClick={() => setIsQuickSearchOpen(false)}
         >
           <motion.div
             key="quick-search-card"
+            ref={cardRef}
             initial={{ opacity: 0, y: -16, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -12, scale: 0.97 }}
