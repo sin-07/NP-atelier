@@ -33,6 +33,7 @@ import {
   MapPin,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { lockScroll, unlockScroll } from '../utils/scrollLock'
 import gsap from 'gsap'
 
 export default function Navbar() {
@@ -86,10 +87,9 @@ export default function Navbar() {
   // Lock body scroll when mobile boutique drawer is active
   useEffect(() => {
     if (isMenuOpen) {
-      const prev = document.body.style.overflow
-      document.body.style.overflow = 'hidden'
+      lockScroll()
       return () => {
-        document.body.style.overflow = prev
+        unlockScroll()
       }
     }
   }, [isMenuOpen])
@@ -525,17 +525,17 @@ export default function Navbar() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.15, ease: 'easeOut' }}
+          transition={{ duration: 0.16, ease: 'easeOut' }}
           onClick={() => setIsMenuOpen(false)}
-          className="fixed inset-0 bg-black/80 backdrop-blur-xs"
+          className="fixed inset-0 bg-black/80"
         />
 
         {/* Haute Couture Slide Sheet */}
         <motion.div
           initial={{ x: '100%' }}
-          animate={{ x: 0, transition: { type: 'spring', damping: 32, stiffness: 350, mass: 0.8 } }}
-          exit={{ x: '100%', opacity: 0, transition: { duration: 0.14, ease: 'easeIn' } }}
-          className="relative w-[88%] max-w-[390px] h-full bg-[#141210] border-l border-[rgba(212,175,120,0.30)] shadow-[-12px_0_35px_rgba(0,0,0,0.9)] flex flex-col z-10 overflow-hidden transform-gpu touch-auto overscroll-contain"
+          animate={{ x: 0, transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] } }}
+          exit={{ x: '100%', opacity: 0, transition: { duration: 0.16, ease: 'easeIn' } }}
+          className="relative w-[88%] max-w-[390px] h-full bg-[#141210] border-l border-[rgba(212,175,120,0.30)] shadow-[-12px_0_35px_rgba(0,0,0,0.9)] flex flex-col z-10 overflow-hidden transform-gpu will-change-transform touch-auto overscroll-contain"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Drawer Top Atelier Header */}

@@ -8,6 +8,7 @@ import {
   Product,
 } from '../data/products'
 import { getSavedShippingAddress, saveShippingAddress } from '../utils/addressStorage'
+import { useModalDispatch } from './UIModalContext'
 
 export interface BrandingSettings {
   siteName: string
@@ -241,15 +242,18 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }
   }, [])
 
-  // Drawer / Modal toggles
-  const [isCartOpen, setIsCartOpen] = useState(false)
-  const [isWishlistOpen, setIsWishlistOpen] = useState(false)
-  const [isAuthOpen, setIsAuthOpen] = useState(false)
-  const [isProfileOpen, setIsProfileOpen] = useState(false)
-  const [profileTab, setProfileTab] = useState<'profile' | 'orders' | 'wishlist'>('profile')
-  const [isSellOpen, setIsSellOpen] = useState(false)
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
-  const [isQuickSearchOpen, setIsQuickSearchOpen] = useState(false)
+  // High-performance decoupled modal dispatch (guarantees 0ms re-render overhead on data consumers)
+  const {
+    setIsCartOpen,
+    setIsWishlistOpen,
+    setIsAuthOpen,
+    setIsProfileOpen,
+    setProfileTab,
+    openProfile,
+    setIsSellOpen,
+    setIsCheckoutOpen,
+    setIsQuickSearchOpen,
+  } = useModalDispatch()
 
   // Global Transition Loader (Signin, Signout, Page Switch)
   const [globalLoader, setGlobalLoader] = useState<GlobalLoaderState | null>(null)
@@ -292,19 +296,6 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       document.body.style.overflow = ''
     }
   }, [])
-
-  const openProfile = (tab: 'profile' | 'orders' | 'wishlist' = 'profile') => {
-    setProfileTab(tab)
-    setIsProfileOpen(false)
-    if (typeof window !== 'undefined') {
-      const targetUrl = tab === 'profile' ? '/profile' : `/profile?tab=${tab}`
-      if (window.location.pathname === '/profile') {
-        window.history.pushState(null, '', targetUrl)
-      } else {
-        window.location.href = targetUrl
-      }
-    }
-  }
 
   // Toasts
   const [toasts, setToasts] = useState<any[]>([])
@@ -1240,6 +1231,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       setSelectedRegion,
       products,
       cartItems,
+      cart: cartItems,
       cartSubtotal: cartRawSubtotal,
       cartFinalTotal,
       discountAmount,
@@ -1257,14 +1249,6 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       toasts,
       activeDepartment,
       setActiveDepartment,
-      isCartOpen,
-      isWishlistOpen,
-      isAuthOpen,
-      isProfileOpen,
-      profileTab,
-      isSellOpen,
-      isCheckoutOpen,
-      isQuickSearchOpen,
       setIsCartOpen,
       setIsWishlistOpen,
       setIsAuthOpen,
@@ -1323,14 +1307,6 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       user,
       toasts,
       activeDepartment,
-      isCartOpen,
-      isWishlistOpen,
-      isAuthOpen,
-      isProfileOpen,
-      profileTab,
-      isSellOpen,
-      isCheckoutOpen,
-      isQuickSearchOpen,
       isAuthLoading,
       globalLoader,
       triggerGlobalLoader,

@@ -17,7 +17,9 @@ import {
   X,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { useUIModals } from '../context/UIModalContext'
 import { categories } from '../data/products'
+import { lockScroll, unlockScroll } from '../utils/scrollLock'
 
 const PRESET_IMAGES = [
   { label: 'Resin Flora', url: 'https://images.unsplash.com/photo-1614252369475-531eba835eb1?auto=format&fit=crop&w=800&q=80' },
@@ -29,13 +31,11 @@ const PRESET_IMAGES = [
 ]
 
 export default function SellCraftModal() {
+  const { isSellOpen, setIsSellOpen, setIsAuthOpen } = useUIModals()
   const {
-    isSellOpen,
-    setIsSellOpen,
     addProduct,
     user,
     login,
-    setIsAuthOpen,
     showToast,
   } = useMarketplace()
 
@@ -47,13 +47,17 @@ export default function SellCraftModal() {
 
   useEffect(() => {
     if (isSellOpen) {
-      const prevOverflow = document.body.style.overflow
-      document.body.style.overflow = 'hidden'
+      lockScroll()
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setIsSellOpen(false)
+      }
+      window.addEventListener('keydown', handleKeyDown)
       return () => {
-        document.body.style.overflow = prevOverflow
+        unlockScroll()
+        window.removeEventListener('keydown', handleKeyDown)
       }
     }
-  }, [isSellOpen])
+  }, [isSellOpen, setIsSellOpen])
 
   const [formState, setFormState] = useState({
     image: '',
@@ -168,15 +172,16 @@ export default function SellCraftModal() {
       {isSellOpen ? (
         <motion.div
           key="sell-modal-backdrop"
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/75 backdrop-blur-xs p-0 sm:p-4 overflow-hidden"
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/75 p-0 sm:p-4 overflow-hidden touch-none"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.18, ease: 'easeOut' }}
           onClick={() => setIsSellOpen(false)}
         >
           <motion.div
             key="sell-modal-card"
-            className="relative my-0 sm:my-8 w-full max-w-xl max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#191713] border border-[rgba(212,175,120,0.25)] shadow-[0_25px_70px_rgba(0,0,0,0.8)]"
+            className="relative my-0 sm:my-8 w-full max-w-xl max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#191713] border border-[rgba(212,175,120,0.25)] shadow-[0_25px_70px_rgba(0,0,0,0.8)] transform-gpu will-change-transform touch-auto overscroll-contain"
             initial={{ scale: 0.96, y: 14 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, y: 14 }}

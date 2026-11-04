@@ -16,21 +16,20 @@ import {
   X,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { useUIModals } from '../context/UIModalContext'
 import { lookupPincode } from '../utils/pincodeLookup'
 import { getSavedShippingAddress } from '../utils/addressStorage'
+import { lockScroll, unlockScroll } from '../utils/scrollLock'
 
 export default function AuthModal() {
   const router = useRouter()
+  const { isAuthOpen, setIsAuthOpen, setIsCheckoutOpen, openProfile } = useUIModals()
   const {
-    isAuthOpen,
-    setIsAuthOpen,
     login,
     user,
     logout,
     showToast,
     cartItems,
-    setIsCheckoutOpen,
-    openProfile,
     triggerGlobalLoader,
   } = useMarketplace()
   const [mode, setMode] = useState<'login' | 'register'>('register')
@@ -132,20 +131,35 @@ export default function AuthModal() {
     })
   }
 
+  useEffect(() => {
+    if (isAuthOpen) {
+      lockScroll()
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setIsAuthOpen(false)
+      }
+      window.addEventListener('keydown', handleKeyDown)
+      return () => {
+        unlockScroll()
+        window.removeEventListener('keydown', handleKeyDown)
+      }
+    }
+  }, [isAuthOpen, setIsAuthOpen])
+
   return (
     <AnimatePresence>
       {isAuthOpen ? (
         <motion.div
           key="auth-modal-backdrop"
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/75 backdrop-blur-xs p-0 sm:p-4 overflow-hidden"
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/75 p-0 sm:p-4 overflow-hidden touch-none"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.18, ease: 'easeOut' }}
           onClick={() => setIsAuthOpen(false)}
         >
           <motion.div
             key="auth-modal-card"
-            className="relative my-0 sm:my-8 w-full max-w-lg max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#191713] border border-[rgba(212,175,120,0.25)] shadow-[0_25px_70px_rgba(0,0,0,0.8)]"
+            className="relative my-0 sm:my-8 w-full max-w-lg max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#191713] border border-[rgba(212,175,120,0.25)] shadow-[0_25px_70px_rgba(0,0,0,0.8)] transform-gpu will-change-transform touch-auto overscroll-contain"
             initial={{ scale: 0.96, y: 14 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, y: 14 }}

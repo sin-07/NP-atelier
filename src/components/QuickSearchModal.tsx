@@ -4,7 +4,9 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Heart, Search, ShoppingBag, X, Fish } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { useUIModals } from '../context/UIModalContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
+import { lockScroll, unlockScroll } from '../utils/scrollLock'
 
 const SEARCH_CATEGORIES = [
   'All',
@@ -18,9 +20,8 @@ const SEARCH_CATEGORIES = [
 ]
 
 export default function QuickSearchModal() {
+  const { isQuickSearchOpen, setIsQuickSearchOpen } = useUIModals()
   const {
-    isQuickSearchOpen,
-    setIsQuickSearchOpen,
     products,
     addToCart,
     toggleWishlist,
@@ -36,9 +37,7 @@ export default function QuickSearchModal() {
   useEffect(() => {
     if (!isQuickSearchOpen) return
 
-    // Prevent body scroll behind modal without layout shift (scrollbar-gutter: stable in index.css)
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    lockScroll()
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -60,7 +59,7 @@ export default function QuickSearchModal() {
 
     return () => {
       clearTimeout(focusTimer)
-      document.body.style.overflow = prevOverflow
+      unlockScroll()
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [isQuickSearchOpen, setIsQuickSearchOpen])

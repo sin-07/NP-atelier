@@ -40,6 +40,7 @@ import { useGsapReveal } from '../hooks/useGsapReveal'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
 import { buildSingleProductWhatsAppMessage, sendWhatsAppOrder } from '../utils/whatsappOrder'
+import { lockScroll, unlockScroll } from '../utils/scrollLock'
 
 const BADGE_TAGS = [
   'All',
@@ -165,10 +166,14 @@ export default function HandmadeGallery() {
   // Prevent background page double-scrolling when Quick View is open
   useEffect(() => {
     if (quickViewProduct) {
-      const prevOverflow = document.body.style.overflow
-      document.body.style.overflow = 'hidden'
+      lockScroll()
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setQuickViewProduct(null)
+      }
+      window.addEventListener('keydown', handleKeyDown)
       return () => {
-        document.body.style.overflow = prevOverflow
+        unlockScroll()
+        window.removeEventListener('keydown', handleKeyDown)
       }
     }
   }, [quickViewProduct])
@@ -861,15 +866,16 @@ export default function HandmadeGallery() {
         {quickViewProduct ? (
           <motion.div
             key="quick-view-modal-backdrop"
-            className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/85 backdrop-blur-xs p-0 sm:p-4 overflow-hidden"
+            className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/80 p-0 sm:p-4 overflow-hidden touch-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
             onClick={() => setQuickViewProduct(null)}
           >
             <motion.div
               key="quick-view-modal-card"
-              className="relative my-0 sm:my-8 w-full max-w-3xl max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#151412] border border-[#6D5738]/45 shadow-[0_25px_60px_rgba(0,0,0,0.85)]"
+              className="relative my-0 sm:my-8 w-full max-w-3xl max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#151412] border border-[#6D5738]/45 shadow-[0_25px_60px_rgba(0,0,0,0.85)] transform-gpu will-change-transform touch-auto overscroll-contain"
               initial={{ scale: 0.95, y: 16 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 16 }}

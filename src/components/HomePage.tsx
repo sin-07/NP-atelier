@@ -12,8 +12,9 @@ import Footer from './Footer'
 import ToastContainer from './ToastContainer'
 import BackToTop from './BackToTop'
 import MobileBottomDock from './MobileBottomDock'
+import { useMarketplace } from '../context/MarketplaceContext'
 
-// Dynamically imported alternate view & interactive drawers to drastically reduce initial JS payload
+// Dynamically imported alternate view to drastically reduce initial JS payload
 const AcquarioTropicale = dynamic(() => import('./AcquarioTropicale'), {
   ssr: false,
   loading: () => (
@@ -26,44 +27,8 @@ const AcquarioTropicale = dynamic(() => import('./AcquarioTropicale'), {
   ),
 })
 
-const CartSidebar = dynamic(() => import('./CartSidebar'), { ssr: false })
-const WishlistSidebar = dynamic(() => import('./WishlistSidebar'), { ssr: false })
-const CheckoutModal = dynamic(() => import('./CheckoutModal'), { ssr: false })
-const QuickSearchModal = dynamic(() => import('./QuickSearchModal'), { ssr: false })
-const AuthModal = dynamic(() => import('./AuthModal'), { ssr: false })
-const SellCraftModal = dynamic(() => import('./SellCraftModal'), { ssr: false })
-
-import { useState, useEffect } from 'react'
-import { useMarketplace } from '../context/MarketplaceContext'
-
 export default function HomePage() {
-  const {
-    activeDepartment,
-    isCartOpen,
-    isWishlistOpen,
-    isCheckoutOpen,
-    isQuickSearchOpen,
-    isAuthOpen,
-    isSellOpen,
-  } = useMarketplace()
-
-  // Defer heavy modal chunks until first user interaction to minimize initial bundle size
-  const [hasOpenedCart, setHasOpenedCart] = useState(false)
-  const [hasOpenedWishlist, setHasOpenedWishlist] = useState(false)
-  const [hasOpenedCheckout, setHasOpenedCheckout] = useState(false)
-  const [hasOpenedSearch, setHasOpenedSearch] = useState(false)
-  const [hasOpenedAuth, setHasOpenedAuth] = useState(false)
-  const [hasOpenedSell, setHasOpenedSell] = useState(false)
-
-  useEffect(() => {
-    if (isCartOpen) setHasOpenedCart(true)
-    if (isWishlistOpen) setHasOpenedWishlist(true)
-    if (isCheckoutOpen) setHasOpenedCheckout(true)
-    if (isQuickSearchOpen) setHasOpenedSearch(true)
-    if (isAuthOpen) setHasOpenedAuth(true)
-    if (isSellOpen) setHasOpenedSell(true)
-  }, [isCartOpen, isWishlistOpen, isCheckoutOpen, isQuickSearchOpen, isAuthOpen, isSellOpen])
-
+  const { activeDepartment } = useMarketplace()
   const isAquariumView = activeDepartment === 'aquarium'
 
   return (
@@ -100,15 +65,8 @@ export default function HomePage() {
       {/* Mobile Floating Bottom Dock */}
       <MobileBottomDock />
 
-      {/* On-Demand Modals & Overlays (Code-split to drastically reduce initial JS payload) */}
-      {hasOpenedCart && <CartSidebar />}
-      {hasOpenedWishlist && <WishlistSidebar />}
-      {hasOpenedCheckout && <CheckoutModal />}
-      {hasOpenedSearch && <QuickSearchModal />}
-      {hasOpenedAuth && <AuthModal />}
-      {hasOpenedSell && <SellCraftModal />}
+      {/* Back to Top */}
       <BackToTop />
     </div>
   )
 }
-

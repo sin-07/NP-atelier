@@ -19,11 +19,14 @@ import {
   X,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { useUIModals } from '../context/UIModalContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
 import { getSavedShippingAddress, formatAddressOneLine } from '../utils/addressStorage'
 import { buildCartWhatsAppMessage, sendWhatsAppOrder } from '../utils/whatsappOrder'
+import { lockScroll, unlockScroll } from '../utils/scrollLock'
 
 export default function CartSidebar() {
+  const { isCartOpen, setIsCartOpen, setIsCheckoutOpen, setIsAuthOpen } = useUIModals()
   const {
     cartItems,
     cartSubtotal,
@@ -33,10 +36,6 @@ export default function CartSidebar() {
     giftWrapCost,
     isGiftWrap,
     setIsGiftWrap,
-    isCartOpen,
-    setIsCartOpen,
-    setIsCheckoutOpen,
-    setIsAuthOpen,
     showToast,
     user,
     setCartQuantity,
@@ -55,13 +54,17 @@ export default function CartSidebar() {
 
   useEffect(() => {
     if (isCartOpen) {
-      const prevOverflow = document.body.style.overflow
-      document.body.style.overflow = 'hidden'
+      lockScroll()
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setIsCartOpen(false)
+      }
+      window.addEventListener('keydown', handleKeyDown)
       return () => {
-        document.body.style.overflow = prevOverflow
+        unlockScroll()
+        window.removeEventListener('keydown', handleKeyDown)
       }
     }
-  }, [isCartOpen])
+  }, [isCartOpen, setIsCartOpen])
 
   const [couponInput, setCouponInput] = useState('')
 
@@ -133,20 +136,21 @@ export default function CartSidebar() {
           <motion.div
             key="cart-backdrop"
             aria-label="Close cart overlay"
-            className="fixed inset-0 z-[80] bg-black/60"
+            className="fixed inset-0 z-[80] bg-black/75 touch-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
             onClick={() => setIsCartOpen(false)}
           />
 
           <motion.aside
             key="cart-sidebar"
-            className="fixed right-0 top-0 z-[90] flex h-full w-full max-w-md flex-col overflow-hidden border-l border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] shadow-2xl"
+            className="fixed right-0 top-0 z-[90] flex h-full w-full max-w-md flex-col overflow-hidden border-l border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] shadow-2xl transform-gpu will-change-transform touch-auto overscroll-contain"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Header */}
             <div className="flex shrink-0 items-center justify-between border-b border-[rgba(212,175,120,0.25)] bg-[#191713] px-6 py-5 z-10 shadow-xs">

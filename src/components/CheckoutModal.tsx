@@ -21,16 +21,16 @@ import {
   X,
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { useUIModals } from '../context/UIModalContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
 import { lookupPincode } from '../utils/pincodeLookup'
 import { getSavedShippingAddress, saveShippingAddress, findAddressByPhone } from '../utils/addressStorage'
 import { buildCartWhatsAppMessage, sendWhatsAppOrder } from '../utils/whatsappOrder'
+import { lockScroll, unlockScroll } from '../utils/scrollLock'
 
 export default function CheckoutModal() {
+  const { isCheckoutOpen, setIsCheckoutOpen, setIsAuthOpen } = useUIModals()
   const {
-    isCheckoutOpen,
-    setIsCheckoutOpen,
-    setIsAuthOpen,
     showToast,
     branding,
     cartItems,
@@ -305,23 +305,40 @@ export default function CheckoutModal() {
     }, 300)
   }
 
+  useEffect(() => {
+    if (isCheckoutOpen) {
+      lockScroll()
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') handleClose()
+      }
+      window.addEventListener('keydown', handleKeyDown)
+      return () => {
+        unlockScroll()
+        window.removeEventListener('keydown', handleKeyDown)
+      }
+    }
+  }, [isCheckoutOpen])
+
   return (
     <AnimatePresence>
       {isCheckoutOpen ? (
         <motion.div
           key="checkout-modal-backdrop"
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/70 p-0 sm:p-4 overflow-hidden"
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/75 p-0 sm:p-4 overflow-hidden touch-none"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.18, ease: 'easeOut' }}
+          onClick={handleClose}
         >
           <motion.div
             key="checkout-modal-card"
-            className="relative my-0 sm:my-8 w-full max-w-2xl max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#191713] border border-[rgba(212,175,120,0.25)] shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
+            className="relative my-0 sm:my-8 w-full max-w-2xl max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#191713] border border-[rgba(212,175,120,0.25)] shadow-[0_20px_60px_rgba(0,0,0,0.8)] transform-gpu will-change-transform touch-auto overscroll-contain"
             initial={{ scale: 0.96, y: 14 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, y: 14 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"

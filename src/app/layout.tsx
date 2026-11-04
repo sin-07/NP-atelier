@@ -4,7 +4,9 @@ import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Plus_Jakarta_Sans, Cinzel } from 'next/font/google'
 import '../index.css'
 import { MarketplaceProvider } from '../context/MarketplaceContext'
+import { UIModalProvider } from '../context/UIModalContext'
 import GlobalPageTransitionHandler from '../components/GlobalPageTransitionHandler'
+import GlobalModals from '../components/GlobalModals'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -61,10 +63,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${playfair.variable} ${jakarta.variable} ${cinzel.variable}`}
     >
       <body className="font-sans antialiased bg-[#0B0B0A] text-[#F5EBDD] selection:bg-[#D4AF78]/30 selection:text-[#F5EBDD]">
-        <MarketplaceProvider>
-          <GlobalPageTransitionHandler />
-          {children}
-        </MarketplaceProvider>
+        <UIModalProvider>
+          <MarketplaceProvider>
+            <GlobalPageTransitionHandler />
+            <GlobalModals />
+            {children}
+          </MarketplaceProvider>
+        </UIModalProvider>
       </body>
     </html>
   )

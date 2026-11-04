@@ -4,12 +4,13 @@ import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, Heart, ShoppingBag, Sparkles, Trash2, X } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { useUIModals } from '../context/UIModalContext'
 import { fallbackCraftImage } from '../utils/fallbackImage'
+import { lockScroll, unlockScroll } from '../utils/scrollLock'
 
 export default function WishlistSidebar() {
+  const { isWishlistOpen, setIsWishlistOpen } = useUIModals()
   const {
-    isWishlistOpen,
-    setIsWishlistOpen,
     wishlistedProducts,
     toggleWishlist,
     addToCart,
@@ -18,13 +19,17 @@ export default function WishlistSidebar() {
 
   useEffect(() => {
     if (isWishlistOpen) {
-      const prevOverflow = document.body.style.overflow
-      document.body.style.overflow = 'hidden'
+      lockScroll()
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setIsWishlistOpen(false)
+      }
+      window.addEventListener('keydown', handleKeyDown)
       return () => {
-        document.body.style.overflow = prevOverflow
+        unlockScroll()
+        window.removeEventListener('keydown', handleKeyDown)
       }
     }
-  }, [isWishlistOpen])
+  }, [isWishlistOpen, setIsWishlistOpen])
 
   return (
     <AnimatePresence>
@@ -32,20 +37,21 @@ export default function WishlistSidebar() {
         <>
           <motion.div
             key="wishlist-overlay"
-            className="fixed inset-0 z-[80] bg-black/60"
+            className="fixed inset-0 z-[80] bg-black/75 touch-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
             onClick={() => setIsWishlistOpen(false)}
           />
 
           <motion.aside
             key="wishlist-drawer"
-            className="fixed right-0 top-0 z-[90] flex h-full w-full max-w-md flex-col overflow-hidden border-l border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] shadow-2xl"
+            className="fixed right-0 top-0 z-[90] flex h-full w-full max-w-md flex-col overflow-hidden border-l border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] shadow-2xl transform-gpu will-change-transform touch-auto overscroll-contain"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="flex shrink-0 items-center justify-between border-b border-[rgba(212,175,120,0.25)] bg-[#12110F] px-6 py-5 z-10 shadow-sm">
               <div className="flex items-center gap-2.5">
