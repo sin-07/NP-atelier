@@ -4,7 +4,6 @@ import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Plus_Jakarta_Sans, Cinzel } from 'next/font/google'
 import '../index.css'
 import { MarketplaceProvider } from '../context/MarketplaceContext'
-import Preloader from '../components/Preloader'
 import GlobalPageTransitionHandler from '../components/GlobalPageTransitionHandler'
 
 const playfair = Playfair_Display({
@@ -63,7 +62,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="font-sans antialiased bg-[#0B0B0A] text-[#F5EBDD] selection:bg-[#D4AF78]/30 selection:text-[#F5EBDD]">
         <MarketplaceProvider>
-          <Preloader />
           <GlobalPageTransitionHandler />
           {children}
         </MarketplaceProvider>
@@ -71,4 +69,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
-

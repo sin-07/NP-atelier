@@ -65,7 +65,6 @@ import {
 } from '../../data/products'
 import { fallbackCraftImage } from '../../utils/fallbackImage'
 import AdminLoginForm from '../../components/AdminLoginForm'
-import AdminDashboardLoader from '../../components/AdminDashboardLoader'
 
 const PRESET_IMAGES = [
   // Crafts
@@ -106,18 +105,31 @@ export default function AdminPage() {
     triggerGlobalLoader,
   } = useMarketplace()
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        return window.localStorage.getItem('ateliernp-admin-authenticated') === 'true'
+      } catch {
+        return false
+      }
+    }
+    return false
+  })
   const [authChecked, setAuthChecked] = useState(false)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const auth = window.localStorage.getItem('ateliernp-admin-authenticated') === 'true'
-      // A customer session must not automatically enter admin without verified admin role
-      const isRegularCustomer = user && user.role === 'customer'
-      if (isRegularCustomer) {
+      try {
+        const auth = window.localStorage.getItem('ateliernp-admin-authenticated') === 'true'
+        // A customer session must not automatically enter admin without verified admin role
+        const isRegularCustomer = user && user.role === 'customer'
+        if (isRegularCustomer) {
+          setIsAuthenticated(false)
+        } else {
+          setIsAuthenticated(auth)
+        }
+      } catch {
         setIsAuthenticated(false)
-      } else {
-        setIsAuthenticated(auth)
       }
       setAuthChecked(true)
     }
@@ -130,16 +142,18 @@ export default function AdminPage() {
   }, [isAuthenticated, refreshOrders])
 
   const handleAdminLogout = () => {
+    if (typeof window !== 'undefined') {
+      try {
+        window.localStorage.removeItem('ateliernp-admin-authenticated')
+        window.localStorage.removeItem('ateliernp-admin-user')
+      } catch {}
+    }
     triggerGlobalLoader({
       mode: 'admin_signout',
       title: 'Executive Sign Out',
       subtitle: 'Terminating Administrative Session & Locking Vault',
-      durationMs: 1000,
+      durationMs: 600,
       onComplete: () => {
-        if (typeof window !== 'undefined') {
-          window.localStorage.removeItem('ateliernp-admin-authenticated')
-          window.localStorage.removeItem('ateliernp-admin-user')
-        }
         setIsAuthenticated(false)
         showToast({
           title: 'Admin Signed Out',
@@ -601,14 +615,7 @@ export default function AdminPage() {
   }
 
   if (!authChecked) {
-    return (
-      <AdminDashboardLoader
-        mode="checking"
-        title="Verifying Session"
-        subtitle="Checking administrator security credentials..."
-        durationMs={450}
-      />
-    )
+    return null
   }
 
   if (!isAuthenticated) {

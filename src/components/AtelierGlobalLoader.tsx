@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, CheckCircle2, ShieldCheck, Lock, Compass, ArrowRightLeft } from 'lucide-react'
 
@@ -96,11 +96,16 @@ export default function AtelierGlobalLoader({
   mode = 'page_switch',
   title,
   subtitle,
-  durationMs = 850,
+  durationMs = 650,
   onComplete,
 }: AtelierGlobalLoaderProps) {
   const [progress, setProgress] = useState(0)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
+
+  const onCompleteRef = useRef(onComplete)
+  useEffect(() => {
+    onCompleteRef.current = onComplete
+  }, [onComplete])
 
   const config = DEFAULT_TITLES[mode] || DEFAULT_TITLES.page_switch
   const displayTitle = title || config.title
@@ -109,7 +114,6 @@ export default function AtelierGlobalLoader({
   const steps = STEP_DEFINITIONS[mode] || STEP_DEFINITIONS.page_switch
 
   useEffect(() => {
-    // Freeze body scroll while loader is active
     const originalOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
@@ -123,19 +127,28 @@ export default function AtelierGlobalLoader({
 
     const completeTimer = setTimeout(() => {
       document.body.style.overflow = originalOverflow
-      if (onComplete) {
-        onComplete()
+      if (onCompleteRef.current) {
+        onCompleteRef.current()
       }
-    }, durationMs + 120)
+    }, durationMs + 100)
+
+    // Hard fallback safety timer to ensure loader never hangs
+    const hardSafetyTimer = setTimeout(() => {
+      document.body.style.overflow = originalOverflow
+      if (onCompleteRef.current) {
+        onCompleteRef.current()
+      }
+    }, durationMs + 300)
 
     return () => {
       clearTimeout(timer1)
       clearTimeout(timer2)
       clearTimeout(timer3)
       clearTimeout(completeTimer)
+      clearTimeout(hardSafetyTimer)
       document.body.style.overflow = originalOverflow
     }
-  }, [durationMs, onComplete])
+  }, [durationMs])
 
   return (
     <motion.div
@@ -143,7 +156,7 @@ export default function AtelierGlobalLoader({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ duration: 0.25, ease: 'easeInOut' }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
       className="fixed inset-0 z-[999999] flex flex-col items-center justify-center overflow-hidden bg-[#0B0B0A] p-4 text-[#F5EBDD] select-none"
     >
       {/* Ambient Radiant Lighting Matching Website */}
@@ -156,7 +169,7 @@ export default function AtelierGlobalLoader({
         initial={{ scale: 0.95, opacity: 0, y: 12 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.95, opacity: 0, y: -10 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
         className="relative z-10 w-full max-w-md rounded-[2.5rem] border border-[rgba(212,175,120,0.25)] bg-[#191713]/95 p-7 sm:p-9 shadow-[0_24px_70px_rgba(0,0,0,0.8),0_4px_24px_rgba(212,175,120,0.15)] backdrop-blur-xl text-center flex flex-col items-center"
       >
         {/* Centerpiece: Gilded Astrolabe / Royal Seal */}

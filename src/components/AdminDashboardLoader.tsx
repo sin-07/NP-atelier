@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, CheckCircle2, ShieldCheck } from 'lucide-react'
 
@@ -22,12 +22,17 @@ const TRANSITION_STEPS = [
 export default function AdminDashboardLoader({
   title = 'NP Atelier Executive Access',
   subtitle = 'Curated Artisan Marketplace & Living Waters',
-  durationMs = 1350,
+  durationMs = 850,
   onComplete,
   mode = 'transition',
 }: AdminDashboardLoaderProps) {
   const [progress, setProgress] = useState(0)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
+
+  const onCompleteRef = useRef(onComplete)
+  useEffect(() => {
+    onCompleteRef.current = onComplete
+  }, [onComplete])
 
   useEffect(() => {
     const startTime = Date.now()
@@ -49,15 +54,26 @@ export default function AdminDashboardLoader({
       if (rawPct >= 100) {
         clearInterval(interval)
         setTimeout(() => {
-          if (onComplete) {
-            onComplete()
+          if (onCompleteRef.current) {
+            onCompleteRef.current()
           }
-        }, 180)
+        }, 120)
       }
     }, 20)
 
-    return () => clearInterval(interval)
-  }, [durationMs, onComplete])
+    // Hard fallback safety timer to ensure loader never hangs
+    const safetyTimer = setTimeout(() => {
+      clearInterval(interval)
+      if (onCompleteRef.current) {
+        onCompleteRef.current()
+      }
+    }, durationMs + 250)
+
+    return () => {
+      clearInterval(interval)
+      clearTimeout(safetyTimer)
+    }
+  }, [durationMs])
 
   return (
     <motion.div
@@ -65,7 +81,7 @@ export default function AdminDashboardLoader({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
+      transition={{ duration: 0.25, ease: 'easeInOut' }}
       className="fixed inset-0 z-[999] flex flex-col items-center justify-center overflow-hidden bg-[#0B0B0A] p-4 text-[#F5EBDD] select-none"
     >
       {/* Ambient Radiant Lighting Matching Website */}
@@ -78,7 +94,7 @@ export default function AdminDashboardLoader({
         initial={{ scale: 0.96, opacity: 0, y: 14 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.96, opacity: 0, y: -10 }}
-        transition={{ duration: 0.35, ease: 'easeOut' }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
         className="relative z-10 w-full max-w-md rounded-[2.5rem] border border-[rgba(212,175,120,0.25)] bg-[#191713]/95 p-8 sm:p-10 shadow-[0_24px_70px_rgba(0,0,0,0.8),0_4px_24px_rgba(212,175,120,0.15)] backdrop-blur-xl text-center flex flex-col items-center"
       >
         {/* Centerpiece: Gilded Astrolabe / Royal Seal */}
@@ -98,7 +114,7 @@ export default function AdminDashboardLoader({
             <span className="absolute -top-1 left-1/2 -translate-x-1/2 h-2.5 w-2.5 rounded-full bg-gradient-to-tr from-[#FFF5DC] to-[#D4AF78] shadow-[0_0_8px_rgba(212,175,120,0.8)] border border-[#191713]" />
           </motion.div>
 
-          {/* Central 3D Embossed Medal Emblem (Matches Website Header Brand Mark) */}
+          {/* Central 3D Embossed Medal Emblem */}
           <motion.div
             animate={{ scale: [1, 1.04, 1] }}
             transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}

@@ -288,6 +288,9 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
   const hideGlobalLoader = useCallback(() => {
     setGlobalLoader(null)
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = ''
+    }
   }, [])
 
   const openProfile = (tab: 'profile' | 'orders' | 'wishlist' = 'profile') => {
