@@ -385,8 +385,8 @@ export default function HandmadeGallery() {
                 }}
                 className={`group relative flex flex-col overflow-hidden rounded-2xl border text-left transition duration-300 cursor-pointer ${
                   isSelected
-                    ? 'border-[#D4AF78] ring-1 ring-[#D4AF78]/50 shadow-[0_8px_24px_rgba(0,0,0,0.6)] bg-gradient-to-b from-[#1E1C18] via-[#161412] to-[#100F0D]'
-                    : 'border-[#6D5738]/35 bg-gradient-to-b from-[#181714] via-[#141311] to-[#0E0D0C] hover:border-[#D4AF78]/70 hover:shadow-[0_8px_24px_rgba(0,0,0,0.5)]'
+                    ? 'border-[#D4AF78] ring-2 ring-[#D4AF78]/60 shadow-[0_12px_32px_rgba(212,175,120,0.22)] bg-gradient-to-b from-[#201D18] via-[#181613] to-[#100F0D]'
+                    : 'border-[#6D5738]/35 bg-gradient-to-b from-[#181714] via-[#141311] to-[#0E0D0C] hover:border-[#D4AF78]/70 hover:shadow-[0_10px_28px_rgba(0,0,0,0.7)] hover:-translate-y-0.5'
                 }`}
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0B0B0A]">
@@ -439,7 +439,7 @@ export default function HandmadeGallery() {
                     setSearchTerm(e.target.value)
                   }}
                   placeholder="Search live fish, aquascapes, jewelry, soy candles, artisan crafts..."
-                  className="h-12 w-full rounded-2xl border border-[#6D5738]/40 bg-[#0B0B0A] pl-11 pr-24 text-xs sm:text-sm font-medium text-[#F5EBDD] placeholder:text-[#B8A68B]/50 focus:border-[#D4AF78] focus:ring-2 focus:ring-[#D4AF78]/20 shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)] outline-none transition-all"
+                  className="h-12 w-full rounded-2xl border border-[#6D5738]/40 bg-[#0B0B0A] pl-11 pr-24 text-xs sm:text-sm font-medium text-[#F5EBDD] placeholder:text-[#B8A68B]/50 focus:border-[#D4AF78] focus:ring-2 focus:ring-[#D4AF78]/30 focus:shadow-[0_0_24px_rgba(212,175,120,0.18)] shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)] outline-none transition-all"
                 />
                 {searchTerm ? (
                   <button

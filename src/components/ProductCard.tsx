@@ -134,7 +134,7 @@ function ProductCard({
         isCompact
           ? 'rounded-[1.15rem] sm:rounded-[1.35rem] p-1.5 sm:p-2.5'
           : 'rounded-[1.25rem] sm:rounded-[1.65rem] p-2 sm:p-2.5'
-      } border border-[rgba(212,175,120,0.25)] bg-[#191713] shadow-[0_8px_24px_rgba(0,0,0,0.65)] sm:hover:shadow-[0_16px_36px_rgba(0,0,0,0.85)] sm:hover:border-[rgba(212,175,120,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out transform-gpu hover:will-change-transform ${className}`}
+      } border border-[rgba(212,175,120,0.25)] bg-gradient-to-b from-[#1C1A16] via-[#171512] to-[#12110F] shadow-[0_8px_24px_rgba(0,0,0,0.65)] sm:hover:shadow-[0_18px_42px_rgba(0,0,0,0.9),0_0_24px_rgba(212,175,120,0.12)] sm:hover:border-[#D4AF78]/70 sm:hover:-translate-y-1 transition-[transform,box-shadow,border-color] duration-200 ease-out transform-gpu hover:will-change-transform ${className}`}
     >
       <div>
         {/* Image Showcase Frame */}
@@ -329,7 +329,7 @@ function ProductCard({
                 onClick={(e) => e.stopPropagation()}
                 className={`flex-1 ${
                   isCompact ? 'h-8 sm:h-9' : 'h-8.5 sm:h-9.5'
-                } flex items-center justify-between rounded-full bg-[#0B0B0A] border border-[#D4AF78] p-0.5 shadow-[0_4px_14px_rgba(212,175,120,0.2)] select-none transition-all duration-200`}
+                } flex items-center justify-between rounded-full bg-[#0B0B0A] border border-[#D4AF78] p-0.5 shadow-[0_4px_16px_rgba(212,175,120,0.25)] select-none transition-all duration-200`}
               >
                 {/* Minus Button */}
                 <button
@@ -369,7 +369,7 @@ function ProductCard({
                 onClick={handleAdd}
                 className={`group/btn flex-1 ${
                   isCompact ? 'h-8 sm:h-9 text-[10px] sm:text-[11px]' : 'h-8.5 sm:h-9.5 text-[11px] sm:text-xs'
-                } inline-flex items-center justify-center gap-1.5 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] border border-[#E5C18A]/50 px-2 sm:px-3 font-bold text-[#0B0B0A] transition-all duration-200 active:scale-[0.98] shadow-xs cursor-pointer min-w-0`}
+                } inline-flex items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] hover:brightness-105 border border-[#F5DC9A]/60 px-2 sm:px-3 font-extrabold text-[#0B0B0A] transition-all duration-200 active:scale-[0.98] shadow-[0_2px_10px_rgba(212,175,120,0.25)] cursor-pointer min-w-0`}
                 title={`Add ${product.title} to Bag`}
               >
                 <ShoppingBag className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#0B0B0A] transition-transform duration-200 group-hover/btn:scale-110 shrink-0" />

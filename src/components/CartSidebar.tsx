@@ -52,6 +52,11 @@ export default function CartSidebar() {
   const displayPhone = branding?.contactPhone || '+91 93412 97124'
   const siteName = branding?.siteName || 'NP Atelier'
 
+  const freeShippingThreshold = 999
+  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - cartSubtotal)
+  const isFreeShippingUnlocked = cartSubtotal >= freeShippingThreshold
+  const shippingProgress = Math.min(100, Math.round((cartSubtotal / freeShippingThreshold) * 100))
+
   useEffect(() => {
     if (isCartOpen) {
       lockScroll()
@@ -174,6 +179,35 @@ export default function CartSidebar() {
                 <X className="h-5 w-5" />
               </button>
             </div>
+
+            {/* Free Shipping / Fragile Courier Milestone Bar */}
+            {cartItems.length > 0 && (
+              <div className="shrink-0 border-b border-[rgba(212,175,120,0.20)] bg-[#151412] px-6 py-3">
+                <div className="flex items-center justify-between text-xs font-semibold mb-1.5">
+                  <span className="flex items-center gap-1.5 text-[#F5EBDD]">
+                    <Truck className="h-3.5 w-3.5 text-[#D4AF78]" />
+                    {isFreeShippingUnlocked ? (
+                      <span className="text-[#D4AF78] font-bold">
+                        ✦ Unlocked: Complimentary Fragile Transit!
+                      </span>
+                    ) : (
+                      <span>
+                        Add <strong className="text-[#D4AF78]">₹{remainingForFreeShipping.toFixed(0)}</strong> for Free Fragile Delivery
+                      </span>
+                    )}
+                  </span>
+                  <span className="text-[10px] font-mono font-bold text-[#B8AA96]">
+                    {shippingProgress}%
+                  </span>
+                </div>
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.20)]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] transition-all duration-300 shadow-[0_0_8px_rgba(212,175,120,0.5)]"
+                    style={{ width: `${shippingProgress}%` }}
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Items List with Soft Vignettes and Refined Scroller */}
             <div className="relative flex-1 min-h-0">
@@ -387,7 +421,7 @@ export default function CartSidebar() {
                   <button
                     type="button"
                     onClick={handleDirectWhatsAppOrder}
-                    className="w-full py-3.5 px-4 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] text-[#0B0B0A] font-bold text-sm shadow-[0_4px_18px_rgba(212,175,120,0.25)] transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.98]"
+                    className="w-full py-3.5 px-4 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] hover:brightness-105 text-[#0B0B0A] font-extrabold text-sm shadow-[0_4px_18px_rgba(212,175,120,0.35)] transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.98]"
                   >
                     <MessageCircle className="h-5 w-5 fill-current" />
                     <span>Order Entire Bag on WhatsApp • ₹{cartFinalTotal.toFixed(0)}</span>

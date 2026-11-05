@@ -396,10 +396,20 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={() => handleDepartmentJump('crafts')}
-                className="gsap-hero-cta btn-primary py-4 px-7 text-sm font-bold tracking-wide shadow-md group cursor-pointer text-center justify-center"
+                className="gsap-hero-cta btn-primary py-4 px-7 text-sm font-bold tracking-wide shadow-md group cursor-pointer text-center justify-center flex items-center gap-2"
               >
                 <span>Explore Artisan Drops</span>
                 <ArrowUpRight className="h-4 w-4 stroke-[2.5] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleDepartmentJump('aquarium')}
+                className="gsap-hero-cta inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-4 text-sm font-bold tracking-wide cursor-pointer border border-teal-500/40 bg-[#0E1716] text-teal-200 shadow-sm transition hover:border-teal-400 hover:bg-[#132321] hover:text-teal-100 hover:shadow-[0_0_20px_rgba(20,184,166,0.2)] hover:-translate-y-0.5 group"
+              >
+                <Waves className="h-4 w-4 text-teal-400 transition-transform duration-200 group-hover:scale-110" />
+                <span>Exotic Aquatics</span>
+                <ArrowRight className="h-3.5 w-3.5 text-teal-400/80 stroke-[2.5]" />
               </button>
 
               <button
@@ -410,10 +420,10 @@ export default function Hero() {
                     makersEl.scrollIntoView({ behavior: 'smooth' })
                   }
                 }}
-                className="gsap-hero-cta inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-4 text-sm font-bold tracking-wide cursor-pointer border border-[#6D5738]/45 bg-[#151412] text-[#F5EBDD] shadow-sm transition hover:border-[#D4AF78] hover:text-[#E5C18A] hover:-translate-y-0.5"
+                className="gsap-hero-cta inline-flex items-center justify-center gap-2 rounded-full px-5 py-3.5 text-xs font-semibold tracking-wide cursor-pointer border border-[#6D5738]/35 bg-[#151412]/80 text-[#B8A68B] shadow-2xs transition hover:border-[#D4AF78]/60 hover:text-[#F5EBDD] hover:bg-[#1C1A17]"
               >
+                <Users className="h-3.5 w-3.5 text-[#D4AF78]" />
                 <span>Meet Atelier Makers</span>
-                <ArrowRight className="h-4 w-4 stroke-[2.5]" />
               </button>
             </div>
 
@@ -561,7 +571,7 @@ export default function Hero() {
                     <button
                       type="button"
                       onClick={() => handleQuickAdd(currentDrop.craft)}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-[#D4AF78] border border-[#E5C18A]/50 px-3.5 py-1.5 text-xs font-bold text-[#0B0B0A] shadow-xs transition hover:bg-[#E5C18A] active:scale-95 cursor-pointer"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] border border-[#F5DC9A]/60 px-3.5 py-1.5 text-xs font-extrabold text-[#0B0B0A] shadow-[0_2px_10px_rgba(212,175,120,0.25)] transition hover:brightness-105 active:scale-95 cursor-pointer"
                       title={`Add ${currentDrop.craft.title} to bag`}
                     >
                       <ShoppingBag className="h-3 w-3" />
@@ -643,7 +653,7 @@ export default function Hero() {
                     <button
                       type="button"
                       onClick={() => handleQuickAdd(currentDrop.craft2)}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-[#D4AF78] border border-[#E5C18A]/50 px-3.5 py-1.5 text-xs font-bold text-[#0B0B0A] shadow-xs transition hover:bg-[#E5C18A] active:scale-95 cursor-pointer"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] border border-[#F5DC9A]/60 px-3.5 py-1.5 text-xs font-extrabold text-[#0B0B0A] shadow-[0_2px_10px_rgba(212,175,120,0.25)] transition hover:brightness-105 active:scale-95 cursor-pointer"
                       title={`Add ${currentDrop.craft2.title} to bag`}
                     >
                       <ShoppingBag className="h-3 w-3" />
