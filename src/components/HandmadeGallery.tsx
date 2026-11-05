@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState, useRef, useEffect, useCallback } from 'react'
+import { useMemo, useState, useRef, useEffect, useCallback, useDeferredValue } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowUpRight,
@@ -96,6 +96,7 @@ export default function HandmadeGallery() {
   const [activeBadge, setActiveBadge] = useState('All')
   const [sortBy, setSortBy] = useState('featured')
   const [searchTerm, setSearchTerm] = useState('')
+  const deferredSearchTerm = useDeferredValue(searchTerm)
   const [layoutMode, setLayoutMode] = useState('grid')
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null)
   const [quickViewQuantity, setQuickViewQuantity] = useState(1)
@@ -202,7 +203,7 @@ export default function HandmadeGallery() {
   }, [products])
 
   const filteredProducts = useMemo(() => {
-    const query = searchTerm.trim().toLowerCase()
+    const query = deferredSearchTerm.trim().toLowerCase()
 
     let result = products.filter((product: Product) => {
       // Exclude ALL aquarium items - Crafts section ONLY
@@ -257,7 +258,7 @@ export default function HandmadeGallery() {
     }
 
     return result
-  }, [activeDepartment, activeCategory, activeBadge, products, searchTerm, sortBy])
+  }, [activeDepartment, activeCategory, activeBadge, products, deferredSearchTerm, sortBy])
 
   // Pagination & progressive display metrics
   const totalItems = filteredProducts.length

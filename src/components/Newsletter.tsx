@@ -45,6 +45,10 @@ export default function Newsletter() {
               <img
                 src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=300&q=80"
                 alt="Artisan studio box"
+                width={48}
+                height={48}
+                loading="lazy"
+                decoding="async"
                 className="h-12 w-12 rounded-xl object-cover border border-[rgba(212,175,120,0.25)] shadow-sm"
               />
               <p className="text-xs font-semibold text-[#D4AF78]">

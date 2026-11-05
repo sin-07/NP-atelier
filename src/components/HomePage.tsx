@@ -4,15 +4,17 @@ import dynamic from 'next/dynamic'
 import Navbar from './Navbar'
 import Hero from './Hero'
 import HandmadeGallery from './HandmadeGallery'
-import ArtisanSpotlight from './ArtisanSpotlight'
-import Testimonials from './Testimonials'
-import FaqSection from './FaqSection'
-import Newsletter from './Newsletter'
 import Footer from './Footer'
 import ToastContainer from './ToastContainer'
 import BackToTop from './BackToTop'
 import MobileBottomDock from './MobileBottomDock'
 import { useMarketplace } from '../context/MarketplaceContext'
+
+// Dynamically imported below-the-fold sections to minimize initial client JS bundle
+const ArtisanSpotlight = dynamic(() => import('./ArtisanSpotlight'))
+const Testimonials = dynamic(() => import('./Testimonials'))
+const FaqSection = dynamic(() => import('./FaqSection'))
+const Newsletter = dynamic(() => import('./Newsletter'))
 
 // Dynamically imported alternate view to drastically reduce initial JS payload
 const AcquarioTropicale = dynamic(() => import('./AcquarioTropicale'), {

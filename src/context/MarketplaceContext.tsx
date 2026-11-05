@@ -480,7 +480,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }
   }, [])
 
-  const updateBranding = async (newBranding: Partial<BrandingSettings>) => {
+  const updateBranding = useCallback(async (newBranding: Partial<BrandingSettings>) => {
     setBranding((current) => {
       const updated = { ...current, ...newBranding }
       if (typeof window !== 'undefined') {
@@ -509,18 +509,18 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       message: 'New store name & logo applied permanently across the entire website.',
       type: 'success',
     })
-  }
+  }, [showToast])
 
-  const resetBranding = async () => {
+  const resetBranding = useCallback(async () => {
     await updateBranding(DEFAULT_BRANDING)
     showToast({
       title: 'Branding Reset',
       message: 'Storefront branding restored to default settings.',
       type: 'info',
     })
-  }
+  }, [updateBranding, showToast])
 
-  const updateDeliverySettings = async (newDelivery: Partial<RegionalDeliverySettings>) => {
+  const updateDeliverySettings = useCallback(async (newDelivery: Partial<RegionalDeliverySettings>) => {
     setDeliverySettings((current) => {
       const updated: RegionalDeliverySettings = {
         ...current,
@@ -553,11 +553,11 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }
 
     showToast({
-      title: 'Regional Delivery Saved',
-      message: 'Regional delivery rates updated and saved live to database.',
+      title: 'Delivery Rules Saved',
+      message: 'Regional delivery shipping rates and state mappings updated permanently.',
       type: 'success',
     })
-  }
+  }, [showToast])
 
   const productLookup = useMemo(() => {
     const map = new Map<string | number, Product>()
@@ -602,80 +602,89 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }
   }, [productLookup, wishlist, showToast])
 
-  const addToCart = (product: any, quantity: number | string = 1, customization: any = null) => {
-    const safeQuantity = Math.max(1, Math.floor(Number(quantity)) || 1)
-    const targetProdId = String(product.id ?? product._id ?? '')
-    const cartItemId = customization ? `${targetProdId}-${Date.now()}` : targetProdId
+  const addToCart = useCallback(
+    (product: any, quantity: number | string = 1, customization: any = null) => {
+      const safeQuantity = Math.max(1, Math.floor(Number(quantity)) || 1)
+      const targetProdId = String(product.id ?? product._id ?? '')
+      const cartItemId = customization ? `${targetProdId}-${Date.now()}` : targetProdId
 
-    setCart((current) => {
-      const existingIndex = current.findIndex((item) => {
-        if (customization) return false
-        return (
-          (String(item.productId) === targetProdId ||
-           String(item.cartItemId) === targetProdId ||
-           (product._id && (String(item.productId) === String(product._id) || String(item.cartItemId) === String(product._id)))) &&
-          !item.customization
-        )
+      setCart((current) => {
+        const existingIndex = current.findIndex((item) => {
+          if (customization) return false
+          return (
+            (String(item.productId) === targetProdId ||
+             String(item.cartItemId) === targetProdId ||
+             (product._id && (String(item.productId) === String(product._id) || String(item.cartItemId) === String(product._id)))) &&
+            !item.customization
+          )
+        })
+
+        if (existingIndex > -1) {
+          const next = [...current]
+          next[existingIndex] = {
+            ...next[existingIndex],
+            quantity: next[existingIndex].quantity + safeQuantity,
+          }
+          return next
+        }
+
+        return [
+          ...current,
+          {
+            cartItemId,
+            productId: targetProdId,
+            quantity: safeQuantity,
+            customization,
+            department: product.department || (aquariumCategories.includes(product.category) ? 'aquarium' : 'crafts'),
+          },
+        ]
       })
 
-      if (existingIndex > -1) {
-        const next = [...current]
-        next[existingIndex] = {
-          ...next[existingIndex],
-          quantity: next[existingIndex].quantity + safeQuantity,
-        }
-        return next
+      showToast({
+        title: 'Added to Bag',
+        message: `${safeQuantity}x "${product.title}" is ready in your cart.`,
+        type: 'cart',
+      })
+    },
+    [showToast]
+  )
+
+  const removeFromCart = useCallback(
+    (cartItemId: string | number) => {
+      setCart((current) =>
+        current.filter(
+          (item) => String(item.cartItemId) !== String(cartItemId) && String(item.productId) !== String(cartItemId)
+        )
+      )
+      showToast({
+        title: 'Item Removed',
+        message: 'Product removed from your shopping bag.',
+        type: 'info',
+      })
+    },
+    [showToast]
+  )
+
+  const setCartQuantity = useCallback(
+    (cartItemId: string | number, quantity: number | string) => {
+      const targetQty = Number.parseInt(String(quantity), 10) || 0
+      if (targetQty <= 0) {
+        removeFromCart(cartItemId)
+        return
       }
 
-      return [
-        ...current,
-        {
-          cartItemId,
-          productId: targetProdId,
-          quantity: safeQuantity,
-          customization,
-          department: product.department || (aquariumCategories.includes(product.category) ? 'aquarium' : 'crafts'),
-        },
-      ]
-    })
-
-    showToast({
-      title: 'Added to Bag',
-      message: `${safeQuantity}x "${product.title}" is ready in your cart.`,
-      type: 'cart',
-    })
-  }
-
-  const setCartQuantity = (cartItemId: string | number, quantity: number | string) => {
-    const targetQty = Number.parseInt(String(quantity), 10) || 0
-    if (targetQty <= 0) {
-      removeFromCart(cartItemId)
-      return
-    }
-
-    setCart((current) =>
-      current.map((item) =>
-        String(item.cartItemId) === String(cartItemId) || String(item.productId) === String(cartItemId)
-          ? { ...item, quantity: targetQty }
-          : item
+      setCart((current) =>
+        current.map((item) =>
+          String(item.cartItemId) === String(cartItemId) || String(item.productId) === String(cartItemId)
+            ? { ...item, quantity: targetQty }
+            : item
+        )
       )
-    )
-  }
+    },
+    [removeFromCart]
+  )
 
-  const removeFromCart = (cartItemId: string | number) => {
-    setCart((current) =>
-      current.filter(
-        (item) => String(item.cartItemId) !== String(cartItemId) && String(item.productId) !== String(cartItemId)
-      )
-    )
-    showToast({
-      title: 'Item Removed',
-      message: 'Product removed from your shopping bag.',
-      type: 'info',
-    })
-  }
-
-  const moveAllWishlistToCart = () => {
+  const moveAllWishlistToCart = useCallback(() => {
     if (wishlistedProducts.length === 0) return
 
     setCart((current) => {
@@ -712,7 +721,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       message: `${wishlistedProducts.length} items moved to your bag.`,
       type: 'cart',
     })
-  }
+  }, [wishlistedProducts, setIsWishlistOpen, setIsCartOpen, showToast])
 
   const cartItems = useMemo(
     () =>
@@ -776,66 +785,75 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
   const cartCount = useMemo(() => cartItems.reduce((total, item) => total + item.quantity, 0), [cartItems])
 
-  const applyCouponCode = (code: string) => {
-    const cleanCode = code.trim().toUpperCase()
-    if (availableCoupons[cleanCode]) {
-      setAppliedCoupon(availableCoupons[cleanCode])
+  const applyCouponCode = useCallback(
+    (code: string) => {
+      const cleanCode = code.trim().toUpperCase()
+      if (availableCoupons[cleanCode]) {
+        setAppliedCoupon(availableCoupons[cleanCode])
+        showToast({
+          title: 'Coupon Applied',
+          message: `${availableCoupons[cleanCode].label} has been activated.`,
+          type: 'success',
+        })
+        return { success: true, message: 'Coupon applied successfully!' }
+      }
       showToast({
-        title: 'Coupon Applied',
-        message: `${availableCoupons[cleanCode].label} has been activated.`,
-        type: 'success',
+        title: 'Invalid Code',
+        message: 'Code not recognized. Try ATELIER10 or AQUA15',
+        type: 'error',
       })
-      return { success: true, message: 'Coupon applied successfully!' }
-    }
-    showToast({
-      title: 'Invalid Code',
-      message: 'Code not recognized. Try ATELIER10 or AQUA15',
-      type: 'error',
-    })
-    return { success: false, message: 'Invalid coupon code.' }
-  }
+      return { success: false, message: 'Invalid coupon code.' }
+    },
+    [availableCoupons, showToast]
+  )
 
-  const removeCoupon = () => {
+  const removeCoupon = useCallback(() => {
     setAppliedCoupon(null)
     showToast({
       title: 'Coupon Removed',
       message: 'Discount code has been detached.',
       type: 'info',
     })
-  }
+  }, [showToast])
 
-  const addCoupon = (coupon: any) => {
-    const code = coupon.code.trim().toUpperCase()
-    setAvailableCoupons((current: any) => ({
-      ...current,
-      [code]: {
-        code,
-        type: coupon.type || 'percent',
-        value: Number(coupon.value) || 10,
-        label: coupon.label || `${coupon.value}% Discount`,
-      },
-    }))
-    showToast({
-      title: 'Coupon Created',
-      message: `Coupon code "${code}" is now active in store.`,
-      type: 'success',
-    })
-  }
+  const addCoupon = useCallback(
+    (coupon: any) => {
+      const code = coupon.code.trim().toUpperCase()
+      setAvailableCoupons((current: any) => ({
+        ...current,
+        [code]: {
+          code,
+          type: coupon.type || 'percent',
+          value: Number(coupon.value) || 10,
+          label: coupon.label || `${coupon.value}% Discount`,
+        },
+      }))
+      showToast({
+        title: 'Coupon Created',
+        message: `Coupon code "${code}" is now active in store.`,
+        type: 'success',
+      })
+    },
+    [showToast]
+  )
 
-  const deleteCoupon = (code: string) => {
-    setAvailableCoupons((current: any) => {
-      const next = { ...current }
-      delete next[code]
-      return next
-    })
-    showToast({
-      title: 'Coupon Deleted',
-      message: `Coupon "${code}" has been disabled.`,
-      type: 'info',
-    })
-  }
+  const deleteCoupon = useCallback(
+    (code: string) => {
+      setAvailableCoupons((current: any) => {
+        const next = { ...current }
+        delete next[code]
+        return next
+      })
+      showToast({
+        title: 'Coupon Deleted',
+        message: `Coupon "${code}" has been disabled.`,
+        type: 'info',
+      })
+    },
+    [showToast]
+  )
 
-  const clearCart = () => setCart([])
+  const clearCart = useCallback(() => setCart([]), [])
 
   const createOrder = async (orderData: any) => {
     if (cartItems.length === 0) {
@@ -937,27 +955,30 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     return newOrder
   }
 
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
-    setOrders((current) =>
-      current.map((order) => (order.orderId === orderId ? { ...order, status: newStatus } : order))
-    )
+  const updateOrderStatus = useCallback(
+    async (orderId: string, newStatus: string) => {
+      setOrders((current) =>
+        current.map((order) => (order.orderId === orderId ? { ...order, status: newStatus } : order))
+      )
 
-    try {
-      await fetch('/api/orders', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId, status: newStatus }),
+      try {
+        await fetch('/api/orders', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId, status: newStatus }),
+        })
+      } catch (err) {
+        console.error('Failed to sync order status to server:', err)
+      }
+
+      showToast({
+        title: 'Order Status Updated',
+        message: `Order #${orderId} marked as "${newStatus}".`,
+        type: 'success',
       })
-    } catch (err) {
-      console.error('Failed to sync order status to server:', err)
-    }
-
-    showToast({
-      title: 'Order Status Updated',
-      message: `Order #${orderId} marked as "${newStatus}".`,
-      type: 'success',
-    })
-  }
+    },
+    [showToast]
+  )
 
   const refreshOrders = useCallback(async () => {
     try {
@@ -971,87 +992,93 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     } catch {}
   }, [])
 
-  const login = (userData: {
-    name: string
-    email: string
-    phone?: string
-    address?: string
-    pincode?: string
-    city?: string
-    state?: string
-    password?: string
-  }) => {
-    const cleanedName = (userData.name || '').trim()
-    const cleanedEmail = (userData.email || '').trim().toLowerCase()
-    const isAdminEmail = cleanedEmail === 'npatelierindia@gmail.com'
+  const login = useCallback(
+    (userData: {
+      name: string
+      email: string
+      phone?: string
+      address?: string
+      pincode?: string
+      city?: string
+      state?: string
+      password?: string
+    }) => {
+      const cleanedName = (userData.name || '').trim()
+      const cleanedEmail = (userData.email || '').trim().toLowerCase()
+      const isAdminEmail = cleanedEmail === 'npatelierindia@gmail.com'
 
-    const newUser = {
-      name: cleanedName,
-      email: cleanedEmail,
-      phone: userData.phone || '',
-      address: userData.address || '',
-      pincode: userData.pincode || '',
-      city: userData.city || '',
-      state: userData.state || '',
-      avatar: buildAvatar(cleanedName),
-      avatarImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-      memberSince: '2026',
-      role: isAdminEmail ? 'admin' : 'customer',
-    }
-
-    setUser(newUser)
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(STORAGE_KEYS.auth, JSON.stringify(newUser))
-    }
-
-    // Persist address to addressBook
-    if (userData.address || userData.phone || userData.name) {
-      saveShippingAddress({
-        fullName: userData.name,
-        phone: userData.phone,
-        email: userData.email,
-        address: userData.address,
-        city: userData.city,
-        state: userData.state,
-        zip: userData.pincode,
-      })
-    }
-
-    showToast({
-      title: `Welcome, ${cleanedName}!`,
-      message: `Signed in to ${branding.siteName}.`,
-      type: 'success',
-    })
-  }
-
-  const updateUser = (updatedFields: Partial<any>) => {
-    setUser((prev: any) => {
-      const next = { ...prev, ...updatedFields }
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(STORAGE_KEYS.auth, JSON.stringify(next))
+      const newUser = {
+        name: cleanedName,
+        email: cleanedEmail,
+        phone: userData.phone || '',
+        address: userData.address || '',
+        pincode: userData.pincode || '',
+        city: userData.city || '',
+        state: userData.state || '',
+        avatar: buildAvatar(cleanedName),
+        avatarImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+        memberSince: '2026',
+        role: isAdminEmail ? 'admin' : 'customer',
       }
-      return next
-    })
 
-    // Also sync to saved shipping address
-    if (updatedFields.address || updatedFields.phone || updatedFields.name || updatedFields.pincode) {
-      saveShippingAddress({
-        fullName: updatedFields.name,
-        phone: updatedFields.phone,
-        email: updatedFields.email,
-        address: updatedFields.address,
-        city: updatedFields.city,
-        state: updatedFields.state,
-        zip: updatedFields.pincode || updatedFields.zip,
+      setUser(newUser)
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(STORAGE_KEYS.auth, JSON.stringify(newUser))
+      }
+
+      // Persist address to addressBook
+      if (userData.address || userData.phone || userData.name) {
+        saveShippingAddress({
+          fullName: userData.name,
+          phone: userData.phone,
+          email: userData.email,
+          address: userData.address,
+          city: userData.city,
+          state: userData.state,
+          zip: userData.pincode,
+        })
+      }
+
+      showToast({
+        title: `Welcome, ${cleanedName}!`,
+        message: `Signed in to ${branding.siteName}.`,
+        type: 'success',
       })
-    }
+    },
+    [branding.siteName, showToast]
+  )
 
-    showToast({
-      title: 'Profile Updated',
-      message: 'Your personal details and address have been saved.',
-      type: 'success',
-    })
-  }
+  const updateUser = useCallback(
+    (updatedFields: Partial<any>) => {
+      setUser((prev: any) => {
+        const next = { ...prev, ...updatedFields }
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem(STORAGE_KEYS.auth, JSON.stringify(next))
+        }
+        return next
+      })
+
+      // Also sync to saved shipping address
+      if (updatedFields.address || updatedFields.phone || updatedFields.name || updatedFields.pincode) {
+        saveShippingAddress({
+          fullName: updatedFields.name,
+          phone: updatedFields.phone,
+          email: updatedFields.email,
+          address: updatedFields.address,
+          city: updatedFields.city,
+          state: updatedFields.state,
+          zip: updatedFields.pincode || updatedFields.zip,
+        })
+      }
+
+      showToast({
+        title: 'Profile Updated',
+        message: 'Your personal details and address have been saved.',
+        type: 'success',
+      })
+    },
+    [showToast]
+  )
 
   const logout = useCallback(
     (onComplete?: () => void) => {
@@ -1085,140 +1112,152 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     [triggerGlobalLoader, showToast]
   )
 
-  const addProduct = async (productData: any) => {
-    const rawPrice = String(productData.price || '').trim()
-    const formattedPrice = rawPrice.startsWith('₹') ? rawPrice : `₹${rawPrice}`
+  const addProduct = useCallback(
+    async (productData: any) => {
+      const rawPrice = String(productData.price || '').trim()
+      const formattedPrice = rawPrice.startsWith('₹') ? rawPrice : `₹${rawPrice}`
 
-    const isAquarium =
-      productData.department === 'aquarium' ||
-      aquariumCategories.includes(productData.category)
+      const isAquarium =
+        productData.department === 'aquarium' ||
+        aquariumCategories.includes(productData.category)
 
-    const nextProduct: Product = {
-      id: Date.now(),
-      title: productData.title.trim(),
-      description: (productData.description || '').trim(),
-      department: isAquarium ? 'aquarium' : 'crafts',
-      category: productData.category.trim(),
-      subCategory: productData.subCategory || productData.category.trim(),
-      price: formattedPrice,
-      image:
-        productData.image?.trim() ||
-        (isAquarium
-          ? '/products/royal-discus-aquarium.jpg'
-          : '/products/ceramic-mug.jpg'),
-      badges: productData.badges || ['New', 'In Stock'],
-      rating: 5.0,
-      reviews: 1,
-      stock: productData.stock !== undefined ? Number(productData.stock) : 25,
-      isUserCreated: true,
-      artisanName: productData.artisanName || user?.name || (isAquarium ? 'Aquatic Master' : 'Local Artisan'),
-      aquaticSpecs: productData.aquaticSpecs,
-    }
+      const nextProduct: Product = {
+        id: Date.now(),
+        title: productData.title.trim(),
+        description: (productData.description || '').trim(),
+        department: isAquarium ? 'aquarium' : 'crafts',
+        category: productData.category.trim(),
+        subCategory: productData.subCategory || productData.category.trim(),
+        price: formattedPrice,
+        image:
+          productData.image?.trim() ||
+          (isAquarium
+            ? '/products/royal-discus-aquarium.jpg'
+            : '/products/ceramic-mug.jpg'),
+        badges: productData.badges || ['New', 'In Stock'],
+        rating: 5.0,
+        reviews: 1,
+        stock: productData.stock !== undefined ? Number(productData.stock) : 25,
+        isUserCreated: true,
+        artisanName: productData.artisanName || user?.name || (isAquarium ? 'Aquatic Master' : 'Local Artisan'),
+        aquaticSpecs: productData.aquaticSpecs,
+      }
 
-    setProducts((current) => [nextProduct, ...current])
+      setProducts((current) => [nextProduct, ...current])
 
-    try {
-      await fetch('/api/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(nextProduct),
-      })
-    } catch (err) {
-      console.error('Failed to sync new product to server:', err)
-    }
-
-    showToast({
-      title: 'Product Listed Live',
-      message: `"${nextProduct.title}" is now available in ${nextProduct.category}.`,
-      type: 'success',
-    })
-  }
-
-  const editProduct = async (productId: string | number, updatedData: any) => {
-    let updatedItem: any = null
-    setProducts((current) =>
-      current.map((prod) => {
-        if (prod.id === productId) {
-          let updatedPrice = prod.price
-          if (updatedData.price) {
-            const raw = String(updatedData.price).trim()
-            updatedPrice = raw.startsWith('₹') ? raw : `₹${raw}`
-          }
-
-          const isAquarium =
-            updatedData.department === 'aquarium' ||
-            aquariumCategories.includes(updatedData.category || prod.category)
-
-          updatedItem = {
-            ...prod,
-            ...updatedData,
-            department: isAquarium ? 'aquarium' : 'crafts',
-            price: updatedPrice,
-          }
-          return updatedItem
-        }
-        return prod
-      })
-    )
-
-    if (updatedItem) {
       try {
         await fetch('/api/products', {
-          method: 'PUT',
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updatedItem),
+          body: JSON.stringify(nextProduct),
         })
       } catch (err) {
-        console.error('Failed to sync edited product to server:', err)
+        console.error('Failed to sync new product to server:', err)
       }
-    }
 
-    showToast({
-      title: 'Product Updated',
-      message: 'Product details saved & updated permanently.',
-      type: 'success',
-    })
-  }
-
-  const deleteProduct = async (productId: string | number) => {
-    setProducts((current) => current.filter((prod) => prod.id !== productId))
-
-    try {
-      await fetch(`/api/products?id=${productId}`, { method: 'DELETE' })
-    } catch (err) {
-      console.error('Failed to sync deleted product to server:', err)
-    }
-
-    showToast({
-      title: 'Product Deleted',
-      message: 'Product removed from marketplace and database.',
-      type: 'info',
-    })
-  }
-
-  const addReview = (productId: string | number, review: any) => {
-    setProducts((current) =>
-      current.map((prod) => {
-        if (prod.id === productId) {
-          const currentCount = prod.reviews || 10
-          const currentRating = prod.rating || 4.8
-          const newRating = Number(((currentRating * currentCount + review.rating) / (currentCount + 1)).toFixed(1))
-          return {
-            ...prod,
-            rating: newRating,
-            reviews: currentCount + 1,
-          }
-        }
-        return prod
+      showToast({
+        title: 'Product Listed Live',
+        message: `"${nextProduct.title}" is now available in ${nextProduct.category}.`,
+        type: 'success',
       })
-    )
+    },
+    [user?.name, showToast]
+  )
 
-    showToast({
-      title: 'Review Posted',
-      message: 'Thank you for sharing your feedback with the community.',
-      type: 'success',
-    })
-  }
+  const editProduct = useCallback(
+    async (productId: string | number, updatedData: any) => {
+      let updatedItem: any = null
+      setProducts((current) =>
+        current.map((prod) => {
+          if (prod.id === productId) {
+            let updatedPrice = prod.price
+            if (updatedData.price) {
+              const raw = String(updatedData.price).trim()
+              updatedPrice = raw.startsWith('₹') ? raw : `₹${raw}`
+            }
+
+            const isAquarium =
+              updatedData.department === 'aquarium' ||
+              aquariumCategories.includes(updatedData.category || prod.category)
+
+            updatedItem = {
+              ...prod,
+              ...updatedData,
+              department: isAquarium ? 'aquarium' : 'crafts',
+              price: updatedPrice,
+            }
+            return updatedItem
+          }
+          return prod
+        })
+      )
+
+      if (updatedItem) {
+        try {
+          await fetch('/api/products', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedItem),
+          })
+        } catch (err) {
+          console.error('Failed to sync edited product to server:', err)
+        }
+      }
+
+      showToast({
+        title: 'Product Updated',
+        message: 'Product details saved & updated permanently.',
+        type: 'success',
+      })
+    },
+    [showToast]
+  )
+
+  const deleteProduct = useCallback(
+    async (productId: string | number) => {
+      setProducts((current) => current.filter((prod) => prod.id !== productId))
+
+      try {
+        await fetch(`/api/products?id=${productId}`, { method: 'DELETE' })
+      } catch (err) {
+        console.error('Failed to sync deleted product to server:', err)
+      }
+
+      showToast({
+        title: 'Product Deleted',
+        message: 'Product removed from marketplace and database.',
+        type: 'info',
+      })
+    },
+    [showToast]
+  )
+
+  const addReview = useCallback(
+    (productId: string | number, review: any) => {
+      setProducts((current) =>
+        current.map((prod) => {
+          if (prod.id === productId) {
+            const currentCount = prod.reviews || 10
+            const currentRating = prod.rating || 4.8
+            const newRating = Number(((currentRating * currentCount + review.rating) / (currentCount + 1)).toFixed(1))
+            return {
+              ...prod,
+              rating: newRating,
+              reviews: currentCount + 1,
+            }
+          }
+          return prod
+        })
+      )
+
+      showToast({
+        title: 'Review Posted',
+        message: 'Thank you for sharing your feedback with the community.',
+        type: 'success',
+      })
+    },
+    [showToast]
+  )
 
   const value = useMemo(
     () => ({

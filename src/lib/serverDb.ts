@@ -143,10 +143,23 @@ const PRODUCTS_FILE = path.join(DATA_DIR, 'db-products.json')
 const ORDERS_FILE = path.join(DATA_DIR, 'db-orders.json')
 const DELIVERY_FILE = path.join(DATA_DIR, 'db-delivery.json')
 
+const IS_SERVERLESS = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
+
 function ensureDirExists(dir: string) {
+  if (IS_SERVERLESS) return
   if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
+    try {
+      fs.mkdirSync(dir, { recursive: true })
+    } catch {}
   }
+}
+
+async function safeWriteFile(filePath: string, data: string, encoding: any = 'utf8') {
+  if (IS_SERVERLESS) return
+  try {
+    ensureDirExists(DATA_DIR)
+    await fs.promises.writeFile(filePath, data, encoding)
+  } catch {}
 }
 
 // High-speed In-Memory Cache Layer with Micro-TTL & Mutation Invalidation
@@ -205,7 +218,7 @@ export async function getSettings(): Promise<BrandingSettings> {
   try {
     ensureDirExists(DATA_DIR)
     if (!fs.existsSync(SETTINGS_FILE)) {
-      await fs.promises.writeFile(SETTINGS_FILE, JSON.stringify(DEFAULT_BRANDING, null, 2), 'utf8')
+      await safeWriteFile(SETTINGS_FILE, JSON.stringify(DEFAULT_BRANDING, null, 2), 'utf8')
       memorySettings = { ...DEFAULT_BRANDING }
       cachedSettings = { data: memorySettings, expiresAt: now + SETTINGS_TTL_MS }
       return memorySettings
@@ -244,7 +257,7 @@ export async function saveSettings(settings: Partial<BrandingSettings>): Promise
   // 2. Save to local disk & memory fallback
   try {
     ensureDirExists(DATA_DIR)
-    await fs.promises.writeFile(SETTINGS_FILE, JSON.stringify(updated, null, 2), 'utf8')
+    await safeWriteFile(SETTINGS_FILE, JSON.stringify(updated, null, 2), 'utf8')
   } catch (err) {
     // Memory fallback
   }
@@ -304,7 +317,7 @@ export async function getProducts(): Promise<Product[]> {
   try {
     ensureDirExists(DATA_DIR)
     if (!fs.existsSync(PRODUCTS_FILE)) {
-      await fs.promises.writeFile(PRODUCTS_FILE, JSON.stringify(allInitialProducts, null, 2), 'utf8')
+      await safeWriteFile(PRODUCTS_FILE, JSON.stringify(allInitialProducts, null, 2), 'utf8')
       memoryProducts = [...allInitialProducts]
       cachedProducts = { data: memoryProducts, expiresAt: now + PRODUCTS_TTL_MS }
       return memoryProducts
@@ -342,7 +355,7 @@ export async function saveAllProducts(products: Product[]): Promise<Product[]> {
 
   try {
     ensureDirExists(DATA_DIR)
-    await fs.promises.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2), 'utf8')
+    await safeWriteFile(PRODUCTS_FILE, JSON.stringify(products, null, 2), 'utf8')
   } catch (err) {
     // Memory fallback
   }
@@ -372,7 +385,7 @@ export async function addProductToDb(product: Product): Promise<Product[]> {
 
   try {
     ensureDirExists(DATA_DIR)
-    await fs.promises.writeFile(PRODUCTS_FILE, JSON.stringify(next, null, 2), 'utf8')
+    await safeWriteFile(PRODUCTS_FILE, JSON.stringify(next, null, 2), 'utf8')
   } catch {}
 
   memoryProducts = next
@@ -410,7 +423,7 @@ export async function updateProductInDb(id: number | string, data: Partial<Produ
 
   try {
     ensureDirExists(DATA_DIR)
-    await fs.promises.writeFile(PRODUCTS_FILE, JSON.stringify(next, null, 2), 'utf8')
+    await safeWriteFile(PRODUCTS_FILE, JSON.stringify(next, null, 2), 'utf8')
   } catch {}
 
   memoryProducts = next
@@ -440,7 +453,7 @@ export async function deleteProductFromDb(id: number | string): Promise<Product[
 
   try {
     ensureDirExists(DATA_DIR)
-    await fs.promises.writeFile(PRODUCTS_FILE, JSON.stringify(next, null, 2), 'utf8')
+    await safeWriteFile(PRODUCTS_FILE, JSON.stringify(next, null, 2), 'utf8')
   } catch {}
 
   memoryProducts = next
@@ -483,7 +496,7 @@ export async function getOrders(): Promise<any[]> {
   try {
     ensureDirExists(DATA_DIR)
     if (!fs.existsSync(ORDERS_FILE)) {
-      await fs.promises.writeFile(ORDERS_FILE, JSON.stringify([], null, 2), 'utf8')
+      await safeWriteFile(ORDERS_FILE, JSON.stringify([], null, 2), 'utf8')
       memoryOrders = []
       cachedOrders = { data: [], expiresAt: now + ORDERS_TTL_MS }
       return []
@@ -521,7 +534,7 @@ export async function addOrderToDb(order: any): Promise<any[]> {
   const next = [order, ...current]
   try {
     ensureDirExists(DATA_DIR)
-    await fs.promises.writeFile(ORDERS_FILE, JSON.stringify(next, null, 2), 'utf8')
+    await safeWriteFile(ORDERS_FILE, JSON.stringify(next, null, 2), 'utf8')
   } catch {}
 
   memoryOrders = next
@@ -557,7 +570,7 @@ export async function updateOrderStatusInDb(orderId: string, status: string): Pr
   const next = current.map((o) => (o.orderId === orderId || o.id === orderId ? { ...o, status } : o))
   try {
     ensureDirExists(DATA_DIR)
-    await fs.promises.writeFile(ORDERS_FILE, JSON.stringify(next, null, 2), 'utf8')
+    await safeWriteFile(ORDERS_FILE, JSON.stringify(next, null, 2), 'utf8')
   } catch {}
 
   memoryOrders = next
@@ -608,7 +621,7 @@ export async function getDeliverySettings(): Promise<RegionalDeliverySettings> {
   try {
     ensureDirExists(DATA_DIR)
     if (!fs.existsSync(DELIVERY_FILE)) {
-      await fs.promises.writeFile(DELIVERY_FILE, JSON.stringify(DEFAULT_DELIVERY_SETTINGS, null, 2), 'utf8')
+      await safeWriteFile(DELIVERY_FILE, JSON.stringify(DEFAULT_DELIVERY_SETTINGS, null, 2), 'utf8')
       memoryDelivery = JSON.parse(JSON.stringify(DEFAULT_DELIVERY_SETTINGS))
       cachedDelivery = { data: memoryDelivery, expiresAt: now + DELIVERY_TTL_MS }
       return memoryDelivery
@@ -664,7 +677,7 @@ export async function saveDeliverySettings(settings: Partial<RegionalDeliverySet
   // 2. Save to local disk & memory fallback
   try {
     ensureDirExists(DATA_DIR)
-    await fs.promises.writeFile(DELIVERY_FILE, JSON.stringify(updated, null, 2), 'utf8')
+    await safeWriteFile(DELIVERY_FILE, JSON.stringify(updated, null, 2), 'utf8')
   } catch (err) {
     // Memory fallback
   }

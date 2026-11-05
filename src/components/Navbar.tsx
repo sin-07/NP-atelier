@@ -104,8 +104,6 @@ export default function Navbar() {
     setIsCartOpen,
     setIsWishlistOpen,
     setIsAuthOpen,
-    isProfileOpen,
-    setIsProfileOpen,
     openProfile,
     setIsSellOpen,
     setIsQuickSearchOpen,

@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useDeferredValue } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Fish,
@@ -47,6 +47,7 @@ export default function AcquarioTropicale() {
   const [activeBadge, setActiveBadge] = useState('All')
   const [sortBy, setSortBy] = useState('featured')
   const [searchTerm, setSearchTerm] = useState('')
+  const deferredSearchTerm = useDeferredValue(searchTerm)
   const [visibleCount, setVisibleCount] = useState(12)
 
   // Filter ONLY aquarium products - NEVER mix with craft items
@@ -77,7 +78,7 @@ export default function AcquarioTropicale() {
 
   // Filtered and sorted list
   const filteredProducts = useMemo(() => {
-    const query = searchTerm.trim().toLowerCase()
+    const query = deferredSearchTerm.trim().toLowerCase()
 
     const result = allAquariumProducts.filter((product: Product) => {
       // Category filter
@@ -123,7 +124,7 @@ export default function AcquarioTropicale() {
     }
 
     return result
-  }, [allAquariumProducts, activeCategory, activeBadge, searchTerm, sortBy])
+  }, [allAquariumProducts, activeCategory, activeBadge, deferredSearchTerm, sortBy])
 
   const displayedProducts = useMemo(() => {
     return filteredProducts.slice(0, visibleCount)

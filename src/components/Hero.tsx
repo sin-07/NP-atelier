@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import {
@@ -235,7 +236,7 @@ export default function Hero() {
     ]
     imagesToPreload.forEach((src) => {
       if (typeof window !== 'undefined' && src) {
-        const img = new Image()
+        const img = new window.Image()
         img.src = src
       }
     })
@@ -491,17 +492,15 @@ export default function Hero() {
               {/* Card 1: Artisan Craft Showcase */}
               <article className="gsap-hero-card group relative overflow-hidden rounded-[2rem] border border-[#6D5738]/40 bg-gradient-to-b from-[#181714] via-[#141311] to-[#0E0D0C] p-3.5 shadow-[0_12px_32px_rgba(0,0,0,0.7)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF78]/70 hover:shadow-[0_16px_40px_rgba(0,0,0,0.85)]">
                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#121110] border border-[#6D5738]/30">
-                  <img
+                  <Image
                     src={currentDrop.craft.image}
                     alt={currentDrop.craft.title}
-                    loading="eager"
-                    decoding="async"
-                    onError={(e) => {
-                      e.currentTarget.src = fallbackCraftImage
-                    }}
-                    className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                    fill
+                    priority
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
+                    className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80 pointer-events-none" />
 
                   {/* Top Floating Badge */}
                   <div className="absolute left-2.5 top-2.5">
@@ -575,17 +574,15 @@ export default function Hero() {
               {/* Card 2: Artisanal Decor & Keepsake Showcase */}
               <article className="gsap-hero-card group relative overflow-hidden rounded-[2rem] border border-[#6D5738]/40 bg-gradient-to-b from-[#181714] via-[#141311] to-[#0E0D0C] p-3.5 shadow-[0_12px_32px_rgba(0,0,0,0.7)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF78]/70 hover:shadow-[0_16px_40px_rgba(0,0,0,0.85)]">
                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#121110] border border-[#6D5738]/30">
-                  <img
+                  <Image
                     src={currentDrop.craft2.image}
                     alt={currentDrop.craft2.title}
-                    loading="eager"
-                    decoding="async"
-                    onError={(e) => {
-                      e.currentTarget.src = fallbackCraftImage
-                    }}
-                    className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                    fill
+                    priority
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
+                    className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80 pointer-events-none" />
 
                   {/* Top Floating Badge */}
                   <div className="absolute left-2.5 top-2.5">
