@@ -19,6 +19,19 @@ export interface ProductCardProps {
   className?: string
 }
 
+function WhatsAppIcon({ className = 'h-3.5 w-3.5' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.04 14.69 2 12.04 2ZM12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.68 12.04 3.68C14.25 3.68 16.31 4.54 17.87 6.1C19.42 7.66 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15ZM16.57 14.39C16.32 14.27 15.11 13.67 14.88 13.59C14.65 13.5 14.49 13.46 14.32 13.71C14.15 13.96 13.68 14.52 13.53 14.69C13.38 14.85 13.24 14.87 12.99 14.75C12.74 14.62 11.93 14.36 10.98 13.51C10.23 12.85 9.73 12.03 9.58 11.78C9.43 11.53 9.56 11.4 9.69 11.27C9.8 11.16 9.94 10.98 10.06 10.84C10.19 10.69 10.23 10.59 10.31 10.42C10.39 10.26 10.35 10.11 10.29 9.99C10.23 9.86 9.73 8.64 9.53 8.14C9.32 7.65 9.12 7.72 8.97 7.71C8.83 7.7 8.66 7.7 8.49 7.7C8.33 7.7 8.06 7.76 7.83 8.01C7.6 8.26 6.96 8.86 6.96 10.08C6.96 11.3 7.85 12.48 7.97 12.64C8.1 12.81 9.72 15.31 12.2 16.38C12.79 16.64 13.25 16.79 13.61 16.91C14.21 17.1 14.75 17.07 15.18 17.01C15.66 16.94 16.65 16.41 16.86 15.82C17.06 15.24 17.06 14.74 17 14.64C16.94 14.53 16.82 14.51 16.57 14.39Z" />
+    </svg>
+  )
+}
+
 function ProductCard({
   product,
   isWishlisted = false,
@@ -102,6 +115,20 @@ function ProductCard({
     ? rawPriceStr
     : `${curr}${rawPriceStr}`
 
+  const rawOrig = (product as any).originalPrice
+  const origNumericVal = rawOrig != null ? parseFloat(String(rawOrig).replace(/[^0-9.]/g, '')) : null
+  const formattedOriginalPrice = origNumericVal && !isNaN(origNumericVal)
+    ? `${curr}${origNumericVal.toLocaleString('en-IN')}`
+    : rawOrig != null
+    ? String(rawOrig).startsWith(curr)
+      ? String(rawOrig)
+      : `${curr}${rawOrig}`
+    : null
+  const discountPercent =
+    origNumericVal && numericVal && origNumericVal > numericVal
+      ? Math.round(((origNumericVal - numericVal) / origNumericVal) * 100)
+      : null
+
   const contactPhone = (branding?.contactPhone || '+91 93412 97124').replace(/[^0-9]/g, '')
   const storeName = branding?.siteName || 'NP Atelier'
 
@@ -132,8 +159,8 @@ function ProductCard({
     <article
       className={`card-smooth-appear group relative flex flex-col justify-between overflow-hidden ${
         isCompact
-          ? 'rounded-[1.15rem] sm:rounded-[1.35rem] p-1.5 sm:p-2.5'
-          : 'rounded-[1.25rem] sm:rounded-[1.65rem] p-2 sm:p-2.5'
+          ? 'rounded-[1.15rem] sm:rounded-[1.35rem] p-2 sm:p-2.5'
+          : 'rounded-[1.25rem] sm:rounded-[1.65rem] p-2.5 sm:p-3'
       } border border-[rgba(212,175,120,0.25)] bg-gradient-to-b from-[#1C1A16] via-[#171512] to-[#12110F] shadow-[0_8px_24px_rgba(0,0,0,0.65)] sm:hover:shadow-[0_18px_42px_rgba(0,0,0,0.9),0_0_24px_rgba(212,175,120,0.12)] sm:hover:border-[#D4AF78]/70 sm:hover:-translate-y-1 transition-[transform,box-shadow,border-color] duration-200 ease-out transform-gpu hover:will-change-transform ${className}`}
     >
       <div>
@@ -252,44 +279,43 @@ function ProductCard({
             {product.title}
           </h3>
 
-          {/* Description */}
-          {!isCompact && (
-            <p className="text-[10px] sm:text-[11px] leading-relaxed text-[#B8AA96] line-clamp-1">
-              {product.description}
-            </p>
-          )}
         </div>
       </div>
 
-      {/* Footer: Price on its own row + Streamlined Action Bar */}
-      <div className={`pt-1.5 sm:pt-2 border-t border-[rgba(212,175,120,0.25)] px-0.5 ${isCompact ? 'mt-1.5 space-y-1.5' : 'mt-2 space-y-2'}`}>
-        {/* Price & Heritage Row */}
-        <div className="flex items-baseline justify-between gap-1">
+      {/* Footer: Clean Price & Never-Cramped Action Bar */}
+      <div className={`pt-2.5 sm:pt-3 border-t border-[rgba(212,175,120,0.20)] px-0.5 mt-2 space-y-2`}>
+        {/* Price & Availability Status */}
+        <div className="flex items-center justify-between gap-1.5 py-0.5">
           <div className="flex items-baseline gap-1.5 flex-wrap">
-            <span className={`font-serif font-extrabold text-[#F5EBDD] tracking-tight whitespace-nowrap ${
+            <span className={`font-serif font-extrabold text-[#F5EBDD] tracking-tight leading-none whitespace-nowrap ${
               isCompact ? 'text-sm sm:text-base' : 'text-base sm:text-lg'
             }`}>
               {formattedPrice}
             </span>
-            {(product as any).originalPrice && (
+            {formattedOriginalPrice && (
               <span className="text-[10px] sm:text-xs text-[#B8AA96]/60 line-through font-medium whitespace-nowrap">
-                {typeof (product as any).originalPrice === 'number'
-                  ? `${curr}${Number((product as any).originalPrice).toLocaleString('en-IN')}`
-                  : String((product as any).originalPrice).startsWith(curr)
-                  ? (product as any).originalPrice
-                  : `${curr}${(product as any).originalPrice}`}
+                {formattedOriginalPrice}
               </span>
             )}
           </div>
 
-          <span
-            className="text-[8.5px] sm:text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full shrink-0 bg-[#12110F] text-[#D4AF78] border border-[rgba(212,175,120,0.25)]"
-          >
-            {isCardComingSoon ? 'Coming Soon' : product.department === 'aquarium' ? 'Aquatics' : 'Artisan'}
-          </span>
+          {discountPercent ? (
+            <span className="text-[8.5px] sm:text-[9.5px] font-extrabold text-[#0B0B0A] bg-gradient-to-r from-[#D4AF78] to-[#ECC872] px-2 py-0.5 rounded-full shadow-2xs shrink-0">
+              {discountPercent}% OFF
+            </span>
+          ) : isCardComingSoon ? (
+            <span className="text-[8.5px] sm:text-[9.5px] font-bold text-[#D4AF78] bg-[#D4AF78]/10 border border-[#D4AF78]/30 px-2 py-0.5 rounded-full shrink-0">
+              Coming Soon
+            </span>
+          ) : (
+            <span className="text-[8.5px] sm:text-[9.5px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>In Stock</span>
+            </span>
+          )}
         </div>
 
-        {/* Unified Dual Action Bar: Add to Bag (or Stepper) + 1-Click WhatsApp Companion */}
+        {/* Unified Action Bar: Stacked on Mobile for 100% clarity & comfort, Side-by-Side on Desktop */}
         <div className="relative">
           {plusPop && (
             <span className="absolute -top-7 right-2 sm:right-4 z-30 pointer-events-none inline-flex items-center gap-1 rounded-full bg-[#D4AF78] text-[#0B0B0A] text-[9px] sm:text-[10px] font-black px-2 py-0.5 shadow-[0_4px_14px_rgba(212,175,120,0.4)] animate-bounce border border-[#E5C18A]">
@@ -297,99 +323,87 @@ function ProductCard({
             </span>
           )}
 
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex flex-col gap-1.5 sm:grid sm:grid-cols-2 sm:gap-2">
             {isCardComingSoon ? (
+              <button
+                type="button"
+                onClick={handleWhatsAppAction}
+                className="w-full sm:col-span-2 h-8.5 sm:h-9 inline-flex items-center justify-center gap-2 rounded-full bg-[#0D2418] hover:bg-[#123322] border border-[#25D366]/60 text-[#25D366] text-xs font-bold transition-all shadow-sm cursor-pointer active:scale-98"
+                title={`Inquire about ${product.title} on WhatsApp (${contactPhone})`}
+              >
+                <WhatsAppIcon className="h-4 w-4 text-[#25D366] shrink-0" />
+                <span className="whitespace-nowrap font-bold text-[#F5EBDD]">Inquire on WhatsApp</span>
+              </button>
+            ) : activeQuantity > 0 ? (
+              <>
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-full h-8.5 sm:h-9 flex items-center justify-between rounded-full bg-[#0B0B0A] border border-[#D4AF78] p-0.5 shadow-[0_4px_16px_rgba(212,175,120,0.25)] select-none transition-all duration-200"
+                >
+                  {/* Minus Button */}
+                  <button
+                    type="button"
+                    aria-label={`Decrease ${product.title} quantity`}
+                    onClick={handleDecrement}
+                    className="grid h-7 w-7 place-items-center rounded-full bg-[#191713] text-[#D4AF78] hover:bg-[#25221B] hover:text-[#F5EBDD] transition duration-150 active:scale-85 cursor-pointer shrink-0 border border-[rgba(212,175,120,0.25)] shadow-xs"
+                    title="Decrease (-1)"
+                  >
+                    <Minus className="h-3 w-3 stroke-[3]" />
+                  </button>
+
+                  <div className="flex items-center gap-1.5 px-2 justify-center flex-1 min-w-0">
+                    <span className="inline-flex items-center justify-center min-w-[20px] px-1.5 py-0.2 rounded-full bg-[#D4AF78] text-[#0B0B0A] text-[11px] font-black font-mono shadow-xs">
+                      {activeQuantity}
+                    </span>
+                    <span className="text-[10px] sm:text-[11px] font-bold text-[#B8AA96] uppercase tracking-wider">
+                      in Bag
+                    </span>
+                  </div>
+
+                  {/* Plus Button */}
+                  <button
+                    type="button"
+                    aria-label={`Increase ${product.title} quantity`}
+                    onClick={handleIncrement}
+                    className="grid h-7 w-7 place-items-center rounded-full bg-[#D4AF78] text-[#0B0B0A] hover:bg-[#E5C18A] transition duration-150 active:scale-85 cursor-pointer shadow-xs shrink-0"
+                    title="Add (+1)"
+                  >
+                    <Plus className="h-3 w-3 stroke-[3]" />
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleWhatsAppAction}
+                  className="w-full h-8 sm:h-9 rounded-full bg-[#0D2418] hover:bg-[#123322] border border-[#25D366]/60 hover:border-[#25D366] text-[#25D366] transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 px-3 shadow-xs cursor-pointer group/wa"
+                  title={`Order ${product.title} on WhatsApp (${contactPhone})`}
+                >
+                  <WhatsAppIcon className="h-3.5 w-3.5 text-[#25D366] group-hover/wa:scale-110 transition-transform shrink-0" />
+                  <span className="text-[11px] font-bold text-[#F5EBDD] group-hover/wa:text-[#25D366] transition-colors whitespace-nowrap">Order on WhatsApp</span>
+                </button>
+              </>
+            ) : (
               <>
                 <button
                   type="button"
-                  disabled
-                  className={`flex-1 ${
-                    isCompact ? 'h-8 sm:h-9 text-[10px] sm:text-[11px]' : 'h-8.5 sm:h-9.5 text-[11px] sm:text-xs'
-                  } inline-flex items-center justify-center gap-1.5 rounded-full bg-[#12110F] border border-[rgba(212,175,120,0.25)] px-2 sm:px-3 font-extrabold text-[#D4AF78] shadow-xs select-none cursor-default`}
-                  title="Coming Soon to NP Atelier"
+                  onClick={handleAdd}
+                  className="w-full h-8.5 sm:h-9 inline-flex items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] hover:brightness-105 border border-[#F5DC9A]/60 px-3 font-extrabold text-[#0B0B0A] text-xs transition-all duration-200 active:scale-[0.98] shadow-[0_2px_10px_rgba(212,175,120,0.25)] cursor-pointer"
+                  title={`Add ${product.title} to Bag`}
                 >
-                  <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#D4AF78]" />
-                  <span className="uppercase tracking-wider text-[10px] sm:text-[11px] font-black">Coming Soon</span>
+                  <ShoppingBag className="h-3.5 w-3.5 text-[#0B0B0A] transition-transform duration-200 group-hover/btn:scale-110 shrink-0 stroke-[2.5]" />
+                  <span className="font-extrabold whitespace-nowrap">Add to Bag</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={handleWhatsAppAction}
-                  className={`${
-                    isCompact ? 'h-8 sm:h-9 px-2 sm:px-2.5' : 'h-8.5 sm:h-9.5 px-2.5 sm:px-3'
-                  } rounded-full bg-[#12110F] border border-[rgba(212,175,120,0.30)] text-[#D4AF78] hover:bg-[#191713] hover:border-[#D4AF78] hover:text-[#E5C18A] transition-all duration-200 active:scale-95 flex items-center justify-center gap-1 shrink-0 shadow-xs cursor-pointer group/wa`}
-                  title={`Inquire about ${product.title} on WhatsApp (${contactPhone})`}
+                  className="w-full h-8 sm:h-9 rounded-full bg-[#0D2418] hover:bg-[#123322] border border-[#25D366]/60 hover:border-[#25D366] text-[#25D366] transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 px-3 shadow-xs cursor-pointer group/wa"
+                  title={`Order ${product.title} on WhatsApp (${contactPhone})`}
                 >
-                  <MessageCircle className="h-3.5 w-3.5 text-[#D4AF78] fill-[#D4AF78]/20 group-hover/wa:scale-110 transition-transform shrink-0" />
-                  <span className="text-[9.5px] sm:text-[10.5px] font-bold tracking-tight">Inquire</span>
+                  <WhatsAppIcon className="h-3.5 w-3.5 text-[#25D366] group-hover/wa:scale-110 transition-transform shrink-0" />
+                  <span className="text-[11px] font-bold text-[#F5EBDD] group-hover/wa:text-[#25D366] transition-colors whitespace-nowrap">Order on WhatsApp</span>
                 </button>
               </>
-            ) : activeQuantity > 0 ? (
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className={`flex-1 ${
-                  isCompact ? 'h-8 sm:h-9' : 'h-8.5 sm:h-9.5'
-                } flex items-center justify-between rounded-full bg-[#0B0B0A] border border-[#D4AF78] p-0.5 shadow-[0_4px_16px_rgba(212,175,120,0.25)] select-none transition-all duration-200`}
-              >
-                {/* Minus Button */}
-                <button
-                  type="button"
-                  aria-label={`Decrease ${product.title} quantity`}
-                  onClick={handleDecrement}
-                  className="grid h-6 w-6 sm:h-7 sm:w-7 place-items-center rounded-full bg-[#191713] text-[#D4AF78] hover:bg-[#25221B] hover:text-[#F5EBDD] transition duration-150 active:scale-85 cursor-pointer shrink-0 border border-[rgba(212,175,120,0.25)] shadow-xs"
-                  title="Decrease (-1)"
-                >
-                  <Minus className="h-2.5 w-2.5 sm:h-3 sm:w-3 stroke-[3]" />
-                </button>
-
-                {/* Center Quantity */}
-                <div className="flex items-center gap-1 px-1 justify-center flex-1 min-w-0">
-                  <span className="inline-flex items-center justify-center min-w-[22px] px-1.5 py-0.5 rounded-full bg-[#D4AF78] text-[#0B0B0A] text-[10px] sm:text-[11px] font-black font-mono shadow-xs">
-                    +{activeQuantity}
-                  </span>
-                  <span className="text-[8.5px] sm:text-[9.5px] font-bold text-[#B8AA96] uppercase tracking-wider truncate hidden xs:inline">
-                    Bag
-                  </span>
-                </div>
-
-                {/* Plus Button */}
-                <button
-                  type="button"
-                  aria-label={`Increase ${product.title} quantity`}
-                  onClick={handleIncrement}
-                  className="grid h-6 w-6 sm:h-7 sm:w-7 place-items-center rounded-full bg-[#D4AF78] text-[#0B0B0A] hover:bg-[#E5C18A] transition duration-150 active:scale-85 cursor-pointer shadow-xs shrink-0"
-                  title="Add (+1)"
-                >
-                  <Plus className="h-2.5 w-2.5 sm:h-3 sm:w-3 stroke-[3]" />
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={handleAdd}
-                className={`group/btn flex-1 ${
-                  isCompact ? 'h-8 sm:h-9 text-[10px] sm:text-[11px]' : 'h-8.5 sm:h-9.5 text-[11px] sm:text-xs'
-                } inline-flex items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] hover:brightness-105 border border-[#F5DC9A]/60 px-2 sm:px-3 font-extrabold text-[#0B0B0A] transition-all duration-200 active:scale-[0.98] shadow-[0_2px_10px_rgba(212,175,120,0.25)] cursor-pointer min-w-0`}
-                title={`Add ${product.title} to Bag`}
-              >
-                <ShoppingBag className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#0B0B0A] transition-transform duration-200 group-hover/btn:scale-110 shrink-0" />
-                <span className="truncate">Add to Bag</span>
-              </button>
-            )}
-
-            {/* WhatsApp Companion Button */}
-            {!isCardComingSoon && (
-              <button
-                type="button"
-                onClick={handleWhatsAppAction}
-                className={`${
-                  isCompact ? 'h-8 sm:h-9 px-2 sm:px-2.5' : 'h-8.5 sm:h-9.5 px-2.5 sm:px-3'
-                } rounded-full bg-[#12110F] border border-[rgba(212,175,120,0.30)] text-[#D4AF78] hover:bg-[#191713] hover:border-[#D4AF78] hover:text-[#E5C18A] transition-all duration-200 active:scale-95 flex items-center justify-center gap-1 shrink-0 shadow-xs cursor-pointer group/wa`}
-                title={`Order ${product.title} on WhatsApp (${contactPhone})`}
-              >
-                <MessageCircle className="h-3.5 w-3.5 text-[#D4AF78] fill-[#D4AF78]/20 group-hover/wa:scale-110 transition-transform shrink-0" />
-                <span className="text-[9.5px] sm:text-[10.5px] font-bold tracking-tight">WhatsApp</span>
-              </button>
             )}
           </div>
         </div>
