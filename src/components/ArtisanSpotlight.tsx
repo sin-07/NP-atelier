@@ -1,34 +1,38 @@
 "use client"
 
-import { ArrowRight, Award, MapPin, Sparkles, Star } from 'lucide-react'
+import { ArrowRight, Award, MapPin, Quote, Sparkles, Star } from 'lucide-react'
 import { fallbackAquariumImage, fallbackCraftImage } from '../utils/fallbackImage'
 import { useGsapReveal } from '../hooks/useGsapReveal'
 import { useMarketplace } from '../context/MarketplaceContext'
 
 const FEATURED_MAKERS = [
   {
-    id: 'punam-kumari',
-    name: 'Punam Kumari',
-    role: 'Founder & Lead Resin / Craft Artist',
+    id: 'poonam-verma',
+    name: 'Poonam Verma',
+    role: 'Founder • Lead Resin Artist & Educator',
     studioTag: 'NP Atelier Craft Studio',
-    experience: 'Co-Founder & Maker',
+    experience: 'Founder & Creator',
     location: 'India',
     image: '/makers/punam-kumari.jpg',
-    bio: 'Creator of NP Atelier handmade pressed-flower resin art, botanical candles, keychain keepsakes, and signature DIY craft kits crafted with love.',
-    badges: ['Resin Art & Gifts', 'DIY Craft Kits', 'Botanical Keepsakes'],
+    bio: 'Visionary behind NP Atelier—handcrafting pressed-flower resin keepsakes, floral heart charms, keychains, glowing botanical candles, and signature DIY craft kits. Balancing craft business and teaching with family, wellness, and big dreams, she pours care into every handmade creation.',
+    quote:
+      'Dream Big… Create More… Be Happy — create with love, stay grateful always, and spread positivity through every handmade piece.',
+    badges: ['Resin Art & Gifts', 'DIY Craft Kits', 'Teaching & Craft Business', 'Botanical Candles'],
     actionLabel: 'Explore Crafts',
     actionTarget: 'crafts' as const,
   },
   {
     id: 's-nandan-verma',
     name: 'S. Nandan Verma',
-    role: 'Founder, Educator & Aquarist',
+    role: 'Co-Founder • Educator, Aquarist & Author',
     studioTag: 'Acquario Tropicale & Nature Systems',
-    experience: 'Founder & Aquarist',
+    experience: 'Co-Founder & Aquarist',
     location: 'India',
     image: '/makers/s-nandan-verma.jpg',
-    bio: 'Biology & environmental science educator building self-sustaining Walstad freshwater ecosystems, indoor aquatic tubs, moss terrariums, and planted nature setups.',
-    badges: ['Walstad Aquariums', 'Planted Nature Tubs', 'Aquatic Flora & Fauna'],
+    bio: 'Biology, zoology & environmental science educator (M.Sc., Patna), creator of RAVEN and fantasy novel The Thirteen Realms (Xaq). Cultivates filterless 135L Walstad ecosystems, 90L shrimp & Corydoras indoor tubs, live microfauna cultures (Daphnia & Moina), plant propagation, and Selaginella moss terrariums.',
+    quote:
+      'Curiosity + Discipline = Freedom — small things make big worlds when you teach, explore, write, and build from darkness to light.',
+    badges: ['135L Walstad & 90L Tubs', 'Biology & Zoology', 'Live Microfauna & Moss', 'Author • RAVEN'],
     actionLabel: 'Explore Aquatics',
     actionTarget: 'aquarium' as const,
   },
@@ -119,7 +123,7 @@ export default function ArtisanSpotlight() {
           {FEATURED_MAKERS.map((maker) => (
             <article
               key={maker.id}
-              className="gsap-artisan-item group overflow-hidden rounded-[2rem] border border-[#8C6D46]/30 bg-gradient-to-b from-[#FCF9F4] via-[#FAF6EE] to-[#F3ECE0] p-4 sm:p-5 shadow-[0_10px_28px_rgba(72,54,30,0.09)] transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-1 hover:border-[#B8925A] hover:shadow-[0_18px_40px_rgba(72,54,30,0.14)]"
+              className="gsap-artisan-item group flex flex-col overflow-hidden rounded-[2rem] border border-[#8C6D46]/30 bg-gradient-to-b from-[#FCF9F4] via-[#FAF6EE] to-[#F3ECE0] p-4 sm:p-5 shadow-[0_10px_28px_rgba(72,54,30,0.09)] transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-1 hover:border-[#B8925A] hover:shadow-[0_18px_40px_rgba(72,54,30,0.14)]"
             >
               <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-[#8C6D46]/25 bg-[#EDE4DD]">
                 <img
@@ -135,28 +139,39 @@ export default function ArtisanSpotlight() {
                 />
               </div>
 
-              <div className="mt-4 px-1">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#8C6D46]/30 bg-[#EFE8DC] px-3 py-1 text-[11px] font-bold text-[#7A5B32]">
-                    <Sparkles className="h-3 w-3 text-[#8C6838]" />
-                    <span>{maker.experience}</span>
-                  </span>
-                  <span className="flex items-center gap-1 text-xs font-semibold text-[#5C4D3C]">
-                    <MapPin className="h-3.5 w-3.5 text-[#8C6838]" />
-                    <span>{maker.location}</span>
-                  </span>
-                </div>
+              <div className="mt-4 flex flex-1 flex-col justify-between px-1">
+                <div>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#8C6D46]/30 bg-[#EFE8DC] px-3 py-1 text-[11px] font-bold text-[#7A5B32]">
+                      <Sparkles className="h-3 w-3 text-[#8C6838]" />
+                      <span>{maker.experience}</span>
+                    </span>
+                    <span className="flex items-center gap-1 text-xs font-semibold text-[#5C4D3C]">
+                      <MapPin className="h-3.5 w-3.5 text-[#8C6838]" />
+                      <span>{maker.location}</span>
+                    </span>
+                  </div>
 
-                <div className="mt-3">
-                  <h3 className="font-tagline text-2xl sm:text-[1.65rem] font-bold text-[#141210]">
-                    {maker.name}
-                  </h3>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#7A5B32] mt-0.5">
-                    {maker.role}
-                  </p>
-                  <p className="mt-2.5 text-xs sm:text-[13px] leading-relaxed text-[#5C4D3C]">
-                    {maker.bio}
-                  </p>
+                  <div className="mt-3">
+                    <h3 className="font-tagline text-2xl sm:text-[1.65rem] font-bold text-[#141210]">
+                      {maker.name}
+                    </h3>
+                    <p className="text-xs font-bold uppercase tracking-wider text-[#7A5B32] mt-0.5">
+                      {maker.role}
+                    </p>
+                    <p className="mt-2.5 text-xs sm:text-[13px] leading-relaxed text-[#5C4D3C]">
+                      {maker.bio}
+                    </p>
+
+                    <blockquote className="mt-3.5 rounded-2xl border-l-2 border-[#B8925A] bg-[#EFE8DC]/70 px-3.5 py-2.5">
+                      <div className="flex items-start gap-2">
+                        <Quote className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#8C6838]" />
+                        <p className="font-tagline italic text-[13.5px] sm:text-sm leading-relaxed text-[#3A2E21]">
+                          &ldquo;{maker.quote}&rdquo;
+                        </p>
+                      </div>
+                    </blockquote>
+                  </div>
                 </div>
 
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-2.5 border-t border-[#8C6D46]/20 pt-3.5">
@@ -174,7 +189,7 @@ export default function ArtisanSpotlight() {
                   <button
                     type="button"
                     onClick={() => handleFeaturedAction(maker.actionTarget)}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-[#7A5B32] transition hover:text-[#141210] cursor-pointer"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-[#7A5B32] transition hover:text-[#141210] cursor-pointer shrink-0"
                   >
                     <span>{maker.actionLabel}</span>
                     <ArrowRight className="h-3.5 w-3.5" />
