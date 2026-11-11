@@ -350,28 +350,28 @@ export default function Hero() {
       {/* Grand Architectural Canvas */}
       <div
         ref={heroContainerRef}
-        className="reveal is-visible relative overflow-hidden rounded-[2.5rem] border border-[#6D5738]/35 bg-gradient-to-br from-[#151412] via-[#121110] to-[#0B0B0A] p-6 sm:p-10 lg:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_1px_1px_rgba(109,87,56,0.25)]"
+        className="reveal is-visible relative overflow-hidden rounded-[2.5rem] border border-[#8C6D46]/25 bg-gradient-to-br from-[#FAF7F2] via-[#F5F0E8] to-[#EDE4DD] p-6 sm:p-10 lg:p-12 shadow-[0_20px_50px_rgba(72,54,30,0.09),0_0_1px_1px_rgba(139,109,71,0.18)]"
       >
         {/* Soft Ambient Radiance Highlights */}
-        <div className="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-[#D4AF78]/5 blur-3xl pointer-events-none" />
-        <div className="absolute right-0 top-1/3 h-96 w-96 rounded-full bg-[#6D5738]/10 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 left-1/3 h-80 w-80 rounded-full bg-[#14B8A6]/5 blur-3xl pointer-events-none" />
+        <div className="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-[#D4AF78]/12 blur-3xl pointer-events-none" />
+        <div className="absolute right-0 top-1/3 h-96 w-96 rounded-full bg-[#B8925A]/10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 left-1/3 h-80 w-80 rounded-full bg-[#14B8A6]/8 blur-3xl pointer-events-none" />
 
         {/* Top Architectural Header Bar */}
-        <div className="gsap-hero-header relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-[#6D5738]/30 pb-6">
+        <div className="gsap-hero-header relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-[#8C6D46]/22 pb-6">
           <div className="flex flex-wrap items-center gap-2.5">
             <span className="section-eyebrow">
-              <Sparkles className="h-3.5 w-3.5 text-[#D4AF78]" />
+              <Sparkles className="h-3.5 w-3.5 text-[#8C6838]" />
               Haute Artisan Craft & Couture Atelier
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#6D5738]/40 bg-[#1C1A17] px-3 py-1 text-xs font-bold text-[#D4AF78] shadow-xs">
-              <Sparkles className="h-3.5 w-3.5 text-[#D4AF78]" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#8C6D46]/28 bg-[#FAF6EF] px-3 py-1 text-xs font-bold text-[#7A5B32] shadow-xs">
+              <Sparkles className="h-3.5 w-3.5 text-[#8C6838]" />
               Direct Artisan Collective
             </span>
           </div>
 
-          <div className="hidden sm:flex items-center gap-2 rounded-full border border-[#6D5738]/35 bg-[#1C1A17] px-3.5 py-1 text-xs font-semibold text-[#F5EBDD]">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="hidden sm:flex items-center gap-2 rounded-full border border-[#8C6D46]/25 bg-[#FAF6EF] px-3.5 py-1 text-xs font-semibold text-[#141210]">
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Artisan Drops Shipping Nationwide</span>
           </div>
         </div>
@@ -380,14 +380,14 @@ export default function Hero() {
         <div className="relative z-10 mt-8 grid items-center gap-10 lg:grid-cols-[1.05fr_1.15fr] lg:gap-12">
           {/* Left Editorial Column */}
           <div className="max-w-xl">
-            <h1 className="gsap-hero-title font-serif text-4xl sm:text-5xl lg:text-[3.75rem] font-bold tracking-tight text-[#F5EBDD] leading-[1.08]">
+            <h1 className="gsap-hero-title font-tagline text-4xl sm:text-5xl lg:text-[4rem] font-semibold tracking-tight text-[#141210] leading-[1.06]">
               Where Fine Art <br />
-              <span className="italic font-normal text-gold-gradient font-serif">
+              <span className="italic font-medium text-gold-gradient font-tagline">
                 Meets Master Craft.
               </span>
             </h1>
 
-            <p className="gsap-hero-text body-lead mt-5 sm:text-lg text-[#B8A68B] leading-relaxed">
+            <p className="gsap-hero-text body-lead mt-5 sm:text-xl text-[#524436] leading-relaxed">
               Discover genuine artisan handmade jewelry, wild botanical resin art, personalized monogram keepsakes, and creative DIY craft kits handcrafted with love by verified independent makers.
             </p>
 
@@ -405,11 +405,11 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={() => handleDepartmentJump('aquarium')}
-                className="gsap-hero-cta inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-4 text-sm font-bold tracking-wide cursor-pointer border border-teal-500/40 bg-[#0E1716] text-teal-200 shadow-sm transition hover:border-teal-400 hover:bg-[#132321] hover:text-teal-100 hover:shadow-[0_0_20px_rgba(20,184,166,0.2)] hover:-translate-y-0.5 group"
+                className="gsap-hero-cta inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-4 text-sm font-bold tracking-wide cursor-pointer border border-teal-700/35 bg-[#E7F4F1] text-teal-900 shadow-sm transition hover:border-teal-600 hover:bg-[#D6ECE7] hover:text-teal-950 hover:shadow-[0_6px_20px_rgba(20,184,166,0.16)] hover:-translate-y-0.5 group"
               >
-                <Waves className="h-4 w-4 text-teal-400 transition-transform duration-200 group-hover:scale-110" />
+                <Waves className="h-4 w-4 text-teal-700 transition-transform duration-200 group-hover:scale-110" />
                 <span>Exotic Aquatics</span>
-                <ArrowRight className="h-3.5 w-3.5 text-teal-400/80 stroke-[2.5]" />
+                <ArrowRight className="h-3.5 w-3.5 text-teal-700/80 stroke-[2.5]" />
               </button>
 
               <button
@@ -420,29 +420,29 @@ export default function Hero() {
                     makersEl.scrollIntoView({ behavior: 'smooth' })
                   }
                 }}
-                className="gsap-hero-cta inline-flex items-center justify-center gap-2 rounded-full px-5 py-3.5 text-xs font-semibold tracking-wide cursor-pointer border border-[#6D5738]/35 bg-[#151412]/80 text-[#B8A68B] shadow-2xs transition hover:border-[#D4AF78]/60 hover:text-[#F5EBDD] hover:bg-[#1C1A17]"
+                className="gsap-hero-cta inline-flex items-center justify-center gap-2 rounded-full px-5 py-3.5 text-xs font-semibold tracking-wide cursor-pointer border border-[#8C6D46]/30 bg-[#FAF6EF] text-[#5C4D3C] shadow-2xs transition hover:border-[#8C6D46]/65 hover:text-[#141210] hover:bg-[#F3ECE0]"
               >
-                <Users className="h-3.5 w-3.5 text-[#D4AF78]" />
+                <Users className="h-3.5 w-3.5 text-[#7A5B32]" />
                 <span>Meet Atelier Makers</span>
               </button>
             </div>
 
             {/* Guarantee Strip */}
-            <div className="gsap-hero-trust mt-10 flex flex-wrap items-center gap-6 border-t border-[#6D5738]/30 pt-6">
-              <div className="text-xs font-semibold text-[#B8A68B]">
-                <p className="font-bold text-[#F5EBDD] flex items-center gap-1.5">
-                  <Leaf className="h-3.5 w-3.5 text-[#D4AF78]" /> 100% Eco Packaging
+            <div className="gsap-hero-trust mt-10 flex flex-wrap items-center gap-6 border-t border-[#8C6D46]/22 pt-6">
+              <div className="text-xs font-semibold text-[#5C4D3C]">
+                <p className="font-bold text-[#141210] flex items-center gap-1.5">
+                  <Leaf className="h-3.5 w-3.5 text-[#7A5B32]" /> 100% Eco Packaging
                 </p>
-                <p className="text-[#B8A68B]/80 text-[11px]">Biodegradable boxes & honeycomb wrap</p>
+                <p className="text-[#6B5A48] text-[11px]">Biodegradable boxes & honeycomb wrap</p>
               </div>
 
-              <div className="hidden h-8 w-px bg-[#6D5738]/30 sm:block" />
+              <div className="hidden h-8 w-px bg-[#8C6D46]/25 sm:block" />
 
-              <div className="text-xs font-semibold text-[#B8A68B]">
-                <p className="font-bold text-[#F5EBDD] flex items-center gap-1.5">
-                  <ShieldCheck className="h-3.5 w-3.5 text-[#D4AF78]" /> Fragile Transit Protection
+              <div className="text-xs font-semibold text-[#5C4D3C]">
+                <p className="font-bold text-[#141210] flex items-center gap-1.5">
+                  <ShieldCheck className="h-3.5 w-3.5 text-[#7A5B32]" /> Fragile Transit Protection
                 </p>
-                <p className="text-[#B8A68B]/80 text-[11px]">Shockproof layers & express tracking nationwide</p>
+                <p className="text-[#6B5A48] text-[11px]">Shockproof layers & express tracking nationwide</p>
               </div>
             </div>
           </div>
@@ -457,18 +457,18 @@ export default function Hero() {
             {/* Interactive Drop Selector Pills */}
             <div className="mb-3 sm:mb-4">
               <div className="flex items-center justify-between gap-2 mb-2 px-1">
-                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#D4AF78] flex items-center gap-1.5">
-                  <Sparkles className="h-3 w-3 text-[#D4AF78]" />
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#7A5B32] flex items-center gap-1.5">
+                  <Sparkles className="h-3 w-3 text-[#8C6838]" />
                   <span>Curated Drop Collections</span>
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-semibold text-[#B8A68B] hidden xs:inline-flex items-center gap-1">
+                <span className="text-[10px] sm:text-[11px] font-semibold text-[#6B5A48] hidden xs:inline-flex items-center gap-1">
                   <span>Tap to switch showcase</span>
-                  <span className="text-[#D4AF78]">✦</span>
+                  <span className="text-[#8C6838]">✦</span>
                 </span>
               </div>
 
               {/* Seamless Full-Width 3-Tab Segmented Switcher with Smooth Sliding Pill */}
-              <div className="grid grid-cols-3 gap-1 rounded-2xl sm:rounded-full border border-[#6D5738]/40 bg-[#151412] p-1 shadow-xs relative">
+              <div className="grid grid-cols-3 gap-1 rounded-2xl sm:rounded-full border border-[#8C6D46]/28 bg-[#EFE8DC] p-1 shadow-xs relative">
                 {(Object.keys(HERO_DROPS) as DropKey[]).map((key) => {
                   const isActive = activeTab === key
                   return (
@@ -478,8 +478,8 @@ export default function Hero() {
                       onClick={() => setActiveTab(key)}
                       className={`relative rounded-xl sm:rounded-full py-1.5 sm:py-2 px-1 sm:px-3 text-center text-[11px] sm:text-xs font-bold transition-colors duration-200 cursor-pointer truncate ${
                         isActive
-                          ? 'text-[#0B0B0A]'
-                          : 'text-[#B8A68B] hover:text-[#F5EBDD]'
+                          ? 'text-[#141210]'
+                          : 'text-[#5C4D3C] hover:text-[#141210]'
                       }`}
                     >
                       {isActive && (
@@ -500,8 +500,8 @@ export default function Hero() {
             {/* Dual Stage Cards Container */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
               {/* Card 1: Artisan Craft Showcase */}
-              <article className="gsap-hero-card group relative overflow-hidden rounded-[2rem] border border-[#6D5738]/40 bg-gradient-to-b from-[#181714] via-[#141311] to-[#0E0D0C] p-3.5 shadow-[0_12px_32px_rgba(0,0,0,0.7)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF78]/70 hover:shadow-[0_16px_40px_rgba(0,0,0,0.85)]">
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#121110] border border-[#6D5738]/30">
+              <article className="gsap-hero-card group relative overflow-hidden rounded-[2rem] border border-[#8C6D46]/28 bg-gradient-to-b from-[#FCF9F4] via-[#FAF6EE] to-[#F3ECE0] p-3.5 shadow-[0_12px_30px_rgba(72,54,30,0.09)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#B8925A] hover:shadow-[0_16px_36px_rgba(72,54,30,0.14)]">
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#EDE4DD] border border-[#8C6D46]/22">
                   <Image
                     src={currentDrop.craft.image}
                     alt={currentDrop.craft.title}
@@ -520,7 +520,7 @@ export default function Hero() {
                   </div>
 
                   {/* Bottom Image Overlay Tag */}
-                  <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between rounded-xl bg-[#151412]/95 border border-[#6D5738]/45 px-3 py-1.5 shadow-sm">
+                  <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between rounded-xl bg-[#151412]/90 border border-[#6D5738]/45 px-3 py-1.5 shadow-sm">
                     <span className="text-[11px] font-bold text-[#F5EBDD] truncate max-w-[130px]">
                       {currentDrop.craft.title}
                     </span>
@@ -533,16 +533,16 @@ export default function Hero() {
                 {/* Card Sub-Info & Action */}
                 <div className="mt-3 px-1 flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#D4AF78] block">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A5B32] block">
                       {currentDrop.craft.category}
                     </span>
-                    <p className="text-xs text-[#B8A68B] font-medium">{currentDrop.craft.artisan}</p>
+                    <p className="text-xs text-[#5C4D3C] font-medium">{currentDrop.craft.artisan}</p>
                   </div>
 
                   {craftQty > 0 ? (
                     <div
                       onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 rounded-full bg-[#151412] border border-[#D4AF78] p-1 shadow-xs"
+                      className="inline-flex items-center gap-1 rounded-full bg-[#EFE8DC] border border-[#D4AF78] p-1 shadow-xs"
                     >
                       <button
                         type="button"
@@ -551,18 +551,18 @@ export default function Hero() {
                           if (craftQty <= 1) removeFromCart(currentDrop.craft.id)
                           else setCartQuantity(currentDrop.craft.id, craftQty - 1)
                         }}
-                        className="grid h-6 w-6 place-items-center rounded-full bg-[#24211C] text-[#D4AF78] hover:bg-[#2F2B24] transition active:scale-90 cursor-pointer"
+                        className="grid h-6 w-6 place-items-center rounded-full bg-[#FAF6EF] text-[#7A5B32] hover:bg-[#E7DDD0] transition active:scale-90 cursor-pointer"
                       >
                         <Minus className="h-3 w-3 stroke-[2.8]" />
                       </button>
-                      <span className="px-1 text-xs font-black text-[#F5EBDD] min-w-5 text-center font-mono">
+                      <span className="px-1 text-xs font-black text-[#141210] min-w-5 text-center font-mono">
                         {craftQty}
                       </span>
                       <button
                         type="button"
                         aria-label="Increase quantity"
                         onClick={() => setCartQuantity(currentDrop.craft.id, craftQty + 1)}
-                        className="grid h-6 w-6 place-items-center rounded-full bg-[#D4AF78] text-[#0B0B0A] hover:bg-[#E5C18A] transition active:scale-90 cursor-pointer shadow-xs"
+                        className="grid h-6 w-6 place-items-center rounded-full bg-[#D4AF78] text-[#141210] hover:bg-[#E5C18A] transition active:scale-90 cursor-pointer shadow-xs"
                       >
                         <Plus className="h-3 w-3 stroke-[2.8]" />
                       </button>
@@ -571,7 +571,7 @@ export default function Hero() {
                     <button
                       type="button"
                       onClick={() => handleQuickAdd(currentDrop.craft)}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] border border-[#F5DC9A]/60 px-3.5 py-1.5 text-xs font-extrabold text-[#0B0B0A] shadow-[0_2px_10px_rgba(212,175,120,0.25)] transition hover:brightness-105 active:scale-95 cursor-pointer"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] border border-[#F5DC9A]/60 px-3.5 py-1.5 text-xs font-extrabold text-[#141210] shadow-[0_2px_10px_rgba(212,175,120,0.25)] transition hover:brightness-105 active:scale-95 cursor-pointer"
                       title={`Add ${currentDrop.craft.title} to bag`}
                     >
                       <ShoppingBag className="h-3 w-3" />
@@ -582,8 +582,8 @@ export default function Hero() {
               </article>
 
               {/* Card 2: Artisanal Decor & Keepsake Showcase */}
-              <article className="gsap-hero-card group relative overflow-hidden rounded-[2rem] border border-[#6D5738]/40 bg-gradient-to-b from-[#181714] via-[#141311] to-[#0E0D0C] p-3.5 shadow-[0_12px_32px_rgba(0,0,0,0.7)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#D4AF78]/70 hover:shadow-[0_16px_40px_rgba(0,0,0,0.85)]">
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#121110] border border-[#6D5738]/30">
+              <article className="gsap-hero-card group relative overflow-hidden rounded-[2rem] border border-[#8C6D46]/28 bg-gradient-to-b from-[#FCF9F4] via-[#FAF6EE] to-[#F3ECE0] p-3.5 shadow-[0_12px_30px_rgba(72,54,30,0.09)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-[#B8925A] hover:shadow-[0_16px_36px_rgba(72,54,30,0.14)]">
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] bg-[#EDE4DD] border border-[#8C6D46]/22">
                   <Image
                     src={currentDrop.craft2.image}
                     alt={currentDrop.craft2.title}
@@ -602,7 +602,7 @@ export default function Hero() {
                   </div>
 
                   {/* Bottom Image Overlay Tag */}
-                  <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between rounded-xl bg-[#151412]/95 border border-[#6D5738]/45 px-3 py-1.5 shadow-sm">
+                  <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between rounded-xl bg-[#151412]/90 border border-[#6D5738]/45 px-3 py-1.5 shadow-sm">
                     <span className="text-[11px] font-bold text-[#F5EBDD] truncate max-w-[130px]">
                       {currentDrop.craft2.title}
                     </span>
@@ -615,16 +615,16 @@ export default function Hero() {
                 {/* Card Sub-Info & Action */}
                 <div className="mt-3 px-1 flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#D4AF78] block">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A5B32] block">
                       {currentDrop.craft2.category}
                     </span>
-                    <p className="text-xs text-[#B8A68B] font-medium">{currentDrop.craft2.artisan}</p>
+                    <p className="text-xs text-[#5C4D3C] font-medium">{currentDrop.craft2.artisan}</p>
                   </div>
 
                   {craft2Qty > 0 ? (
                     <div
                       onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 rounded-full bg-[#151412] border border-[#D4AF78] p-1 shadow-xs"
+                      className="inline-flex items-center gap-1 rounded-full bg-[#EFE8DC] border border-[#D4AF78] p-1 shadow-xs"
                     >
                       <button
                         type="button"
@@ -633,18 +633,18 @@ export default function Hero() {
                           if (craft2Qty <= 1) removeFromCart(currentDrop.craft2.id)
                           else setCartQuantity(currentDrop.craft2.id, craft2Qty - 1)
                         }}
-                        className="grid h-6 w-6 place-items-center rounded-full bg-[#24211C] text-[#D4AF78] hover:bg-[#2F2B24] transition active:scale-90 cursor-pointer"
+                        className="grid h-6 w-6 place-items-center rounded-full bg-[#FAF6EF] text-[#7A5B32] hover:bg-[#E7DDD0] transition active:scale-90 cursor-pointer"
                       >
                         <Minus className="h-3 w-3 stroke-[2.8]" />
                       </button>
-                      <span className="px-1 text-xs font-black text-[#F5EBDD] min-w-5 text-center font-mono">
+                      <span className="px-1 text-xs font-black text-[#141210] min-w-5 text-center font-mono">
                         {craft2Qty}
                       </span>
                       <button
                         type="button"
                         aria-label="Increase quantity"
                         onClick={() => setCartQuantity(currentDrop.craft2.id, craft2Qty + 1)}
-                        className="grid h-6 w-6 place-items-center rounded-full bg-[#D4AF78] text-[#0B0B0A] hover:bg-[#E5C18A] transition active:scale-90 cursor-pointer shadow-xs"
+                        className="grid h-6 w-6 place-items-center rounded-full bg-[#D4AF78] text-[#141210] hover:bg-[#E5C18A] transition active:scale-90 cursor-pointer shadow-xs"
                       >
                         <Plus className="h-3 w-3 stroke-[2.8]" />
                       </button>
@@ -653,7 +653,7 @@ export default function Hero() {
                     <button
                       type="button"
                       onClick={() => handleQuickAdd(currentDrop.craft2)}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] border border-[#F5DC9A]/60 px-3.5 py-1.5 text-xs font-extrabold text-[#0B0B0A] shadow-[0_2px_10px_rgba(212,175,120,0.25)] transition hover:brightness-105 active:scale-95 cursor-pointer"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] border border-[#F5DC9A]/60 px-3.5 py-1.5 text-xs font-extrabold text-[#141210] shadow-[0_2px_10px_rgba(212,175,120,0.25)] transition hover:brightness-105 active:scale-95 cursor-pointer"
                       title={`Add ${currentDrop.craft2.title} to bag`}
                     >
                       <ShoppingBag className="h-3 w-3" />
@@ -665,16 +665,16 @@ export default function Hero() {
             </div>
 
             {/* Bottom Quick Feature Strip */}
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[rgba(212,175,120,0.3)] bg-[#151412]/95 px-4 py-2.5 shadow-[0_4px_20px_rgba(0,0,0,0.5)] backdrop-blur-md">
-              <div className="flex items-center gap-2 text-xs font-bold text-[#F5EBDD]">
-                <span className="grid h-5 w-5 place-items-center rounded-full bg-[#242019] border border-[#D4AF78]/35 text-[#D4AF78] text-[10px] font-black shrink-0">
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[#8C6D46]/25 bg-[#FCF9F4]/95 px-4 py-2.5 shadow-[0_4px_16px_rgba(72,54,30,0.06)] backdrop-blur-md">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#141210]">
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-[#EFE8DC] border border-[#8C6D46]/30 text-[#7A5B32] text-[10px] font-black shrink-0">
                   ✦
                 </span>
                 <span className="leading-tight">All bespoke crafts ship in honeycomb protective packaging with wax seal presentation</span>
               </div>
               <a
                 href="#collection"
-                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#D4AF78] hover:text-[#E5C18A] transition-colors shrink-0"
+                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#7A5B32] hover:text-[#141210] transition-colors shrink-0"
               >
                 <span>View All 40+ Crafts</span>
                 <ArrowRight className="h-3 w-3" />
@@ -684,31 +684,31 @@ export default function Hero() {
         </div>
 
         {/* Value Perks 4-Column Grid with GSAP Stagger */}
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 border-t border-[rgba(212,175,120,0.25)] pt-8">
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 border-t border-[#8C6D46]/22 pt-8">
           {VALUE_PERKS.map((perk, i) => (
             <div
               key={i}
-              className="gsap-hero-perk group h-full flex flex-col justify-between rounded-2xl border border-[rgba(212,175,120,0.25)] bg-gradient-to-b from-[#191714] via-[#141311] to-[#0E0D0C] p-4 sm:p-4.5 shadow-[0_8px_25px_rgba(0,0,0,0.5)] transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-1 hover:border-[#D4AF78] hover:shadow-[0_12px_32px_rgba(212,175,120,0.18)]"
+              className="gsap-hero-perk group h-full flex flex-col justify-between rounded-2xl border border-[#8C6D46]/24 bg-gradient-to-b from-[#FCF9F4] via-[#FAF6EE] to-[#F3ECE0] p-4 sm:p-4.5 shadow-[0_8px_24px_rgba(72,54,30,0.07)] transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-1 hover:border-[#B8925A] hover:shadow-[0_12px_28px_rgba(72,54,30,0.12)]"
             >
               <div className="flex items-start gap-3 min-w-0">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#0B0B0A] border border-[rgba(212,175,120,0.35)] text-[#D4AF78] shadow-xs group-hover:scale-105 group-hover:border-[#D4AF78] transition-all duration-300">
-                  <perk.icon className="h-5 w-5 text-[#D4AF78]" />
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#EFE8DC] border border-[#8C6D46]/28 text-[#7A5B32] shadow-xs group-hover:scale-105 group-hover:border-[#8C6D46] transition-all duration-300">
+                  <perk.icon className="h-5 w-5 text-[#7A5B32]" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs sm:text-sm font-bold text-[#F5EBDD] leading-snug group-hover:text-[#E5C18A] transition-colors break-words">
+                  <p className="font-tagline text-sm sm:text-base font-bold text-[#141210] leading-snug group-hover:text-[#7A5B32] transition-colors break-words">
                     {perk.title}
                   </p>
-                  <p className="text-[11px] sm:text-xs text-[#B8AA96] mt-1 leading-relaxed break-words">
+                  <p className="text-[11px] sm:text-xs text-[#5C4D3C] mt-1 leading-relaxed break-words">
                     {perk.desc}
                   </p>
                 </div>
               </div>
-              <div className="mt-3 pt-2.5 border-t border-[rgba(212,175,120,0.15)] flex items-center justify-between gap-2">
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#D4AF78]/10 border border-[#D4AF78]/30 px-2.5 py-0.5 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider text-[#D4AF78] shadow-2xs whitespace-normal break-words">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF78] inline-block shrink-0" />
+              <div className="mt-3 pt-2.5 border-t border-[#8C6D46]/18 flex items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#EFE8DC] border border-[#8C6D46]/25 px-2.5 py-0.5 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider text-[#7A5B32] shadow-2xs whitespace-normal break-words">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#8C6838] inline-block shrink-0" />
                   <span>{perk.highlight}</span>
                 </span>
-                <span className="text-[10px] font-bold text-[#B8AA96]/60 group-hover:text-[#D4AF78] transition-colors shrink-0">
+                <span className="text-[10px] font-bold text-[#75624C] group-hover:text-[#7A5B32] transition-colors shrink-0">
                   0{i + 1}
                 </span>
               </div>

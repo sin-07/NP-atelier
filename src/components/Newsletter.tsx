@@ -29,16 +29,16 @@ export default function Newsletter() {
 
   return (
     <section id="newsletter" ref={containerRef} className="section-shell py-14 sm:py-20">
-      <div className="gsap-newsletter-card relative overflow-hidden rounded-[2.5rem] border border-[rgba(212,175,120,0.25)] bg-[#191713] p-8 sm:p-12 lg:p-16 shadow-[0_16px_45px_rgba(0,0,0,0.6)]">
+      <div className="gsap-newsletter-card relative overflow-hidden rounded-[2.5rem] border border-[#8C6D46]/25 bg-[#FCF9F4] p-8 sm:p-12 lg:p-16 shadow-[0_16px_45px_rgba(72,54,30,0.09)]">
         <div className="relative grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <span className="section-eyebrow">
-              <Sparkles className="h-3.5 w-3.5 text-[#D4AF78]" /> Artisan Circle
+              <Sparkles className="h-3.5 w-3.5 text-[#8C6838]" /> Artisan Circle
             </span>
-            <h2 className="heading-1 mt-3.5 text-[#F5EBDD]">
+            <h2 className="heading-1 mt-3.5 text-[#141210]">
               Join the Soft <span className="italic font-normal text-gold-gradient">Handmade Circle</span>
             </h2>
-            <p className="body-lead mt-4 max-w-xl text-[#B8AA96]">
+            <p className="body-lead mt-4 max-w-xl text-[#524436]">
               Get notified of limited batch drops, maker studio journals, and seasonal DIY tutorials directly from our atelier.
             </p>
             <div className="mt-5 flex items-center gap-3">
@@ -49,9 +49,9 @@ export default function Newsletter() {
                 height={48}
                 loading="lazy"
                 decoding="async"
-                className="h-12 w-12 rounded-xl object-cover border border-[rgba(212,175,120,0.25)] shadow-sm"
+                className="h-12 w-12 rounded-xl object-cover border border-[#8C6D46]/25 shadow-sm"
               />
-              <p className="text-xs font-semibold text-[#D4AF78]">
+              <p className="text-xs font-semibold text-[#7A5B32]">
                 Handcrafted boutique packaging • Dispatched across India
               </p>
             </div>
@@ -59,26 +59,26 @@ export default function Newsletter() {
 
           <div>
             {isSubscribed ? (
-              <div className="rounded-3xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] p-6 shadow-sm text-center">
-                <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.25)] text-[#D4AF78]">
-                  <CheckCircle2 className="h-6 w-6 text-[#D4AF78]" />
+              <div className="rounded-3xl border border-[#8C6D46]/25 bg-[#F5F0E8] p-6 shadow-sm text-center">
+                <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[#FCF9F4] border border-[#8C6D46]/25 text-[#7A5B32]">
+                  <CheckCircle2 className="h-6 w-6 text-[#8C6838]" />
                 </div>
-                <h3 className="mt-3 font-serif text-2xl font-bold text-[#F5EBDD]">You&apos;re on the list!</h3>
-                <p className="mt-1 text-xs text-[#B8AA96]">
+                <h3 className="mt-3 font-tagline text-2xl font-bold text-[#141210]">You&apos;re on the list!</h3>
+                <p className="mt-1 text-xs text-[#5C4D3C]">
                   Thank you for joining. You will receive exclusive early access to artisan drops and studio journals.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex flex-col gap-3 sm:flex-row">
                 <div className="relative flex-1">
-                  <Mail className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#D4AF78]" />
+                  <Mail className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#8C6838]" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email address"
-                    className="h-14 w-full rounded-full border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] pl-12 pr-5 text-sm text-[#F5EBDD] outline-none shadow-xs transition placeholder:text-[#B8AA96]/50 focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
+                    className="h-14 w-full rounded-full border border-[#8C6D46]/30 bg-[#F5F0E8] pl-12 pr-5 text-sm text-[#141210] outline-none shadow-xs transition placeholder:text-[#75624C] focus:border-[#B8925A] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
                   />
                 </div>
                 <button

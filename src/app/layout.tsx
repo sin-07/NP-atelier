@@ -1,7 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
 
 import type { Metadata, Viewport } from 'next'
-import { Playfair_Display, Plus_Jakarta_Sans, Cinzel } from 'next/font/google'
+import {
+  Playfair_Display,
+  Plus_Jakarta_Sans,
+  Cinzel,
+  Cormorant_Garamond,
+  Allura,
+} from 'next/font/google'
 import '../index.css'
 import { MarketplaceProvider } from '../context/MarketplaceContext'
 import { UIModalProvider } from '../context/UIModalContext'
@@ -26,8 +32,22 @@ const cinzel = Cinzel({
   variable: '--font-display',
 })
 
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-tagline',
+})
+
+const allura = Allura({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-script',
+})
+
 export const viewport: Viewport = {
-  themeColor: '#0B0B0A',
+  themeColor: '#F5F0E8',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
@@ -38,6 +58,10 @@ export const metadata: Metadata = {
   title: 'NP Atelier | Luxury Handmade Crafts & Exotic Aquarium Marketplace',
   description:
     'Discover genuine artisan handmade jewelry, pressed floral resin, clean aromatherapy soy candles, alongside exotic captive-bred fish, rimless nature aquariums, aquatic plants, and equipment.',
+  icons: {
+    icon: '/np-atelier-logo.jpg',
+    apple: '/np-atelier-logo.jpg',
+  },
   keywords: [
     'handmade crafts',
     'fish and aquarium',
@@ -56,9 +80,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${jakarta.variable} ${cinzel.variable}`}
+      className={`${playfair.variable} ${jakarta.variable} ${cinzel.variable} ${cormorant.variable} ${allura.variable}`}
     >
-      <body className="font-sans antialiased bg-[#0B0B0A] text-[#F5EBDD] selection:bg-[#D4AF78]/30 selection:text-[#F5EBDD]">
+      <body className="font-sans antialiased bg-[#F5F0E8] text-[#141210] selection:bg-[#D4AF78]/30 selection:text-[#141210]">
         <UIModalProvider>
           <MarketplaceProvider>
             <GlobalPageTransitionHandler />

@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { useGsapReveal } from '../hooks/useGsapReveal'
+import { BrandTitle } from './BrandTypography'
 
 export default function Footer() {
   const { branding, setActiveDepartment } = useMarketplace()
@@ -28,9 +29,9 @@ export default function Footer() {
   const phone = branding?.contactPhone || '+91 93412 97124'
 
   return (
-    <footer id="contact" ref={containerRef} className="mt-20 bg-gradient-to-b from-[#0E0E0E] via-[#120F09] to-[#0A0805] text-white pt-20 pb-12 border-t border-[#D4AF37]/25 relative overflow-hidden">
+    <footer id="contact" ref={containerRef} className="mt-20 bg-gradient-to-b from-[#F2ECE2] via-[#EFE7DA] to-[#EAE0D1] text-[#141210] pt-20 pb-12 border-t border-[#6D5738]/20 relative overflow-hidden">
       {/* Subtle top gold halo */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-b from-[#D4AF37]/10 to-transparent blur-2xl pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-b from-[#D4AF78]/15 to-transparent blur-2xl pointer-events-none" />
 
       <div className="section-shell relative z-10">
         {/* Tilted Polaroid Gallery Showcase featuring both Crafts and Aquatics */}
@@ -38,8 +39,8 @@ export default function Footer() {
           <div className="relative flex items-center justify-center -space-x-4">
             {/* Left Polaroid - Craft */}
             <div className="group relative -rotate-6 transition-transform duration-200 ease-out hover:rotate-0 hover:scale-105 hover:z-20">
-              <div className="rounded-lg bg-gradient-to-b from-white to-[#FDFBF7] p-2 pb-5 shadow-2xl border border-[#D4AF37]/40 group-hover:border-[#D4AF37] group-hover:shadow-[0_12px_30px_rgba(212,175,55,0.3)] transition-all w-24 sm:w-28">
-                <div className="aspect-square w-full overflow-hidden rounded bg-[#1A1A1A] ring-1 ring-[#D4AF37]/20">
+              <div className="rounded-lg bg-gradient-to-b from-white to-[#FDFBF7] p-2 pb-5 shadow-[0_14px_30px_rgba(68,52,32,0.14)] border border-[#B68D52]/35 group-hover:border-[#B68D52] group-hover:shadow-[0_12px_30px_rgba(182,141,82,0.28)] transition-all w-24 sm:w-28">
+                <div className="aspect-square w-full overflow-hidden rounded bg-[#EFE8DC] ring-1 ring-[#6D5738]/15">
                   <img
                     src="/products/atelier-evil-eye-pendant.jpg"
                     alt="Art talisman"
@@ -48,14 +49,14 @@ export default function Footer() {
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <p className="mt-1.5 text-center text-[9px] font-bold text-[#141414]">Artisan Jewelry</p>
+                <p className="mt-1.5 text-center text-[9px] font-bold text-[#141210]">Artisan Jewelry</p>
               </div>
             </div>
 
             {/* Center Polaroid - Exotic Fish */}
             <div className="group relative z-10 rotate-0 transition-transform duration-200 ease-out hover:scale-105 hover:z-20">
-              <div className="rounded-lg bg-gradient-to-b from-white to-[#FDFBF7] p-2 pb-5 shadow-2xl border border-[#D4AF37]/60 group-hover:border-[#D4AF37] group-hover:shadow-[0_12px_35px_rgba(212,175,55,0.35)] transition-all w-24 sm:w-28">
-                <div className="aspect-square w-full overflow-hidden rounded bg-[#1A1A1A] ring-1 ring-[#D4AF37]/30">
+              <div className="rounded-lg bg-gradient-to-b from-white to-[#FDFBF7] p-2 pb-5 shadow-[0_16px_32px_rgba(68,52,32,0.18)] border border-[#B68D52]/55 group-hover:border-[#B68D52] group-hover:shadow-[0_12px_35px_rgba(182,141,82,0.32)] transition-all w-24 sm:w-28">
+                <div className="aspect-square w-full overflow-hidden rounded bg-[#EFE8DC] ring-1 ring-[#6D5738]/20">
                   <img
                     src="/products/royal-discus-aquarium.jpg"
                     alt="Royal Blue Discus"
@@ -64,14 +65,14 @@ export default function Footer() {
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <p className="mt-1.5 text-center text-[9px] font-bold text-[#141414]">Exotic Aquatics</p>
+                <p className="mt-1.5 text-center text-[9px] font-bold text-[#141210]">Exotic Aquatics</p>
               </div>
             </div>
 
             {/* Right Polaroid - Plaster Art Kit */}
             <div className="group relative rotate-6 transition-transform duration-200 ease-out hover:rotate-0 hover:scale-105 hover:z-20">
-              <div className="rounded-lg bg-gradient-to-b from-white to-[#FDFBF7] p-2 pb-5 shadow-2xl border border-[#D4AF37]/40 group-hover:border-[#D4AF37] group-hover:shadow-[0_12px_30px_rgba(212,175,55,0.3)] transition-all w-24 sm:w-28">
-                <div className="aspect-square w-full overflow-hidden rounded bg-[#1A1A1A] ring-1 ring-[#D4AF37]/20">
+              <div className="rounded-lg bg-gradient-to-b from-white to-[#FDFBF7] p-2 pb-5 shadow-[0_14px_30px_rgba(68,52,32,0.14)] border border-[#B68D52]/35 group-hover:border-[#B68D52] group-hover:shadow-[0_12px_30px_rgba(182,141,82,0.28)] transition-all w-24 sm:w-28">
+                <div className="aspect-square w-full overflow-hidden rounded bg-[#EFE8DC] ring-1 ring-[#6D5738]/15">
                   <img
                     src="https://images.unsplash.com/photo-1546026423-cc4642628d2b?auto=format&fit=crop&w=700&q=80"
                     alt="Planted Rimless Aquarium"
@@ -80,20 +81,20 @@ export default function Footer() {
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <p className="mt-1.5 text-center text-[9px] font-bold text-[#141414]">Aquascaping</p>
+                <p className="mt-1.5 text-center text-[9px] font-bold text-[#141210]">Aquascaping</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Central Contact Headline */}
-        <div className="gsap-footer-item text-center space-y-4 pb-12 border-b border-[#D4AF37]/20">
-          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
+        <div className="gsap-footer-item text-center space-y-4 pb-12 border-b border-[#6D5738]/20">
+          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#7A5B32]">
             Private Inquiries &amp; Commissions
           </p>
           <a
             href={`mailto:${email}`}
-            className="block text-xl sm:text-4xl lg:text-5xl font-sans font-medium tracking-tight text-white hover:text-[#F2D785] transition-colors break-all sm:break-normal"
+            className="block text-xl sm:text-4xl lg:text-5xl font-tagline font-semibold tracking-tight text-[#141210] hover:text-[#7A5B32] transition-colors break-all sm:break-normal"
           >
             {email}
           </a>
@@ -102,16 +103,16 @@ export default function Footer() {
               href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(siteName)}%2C%20I%20want%20to%20place%20an%20order!`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-emerald-500/70 bg-gradient-to-r from-emerald-950/70 to-emerald-900/60 px-5 py-2.5 text-sm sm:text-base font-bold text-emerald-300 hover:text-white hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(16,185,129,0.35)] transition cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-full border border-emerald-600/50 bg-emerald-600 px-5 py-2.5 text-sm sm:text-base font-bold text-white hover:bg-emerald-700 hover:border-emerald-500 hover:shadow-[0_6px_18px_rgba(5,150,105,0.25)] transition cursor-pointer"
             >
-              <MessageCircle className="h-4 w-4 text-emerald-400" />
+              <MessageCircle className="h-4 w-4 text-white" />
               <span>WhatsApp: {phone}</span>
             </a>
             <a
               href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
-              className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/70 bg-gradient-to-r from-[#221B10] to-[#1A140B] px-5 py-2.5 text-sm sm:text-base font-bold text-[#F0D590] hover:text-white hover:border-[#ECC872] hover:shadow-[0_0_20px_rgba(212,175,55,0.35)] transition cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-full border border-[#B68D52]/55 bg-[#FCF9F4] px-5 py-2.5 text-sm sm:text-base font-bold text-[#7A5B32] hover:text-[#141210] hover:bg-[#EFE8DC] hover:border-[#B68D52] shadow-xs transition cursor-pointer"
             >
-              <Phone className="h-4 w-4 text-[#ECC872]" />
+              <Phone className="h-4 w-4 text-[#7A5B32]" />
               <span>Direct Call: {phone}</span>
             </a>
           </div>
@@ -123,41 +124,47 @@ export default function Footer() {
           <div className="space-y-2">
             <div className="flex items-center justify-center md:justify-start gap-2.5">
               {branding?.logoImageUrl && (branding.logoType === 'image' || branding.logoType === 'both') ? (
-                <img
-                  src={branding.logoImageUrl}
-                  alt={siteName}
-                  className="h-7 w-auto object-contain rounded-md border border-[#D4AF37]/40"
-                />
+                <div className="h-10 w-10 rounded-full overflow-hidden border border-[#B68D52]/50 bg-[#EDE4DD] shadow-sm shrink-0">
+                  <img
+                    src={branding.logoImageUrl}
+                    alt={siteName}
+                    className="h-full w-full object-cover scale-[1.06]"
+                  />
+                </div>
               ) : (
-                <span className="h-2 w-2 rounded-full bg-[#D4AF37] shadow-[0_0_8px_#D4AF37]" />
+                <span className="h-2 w-2 rounded-full bg-[#B68D52] shadow-[0_0_8px_rgba(182,141,82,0.5)]" />
               )}
-              <p className="font-serif text-2xl font-bold bg-gradient-to-r from-white via-[#F2D785] to-[#D4AF37] bg-clip-text text-transparent tracking-tight">
-                {siteName}
-              </p>
+              <BrandTitle
+                siteName={siteName}
+                showNpMark={true}
+                svgClassName="h-6 sm:h-7 w-auto"
+                atelierClassName="text-[1.85rem] sm:text-[2.1rem] leading-none text-[#141210]"
+                fallbackClassName="font-tagline text-2xl font-bold text-[#141210] tracking-tight"
+              />
             </div>
-            <p className="text-xs text-[#B5ADA0] leading-relaxed max-w-xs mx-auto md:mx-0">
+            <p className="font-tagline italic text-[14px] font-medium text-[#5C4D3C] leading-relaxed max-w-xs mx-auto md:mx-0">
               {tagline}
             </p>
           </div>
 
           {/* Minimal Links Row */}
-          <div className="flex flex-wrap justify-center gap-6 text-xs font-bold uppercase tracking-[0.2em] text-[#D8D2C5]">
-            <a href="#home" className="hover:text-[#F2D785] transition-colors">Home</a>
+          <div className="flex flex-wrap justify-center gap-6 text-xs font-bold uppercase tracking-[0.2em] text-[#5C4D3C]">
+            <a href="#home" className="hover:text-[#7A5B32] transition-colors">Home</a>
             <a
               href="#collection"
               onClick={() => setActiveDepartment?.('crafts')}
-              className="hover:text-[#F2D785] transition-colors"
+              className="hover:text-[#7A5B32] transition-colors"
             >
               Artisan Crafts
             </a>
             <a
               href="#acquario-tropicale"
               onClick={() => setActiveDepartment?.('aquarium')}
-              className="hover:text-[#F2D785] transition-colors text-teal-300 font-serif"
+              className="hover:text-teal-600 transition-colors text-teal-700 font-tagline"
             >
               Acquario Tropicale
             </a>
-            <a href="#makers" className="hover:text-[#F2D785] transition-colors">Makers</a>
+            <a href="#makers" className="hover:text-[#7A5B32] transition-colors">Makers</a>
           </div>
 
           {/* Social Icons */}
@@ -167,7 +174,7 @@ export default function Footer() {
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"
-              className="grid h-10 w-10 place-items-center rounded-full border border-[#D4AF37]/30 bg-[#161410] text-[#D0C9BE] transition duration-200 hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#1A120B] hover:shadow-[0_0_15px_rgba(212,175,55,0.45)]"
+              className="grid h-10 w-10 place-items-center rounded-full border border-[#6D5738]/25 bg-[#FCF9F4] text-[#5C4D3C] transition duration-200 hover:border-[#B68D52] hover:bg-[#D4AF78] hover:text-[#141210] hover:shadow-[0_6px_16px_rgba(182,141,82,0.25)]"
             >
               <InstagramIcon className="h-4 w-4" />
             </a>
@@ -176,7 +183,7 @@ export default function Footer() {
               target="_blank"
               rel="noreferrer"
               aria-label="Pinterest"
-              className="grid h-10 w-10 place-items-center rounded-full border border-[#D4AF37]/30 bg-[#161410] text-[#D0C9BE] transition duration-200 hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#1A120B] hover:shadow-[0_0_15px_rgba(212,175,55,0.45)]"
+              className="grid h-10 w-10 place-items-center rounded-full border border-[#6D5738]/25 bg-[#FCF9F4] text-[#5C4D3C] transition duration-200 hover:border-[#B68D52] hover:bg-[#D4AF78] hover:text-[#141210] hover:shadow-[0_6px_16px_rgba(182,141,82,0.25)]"
             >
               <PinterestIcon className="h-4 w-4" />
             </a>
@@ -185,7 +192,7 @@ export default function Footer() {
               target="_blank"
               rel="noreferrer"
               aria-label="Facebook"
-              className="grid h-10 w-10 place-items-center rounded-full border border-[#D4AF37]/30 bg-[#161410] text-[#D0C9BE] transition duration-200 hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#1A120B] hover:shadow-[0_0_15px_rgba(212,175,55,0.45)]"
+              className="grid h-10 w-10 place-items-center rounded-full border border-[#6D5738]/25 bg-[#FCF9F4] text-[#5C4D3C] transition duration-200 hover:border-[#B68D52] hover:bg-[#D4AF78] hover:text-[#141210] hover:shadow-[0_6px_16px_rgba(182,141,82,0.25)]"
             >
               <FacebookIcon className="h-4 w-4" />
             </a>
@@ -193,12 +200,12 @@ export default function Footer() {
         </div>
 
         {/* Legal & Credits Bottom Bar */}
-        <div className="gsap-footer-item mt-12 pt-6 border-t border-[#D4AF37]/15 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#A69E90] gap-4">
+        <div className="gsap-footer-item mt-12 pt-6 border-t border-[#6D5738]/15 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#5C4D3C] gap-4">
           <p>© {new Date().getFullYear()} {siteName}. All handcrafted items and aquatic specimens protected by guarantee.</p>
           <div className="flex items-center gap-4">
-            <span className="text-teal-400 font-semibold">● Live Fish Safe Arrival Guaranteed</span>
+            <span className="text-teal-700 font-semibold">● Live Fish Safe Arrival Guaranteed</span>
             <span>•</span>
-            <span className="text-[#D4AF37] font-semibold">100% Certified Artisans</span>
+            <span className="text-[#7A5B32] font-semibold">100% Certified Artisans</span>
           </div>
         </div>
       </div>

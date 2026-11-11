@@ -28,6 +28,7 @@ import {
   X,
 } from 'lucide-react'
 import ProductCard from './ProductCard'
+import { AtelierScriptText } from './BrandTypography'
 import {
   aquariumCategories,
   aquariumCategoryGroups,
@@ -361,13 +362,16 @@ export default function HandmadeGallery() {
         {/* Section Header */}
         <div className="gsap-gallery-section mx-auto max-w-3xl text-center">
           <div className="section-eyebrow mb-3.5">
-            <Sparkles className="h-3.5 w-3.5 text-[#D4AF78]" />
+            <Sparkles className="h-3.5 w-3.5 text-[#7A5B32]" />
             <span>Artisan Crafts Atelier • Handcrafted Masterpieces</span>
           </div>
           <h2 className="heading-1">
-            Artisan Crafts <span className="italic font-normal text-gold-gradient">Atelier</span>
+            Artisan Crafts{' '}
+            <AtelierScriptText className="text-[1.3em] text-[#141210] font-normal">
+              Atelier
+            </AtelierScriptText>
           </h2>
-          <p className="body-lead mx-auto mt-4 max-w-2xl text-[#B8A68B]">
+          <p className="body-lead mx-auto mt-4 max-w-2xl text-[#5C4D3C]">
             Explore genuine handcrafted jewelry, pressed floral resin, clean aromatherapy soy candles, studio ceramics, and creative kits sculpted with generational passion.
           </p>
         </div>
@@ -385,11 +389,11 @@ export default function HandmadeGallery() {
                 }}
                 className={`group relative flex flex-col overflow-hidden rounded-2xl border text-left transition duration-300 cursor-pointer ${
                   isSelected
-                    ? 'border-[#D4AF78] ring-2 ring-[#D4AF78]/60 shadow-[0_12px_32px_rgba(212,175,120,0.22)] bg-gradient-to-b from-[#201D18] via-[#181613] to-[#100F0D]'
-                    : 'border-[#6D5738]/35 bg-gradient-to-b from-[#181714] via-[#141311] to-[#0E0D0C] hover:border-[#D4AF78]/70 hover:shadow-[0_10px_28px_rgba(0,0,0,0.7)] hover:-translate-y-0.5'
+                    ? 'border-[#B68D52] ring-2 ring-[#D4AF78]/45 shadow-[0_12px_32px_rgba(109,87,56,0.16)] bg-gradient-to-b from-[#FAF6EF] via-[#FCF9F4] to-[#F3ECE1]'
+                    : 'border-[#6D5738]/20 bg-gradient-to-b from-[#FCF9F4] via-[#FAF6EF] to-[#F4EDE2] hover:border-[#B68D52]/65 hover:shadow-[0_10px_28px_rgba(68,52,32,0.12)] hover:-translate-y-0.5'
                 }`}
               >
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0B0B0A]">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#EFE8DC]">
                   <img
                     src={cat.image}
                     alt={cat.title}
@@ -402,16 +406,16 @@ export default function HandmadeGallery() {
                     }}
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-                  <span className="absolute bottom-2 left-2.5 right-2.5 truncate font-serif text-xs sm:text-sm font-bold text-[#F5EBDD]">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                  <span className="absolute bottom-2 left-2.5 right-2.5 truncate font-tagline text-xs sm:text-sm font-bold text-[#F9F5EE]">
                     {cat.title}
                   </span>
                 </div>
-                <div className="flex items-center justify-between p-2.5 sm:p-3 bg-[#151412]">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D4AF78] truncate max-w-[120px]">
+                <div className="flex items-center justify-between p-2.5 sm:p-3 bg-[#FCF9F4]">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#7A5B32] truncate max-w-[120px]">
                     {cat.badge}
                   </span>
-                  <span className="text-[10px] text-[#F5EBDD] font-bold shrink-0">
+                  <span className="text-[10px] text-[#141210] font-bold shrink-0">
                     {isSelected ? 'Selected ✓' : 'Browse →'}
                   </span>
                 </div>
@@ -421,17 +425,17 @@ export default function HandmadeGallery() {
         </div>
 
         {/* LUXURY COMMAND & FILTER SKELETON */}
-        <div className="gsap-gallery-section relative rounded-[2rem] sm:rounded-[2.5rem] border border-[#6D5738]/35 bg-gradient-to-b from-[#181714] via-[#141311] to-[#0E0D0C] p-4 sm:p-6 lg:p-7 shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden">
+        <div className="gsap-gallery-section relative rounded-[2rem] sm:rounded-[2.5rem] border border-[#6D5738]/20 bg-gradient-to-b from-[#FCF9F4] via-[#FAF6EF] to-[#F5EFE5] p-4 sm:p-6 lg:p-7 shadow-[0_18px_42px_rgba(68,52,32,0.08)] overflow-hidden">
           {/* Ambient luxury lighting accents */}
-          <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-[#D4AF78]/5 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-[#6D5738]/10 blur-3xl" />
+          <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-[#D4AF78]/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-[#EDE4DD]/50 blur-3xl" />
 
           <div className="relative space-y-4 sm:space-y-5">
             {/* TIER 1: Search Console + Controls Toolbar */}
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               {/* Precision Search Input */}
               <div className="relative flex-1">
-                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#D4AF78]" />
+                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7A5B32]" />
                 <input
                   type="search"
                   value={searchTerm}
@@ -439,7 +443,7 @@ export default function HandmadeGallery() {
                     setSearchTerm(e.target.value)
                   }}
                   placeholder="Search live fish, aquascapes, jewelry, soy candles, artisan crafts..."
-                  className="h-12 w-full rounded-2xl border border-[#6D5738]/40 bg-[#0B0B0A] pl-11 pr-24 text-xs sm:text-sm font-medium text-[#F5EBDD] placeholder:text-[#B8A68B]/50 focus:border-[#D4AF78] focus:ring-2 focus:ring-[#D4AF78]/30 focus:shadow-[0_0_24px_rgba(212,175,120,0.18)] shadow-[inset_0_1px_3px_rgba(0,0,0,0.5)] outline-none transition-all"
+                  className="h-12 w-full rounded-2xl border border-[#6D5738]/25 bg-[#F5F0E8] pl-11 pr-24 text-xs sm:text-sm font-medium text-[#141210] placeholder:text-[#5C4D3C]/65 focus:border-[#B68D52] focus:ring-2 focus:ring-[#D4AF78]/30 focus:shadow-[0_0_24px_rgba(212,175,120,0.18)] shadow-[inset_0_1px_2px_rgba(68,52,32,0.08)] outline-none transition-all"
                 />
                 {searchTerm ? (
                   <button
@@ -447,13 +451,13 @@ export default function HandmadeGallery() {
                     onClick={() => {
                       setSearchTerm('')
                     }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 rounded-full bg-[#1A1815] border border-[#6D5738]/50 px-2.5 py-1 text-[10px] font-bold text-[#D4AF78] hover:bg-[#25221D] transition"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 rounded-full bg-[#EFE8DC] border border-[#6D5738]/30 px-2.5 py-1 text-[10px] font-bold text-[#7A5B32] hover:bg-[#E5DCCD] transition"
                   >
                     <X className="h-3 w-3" />
                     <span>Clear</span>
                   </button>
                 ) : (
-                  <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1.5 text-[11px] font-semibold text-[#B8A68B] bg-[#1A1815] border border-[#6D5738]/40 rounded-lg px-2 py-0.5">
+                  <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1.5 text-[11px] font-semibold text-[#5C4D3C] bg-[#EFE8DC] border border-[#6D5738]/25 rounded-lg px-2 py-0.5">
                     <span>
                       {filteredProducts.length} pieces{pageSize !== 'all' && totalPages > 1 ? ` • Pg ${currentPage}/${totalPages}` : ''}
                     </span>
@@ -464,14 +468,14 @@ export default function HandmadeGallery() {
               {/* Control Actions: Sort, Grid Mode & Reset */}
               <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2.5">
                 {/* Sort Selector */}
-                <div className="relative flex items-center rounded-2xl border border-[#6D5738]/40 bg-[#0B0B0A] px-3 py-2 text-xs font-bold text-[#F5EBDD] shadow-xs hover:border-[#D4AF78] transition">
-                  <SlidersHorizontal className="h-3.5 w-3.5 text-[#D4AF78] mr-2 shrink-0" />
+                <div className="relative flex items-center rounded-2xl border border-[#6D5738]/25 bg-[#F5F0E8] px-3 py-2 text-xs font-bold text-[#141210] shadow-xs hover:border-[#B68D52] transition">
+                  <SlidersHorizontal className="h-3.5 w-3.5 text-[#7A5B32] mr-2 shrink-0" />
                   <select
                     value={sortBy}
                     onChange={(e) => {
                       setSortBy(e.target.value)
                     }}
-                    className="bg-transparent font-bold text-[#F5EBDD] outline-none cursor-pointer pr-4 text-xs [&>option]:bg-[#151412] [&>option]:text-[#F5EBDD]"
+                    className="bg-transparent font-bold text-[#141210] outline-none cursor-pointer pr-4 text-xs [&>option]:bg-[#FCF9F4] [&>option]:text-[#141210]"
                   >
                     <option value="featured">Featured Drops</option>
                     <option value="price-asc">Price: Low to High</option>
@@ -481,15 +485,15 @@ export default function HandmadeGallery() {
                 </div>
 
                 {/* Layout Density Switcher */}
-                <div className="flex items-center rounded-2xl border border-[#6D5738]/40 bg-[#0B0B0A] p-1 shadow-xs">
+                <div className="flex items-center rounded-2xl border border-[#6D5738]/25 bg-[#F5F0E8] p-1 shadow-xs">
                   <button
                     type="button"
                     title="Standard View (Showcase Details)"
                     onClick={() => setLayoutMode('grid')}
                     className={`grid h-8 w-8 place-items-center rounded-xl transition cursor-pointer ${
                       layoutMode === 'grid'
-                        ? 'bg-[#D4AF78] text-[#0B0B0A] shadow-sm font-bold'
-                        : 'text-[#B8A68B] hover:text-[#F5EBDD] hover:bg-[#1C1A17]'
+                        ? 'bg-[#D4AF78] text-[#141210] shadow-sm font-bold'
+                        : 'text-[#5C4D3C] hover:text-[#141210] hover:bg-[#EFE8DC]'
                     }`}
                   >
                     <LayoutGrid className="h-3.5 w-3.5" />
@@ -500,8 +504,8 @@ export default function HandmadeGallery() {
                     onClick={() => setLayoutMode('masonry')}
                     className={`grid h-8 w-8 place-items-center rounded-xl transition cursor-pointer ${
                       layoutMode === 'masonry'
-                        ? 'bg-[#D4AF78] text-[#0B0B0A] shadow-sm font-bold'
-                        : 'text-[#B8A68B] hover:text-[#F5EBDD] hover:bg-[#1C1A17]'
+                        ? 'bg-[#D4AF78] text-[#141210] shadow-sm font-bold'
+                        : 'text-[#5C4D3C] hover:text-[#141210] hover:bg-[#EFE8DC]'
                     }`}
                   >
                     <Grid2X2 className="h-3.5 w-3.5" />
@@ -513,7 +517,7 @@ export default function HandmadeGallery() {
                   <button
                     type="button"
                     onClick={handleResetFilters}
-                    className="flex items-center gap-1.5 rounded-2xl border border-rose-500/40 bg-[#241414] px-3.5 py-2 text-xs font-bold text-rose-300 hover:bg-[#331818] transition shadow-xs cursor-pointer"
+                    className="flex items-center gap-1.5 rounded-2xl border border-rose-500/35 bg-rose-50 px-3.5 py-2 text-xs font-bold text-rose-700 hover:bg-rose-100 transition shadow-xs cursor-pointer"
                   >
                     <RotateCcw className="h-3 w-3" />
                     <span>Reset ({activeFilterCount})</span>
@@ -523,12 +527,12 @@ export default function HandmadeGallery() {
             </div>
 
             {/* TIER 2: Curated Category Horizontal Rail */}
-            <div className="space-y-2 border-t border-[#6D5738]/30 pt-3.5">
+            <div className="space-y-2 border-t border-[#6D5738]/20 pt-3.5">
               <div className="flex items-center justify-between px-0.5">
-                <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#D4AF78]">
+                <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#7A5B32]">
                   Collections & Specialties
                 </span>
-                <span className="text-[10px] text-[#B8A68B] hidden sm:inline">
+                <span className="text-[10px] text-[#5C4D3C] hidden sm:inline">
                   Scroll horizontally to explore &rarr;
                 </span>
               </div>
@@ -549,19 +553,19 @@ export default function HandmadeGallery() {
                       }}
                       className={`relative rounded-xl px-4 py-2 text-xs font-bold transition-colors duration-200 shrink-0 flex items-center gap-1.5 cursor-pointer ${
                         isActive
-                          ? 'text-[#0B0B0A]'
-                          : 'border border-[#6D5738]/35 bg-[#0B0B0A] text-[#B8A68B] hover:border-[#D4AF78]/60 hover:text-[#F5EBDD] shadow-xs'
+                          ? 'text-[#141210]'
+                          : 'border border-[#6D5738]/25 bg-[#F5F0E8] text-[#5C4D3C] hover:border-[#B68D52]/60 hover:text-[#141210] shadow-xs'
                       }`}
                     >
                       {isActive && (
                         <motion.div
                           layoutId="categoryRailPill"
-                          className="absolute inset-0 rounded-xl bg-[#D4AF78] border border-[#E5C18A] shadow-[0_4px_16px_rgba(212,175,120,0.25)]"
+                          className="absolute inset-0 rounded-xl bg-[#D4AF78] border border-[#C69C5D] shadow-[0_4px_16px_rgba(182,141,82,0.25)]"
                           transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                         />
                       )}
                       <span className="relative z-10 flex items-center gap-1.5">
-                        {isActive && <span className="h-1.5 w-1.5 rounded-full bg-[#0B0B0A] animate-pulse" />}
+                        {isActive && <span className="h-1.5 w-1.5 rounded-full bg-[#141210] animate-pulse" />}
                         <span>{cat}</span>
                       </span>
                     </button>
@@ -571,9 +575,9 @@ export default function HandmadeGallery() {
             </div>
 
             {/* TIER 3: Filter Attributes Rail */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-4 border-t border-[#6D5738]/30 pt-3 text-xs">
-              <div className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#D4AF78] shrink-0">
-                <Sparkles className="h-3 w-3 text-[#D4AF78]" />
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-4 border-t border-[#6D5738]/20 pt-3 text-xs">
+              <div className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#7A5B32] shrink-0">
+                <Sparkles className="h-3 w-3 text-[#7A5B32]" />
                 <span>Filter by:</span>
               </div>
 
@@ -589,11 +593,11 @@ export default function HandmadeGallery() {
                       }}
                       className={`rounded-full px-3.5 py-1.5 font-bold transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
                         isSelected
-                          ? 'bg-[#D4AF78] border border-[#E5C18A] text-[#0B0B0A] shadow-sm'
-                          : 'border border-[#6D5738]/35 bg-[#0B0B0A] text-[#B8A68B] hover:border-[#D4AF78]/60 hover:text-[#F5EBDD]'
+                          ? 'bg-[#D4AF78] border border-[#C69C5D] text-[#141210] shadow-sm'
+                          : 'border border-[#6D5738]/25 bg-[#F5F0E8] text-[#5C4D3C] hover:border-[#B68D52]/60 hover:text-[#141210]'
                       }`}
                     >
-                      {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-[#0B0B0A]" />}
+                      {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-[#141210]" />}
                       <span>{tag}</span>
                     </button>
                   )
@@ -605,10 +609,10 @@ export default function HandmadeGallery() {
 
         {/* Product Cards Display */}
         {filteredProducts.length === 0 ? (
-          <div className="glass-card flex flex-col items-center justify-center p-12 text-center border border-[#6D5738]/35 bg-[#151412] rounded-2xl">
-            <Package className="h-12 w-12 text-[#B8A68B]" />
-            <h3 className="mt-4 font-serif text-2xl font-bold text-[#F5EBDD]">No Items Found</h3>
-            <p className="mt-2 text-sm text-[#B8A68B]">
+          <div className="glass-card flex flex-col items-center justify-center p-12 text-center border border-[#6D5738]/20 bg-[#FCF9F4] rounded-2xl">
+            <Package className="h-12 w-12 text-[#5C4D3C]" />
+            <h3 className="mt-4 font-tagline text-2xl font-bold text-[#141210]">No Items Found</h3>
+            <p className="mt-2 text-sm text-[#5C4D3C]">
               Try adjusting your category or filter selection.
             </p>
             <button
@@ -645,18 +649,18 @@ export default function HandmadeGallery() {
             </div>
 
             {/* LUXURY PAGINATION & PROGRESSIVE DISCOVERY CONSOLE */}
-            <div className="mt-8 pt-8 border-t border-[#6D5738]/30 flex flex-col items-center justify-center gap-5">
+            <div className="mt-8 pt-8 border-t border-[#6D5738]/20 flex flex-col items-center justify-center gap-5">
               {/* Progress Tracker */}
               <div className="flex flex-col items-center gap-2 text-center">
-                <span className="text-xs font-bold text-[#B8A68B]">
-                  Showing <strong className="text-[#F5EBDD] font-extrabold">{displayedEnd}</strong> of{' '}
-                  <strong className="text-[#F5EBDD] font-extrabold">{totalItems}</strong> creations
+                <span className="text-xs font-bold text-[#5C4D3C]">
+                  Showing <strong className="text-[#141210] font-extrabold">{displayedEnd}</strong> of{' '}
+                  <strong className="text-[#141210] font-extrabold">{totalItems}</strong> creations
                 </span>
 
                 {/* Gold Gradient Progress Bar */}
-                <div className="w-48 sm:w-64 h-1.5 rounded-full bg-[#1C1A17] overflow-hidden shadow-inner">
+                <div className="w-48 sm:w-64 h-1.5 rounded-full bg-[#E5DCCD] overflow-hidden shadow-inner">
                   <div
-                    className="h-full bg-gradient-to-r from-[#6D5738] via-[#D4AF78] to-[#E5C18A] rounded-full transition-all duration-500 ease-out shadow-[0_0_8px_rgba(212,175,120,0.4)]"
+                    className="h-full bg-gradient-to-r from-[#7A5B32] via-[#C69C5D] to-[#D4AF78] rounded-full transition-all duration-500 ease-out shadow-[0_0_8px_rgba(182,141,82,0.3)]"
                     style={{
                       width: `${Math.min(100, Math.round((displayedEnd / Math.max(1, totalItems)) * 100))}%`,
                     }}
@@ -670,16 +674,16 @@ export default function HandmadeGallery() {
                   <button
                     type="button"
                     onClick={handleLoadMore}
-                    className="group inline-flex items-center gap-2 rounded-full bg-[#D4AF78] text-[#0B0B0A] hover:bg-[#E5C18A] border border-[#E5C18A]/50 px-6 py-2.5 text-xs font-bold shadow-md transition-all duration-200 active:scale-95 cursor-pointer"
+                    className="group inline-flex items-center gap-2 rounded-full bg-[#D4AF78] text-[#141210] hover:bg-[#E5C18A] border border-[#C69C5D]/60 px-6 py-2.5 text-xs font-bold shadow-md transition-all duration-200 active:scale-95 cursor-pointer"
                   >
-                    <Sparkles className="h-3.5 w-3.5 text-[#0B0B0A] group-hover:rotate-12 transition-transform" />
+                    <Sparkles className="h-3.5 w-3.5 text-[#141210] group-hover:rotate-12 transition-transform" />
                     <span>Load More Creations (+{Math.min(12, totalItems - displayedEnd)})</span>
                   </button>
                 )}
 
                 {/* Page Numbered Navigator */}
                 {totalPages > 1 && (
-                  <div className="flex items-center gap-1 sm:gap-1.5 rounded-full border border-[#6D5738]/35 bg-[#151412] p-1 shadow-xs">
+                  <div className="flex items-center gap-1 sm:gap-1.5 rounded-full border border-[#6D5738]/25 bg-[#FCF9F4] p-1 shadow-xs">
                     {/* Previous Button */}
                     <button
                       type="button"
@@ -687,8 +691,8 @@ export default function HandmadeGallery() {
                       onClick={() => handlePageChange(currentPage - 1)}
                       className={`grid h-8 w-8 place-items-center rounded-full transition ${
                         currentPage <= 1
-                          ? 'opacity-35 cursor-not-allowed text-[#B8A68B]'
-                          : 'text-[#F5EBDD] hover:bg-[#1E1C18] hover:text-[#D4AF78] cursor-pointer'
+                          ? 'opacity-35 cursor-not-allowed text-[#5C4D3C]'
+                          : 'text-[#141210] hover:bg-[#EFE8DC] hover:text-[#7A5B32] cursor-pointer'
                       }`}
                       title="Previous Page"
                     >
@@ -705,8 +709,8 @@ export default function HandmadeGallery() {
                           onClick={() => handlePageChange(pageNum)}
                           className={`h-8 min-w-[32px] px-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
                             isActive
-                              ? 'bg-[#D4AF78] text-[#0B0B0A] border border-[#E5C18A]/50 shadow-xs'
-                              : 'text-[#B8A68B] hover:text-[#F5EBDD] hover:bg-[#1E1C18]'
+                              ? 'bg-[#D4AF78] text-[#141210] border border-[#C69C5D]/50 shadow-xs'
+                              : 'text-[#5C4D3C] hover:text-[#141210] hover:bg-[#EFE8DC]'
                           }`}
                         >
                           {pageNum}
@@ -721,8 +725,8 @@ export default function HandmadeGallery() {
                       onClick={() => handlePageChange(currentPage + 1)}
                       className={`grid h-8 w-8 place-items-center rounded-full transition ${
                         currentPage >= totalPages
-                          ? 'opacity-35 cursor-not-allowed text-[#B8A68B]'
-                          : 'text-[#F5EBDD] hover:bg-[#1E1C18] hover:text-[#D4AF78] cursor-pointer'
+                          ? 'opacity-35 cursor-not-allowed text-[#5C4D3C]'
+                          : 'text-[#141210] hover:bg-[#EFE8DC] hover:text-[#7A5B32] cursor-pointer'
                       }`}
                       title="Next Page"
                     >
@@ -733,11 +737,11 @@ export default function HandmadeGallery() {
               </div>
 
               {/* Quick Jump & View Density Options */}
-              <div className="flex items-center gap-4 text-xs font-semibold text-[#B8A68B]">
+              <div className="flex items-center gap-4 text-xs font-semibold text-[#5C4D3C]">
                 <button
                   type="button"
                   onClick={scrollToCollection}
-                  className="hover:text-[#F5EBDD] transition underline decoration-[#D4AF78]/50 underline-offset-4 cursor-pointer"
+                  className="hover:text-[#141210] transition underline decoration-[#7A5B32]/50 underline-offset-4 cursor-pointer"
                 >
                   ↑ Scroll to Top of Catalog
                 </button>
@@ -751,7 +755,7 @@ export default function HandmadeGallery() {
                         setPageSize('all')
                         setVisibleCount(totalItems)
                       }}
-                      className="hover:text-[#F5EBDD] transition underline decoration-[#D4AF78]/50 underline-offset-4 cursor-pointer"
+                      className="hover:text-[#141210] transition underline decoration-[#7A5B32]/50 underline-offset-4 cursor-pointer"
                     >
                       View All ({totalItems})
                     </button>
@@ -769,7 +773,7 @@ export default function HandmadeGallery() {
                         setCurrentPage(1)
                         scrollToCollection()
                       }}
-                      className="hover:text-[#F5EBDD] transition underline decoration-[#D4AF78]/50 underline-offset-4 cursor-pointer"
+                      className="hover:text-[#141210] transition underline decoration-[#7A5B32]/50 underline-offset-4 cursor-pointer"
                     >
                       Show in Pages (12 per view)
                     </button>
@@ -781,15 +785,15 @@ export default function HandmadeGallery() {
         )}
 
         {/* INSPIRATION & JOURNALS */}
-        <section id="inspiration" className="gsap-gallery-section glass-card overflow-hidden p-6 sm:p-10 lg:p-12 border border-[#6D5738]/35 bg-gradient-to-b from-[#181714] via-[#141311] to-[#0E0D0C] rounded-3xl">
+        <section id="inspiration" className="gsap-gallery-section glass-card overflow-hidden p-6 sm:p-10 lg:p-12 border border-[#6D5738]/20 bg-gradient-to-b from-[#FCF9F4] via-[#FAF6EF] to-[#F5EFE5] rounded-3xl">
           <div className="text-center max-w-2xl mx-auto">
             <span className="section-eyebrow">
-              <BookOpen className="h-3.5 w-3.5 text-[#D4AF78]" /> Maker & Aquarist Journals
+              <BookOpen className="h-3.5 w-3.5 text-[#7A5B32]" /> Maker & Aquarist Journals
             </span>
-            <h3 className="mt-3 text-3xl sm:text-4xl text-[#F5EBDD] font-serif font-bold tracking-tight">
+            <h3 className="mt-3 text-3xl sm:text-4xl text-[#141210] font-tagline font-semibold tracking-tight">
               Inspiration for Every Creator & Aquarist
             </h3>
-            <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#B8A68B]">
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#5C4D3C]">
               Explore tactile textures, nature aquascaping guides, and artisanal craft tutorials from our creative collective.
             </p>
           </div>
@@ -799,10 +803,10 @@ export default function HandmadeGallery() {
             {MAKER_ARTICLES.map((article, i) => (
               <div
                 key={i}
-                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#6D5738]/35 bg-[#151412] p-4 transition-[border-color,box-shadow] duration-200 ease-out hover:border-[#D4AF78]/80 hover:shadow-[0_12px_32px_rgba(0,0,0,0.6)]"
+                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#6D5738]/20 bg-[#FCF9F4] p-4 transition-[border-color,box-shadow] duration-200 ease-out hover:border-[#B68D52]/70 hover:shadow-[0_12px_28px_rgba(68,52,32,0.12)]"
               >
                 <div>
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-[#0B0B0A]">
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-[#EFE8DC]">
                     <img
                       src={article.image}
                       alt={article.title}
@@ -810,21 +814,21 @@ export default function HandmadeGallery() {
                       decoding="async"
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                     />
-                    <span className="absolute top-2.5 left-2.5 rounded-full bg-[#0B0B0A]/90 border border-[#6D5738]/40 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#D4AF78] shadow-sm">
+                    <span className="absolute top-2.5 left-2.5 rounded-full bg-[#141210]/85 border border-[#D4AF78]/40 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#E5C18A] shadow-sm">
                       {article.category}
                     </span>
                   </div>
                   <div className="mt-4 space-y-1.5">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#B8A68B]">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#5C4D3C]">
                       {article.date}
                     </p>
-                    <h4 className="font-serif text-lg font-bold leading-snug text-[#F5EBDD] transition group-hover:text-[#E5C18A]">
+                    <h4 className="font-tagline text-xl font-bold leading-snug text-[#141210] transition group-hover:text-[#7A5B32]">
                       {article.title}
                     </h4>
                   </div>
                 </div>
-                <div className="mt-4 pt-3 border-t border-[#6D5738]/30 flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF78] flex items-center gap-1 group-hover:underline">
+                <div className="mt-4 pt-3 border-t border-[#6D5738]/20 flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#7A5B32] flex items-center gap-1 group-hover:underline">
                     Read Journal <ArrowUpRight className="h-3.5 w-3.5 stroke-[2.5]" />
                   </span>
                 </div>
@@ -833,15 +837,15 @@ export default function HandmadeGallery() {
           </div>
 
           {/* Tactile Studio Moodboard preview tiles */}
-          <div className="mt-8 pt-8 border-t border-[#6D5738]/30">
-            <p className="text-xs font-bold uppercase tracking-widest text-[#B8A68B] text-center mb-4">
+          <div className="mt-8 pt-8 border-t border-[#6D5738]/20">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#5C4D3C] text-center mb-4">
               Tactile Studio & Living Water Moodboard
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               {inspirationTiles.slice(0, 6).map((tile) => (
                 <div
                   key={tile.title}
-                  className="group relative aspect-square overflow-hidden rounded-xl border border-[#6D5738]/30 bg-[#0B0B0A]"
+                  className="group relative aspect-square overflow-hidden rounded-xl border border-[#6D5738]/20 bg-[#EFE8DC]"
                 >
                   <img
                     src={tile.image}
@@ -853,7 +857,7 @@ export default function HandmadeGallery() {
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-2">
-                    <span className="text-[10px] font-bold text-[#F5EBDD] truncate">{tile.title}</span>
+                    <span className="text-[10px] font-bold text-[#F9F5EE] truncate">{tile.title}</span>
                   </div>
                 </div>
               ))}
@@ -867,7 +871,7 @@ export default function HandmadeGallery() {
         {quickViewProduct ? (
           <motion.div
             key="quick-view-modal-backdrop"
-            className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/80 p-0 sm:p-4 overflow-hidden touch-none"
+            className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-[#141210]/55 backdrop-blur-sm p-0 sm:p-4 overflow-hidden touch-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -876,7 +880,7 @@ export default function HandmadeGallery() {
           >
             <motion.div
               key="quick-view-modal-card"
-              className="relative my-0 sm:my-8 w-full max-w-3xl max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#151412] border border-[#6D5738]/45 shadow-[0_25px_60px_rgba(0,0,0,0.85)] transform-gpu will-change-transform touch-auto overscroll-contain"
+              className="relative my-0 sm:my-8 w-full max-w-3xl max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#FCF9F4] border border-[#6D5738]/30 shadow-[0_25px_60px_rgba(44,34,20,0.28)] transform-gpu will-change-transform touch-auto overscroll-contain"
               initial={{ scale: 0.95, y: 16 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 16 }}
@@ -887,14 +891,14 @@ export default function HandmadeGallery() {
                 type="button"
                 aria-label="Close quick view"
                 onClick={() => setQuickViewProduct(null)}
-                className="absolute right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-full border border-[#6D5738]/50 bg-[#1E1C18] text-[#F5EBDD] shadow-sm transition hover:bg-[#28241E] hover:border-[#D4AF78] cursor-pointer"
+                className="absolute right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-full border border-[#6D5738]/30 bg-[#EFE8DC] text-[#141210] shadow-sm transition hover:bg-[#E5DCCD] hover:border-[#B68D52] cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
 
               <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
                 {/* Product Image Side */}
-                <div className="relative min-h-[300px] bg-[#0B0B0A] lg:min-h-[500px]">
+                <div className="relative min-h-[300px] bg-[#EFE8DC] lg:min-h-[500px]">
                   <img
                     src={quickViewProduct.image}
                     alt={quickViewProduct.title}
@@ -907,7 +911,7 @@ export default function HandmadeGallery() {
                     {(quickViewProduct.badges || ['Handmade']).map((b) => (
                       <span
                         key={b}
-                        className="rounded-full bg-[#0B0B0A]/90 border border-[#6D5738]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#D4AF78] shadow-sm"
+                        className="rounded-full bg-[#141210]/85 border border-[#D4AF78]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#E5C18A] shadow-sm"
                       >
                         {b}
                       </span>
@@ -916,7 +920,7 @@ export default function HandmadeGallery() {
 
                   {/* Stock status badge */}
                   <div className="absolute bottom-4 left-4">
-                    <span className="rounded-full bg-[#1C1A17] border border-emerald-500/40 text-emerald-400 px-3 py-1 text-[10px] font-bold shadow-md">
+                    <span className="rounded-full bg-[#141210]/85 border border-emerald-400/50 text-emerald-300 px-3 py-1 text-[10px] font-bold shadow-md">
                       ● {quickViewProduct.stock ?? 20} in stock
                     </span>
                   </div>
@@ -926,40 +930,40 @@ export default function HandmadeGallery() {
                 <div className="flex flex-col justify-between p-6 sm:p-8">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-bold uppercase tracking-widest text-[#D4AF78]">
+                      <span className="text-[11px] font-bold uppercase tracking-widest text-[#7A5B32]">
                         {quickViewProduct.category}
                       </span>
                       {quickViewProduct.department === 'aquarium' && (
-                        <span className="rounded-full bg-[#1C1A17] border border-[#6D5738]/40 px-2 py-0.5 text-[9px] font-bold text-[#D4AF78]">
+                        <span className="rounded-full bg-[#EFE8DC] border border-[#6D5738]/25 px-2 py-0.5 text-[9px] font-bold text-[#7A5B32]">
                           Aquatic Specimen
                         </span>
                       )}
                     </div>
 
-                    <h3 className="mt-1 font-serif text-2xl font-bold text-[#F5EBDD] sm:text-3xl">
+                    <h3 className="mt-1 font-tagline text-2xl font-bold text-[#141210] sm:text-3xl">
                       {quickViewProduct.title}
                     </h3>
 
-                    <div className="mt-3 flex items-center justify-between border-b border-[#6D5738]/30 pb-4">
+                    <div className="mt-3 flex items-center justify-between border-b border-[#6D5738]/20 pb-4">
                       <div>
-                        <span className="text-2xl font-extrabold text-[#F5EBDD]">
+                        <span className="text-2xl font-extrabold text-[#141210]">
                           {String(quickViewProduct.price).startsWith('₹')
                             ? quickViewProduct.price
                             : `₹${quickViewProduct.price}`}
                         </span>
-                        <span className="ml-2 text-xs text-[#B8A68B]">Direct Studio Dispatch</span>
+                        <span className="ml-2 text-xs text-[#5C4D3C]">Direct Studio Dispatch</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 fill-[#D4AF78] text-[#D4AF78]" />
-                        <span className="text-sm font-bold text-[#F5EBDD]">
+                        <Star className="h-4 w-4 fill-[#B68D52] text-[#B68D52]" />
+                        <span className="text-sm font-bold text-[#141210]">
                           {quickViewProduct.rating ?? '4.9'}
                         </span>
-                        <span className="text-xs text-[#B8A68B]">({quickViewProduct.reviews ?? 48})</span>
+                        <span className="text-xs text-[#5C4D3C]">({quickViewProduct.reviews ?? 48})</span>
                       </div>
                     </div>
 
                     {/* Quick Tabs */}
-                    <div className="mt-4 flex border-b border-[#6D5738]/30">
+                    <div className="mt-4 flex border-b border-[#6D5738]/20">
                       {[
                         { id: 'details', label: 'Story & Description' },
                         quickViewProduct.aquaticSpecs
@@ -973,8 +977,8 @@ export default function HandmadeGallery() {
                           onClick={() => setActiveQuickTab(tab.id)}
                           className={`border-b-2 px-3 sm:px-4 py-2 text-xs font-bold transition cursor-pointer ${
                             activeQuickTab === tab.id
-                              ? 'border-[#D4AF78] text-[#D4AF78]'
-                              : 'border-transparent text-[#B8A68B] hover:text-[#F5EBDD]'
+                              ? 'border-[#7A5B32] text-[#7A5B32]'
+                              : 'border-transparent text-[#5C4D3C] hover:text-[#141210]'
                           }`}
                         >
                           {tab.label}
@@ -983,13 +987,13 @@ export default function HandmadeGallery() {
                     </div>
 
                     {/* Tab Content */}
-                    <div className="mt-4 min-h-[140px] text-xs leading-relaxed text-[#B8A68B]">
+                    <div className="mt-4 min-h-[140px] text-xs leading-relaxed text-[#5C4D3C]">
                       {activeQuickTab === 'details' && (
                         <div className="space-y-3">
                           <p>{quickViewProduct.description}</p>
                           {quickViewProduct.department === 'aquarium' && (
-                            <div className="flex items-center gap-2 rounded-xl bg-[#0B0B0A] border border-[#6D5738]/40 p-2.5 text-[#F5EBDD] font-semibold">
-                              <ShieldCheck className="h-4 w-4 text-[#D4AF78] shrink-0" />
+                            <div className="flex items-center gap-2 rounded-xl bg-[#F5F0E8] border border-[#6D5738]/25 p-2.5 text-[#141210] font-semibold">
+                              <ShieldCheck className="h-4 w-4 text-[#7A5B32] shrink-0" />
                               <span>Live Arrival Guarantee: Oxygenated bagging + climate controlled thermal transit pack.</span>
                             </div>
                           )}
@@ -999,46 +1003,46 @@ export default function HandmadeGallery() {
                       {activeQuickTab === 'specs' && quickViewProduct.aquaticSpecs && (
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           {quickViewProduct.aquaticSpecs.waterType && (
-                            <div className="rounded-xl bg-[#0B0B0A] border border-[#6D5738]/35 p-2.5">
-                              <span className="text-[10px] font-bold text-[#B8A68B] uppercase block">Water Type</span>
-                              <span className="font-bold text-[#F5EBDD]">{quickViewProduct.aquaticSpecs.waterType}</span>
+                            <div className="rounded-xl bg-[#F5F0E8] border border-[#6D5738]/20 p-2.5">
+                              <span className="text-[10px] font-bold text-[#5C4D3C] uppercase block">Water Type</span>
+                              <span className="font-bold text-[#141210]">{quickViewProduct.aquaticSpecs.waterType}</span>
                             </div>
                           )}
                           {quickViewProduct.aquaticSpecs.careLevel && (
-                            <div className="rounded-xl bg-[#0B0B0A] border border-[#6D5738]/35 p-2.5">
-                              <span className="text-[10px] font-bold text-[#B8A68B] uppercase block">Care Level</span>
-                              <span className="font-bold text-[#F5EBDD]">{quickViewProduct.aquaticSpecs.careLevel}</span>
+                            <div className="rounded-xl bg-[#F5F0E8] border border-[#6D5738]/20 p-2.5">
+                              <span className="text-[10px] font-bold text-[#5C4D3C] uppercase block">Care Level</span>
+                              <span className="font-bold text-[#141210]">{quickViewProduct.aquaticSpecs.careLevel}</span>
                             </div>
                           )}
                           {quickViewProduct.aquaticSpecs.temperament && (
-                            <div className="rounded-xl bg-[#0B0B0A] border border-[#6D5738]/35 p-2.5">
-                              <span className="text-[10px] font-bold text-[#B8A68B] uppercase block">Temperament</span>
-                              <span className="font-bold text-[#F5EBDD]">{quickViewProduct.aquaticSpecs.temperament}</span>
+                            <div className="rounded-xl bg-[#F5F0E8] border border-[#6D5738]/20 p-2.5">
+                              <span className="text-[10px] font-bold text-[#5C4D3C] uppercase block">Temperament</span>
+                              <span className="font-bold text-[#141210]">{quickViewProduct.aquaticSpecs.temperament}</span>
                             </div>
                           )}
                           {quickViewProduct.aquaticSpecs.tankSize && (
-                            <div className="rounded-xl bg-[#0B0B0A] border border-[#6D5738]/35 p-2.5">
-                              <span className="text-[10px] font-bold text-[#B8A68B] uppercase block">Minimum Tank</span>
-                              <span className="font-bold text-[#F5EBDD]">{quickViewProduct.aquaticSpecs.tankSize}</span>
+                            <div className="rounded-xl bg-[#F5F0E8] border border-[#6D5738]/20 p-2.5">
+                              <span className="text-[10px] font-bold text-[#5C4D3C] uppercase block">Minimum Tank</span>
+                              <span className="font-bold text-[#141210]">{quickViewProduct.aquaticSpecs.tankSize}</span>
                             </div>
                           )}
                           {quickViewProduct.aquaticSpecs.diet && (
-                            <div className="col-span-2 rounded-xl bg-[#0B0B0A] border border-[#6D5738]/35 p-2.5">
-                              <span className="text-[10px] font-bold text-[#B8A68B] uppercase block">Diet / Nutrition</span>
-                              <span className="font-bold text-[#F5EBDD]">{quickViewProduct.aquaticSpecs.diet}</span>
+                            <div className="col-span-2 rounded-xl bg-[#F5F0E8] border border-[#6D5738]/20 p-2.5">
+                              <span className="text-[10px] font-bold text-[#5C4D3C] uppercase block">Diet / Nutrition</span>
+                              <span className="font-bold text-[#141210]">{quickViewProduct.aquaticSpecs.diet}</span>
                             </div>
                           )}
                           {quickViewProduct.aquaticSpecs.dimensions && (
-                            <div className="col-span-2 rounded-xl bg-[#0B0B0A] border border-[#6D5738]/35 p-2.5">
-                              <span className="text-[10px] font-bold text-[#B8A68B] uppercase block">Dimensions / Flow</span>
-                              <span className="font-bold text-[#F5EBDD]">{quickViewProduct.aquaticSpecs.dimensions}</span>
+                            <div className="col-span-2 rounded-xl bg-[#F5F0E8] border border-[#6D5738]/20 p-2.5">
+                              <span className="text-[10px] font-bold text-[#5C4D3C] uppercase block">Dimensions / Flow</span>
+                              <span className="font-bold text-[#141210]">{quickViewProduct.aquaticSpecs.dimensions}</span>
                             </div>
                           )}
                         </div>
                       )}
 
                       {activeQuickTab === 'materials' && (
-                        <ul className="space-y-1.5 list-disc pl-4 text-xs text-[#B8A68B]">
+                        <ul className="space-y-1.5 list-disc pl-4 text-xs text-[#5C4D3C]">
                           <li>Handcrafted with studio-grade natural resins, organic soy waxes, and pure silk threads.</li>
                           <li>100% genuine pressed wild botanicals sealed with crystal clarity.</li>
                           <li>Recyclable, plastic-free boutique packaging and personalized gift notes.</li>
@@ -1047,35 +1051,35 @@ export default function HandmadeGallery() {
 
                       {activeQuickTab === 'reviews' && (
                         <div className="space-y-3">
-                          <div className="rounded-xl border border-[#6D5738]/35 bg-[#0B0B0A] p-2.5">
+                          <div className="rounded-xl border border-[#6D5738]/20 bg-[#F5F0E8] p-2.5">
                             <div className="flex items-center justify-between">
-                              <span className="font-bold text-[#F5EBDD]">Verified Buyer</span>
-                              <div className="flex text-[#D4AF78]">
+                              <span className="font-bold text-[#141210]">Verified Buyer</span>
+                              <div className="flex text-[#B68D52]">
                                 {Array.from({ length: 5 }).map((_, i) => (
-                                  <Star key={i} className="h-3 w-3 fill-[#D4AF78]" />
+                                  <Star key={i} className="h-3 w-3 fill-[#B68D52]" />
                                 ))}
                               </div>
                             </div>
-                            <p className="mt-1 text-xs text-[#B8A68B]">
+                            <p className="mt-1 text-xs text-[#5C4D3C]">
                               "Outstanding quality. Exceeded expectations in every detail!"
                             </p>
                           </div>
 
                           {/* Post Review Form */}
-                          <form onSubmit={handlePostReview} className="space-y-2 rounded-xl border border-[#6D5738]/35 bg-[#0B0B0A] p-3">
-                            <p className="text-xs font-bold text-[#F5EBDD]">Leave a Review</p>
+                          <form onSubmit={handlePostReview} className="space-y-2 rounded-xl border border-[#6D5738]/20 bg-[#F5F0E8] p-3">
+                            <p className="text-xs font-bold text-[#141210]">Leave a Review</p>
                             <div className="flex gap-2">
                               <input
                                 required
                                 value={reviewName}
                                 onChange={(e) => setReviewName(e.target.value)}
                                 placeholder="Your Name"
-                                className="h-8 flex-1 rounded-lg border border-[#6D5738]/40 bg-[#151412] px-2.5 text-xs text-[#F5EBDD] placeholder:text-[#B8A68B]/40 outline-none focus:border-[#D4AF78]"
+                                className="h-8 flex-1 rounded-lg border border-[#6D5738]/30 bg-[#FCF9F4] px-2.5 text-xs text-[#141210] placeholder:text-[#5C4D3C]/50 outline-none focus:border-[#B68D52]"
                               />
                               <select
                                 value={reviewRating}
                                 onChange={(e) => setReviewRating(Number(e.target.value))}
-                                className="h-8 rounded-lg border border-[#6D5738]/40 bg-[#151412] px-2 text-xs text-[#F5EBDD] outline-none focus:border-[#D4AF78]"
+                                className="h-8 rounded-lg border border-[#6D5738]/30 bg-[#FCF9F4] px-2 text-xs text-[#141210] outline-none focus:border-[#B68D52]"
                               >
                                 <option value={5}>5 Stars (Excellent)</option>
                                 <option value={4}>4 Stars (Very Good)</option>
@@ -1086,11 +1090,11 @@ export default function HandmadeGallery() {
                               value={reviewComment}
                               onChange={(e) => setReviewComment(e.target.value)}
                               placeholder="Write your review notes..."
-                              className="h-8 w-full rounded-lg border border-[#6D5738]/40 bg-[#151412] px-2.5 text-xs text-[#F5EBDD] placeholder:text-[#B8A68B]/40 outline-none focus:border-[#D4AF78]"
+                              className="h-8 w-full rounded-lg border border-[#6D5738]/30 bg-[#FCF9F4] px-2.5 text-xs text-[#141210] placeholder:text-[#5C4D3C]/50 outline-none focus:border-[#B68D52]"
                             />
                             <button
                               type="submit"
-                              className="rounded-lg bg-[#D4AF78] px-3 py-1 text-xs font-bold text-[#0B0B0A] transition hover:bg-[#E5C18A] shadow-sm cursor-pointer"
+                              className="rounded-lg bg-[#D4AF78] px-3 py-1 text-xs font-bold text-[#141210] transition hover:bg-[#E5C18A] shadow-sm cursor-pointer"
                             >
                               Submit Review
                             </button>
@@ -1101,23 +1105,23 @@ export default function HandmadeGallery() {
                   </div>
 
                   {/* Quantity & CTAs */}
-                  <div className="mt-6 border-t border-[#6D5738]/30 pt-4">
+                  <div className="mt-6 border-t border-[#6D5738]/20 pt-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-2 rounded-full border border-[#6D5738]/40 bg-[#0B0B0A] px-3 py-1.5 shadow-sm">
+                      <div className="flex items-center gap-2 rounded-full border border-[#6D5738]/30 bg-[#F5F0E8] px-3 py-1.5 shadow-sm">
                         <button
                           type="button"
                           onClick={() => setQuickViewQuantity((q) => Math.max(1, q - 1))}
-                          className="grid h-6 w-6 place-items-center rounded-full bg-[#1C1A17] text-[#D4AF78] transition hover:bg-[#28241E] cursor-pointer"
+                          className="grid h-6 w-6 place-items-center rounded-full bg-[#EFE8DC] text-[#7A5B32] transition hover:bg-[#E5DCCD] cursor-pointer"
                         >
                           <Minus className="h-3 w-3" />
                         </button>
-                        <span className="min-w-6 text-center text-sm font-bold text-[#F5EBDD]">
+                        <span className="min-w-6 text-center text-sm font-bold text-[#141210]">
                           {quickViewQuantity}
                         </span>
                         <button
                           type="button"
                           onClick={() => setQuickViewQuantity((q) => q + 1)}
-                          className="grid h-6 w-6 place-items-center rounded-full bg-[#1C1A17] text-[#D4AF78] transition hover:bg-[#28241E] cursor-pointer"
+                          className="grid h-6 w-6 place-items-center rounded-full bg-[#EFE8DC] text-[#7A5B32] transition hover:bg-[#E5DCCD] cursor-pointer"
                         >
                           <Plus className="h-3 w-3" />
                         </button>
@@ -1140,10 +1144,10 @@ export default function HandmadeGallery() {
                           e.stopPropagation()
                           toggleWishlist(quickViewProduct.id)
                         }}
-                        className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[#6D5738]/40 bg-[#0B0B0A] text-[#F5EBDD] transition cursor-pointer ${
+                        className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[#6D5738]/30 bg-[#F5F0E8] text-[#141210] transition cursor-pointer ${
                           isWishlisted(quickViewProduct.id)
                             ? 'border-rose-400 text-rose-500'
-                            : 'hover:border-[#D4AF78]'
+                            : 'hover:border-[#B68D52]'
                         }`}
                         title="Save to wishlist"
                       >
@@ -1157,7 +1161,7 @@ export default function HandmadeGallery() {
                       <button
                         type="button"
                         onClick={handleQuickViewWhatsApp}
-                        className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-emerald-500/40 bg-[#151412] text-emerald-400 hover:bg-emerald-950/60 hover:border-emerald-400 transition shadow-xs cursor-pointer"
+                        className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-emerald-600/35 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:border-emerald-500 transition shadow-xs cursor-pointer"
                         title="Order via WhatsApp with Photo Preview (+91 93412 97124)"
                       >
                         <MessageCircle className="h-5 w-5" />

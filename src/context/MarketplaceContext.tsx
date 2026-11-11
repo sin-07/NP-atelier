@@ -25,9 +25,9 @@ export interface BrandingSettings {
 export const DEFAULT_BRANDING: BrandingSettings = {
   siteName: 'NP Atelier',
   tagline: 'Luxury Crafts & Exotic Aquatics',
-  logoType: 'icon',
+  logoType: 'both',
   logoText: 'NP',
-  logoImageUrl: '',
+  logoImageUrl: '/np-atelier-logo.jpg',
   announcementText: 'Handcrafted Artisan Drops & Exotic Aquatics Live • Code ATELIER10 for 10% off',
   contactEmail: 'npatelierindia@gmail.com',
   contactPhone: '+91 93412 97124',
@@ -443,7 +443,16 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       .then((data) => {
         if (data?.success) {
           if (data.settings) {
-            setBranding((prev) => ({ ...prev, ...data.settings }))
+            setBranding((prev) => {
+              const next = { ...prev, ...data.settings }
+              if (!next.logoImageUrl) {
+                next.logoImageUrl = DEFAULT_BRANDING.logoImageUrl
+                if (next.logoType === 'icon') {
+                  next.logoType = DEFAULT_BRANDING.logoType
+                }
+              }
+              return next
+            })
           }
           if (data.delivery?.regions) {
             setDeliverySettings((prev) => ({

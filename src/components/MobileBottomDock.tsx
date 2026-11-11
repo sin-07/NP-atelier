@@ -106,21 +106,21 @@ export default function MobileBottomDock() {
       aria-label="Mobile primary navigation"
       className="fixed bottom-3 inset-x-2 max-w-md mx-auto z-40 sm:hidden transform-gpu"
     >
-      <div className="flex items-center justify-around rounded-full border border-[#D4AF37]/60 bg-[#120F0A] p-1.5 shadow-[0_14px_40px_rgba(0,0,0,0.55),0_0_20px_rgba(212,175,55,0.15)]">
+      <div className="flex items-center justify-around rounded-full border border-[#8C6D46]/35 bg-[#FCF9F4]/95 backdrop-blur-md p-1.5 shadow-[0_12px_36px_rgba(72,54,30,0.18),0_0_16px_rgba(212,175,120,0.12)]">
         {/* 1. Home / Atelier */}
         <button
           type="button"
           onClick={() => handleNavClick('home')}
           className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'home'
-              ? 'text-[#ECC872]'
-              : 'text-[#A89876] hover:text-[#ECC872]'
+              ? 'text-[#141210]'
+              : 'text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >
           {activeTab === 'home' && (
             <motion.div
               layoutId="mobileDockPill"
-              className="absolute inset-0 rounded-full bg-[#221B10] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]"
+              className="absolute inset-0 rounded-full bg-[#EFE8DC] shadow-xs border border-[#8C6D46]/25"
               transition={{ type: 'spring', stiffness: 450, damping: 35 }}
             />
           )}
@@ -134,14 +134,14 @@ export default function MobileBottomDock() {
           onClick={() => handleNavClick('crafts')}
           className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'crafts'
-              ? 'text-[#ECC872]'
-              : 'text-[#A89876] hover:text-[#ECC872]'
+              ? 'text-[#141210]'
+              : 'text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >
           {activeTab === 'crafts' && (
             <motion.div
               layoutId="mobileDockPill"
-              className="absolute inset-0 rounded-full bg-[#221B10] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]"
+              className="absolute inset-0 rounded-full bg-[#EFE8DC] shadow-xs border border-[#8C6D46]/25"
               transition={{ type: 'spring', stiffness: 450, damping: 35 }}
             />
           )}
@@ -155,19 +155,19 @@ export default function MobileBottomDock() {
           onClick={() => handleNavClick('aquarium')}
           className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'aquarium'
-              ? 'text-[#ECC872]'
-              : 'text-[#A89876] hover:text-[#ECC872]'
+              ? 'text-[#141210]'
+              : 'text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >
           {activeTab === 'aquarium' && (
             <motion.div
               layoutId="mobileDockPill"
-              className="absolute inset-0 rounded-full bg-[#221B10] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.4)]"
+              className="absolute inset-0 rounded-full bg-[#EFE8DC] shadow-xs border border-[#8C6D46]/25"
               transition={{ type: 'spring', stiffness: 450, damping: 35 }}
             />
           )}
-          <Fish className="h-4.5 w-4.5 relative z-10 text-[#ECC872]" />
-          <span className="text-[9.5px] font-bold tracking-tight mt-0.5 relative z-10 font-serif">Acquario</span>
+          <Fish className="h-4.5 w-4.5 relative z-10 text-teal-700" />
+          <span className="text-[10px] font-bold tracking-tight mt-0.5 relative z-10 font-tagline">Acquario</span>
         </button>
 
         {/* 3. Search Spotlight */}
@@ -177,12 +177,12 @@ export default function MobileBottomDock() {
             setActiveTab('search')
             setIsQuickSearchOpen(true)
           }}
-          className="gsap-dock-btn flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#A89876] hover:text-[#ECC872] active:scale-95 transition-all duration-150 cursor-pointer"
+          className="gsap-dock-btn flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#5C4D3C] hover:text-[#141210] active:scale-95 transition-all duration-150 cursor-pointer"
         >
-          <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-tr from-[#D4AF37] to-[#B8860B] text-[#120F0A] shadow-md">
+          <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-tr from-[#D4AF78] to-[#E5C18A] text-[#141210] shadow-sm border border-[#B8925A]/40">
             <Search className="h-4 w-4 stroke-[2.5]" />
           </div>
-          <span className="text-[10px] font-bold tracking-tight mt-0.5 text-[#ECC872]">Search</span>
+          <span className="text-[10px] font-bold tracking-tight mt-0.5 text-[#7A5B32]">Search</span>
         </button>
 
         {/* 4. Wishlist */}
@@ -192,7 +192,7 @@ export default function MobileBottomDock() {
             setActiveTab('wishlist')
             setIsWishlistOpen(true)
           }}
-          className="gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#A89876] hover:text-[#ECC872] active:scale-95 transition-all duration-150 cursor-pointer"
+          className="gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#5C4D3C] hover:text-[#141210] active:scale-95 transition-all duration-150 cursor-pointer"
         >
           <div className="relative">
             <Heart className="h-5 w-5" />
@@ -212,12 +212,12 @@ export default function MobileBottomDock() {
             setActiveTab('bag')
             setIsCartOpen(true)
           }}
-          className="gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#A89876] hover:text-[#ECC872] active:scale-95 transition-all duration-150 cursor-pointer"
+          className="gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#5C4D3C] hover:text-[#141210] active:scale-95 transition-all duration-150 cursor-pointer"
         >
           <div className="relative">
             <ShoppingBag className="h-5 w-5" />
             {mounted && cartCount > 0 && (
-              <span className="absolute -top-1.5 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-gradient-to-r from-[#ECC872] to-[#D4AF37] px-1 text-[9px] font-black text-[#14100A] shadow-xs">
+              <span className="absolute -top-1.5 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-gradient-to-r from-[#ECC872] to-[#D4AF78] px-1 text-[9px] font-black text-[#141210] shadow-xs">
                 {cartCount}
               </span>
             )}

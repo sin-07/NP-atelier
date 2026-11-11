@@ -65,6 +65,7 @@ import {
 } from '../../data/products'
 import { fallbackCraftImage } from '../../utils/fallbackImage'
 import AdminLoginForm from '../../components/AdminLoginForm'
+import { BrandTitle, NpMonogramSvg } from '../../components/BrandTypography'
 
 const PRESET_IMAGES = [
   // Crafts
@@ -623,45 +624,47 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0B0A] text-[#F5EBDD]">
+    <div className="min-h-screen bg-[#F5F0E8] text-[#141210]">
       {/* Top Admin Header with Dynamic Branding */}
-      <header className="sticky top-0 z-30 border-b border-[rgba(212,175,120,0.25)] bg-[#12110F]/95 shadow-xs backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-[rgba(122,91,50,0.2)] bg-[#FCF9F4]/95 shadow-xs backdrop-blur-md">
         <div className="section-shell flex h-16 sm:h-20 items-center justify-between gap-2 sm:gap-4">
           <div className="flex items-center gap-2 sm:gap-3.5 min-w-0 flex-1">
             <Link
               href="/"
               title="Return to Public Storefront"
-              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[rgba(212,175,120,0.25)] bg-[#191713] p-2 sm:px-3.5 sm:py-2 text-xs font-bold text-[#F5EBDD] shadow-xs transition hover:bg-[#12110F] hover:border-[rgba(212,175,120,0.5)] shrink-0 active:scale-95"
+              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[rgba(122,91,50,0.24)] bg-[#FAF6EF] p-2 sm:px-3.5 sm:py-2 text-xs font-bold text-[#141210] shadow-xs transition hover:bg-[#EFE8DC] hover:border-[#8C6834] shrink-0 active:scale-95"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-4 w-4 text-[#7A5B32]" />
               <span className="hidden md:inline">Storefront</span>
             </Link>
 
-            <div className="hidden h-5 w-px bg-[rgba(212,175,120,0.25)] sm:block shrink-0" />
+            <div className="hidden h-5 w-px bg-[rgba(122,91,50,0.22)] sm:block shrink-0" />
 
             {/* Dynamic Branding Display in Admin Header */}
             <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
               {branding?.logoImageUrl && (branding.logoType === 'image' || branding.logoType === 'both') ? (
-                <img
-                  src={branding.logoImageUrl}
-                  alt={branding.siteName}
-                  className="h-8 w-auto max-w-[80px] sm:h-10 sm:max-w-[120px] rounded-xl object-contain border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] p-0.5 shadow-xs shrink-0"
-                />
+                <div className="relative h-8 w-8 sm:h-10 sm:w-10 shrink-0 rounded-full overflow-hidden border border-[#B68D52]/50 bg-[#F5F0E8] shadow-xs">
+                  <img
+                    src={branding.logoImageUrl}
+                    alt={branding.siteName}
+                    className="h-full w-full rounded-full object-cover object-center scale-[1.16]"
+                  />
+                </div>
               ) : (
-                <span className="grid h-8 w-8 sm:h-10 sm:w-10 place-items-center rounded-xl sm:rounded-2xl bg-[#191713] text-xs sm:text-sm font-black text-[#D4AF78] shadow-soft border border-[rgba(212,175,120,0.4)] shrink-0">
-                  {branding?.logoText || 'NP'}
+                <span className="grid h-8 w-8 sm:h-10 sm:w-10 place-items-center rounded-full bg-[#FCF9F4] text-xs sm:text-sm font-black text-[#141210] shadow-xs border border-[#B68D52]/50 shrink-0">
+                  {branding?.logoText && branding.logoText !== 'NP' ? branding.logoText : <NpMonogramSvg className="h-4 w-auto text-[#141210]" />}
                 </span>
               )}
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <h1 className="font-serif text-sm sm:text-lg lg:text-xl font-bold leading-tight text-[#F5EBDD] truncate">
-                    {branding?.siteName || 'NP Atelier'}
+                  <h1 className="text-sm sm:text-lg lg:text-xl font-bold leading-tight text-[#141210] truncate">
+                    <BrandTitle siteName={branding?.siteName || 'NP Atelier'} />
                   </h1>
-                  <span className="rounded-md border border-[rgba(212,175,120,0.3)] bg-[#191713] px-1.5 py-0.5 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider text-[#D4AF78] shrink-0">
+                  <span className="rounded-md border border-[rgba(122,91,50,0.28)] bg-[#EFE8DC] px-1.5 py-0.5 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider text-[#7A5B32] shrink-0">
                     Admin
                   </span>
                 </div>
-                <p className="hidden sm:block text-[10px] font-bold uppercase tracking-wider text-[#B8AA96] truncate mt-0.5">
+                <p className="hidden sm:block text-[10px] font-bold uppercase tracking-wider text-[#5C4D3C] truncate mt-0.5">
                   Crafts, Aquatics &amp; Store Management
                 </p>
               </div>
@@ -669,9 +672,9 @@ export default function AdminPage() {
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-            <div className="hidden rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#191713] px-3.5 py-1.5 text-right xl:block">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-[#B8AA96]">Gross Store Sales</p>
-              <p className="text-xs sm:text-sm font-extrabold text-[#D4AF78]">₹{metrics.totalSales.toFixed(0)}</p>
+            <div className="hidden rounded-2xl border border-[rgba(122,91,50,0.22)] bg-[#FAF6EF] px-3.5 py-1.5 text-right xl:block">
+              <p className="text-[9px] font-bold uppercase tracking-wider text-[#5C4D3C]">Gross Store Sales</p>
+              <p className="text-xs sm:text-sm font-extrabold text-[#7A5B32]">₹{metrics.totalSales.toFixed(0)}</p>
             </div>
 
             <button
@@ -687,7 +690,7 @@ export default function AdminPage() {
             <button
               type="button"
               onClick={() => openAddProductModal('crafts')}
-              className="inline-flex h-8 sm:h-9 items-center justify-center gap-1.5 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] px-2.5 sm:px-3.5 text-xs font-bold text-[#0B0B0A] border border-[#D4AF78] shadow-xs transition active:scale-95 shrink-0 cursor-pointer"
+              className="inline-flex h-8 sm:h-9 items-center justify-center gap-1.5 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] px-2.5 sm:px-3.5 text-xs font-bold text-[#141210] border border-[#B68D52] shadow-xs transition active:scale-95 shrink-0 cursor-pointer"
               title="Add Artisan Craft"
             >
               <Plus className="h-4 w-4" />
@@ -697,7 +700,7 @@ export default function AdminPage() {
             <button
               type="button"
               onClick={handleAdminLogout}
-              className="inline-flex h-8 sm:h-9 items-center justify-center gap-1.5 rounded-full border border-rose-500/30 bg-[#191713] px-2.5 sm:px-3 text-xs font-bold text-rose-400 shadow-xs transition hover:bg-rose-950/40 hover:border-rose-500/50 active:scale-95 shrink-0 cursor-pointer"
+              className="inline-flex h-8 sm:h-9 items-center justify-center gap-1.5 rounded-full border border-rose-600/30 bg-rose-50 px-2.5 sm:px-3 text-xs font-bold text-rose-700 shadow-xs transition hover:bg-rose-100 hover:border-rose-600/50 active:scale-95 shrink-0 cursor-pointer"
               title="Sign out of admin session"
             >
               <LogOut className="h-3.5 w-3.5" />
@@ -710,7 +713,7 @@ export default function AdminPage() {
       {/* Main Admin Content */}
       <div className="section-shell py-6 sm:py-8">
         {/* Navigation Tabs - Smooth Horizontal Rail */}
-        <div className="mb-6 sm:mb-8 flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 -mx-2 px-2 sm:mx-0 sm:px-0 border-b border-[rgba(212,175,120,0.25)]">
+        <div className="mb-6 sm:mb-8 flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth pb-2 pt-1 -mx-2 px-2 sm:mx-0 sm:px-0 border-b border-[rgba(122,91,50,0.2)]">
           {[
             { id: 'overview', label: 'Executive Analytics', icon: LayoutDashboard },
             { id: 'products', label: `Catalog (${products.length})`, icon: Package },
@@ -728,14 +731,14 @@ export default function AdminPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`relative flex items-center gap-2 rounded-full px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold transition-colors duration-200 shrink-0 cursor-pointer ${
                   isActive
-                    ? 'text-[#F5EBDD]'
-                    : 'border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A]/80 text-[#B8AA96] hover:bg-[#12110F] hover:text-[#F5EBDD]'
+                    ? 'text-[#141210]'
+                    : 'border border-[rgba(122,91,50,0.22)] bg-[#FCF9F4] text-[#5C4D3C] hover:bg-[#EFE8DC] hover:text-[#141210]'
                 }`}
               >
                 {isActive && (
                   <motion.div
                     layoutId="adminNavRailActivePill"
-                    className="absolute inset-0 rounded-full bg-[#D4AF78] border border-[#E5C18A] shadow-xs"
+                    className="absolute inset-0 rounded-full bg-[#D4AF78] border border-[#B68D52] shadow-xs"
                     transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                   />
                 )}
@@ -757,45 +760,45 @@ export default function AdminPage() {
             <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
               <div className="glass-card p-3.5 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96] truncate">Gross Revenue</span>
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#5C4D3C] truncate">Gross Revenue</span>
                   <div className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-xl bg-emerald-100 text-emerald-800 shrink-0">
                     <IndianRupee className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </div>
                 </div>
-                <p className="mt-2 sm:mt-3 font-serif text-xl sm:text-3xl font-bold text-[#F5EBDD]">₹{metrics.totalSales.toFixed(0)}</p>
+                <p className="mt-2 sm:mt-3 font-tagline text-xl sm:text-3xl font-bold text-[#141210]">₹{metrics.totalSales.toFixed(0)}</p>
                 <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-[11px] font-semibold text-emerald-700 truncate">Crafts &amp; Aquatics</p>
               </div>
 
               <div className="glass-card p-3.5 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96] truncate">Total Orders</span>
-                  <div className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-xl bg-amber-100 text-[#D4AF78] shrink-0">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#5C4D3C] truncate">Total Orders</span>
+                  <div className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-xl bg-amber-100 text-[#7A5B32] shrink-0">
                     <PackageCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </div>
                 </div>
-                <p className="mt-2 sm:mt-3 font-serif text-xl sm:text-3xl font-bold text-[#F5EBDD]">{metrics.totalOrdersCount}</p>
-                <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-[11px] font-semibold text-[#D4AF78] truncate">Direct fulfillment</p>
+                <p className="mt-2 sm:mt-3 font-tagline text-xl sm:text-3xl font-bold text-[#141210]">{metrics.totalOrdersCount}</p>
+                <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-[11px] font-semibold text-[#7A5B32] truncate">Direct fulfillment</p>
               </div>
 
               <div className="glass-card p-3.5 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96] truncate">Crafts Catalog</span>
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#5C4D3C] truncate">Crafts Catalog</span>
                   <div className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-xl bg-rose-100 text-rose-700 shrink-0">
                     <Palette className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </div>
                 </div>
-                <p className="mt-2 sm:mt-3 font-serif text-xl sm:text-3xl font-bold text-[#F5EBDD]">{metrics.craftCount} Crafts</p>
-                <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-[11px] font-semibold text-[#B8AA96] truncate">Jewelry &amp; Decor</p>
+                <p className="mt-2 sm:mt-3 font-tagline text-xl sm:text-3xl font-bold text-[#141210]">{metrics.craftCount} Crafts</p>
+                <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-[11px] font-semibold text-[#5C4D3C] truncate">Jewelry &amp; Decor</p>
               </div>
 
               <div className="glass-card p-3.5 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96] truncate">Aquatics</span>
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#5C4D3C] truncate">Aquatics</span>
                   <div className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-xl bg-cyan-100 text-cyan-800 shrink-0">
                     <Fish className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </div>
                 </div>
-                <p className="mt-2 sm:mt-3 font-serif text-xl sm:text-3xl font-bold text-[#F5EBDD]">{metrics.aquaticCount} Aquatics</p>
+                <p className="mt-2 sm:mt-3 font-tagline text-xl sm:text-3xl font-bold text-[#141210]">{metrics.aquaticCount} Aquatics</p>
                 <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-[11px] font-semibold text-cyan-700 truncate">Live fish &amp; tanks</p>
               </div>
             </div>
@@ -805,12 +808,12 @@ export default function AdminPage() {
               {/* Category Distribution */}
               <div className="glass-card p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-serif text-xl font-bold text-[#F5EBDD]">Catalog Distribution by Category</h3>
-                  <span className="text-xs font-bold text-[#B8AA96]">Total: {products.length} Items</span>
+                  <h3 className="font-tagline text-xl font-bold text-[#141210]">Catalog Distribution by Category</h3>
+                  <span className="text-xs font-bold text-[#5C4D3C]">Total: {products.length} Items</span>
                 </div>
 
                 <div className="space-y-3.5">
-                  <p className="text-xs font-extrabold uppercase tracking-wider text-cyan-400 border-b border-[rgba(212,175,120,0.2)] pb-1">
+                  <p className="text-xs font-extrabold uppercase tracking-wider text-teal-800 border-b border-[rgba(122,91,50,0.18)] pb-1">
                     Living Aquatics Categories ({allAquariumCategories.length})
                   </p>
                   {allAquariumCategories.map((cat) => {
@@ -819,10 +822,10 @@ export default function AdminPage() {
                     return (
                       <div key={cat}>
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-[#F5EBDD]">{cat}</span>
+                          <span className="text-[#141210]">{cat}</span>
                           <span className="text-cyan-800 font-bold">{count} items ({pct}%)</span>
                         </div>
-                        <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-[#0B0B0A] border border-cyan-900/30">
+                        <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-[#EFE8DC] border border-cyan-800/20">
                           <div
                             className="h-full rounded-full bg-gradient-to-r from-teal-500 to-cyan-600"
                             style={{ width: `${pct}%` }}
@@ -832,7 +835,7 @@ export default function AdminPage() {
                     )
                   })}
 
-                  <p className="text-xs font-extrabold uppercase tracking-wider text-[#D4AF78] border-b border-[rgba(212,175,120,0.2)] pb-1 pt-3">
+                  <p className="text-xs font-extrabold uppercase tracking-wider text-[#7A5B32] border-b border-[rgba(122,91,50,0.18)] pb-1 pt-3">
                     Artisan Crafts Categories ({allCraftCategories.length})
                   </p>
                   {allCraftCategories.map((cat) => {
@@ -841,12 +844,12 @@ export default function AdminPage() {
                     return (
                       <div key={cat}>
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-[#F5EBDD]">{cat}</span>
-                          <span className="text-[#D4AF78] font-bold">{count} items ({pct}%)</span>
+                          <span className="text-[#141210]">{cat}</span>
+                          <span className="text-[#7A5B32] font-bold">{count} items ({pct}%)</span>
                         </div>
-                        <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-[#0B0B0A] border border-[rgba(212,175,120,0.2)]">
+                        <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-[#EFE8DC] border border-[rgba(122,91,50,0.18)]">
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-[#D4AF78] to-[#E5C18A]"
+                            className="h-full rounded-full bg-gradient-to-r from-[#D4AF78] to-[#B68D52]"
                             style={{ width: `${pct}%` }}
                           />
                         </div>
@@ -859,11 +862,11 @@ export default function AdminPage() {
               {/* Recent Orders List */}
               <div className="glass-card p-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-serif text-xl font-bold text-[#F5EBDD]">Recent Customer Orders</h3>
+                  <h3 className="font-tagline text-xl font-bold text-[#141210]">Recent Customer Orders</h3>
                   <button
                     type="button"
                     onClick={() => setActiveTab('orders')}
-                    className="text-xs font-bold text-[#D4AF78] hover:text-[#E5C18A]"
+                    className="text-xs font-bold text-[#7A5B32] hover:text-[#141210]"
                   >
                     View All ({orders.length})
                   </button>
@@ -871,33 +874,33 @@ export default function AdminPage() {
 
                 <div className="mt-4 space-y-3">
                   {orders.length === 0 ? (
-                    <div className="rounded-2xl border border-dashed border-[rgba(212,175,120,0.25)] bg-[#0B0B0A]/40 p-6 text-center text-xs text-[#B8AA96]">
-                      <Package className="mx-auto h-7 w-7 text-[#d4a338]/60 mb-2" />
-                      <p className="font-semibold text-[#F5EBDD]">No customer orders yet</p>
-                      <p className="text-[11px] text-[#B8AA96] mt-0.5">When buyers place orders, they will appear here in real-time.</p>
+                    <div className="rounded-2xl border border-dashed border-[rgba(122,91,50,0.28)] bg-[#FAF6EF] p-6 text-center text-xs text-[#5C4D3C]">
+                      <Package className="mx-auto h-7 w-7 text-[#7A5B32]/60 mb-2" />
+                      <p className="font-semibold text-[#141210]">No customer orders yet</p>
+                      <p className="text-[11px] text-[#5C4D3C] mt-0.5">When buyers place orders, they will appear here in real-time.</p>
                     </div>
                   ) : (
                     orders.slice(0, 5).map((order: any) => (
                       <div
                         key={order.orderId}
                         onClick={() => setSelectedOrder(order)}
-                        className="flex cursor-pointer items-center justify-between rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] p-3 transition hover:bg-[#191713] hover:border-[rgba(212,175,120,0.45)]"
+                        className="flex cursor-pointer items-center justify-between rounded-2xl border border-[rgba(122,91,50,0.2)] bg-[#FAF6EF] p-3 transition hover:bg-[#EFE8DC] hover:border-[rgba(122,91,50,0.42)]"
                       >
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold text-[#F5EBDD]">{order.orderId}</span>
+                            <span className="font-mono text-xs font-bold text-[#141210]">{order.orderId}</span>
                             <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-bold text-emerald-800">
                               {order.status}
                             </span>
                           </div>
-                          <p className="mt-0.5 text-xs text-[#B8AA96]">
+                          <p className="mt-0.5 text-xs text-[#5C4D3C]">
                             {order.customer?.fullName || 'Customer'} • {order.items?.length || 1} item(s)
                           </p>
                         </div>
 
                         <div className="text-right">
-                          <span className="text-sm font-extrabold text-[#D4AF78]">₹{order.total?.toFixed(0)}</span>
-                          <p className="text-[10px] text-[#B8AA96]">{order.date}</p>
+                          <span className="text-sm font-extrabold text-[#7A5B32]">₹{order.total?.toFixed(0)}</span>
+                          <p className="text-[10px] text-[#5C4D3C]">{order.date}</p>
                         </div>
                       </div>
                     ))
@@ -916,12 +919,12 @@ export default function AdminPage() {
             {/* Filter Toolbar */}
             <div className="glass-card flex flex-col gap-4 p-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="relative flex-1 lg:max-w-md">
-                <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#D4AF78]" />
+                <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7A5B32]" />
                 <input
                   value={productSearch}
                   onChange={(e) => setProductSearch(e.target.value)}
                   placeholder="Search products by title, category, or specs..."
-                  className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] pl-10 pr-4 text-xs font-semibold text-[#F5EBDD] placeholder-[#B8AA96]/50 outline-none focus:border-[#D4AF78] shadow-sm"
+                  className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] pl-10 pr-4 text-xs font-semibold text-[#141210] placeholder-[#5C4D3C]/60 outline-none focus:border-[#8C6834] shadow-sm"
                 />
               </div>
 
@@ -933,7 +936,7 @@ export default function AdminPage() {
                     setProductDepartment(e.target.value)
                     setProductCategory('All')
                   }}
-                  className="h-10 w-full sm:w-auto rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs font-bold text-[#F5EBDD] outline-none shadow-xs"
+                  className="h-10 w-full sm:w-auto rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3 text-xs font-bold text-[#141210] outline-none shadow-xs"
                 >
                   <option value="All">All Departments</option>
                   <option value="aquarium">Living Aquatics</option>
@@ -944,7 +947,7 @@ export default function AdminPage() {
                 <select
                   value={productCategory}
                   onChange={(e) => setProductCategory(e.target.value)}
-                  className="h-10 w-full sm:w-auto rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs font-bold text-[#F5EBDD] outline-none shadow-xs"
+                  className="h-10 w-full sm:w-auto rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3 text-xs font-bold text-[#141210] outline-none shadow-xs"
                 >
                   <option value="All">All Categories</option>
                   {productDepartment !== 'crafts' &&
@@ -983,8 +986,8 @@ export default function AdminPage() {
 
             {/* Category-Wise Quick Filter Chips */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs -mx-2 px-2 sm:mx-0 sm:px-0">
-              <span className="text-[10px] font-extrabold text-[#D4AF78] uppercase tracking-wider shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#12110F] border border-[rgba(212,175,120,0.25)]">
-                <Tag className="h-3 w-3 text-[#D4AF78]" /> Filter:
+              <span className="text-[10px] font-extrabold text-[#7A5B32] uppercase tracking-wider shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#FAF6EF] border border-[rgba(122,91,50,0.22)]">
+                <Tag className="h-3 w-3 text-[#7A5B32]" /> Filter:
               </span>
               <button
                 type="button"
@@ -992,7 +995,7 @@ export default function AdminPage() {
                 className={`rounded-full px-3 py-1 font-bold whitespace-nowrap text-xs transition shrink-0 ${
                   productCategory === 'All'
                     ? 'bg-[#855A10] text-white shadow-xs'
-                    : 'bg-[#191713] border border-[rgba(212,175,120,0.25)] text-[#B8AA96] hover:bg-[#12110F]'
+                    : 'bg-[#FCF9F4] border border-[rgba(122,91,50,0.22)] text-[#5C4D3C] hover:bg-[#EFE8DC] hover:text-[#141210]'
                 }`}
               >
                 All ({products.length})
@@ -1013,13 +1016,13 @@ export default function AdminPage() {
                     className={`rounded-full px-3 py-1 font-bold whitespace-nowrap text-xs transition flex items-center gap-1.5 shrink-0 ${
                       isActive
                         ? 'bg-[#855A10] text-white shadow-xs'
-                        : 'bg-[#191713] border border-[rgba(212,175,120,0.25)] text-[#B8AA96] hover:bg-[#12110F]'
+                        : 'bg-[#FCF9F4] border border-[rgba(122,91,50,0.22)] text-[#5C4D3C] hover:bg-[#EFE8DC] hover:text-[#141210]'
                     }`}
                   >
                     <span>{cat}</span>
                     <span
                       className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                        isActive ? 'bg-[#0B0B0A]/30 text-[#0B0B0A]' : 'bg-[#0B0B0A] text-[#D4AF78] border border-[rgba(212,175,120,0.2)]'
+                        isActive ? 'bg-white/25 text-white' : 'bg-[#EFE8DC] text-[#7A5B32] border border-[rgba(122,91,50,0.2)]'
                       }`}
                     >
                       {count}
@@ -1032,9 +1035,9 @@ export default function AdminPage() {
             {/* Mobile Product Cards View (< md) */}
             <div className="space-y-3 md:hidden">
               {filteredProducts.length === 0 ? (
-                <div className="glass-card p-8 text-center text-xs text-[#B8AA96]">
-                  <Package className="mx-auto h-8 w-8 text-[#d4a338]/60 mb-2" />
-                  <p className="font-bold text-sm text-[#F5EBDD]">No matching products found</p>
+                <div className="glass-card p-8 text-center text-xs text-[#5C4D3C]">
+                  <Package className="mx-auto h-8 w-8 text-[#7A5B32]/60 mb-2" />
+                  <p className="font-bold text-sm text-[#141210]">No matching products found</p>
                   <p className="mt-1 text-[11px]">Try adjusting your search query or department filter.</p>
                 </div>
               ) : (
@@ -1043,7 +1046,7 @@ export default function AdminPage() {
                   return (
                     <div
                       key={p.id}
-                      className="glass-card p-3.5 space-y-2.5 rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] shadow-xs"
+                      className="glass-card p-3.5 space-y-2.5 rounded-2xl border border-[rgba(122,91,50,0.22)] bg-[#FCF9F4] shadow-xs"
                     >
                       <div className="flex items-start gap-3">
                         <img
@@ -1052,7 +1055,7 @@ export default function AdminPage() {
                           onError={(e) => {
                             e.currentTarget.src = fallbackCraftImage
                           }}
-                          className="h-16 w-16 rounded-xl object-cover border border-[#d4a338]/25 shrink-0"
+                          className="h-16 w-16 rounded-xl object-cover border border-[rgba(122,91,50,0.22)] shrink-0"
                         />
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-1.5">
@@ -1065,15 +1068,15 @@ export default function AdminPage() {
                             >
                               {isAqua ? 'Aquatics' : 'Craft'}
                             </span>
-                            <span className="text-[10px] font-bold text-[#D4AF78] truncate">
+                            <span className="text-[10px] font-bold text-[#7A5B32] truncate">
                               {p.category}
                             </span>
                           </div>
-                          <h4 className="font-bold text-xs text-[#F5EBDD] truncate mt-1">
+                          <h4 className="font-bold text-xs text-[#141210] truncate mt-1">
                             {p.title}
                           </h4>
                           <div className="flex items-center justify-between mt-1">
-                            <span className="font-extrabold text-sm text-[#D4AF78]">
+                            <span className="font-extrabold text-sm text-[#7A5B32]">
                               {p.price}
                             </span>
                             <span
@@ -1089,15 +1092,15 @@ export default function AdminPage() {
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between pt-2 border-t border-[#d4a338]/15 text-[11px]">
-                        <span className="text-[#B8AA96] font-medium">
+                      <div className="flex items-center justify-between pt-2 border-t border-[rgba(122,91,50,0.15)] text-[11px]">
+                        <span className="text-[#5C4D3C] font-medium">
                           ★ {p.rating ?? 4.9} ({p.reviews ?? 12})
                         </span>
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
                             onClick={() => openEditProductModal(p)}
-                            className="inline-flex items-center gap-1 rounded-lg border border-[rgba(212,175,120,0.25)] bg-[#191713] px-2.5 py-1 font-bold text-[#D4AF78] text-xs hover:bg-[#0B0B0A]"
+                            className="inline-flex items-center gap-1 rounded-lg border border-[rgba(122,91,50,0.24)] bg-[#EFE8DC] px-2.5 py-1 font-bold text-[#7A5B32] text-xs hover:bg-[#D4AF78] hover:text-[#141210]"
                           >
                             <Edit className="h-3 w-3" /> Edit
                           </button>
@@ -1108,7 +1111,7 @@ export default function AdminPage() {
                                 deleteProduct(p.id)
                               }
                             }}
-                            className="inline-flex items-center gap-1 rounded-lg border border-rose-500/30 bg-rose-950/20 px-2.5 py-1 font-bold text-rose-400 text-xs hover:bg-rose-900/40"
+                            className="inline-flex items-center gap-1 rounded-lg border border-rose-600/30 bg-rose-50 px-2.5 py-1 font-bold text-rose-700 text-xs hover:bg-rose-100"
                           >
                             <Trash2 className="h-3 w-3" /> Delete
                           </button>
@@ -1124,7 +1127,7 @@ export default function AdminPage() {
             <div className="hidden md:block glass-card overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="border-b border-[rgba(212,175,120,0.25)] bg-[#12110F] font-bold uppercase tracking-wider text-[#B8AA96]">
+                  <thead className="border-b border-[rgba(122,91,50,0.2)] bg-[#FAF6EF] font-bold uppercase tracking-wider text-[#5C4D3C]">
                     <tr>
                       <th className="p-4">Product</th>
                       <th className="p-4">Department</th>
@@ -1135,11 +1138,11 @@ export default function AdminPage() {
                       <th className="p-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#d4a338]/15">
+                  <tbody className="divide-y divide-[rgba(122,91,50,0.14)]">
                     {filteredProducts.map((p: Product) => {
                       const isAqua = p.department === 'aquarium' || aquariumCategories.includes(p.category)
                       return (
-                        <tr key={p.id} className="transition hover:bg-[#12110F]/70">
+                        <tr key={p.id} className="transition hover:bg-[#FAF6EF]">
                           <td className="p-4">
                             <div className="flex items-center gap-3">
                               <img
@@ -1148,11 +1151,11 @@ export default function AdminPage() {
                                 onError={(e) => {
                                   e.currentTarget.src = fallbackCraftImage
                                 }}
-                                className="h-12 w-12 rounded-xl object-cover border border-[#d4a338]/25 shrink-0"
+                                className="h-12 w-12 rounded-xl object-cover border border-[rgba(122,91,50,0.22)] shrink-0"
                               />
                               <div>
-                                <p className="font-bold text-[#F5EBDD]">{p.title}</p>
-                                <p className="line-clamp-1 max-w-xs text-[11px] text-[#B8AA96]">
+                                <p className="font-bold text-[#141210]">{p.title}</p>
+                                <p className="line-clamp-1 max-w-xs text-[11px] text-[#5C4D3C]">
                                   {p.description}
                                 </p>
                               </div>
@@ -1170,15 +1173,15 @@ export default function AdminPage() {
                             </span>
                           </td>
                           <td className="p-4">
-                            <div className="font-semibold text-[#B8AA96]">{p.category}</div>
+                            <div className="font-semibold text-[#5C4D3C]">{p.category}</div>
                             {p.subCategory && p.subCategory !== p.category && (
-                              <div className="text-[10px] text-[#B8AA96] flex items-center gap-1 mt-0.5">
-                                <Tag className="h-2.5 w-2.5 text-[#b8860b]" />
+                              <div className="text-[10px] text-[#5C4D3C] flex items-center gap-1 mt-0.5">
+                                <Tag className="h-2.5 w-2.5 text-[#7A5B32]" />
                                 <span>{p.subCategory}</span>
                               </div>
                             )}
                           </td>
-                          <td className="p-4 text-sm font-extrabold text-[#D4AF78]">{p.price}</td>
+                          <td className="p-4 text-sm font-extrabold text-[#7A5B32]">{p.price}</td>
                           <td className="p-4">
                             <span
                               className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${
@@ -1190,7 +1193,7 @@ export default function AdminPage() {
                               {p.stock ?? 25} in stock
                             </span>
                           </td>
-                          <td className="p-4 font-bold text-[#F5EBDD]">
+                          <td className="p-4 font-bold text-[#141210]">
                             {p.rating ?? 4.9} ({p.reviews ?? 12} reviews)
                           </td>
                           <td className="p-4 text-right">
@@ -1199,7 +1202,7 @@ export default function AdminPage() {
                                 type="button"
                                 onClick={() => openEditProductModal(p)}
                                 title="Edit product"
-                                className="grid h-8 w-8 place-items-center rounded-lg border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] text-[#D4AF78] transition hover:bg-[#12110F] hover:border-[rgba(212,175,120,0.5)] shadow-sm"
+                                className="grid h-8 w-8 place-items-center rounded-lg border border-[rgba(122,91,50,0.24)] bg-[#EFE8DC] text-[#7A5B32] transition hover:bg-[#D4AF78] hover:text-[#141210] shadow-sm"
                               >
                                 <Edit className="h-3.5 w-3.5" />
                               </button>
@@ -1211,7 +1214,7 @@ export default function AdminPage() {
                                   }
                                 }}
                                 title="Delete product"
-                                className="grid h-8 w-8 place-items-center rounded-lg border border-rose-500/30 bg-rose-950/30 text-rose-400 transition hover:bg-rose-900/50 shadow-sm"
+                                className="grid h-8 w-8 place-items-center rounded-lg border border-rose-600/30 bg-rose-50 text-rose-700 transition hover:bg-rose-100 shadow-sm"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
                               </button>
@@ -1233,16 +1236,16 @@ export default function AdminPage() {
         {activeTab === 'branding' && (
           <div className="space-y-6">
             {/* Top Bar with Live Store Link */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] p-4 sm:p-5 shadow-xs">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl border border-[rgba(122,91,50,0.22)] bg-[#FCF9F4] p-4 sm:p-5 shadow-xs">
               <div>
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(212,175,120,0.25)] bg-[#191713] px-3 py-1 text-xs font-bold text-[#D4AF78] shadow-xs">
-                  <Palette className="h-3.5 w-3.5 text-[#D4AF78]" />
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(122,91,50,0.22)] bg-[#EFE8DC] px-3 py-1 text-xs font-bold text-[#7A5B32] shadow-xs">
+                  <Palette className="h-3.5 w-3.5 text-[#7A5B32]" />
                   <span>Real-Time Brand System</span>
                 </div>
-                <h3 className="mt-2 font-serif text-xl sm:text-2xl font-bold text-[#F5EBDD]">
+                <h3 className="mt-2 font-tagline text-xl sm:text-2xl font-bold text-[#141210]">
                   Store Branding &amp; Identity Studio
                 </h3>
-                <p className="mt-1 text-xs text-[#B8AA96] max-w-2xl leading-relaxed">
+                <p className="mt-1 text-xs text-[#5C4D3C] max-w-2xl leading-relaxed">
                   Categorized studio settings. Configure brand identity, logos, top ticker ribbons, and WhatsApp routing. All edits reflect in the live device simulator.
                 </p>
               </div>
@@ -1251,7 +1254,7 @@ export default function AdminPage() {
                 <Link
                   href="/"
                   target="_blank"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#191713] px-3.5 py-2 text-xs font-bold text-[#D4AF78] hover:bg-[#0B0B0A] hover:border-[#D4AF78] transition shadow-xs shrink-0 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#FAF6EF] px-3.5 py-2 text-xs font-bold text-[#7A5B32] hover:bg-[#EFE8DC] hover:border-[#8C6834] transition shadow-xs shrink-0 cursor-pointer"
                 >
                   <span>View Live Store</span>
                   <ExternalLink className="h-3.5 w-3.5" />
@@ -1299,16 +1302,16 @@ export default function AdminPage() {
                     onClick={() => setBrandingSubTab(tab.id as any)}
                     className={`group relative p-3 sm:p-3.5 rounded-2xl border text-left transition flex flex-col justify-between cursor-pointer ${
                       isActive
-                        ? 'border-[#D4AF37] bg-gradient-to-br from-white via-[#FFFDF8] to-[#FBF4E4] ring-2 ring-[#D4AF37]/40 shadow-sm'
-                        : 'border-[rgba(212,175,120,0.25)] bg-white/80 hover:bg-[#12110F] hover:border-[#D4AF37]/60'
+                        ? 'border-[#B68D52] bg-gradient-to-br from-[#FCF9F4] via-[#FAF6EF] to-[#EFE8DC] ring-2 ring-[#B68D52]/35 shadow-sm'
+                        : 'border-[rgba(122,91,50,0.22)] bg-[#FCF9F4] hover:bg-[#FAF6EF] hover:border-[#B68D52]/60'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div
                         className={`grid h-8 w-8 place-items-center rounded-xl transition ${
                           isActive
-                            ? 'bg-[#141414] text-[#D4AF78] shadow-xs'
-                            : 'bg-[#F5EFE3] text-[#8C7A58] group-hover:text-[#D4AF78]'
+                            ? 'bg-[#141210] text-[#E5C18A] shadow-xs'
+                            : 'bg-[#EFE8DC] text-[#7A5B32] group-hover:text-[#141210]'
                         }`}
                       >
                         <tab.icon className="h-4 w-4" />
@@ -1319,14 +1322,14 @@ export default function AdminPage() {
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B8860B]" />
                         </span>
                       ) : (
-                        <span className="text-[10px] text-[#A6977D] font-mono">0{['identity', 'logo', 'announcement', 'contact'].indexOf(tab.id) + 1}</span>
+                        <span className="text-[10px] text-[#7A5B32] font-mono">0{['identity', 'logo', 'announcement', 'contact'].indexOf(tab.id) + 1}</span>
                       )}
                     </div>
                     <div>
-                      <p className={`text-xs sm:text-sm font-bold truncate ${isActive ? 'text-[#F5EBDD]' : 'text-[#B8AA96]'}`}>
+                      <p className={`text-xs sm:text-sm font-bold truncate ${isActive ? 'text-[#141210]' : 'text-[#5C4D3C]'}`}>
                         {tab.label}
                       </p>
-                      <p className="text-[11px] text-[#8C7E6A] mt-0.5 hidden sm:block truncate">
+                      <p className="text-[11px] text-[#5C4D3C]/80 mt-0.5 hidden sm:block truncate">
                         {tab.desc}
                       </p>
                     </div>
@@ -1343,14 +1346,14 @@ export default function AdminPage() {
                   {/* SUB-TAB 1: CORE STORE IDENTITY & CURRENCY */}
                   {brandingSubTab === 'identity' && (
                     <div className="space-y-5">
-                      <div className="flex items-center justify-between border-b border-[rgba(212,175,120,0.25)] pb-3">
+                      <div className="flex items-center justify-between border-b border-[rgba(122,91,50,0.2)] pb-3">
                         <div className="flex items-center gap-2">
-                          <Globe className="h-4 w-4 text-[#D4AF78]" />
-                          <h4 className="font-serif text-sm font-bold uppercase tracking-wider text-[#F5EBDD]">
+                          <Globe className="h-4 w-4 text-[#7A5B32]" />
+                          <h4 className="font-tagline text-sm font-bold uppercase tracking-wider text-[#141210]">
                             Store Identity &amp; Currency
                           </h4>
                         </div>
-                        <span className="rounded-full bg-[#191713] border border-[rgba(212,175,120,0.25)] px-2.5 py-0.5 text-[10px] font-bold text-[#D4AF78]">
+                        <span className="rounded-full bg-[#EFE8DC] border border-[rgba(122,91,50,0.22)] px-2.5 py-0.5 text-[10px] font-bold text-[#7A5B32]">
                           Tab 1 of 4
                         </span>
                       </div>
@@ -1358,8 +1361,8 @@ export default function AdminPage() {
                       <div className="space-y-4">
                         {/* Website Name */}
                         <div>
-                          <label className="block text-xs font-bold text-[#F5EBDD] mb-1.5">
-                            Website / Brand Name <span className="text-rose-500">*</span>
+                          <label className="block text-xs font-bold text-[#141210] mb-1.5">
+                            Website / Brand Name <span className="text-rose-600">*</span>
                           </label>
                           <input
                             required
@@ -1367,20 +1370,20 @@ export default function AdminPage() {
                             value={brandingForm.siteName}
                             onChange={(e) => setBrandingForm({ ...brandingForm, siteName: e.target.value })}
                             placeholder="e.g. NP Atelier"
-                            className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-sm font-bold text-[#F5EBDD] outline-none focus:border-[#c59325] focus:ring-2 focus:ring-[#D4AF37]/20 shadow-xs transition"
+                            className="h-11 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3.5 text-sm font-bold text-[#141210] outline-none focus:border-[#8C6834] focus:ring-2 focus:ring-[#D4AF78]/25 shadow-xs transition"
                           />
-                          <p className="mt-1 text-[11px] text-[#7A6F62]">
+                          <p className="mt-1 text-[11px] text-[#5C4D3C]">
                             Appears in navbar, header logo, customer invoices, emails, metadata, and browser title.
                           </p>
                           {/* Quick brand name chips */}
                           <div className="mt-2 flex flex-wrap gap-1.5 items-center">
-                            <span className="text-[10px] font-bold text-[#8C7A58] uppercase tracking-wider">Quick Suggestions:</span>
+                            <span className="text-[10px] font-bold text-[#7A5B32] uppercase tracking-wider">Quick Suggestions:</span>
                             {['NP Atelier', 'NP Studio', 'Atelier Aquatics', 'The Artisan Collective'].map((n) => (
                               <button
                                 key={n}
                                 type="button"
                                 onClick={() => setBrandingForm({ ...brandingForm, siteName: n })}
-                                className="rounded-lg border border-[rgba(212,175,120,0.25)] bg-[#191713] px-2 py-0.5 text-[10px] font-semibold text-[#B8AA96] hover:bg-[#0B0B0A] hover:border-[#D4AF78] hover:text-[#F5EBDD] transition cursor-pointer"
+                                className="rounded-lg border border-[rgba(122,91,50,0.22)] bg-[#FAF6EF] px-2 py-0.5 text-[10px] font-semibold text-[#5C4D3C] hover:bg-[#EFE8DC] hover:border-[#8C6834] hover:text-[#141210] transition cursor-pointer"
                               >
                                 {n}
                               </button>
@@ -1390,32 +1393,32 @@ export default function AdminPage() {
 
                         {/* Tagline / Subtitle */}
                         <div>
-                          <label className="block text-xs font-bold text-[#F5EBDD] mb-1.5">
+                          <label className="block text-xs font-bold text-[#141210] mb-1.5">
                             Website Tagline / Subtitle
                           </label>
                           <input
                             type="text"
                             value={brandingForm.tagline}
                             onChange={(e) => setBrandingForm({ ...brandingForm, tagline: e.target.value })}
-                            placeholder="e.g. Luxury Crafts &amp; Exotic Aquatics"
-                            className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-xs sm:text-sm text-[#F5EBDD] outline-none focus:border-[#c59325] focus:ring-2 focus:ring-[#D4AF37]/20 shadow-xs transition"
+                            placeholder="e.g. Where elegance is handcrafted"
+                            className="h-11 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3.5 text-xs sm:text-sm text-[#141210] outline-none focus:border-[#8C6834] focus:ring-2 focus:ring-[#D4AF78]/25 shadow-xs transition"
                           />
-                          <p className="mt-1 text-[11px] text-[#7A6F62]">
+                          <p className="mt-1 text-[11px] text-[#5C4D3C]">
                             Displays beneath the brand logo across hero sections, search headers, and footer cards.
                           </p>
                           {/* Quick tagline chips */}
                           <div className="mt-2 flex flex-wrap gap-1.5 items-center">
-                            <span className="text-[10px] font-bold text-[#8C7A58] uppercase tracking-wider">Presets:</span>
+                            <span className="text-[10px] font-bold text-[#7A5B32] uppercase tracking-wider">Presets:</span>
                             {[
+                              'Where elegance is handcrafted',
                               'Luxury Crafts & Exotic Aquatics',
                               'Handcrafted Art & Living Waters',
-                              'Bespoke Resin Art & Marine Life',
                             ].map((tg) => (
                               <button
                                 key={tg}
                                 type="button"
                                 onClick={() => setBrandingForm({ ...brandingForm, tagline: tg })}
-                                className="rounded-lg border border-[rgba(212,175,120,0.25)] bg-[#191713] px-2 py-0.5 text-[10px] font-semibold text-[#B8AA96] hover:bg-[#0B0B0A] hover:border-[#D4AF78] hover:text-[#F5EBDD] transition cursor-pointer"
+                                className="rounded-lg border border-[rgba(122,91,50,0.22)] bg-[#FAF6EF] px-2 py-0.5 text-[10px] font-semibold text-[#5C4D3C] hover:bg-[#EFE8DC] hover:border-[#8C6834] hover:text-[#141210] transition cursor-pointer"
                               >
                                 {tg}
                               </button>
@@ -1425,13 +1428,13 @@ export default function AdminPage() {
 
                         {/* Store Currency */}
                         <div>
-                          <label className="block text-xs font-bold text-[#F5EBDD] mb-1.5">
+                          <label className="block text-xs font-bold text-[#141210] mb-1.5">
                             Store Primary Currency
                           </label>
                           <select
                             value={brandingForm.currency || '₹'}
                             onChange={(e) => setBrandingForm({ ...brandingForm, currency: e.target.value })}
-                            className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-xs sm:text-sm font-bold text-[#F5EBDD] outline-none focus:border-[#c59325] shadow-xs cursor-pointer"
+                            className="h-11 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3.5 text-xs sm:text-sm font-bold text-[#141210] outline-none focus:border-[#8C6834] shadow-xs cursor-pointer"
                           >
                             <option value="₹">₹ INR — Indian Rupee (Default)</option>
                             <option value="$">$ USD — US Dollar</option>
@@ -1440,7 +1443,7 @@ export default function AdminPage() {
                             <option value="AED">AED — United Arab Emirates Dirham</option>
                             <option value="¥">¥ JPY — Japanese Yen</option>
                           </select>
-                          <p className="mt-1 text-[11px] text-[#7A6F62]">
+                          <p className="mt-1 text-[11px] text-[#5C4D3C]">
                             Applied automatically across all prices, cart summaries, and customer invoices.
                           </p>
                         </div>
@@ -1451,21 +1454,21 @@ export default function AdminPage() {
                   {/* SUB-TAB 2: LOGO & BRANDMARK */}
                   {brandingSubTab === 'logo' && (
                     <div className="space-y-5">
-                      <div className="flex items-center justify-between border-b border-[rgba(212,175,120,0.25)] pb-3">
+                      <div className="flex items-center justify-between border-b border-[rgba(122,91,50,0.2)] pb-3">
                         <div className="flex items-center gap-2">
-                          <Sparkles className="h-4 w-4 text-[#D4AF78]" />
-                          <h4 className="font-serif text-sm font-bold uppercase tracking-wider text-[#F5EBDD]">
+                          <Sparkles className="h-4 w-4 text-[#7A5B32]" />
+                          <h4 className="font-tagline text-sm font-bold uppercase tracking-wider text-[#141210]">
                             Logo &amp; Brandmark Studio
                           </h4>
                         </div>
-                        <span className="rounded-full bg-[#191713] border border-[rgba(212,175,120,0.25)] px-2.5 py-0.5 text-[10px] font-bold text-[#D4AF78]">
+                        <span className="rounded-full bg-[#EFE8DC] border border-[rgba(122,91,50,0.22)] px-2.5 py-0.5 text-[10px] font-bold text-[#7A5B32]">
                           Tab 2 of 4
                         </span>
                       </div>
 
                       {/* Presentation Format Picker */}
                       <div>
-                        <label className="block text-xs font-bold text-[#F5EBDD] mb-2">
+                        <label className="block text-xs font-bold text-[#141210] mb-2">
                           Logo Presentation Format
                         </label>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -1497,21 +1500,21 @@ export default function AdminPage() {
                                 onClick={() => setBrandingForm({ ...brandingForm, logoType: mode.id as any })}
                                 className={`p-3 rounded-2xl border text-left transition flex flex-col justify-between cursor-pointer ${
                                   isSelected
-                                    ? 'border-[#D4AF37] bg-gradient-to-b from-[#FFFDF8] via-[#FAF3DE] to-[#F5E6BF] ring-2 ring-[#D4AF37]/50 shadow-sm'
-                                    : 'border-[rgba(212,175,120,0.25)] bg-[#191713] hover:border-[#D4AF37] hover:bg-[#12110F]'
+                                    ? 'border-[#B68D52] bg-gradient-to-b from-[#FCF9F4] via-[#FAF3DE] to-[#EFE4C8] ring-2 ring-[#B68D52]/40 shadow-sm'
+                                    : 'border-[rgba(122,91,50,0.22)] bg-[#FAF6EF] hover:border-[#B68D52] hover:bg-[#EFE8DC]'
                                 }`}
                               >
                                 <div className="flex items-center justify-between mb-1.5">
                                   <mode.icon
-                                    className={`h-4 w-4 ${isSelected ? 'text-[#D4AF78]' : 'text-[#B8AA96]'}`}
+                                    className={`h-4 w-4 ${isSelected ? 'text-[#7A5B32]' : 'text-[#5C4D3C]'}`}
                                   />
                                   {isSelected && (
-                                    <span className="h-2 w-2 rounded-full bg-[#B8860B]" />
+                                    <span className="h-2 w-2 rounded-full bg-[#7A5B32]" />
                                   )}
                                 </div>
                                 <div>
-                                  <p className="text-xs font-bold text-[#F5EBDD]">{mode.label}</p>
-                                  <p className="text-[10px] text-[#6E6352] mt-0.5 leading-snug">{mode.desc}</p>
+                                  <p className="text-xs font-bold text-[#141210]">{mode.label}</p>
+                                  <p className="text-[10px] text-[#5C4D3C] mt-0.5 leading-snug">{mode.desc}</p>
                                 </div>
                               </button>
                             )
@@ -1521,20 +1524,20 @@ export default function AdminPage() {
 
                       {/* Monogram Symbol Editor */}
                       {(brandingForm.logoType === 'icon' || brandingForm.logoType === 'both') && (
-                        <div className="rounded-2xl border border-[#D4AF37]/40 bg-gradient-to-b from-[#FFFDF9] to-[#FAF5E8] p-4 space-y-3">
+                        <div className="rounded-2xl border border-[#B68D52]/40 bg-gradient-to-b from-[#FCF9F4] to-[#EFE8DC] p-4 space-y-3">
                           <div className="flex items-center justify-between">
-                            <label className="text-xs font-bold text-[#F5EBDD]">
+                            <label className="text-xs font-bold text-[#141210]">
                               Emblem Monogram Symbol (Up to 5 characters)
                             </label>
-                            <span className="text-[10px] font-bold text-[#D4AF78] uppercase tracking-wider">
+                            <span className="text-[10px] font-bold text-[#7A5B32] uppercase tracking-wider">
                               Live Medallion
                             </span>
                           </div>
 
                           <div className="flex items-center gap-3">
                             {/* Live Medallion Badge */}
-                            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-[#1C170F] via-[#120F0A] to-[#0A0805] text-[#D4AF78] border-2 border-[#D4AF37] font-serif text-base font-extrabold shadow-md shrink-0">
-                              {brandingForm.logoText || 'NP'}
+                            <div className="grid h-12 w-12 place-items-center rounded-full bg-[#F5F0E8] text-[#141210] border-2 border-[#B68D52] font-tagline text-base font-extrabold shadow-md shrink-0">
+                              {brandingForm.logoText === 'NP' || !brandingForm.logoText ? <NpMonogramSvg className="h-5 w-auto text-[#141210]" /> : brandingForm.logoText}
                             </div>
 
                             {/* Symbol Input */}
@@ -1545,14 +1548,14 @@ export default function AdminPage() {
                                 value={brandingForm.logoText}
                                 onChange={(e) => setBrandingForm({ ...brandingForm, logoText: e.target.value })}
                                 placeholder="NP"
-                                className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-center sm:text-left text-base font-bold text-[#F5EBDD] outline-none focus:border-[#c59325] focus:ring-2 focus:ring-[#D4AF37]/20 shadow-xs"
+                                className="h-11 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#FCF9F4] px-3.5 text-center sm:text-left text-base font-bold text-[#141210] outline-none focus:border-[#8C6834] focus:ring-2 focus:ring-[#D4AF78]/25 shadow-xs"
                               />
                             </div>
                           </div>
 
                           {/* Preset Chips */}
                           <div>
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-[#8C7A58] mb-1.5">
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-[#7A5B32] mb-1.5">
                               Curated Brand Monograms:
                             </p>
                             <div className="flex flex-wrap items-center gap-2">
@@ -1565,8 +1568,8 @@ export default function AdminPage() {
                                     onClick={() => setBrandingForm({ ...brandingForm, logoText: sym })}
                                     className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition shadow-xs cursor-pointer ${
                                       isActive
-                                        ? 'border-[#D4AF37] bg-[#141414] text-[#D4AF78] shadow-sm scale-105'
-                                        : 'border-[rgba(212,175,120,0.25)] bg-[#191713] text-[#B8AA96] hover:border-[#D4AF37] hover:bg-[#12110F]'
+                                        ? 'border-[#8C6834] bg-[#141210] text-[#E5C18A] shadow-sm scale-105'
+                                        : 'border-[rgba(122,91,50,0.22)] bg-[#FCF9F4] text-[#5C4D3C] hover:border-[#8C6834] hover:bg-[#EFE8DC]'
                                     }`}
                                   >
                                     {sym}
@@ -1580,19 +1583,19 @@ export default function AdminPage() {
 
                       {/* Logo Image Upload & URL */}
                       {(brandingForm.logoType === 'image' || brandingForm.logoType === 'both') && (
-                        <div className="space-y-3 rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A]/70 p-4">
-                          <label className="block text-xs font-bold text-[#F5EBDD]">
+                        <div className="space-y-3 rounded-2xl border border-[rgba(122,91,50,0.22)] bg-[#FAF6EF] p-4">
+                          <label className="block text-xs font-bold text-[#141210]">
                             Graphic Brandmark Image
                           </label>
 
                           {/* File Upload Button + Preview */}
                           <div className="flex items-center gap-3">
                             {brandingForm.logoImageUrl ? (
-                              <div className="relative h-14 w-14 shrink-0 rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] p-1 shadow-xs">
+                              <div className="relative h-14 w-14 shrink-0 rounded-full overflow-hidden border border-[#B68D52]/50 bg-[#F5F0E8] shadow-xs">
                                 <img
                                   src={brandingForm.logoImageUrl}
                                   alt="Logo Preview"
-                                  className="h-full w-full object-contain"
+                                  className="h-full w-full rounded-full object-cover object-center scale-[1.16]"
                                 />
                               </div>
                             ) : null}
@@ -1614,15 +1617,15 @@ export default function AdminPage() {
                                 <Upload className="h-3.5 w-3.5" />
                                 <span>{isUploadingLogo ? 'Uploading Logo...' : 'Upload Brand Logo'}</span>
                               </button>
-                              <p className="text-[10px] text-[#B8AA96]">
-                                PNG, SVG, JPG, WebP transparent backgrounds recommended.
+                              <p className="text-[10px] text-[#5C4D3C]">
+                                PNG, SVG, JPG, WebP transparent or circular medallion formats supported.
                               </p>
                             </div>
                           </div>
 
                           {/* Direct Logo Image URL Input */}
                           <div>
-                            <span className="text-[11px] font-bold text-[#7A6F62] block mb-1">
+                            <span className="text-[11px] font-bold text-[#5C4D3C] block mb-1">
                               Or enter direct image URL:
                             </span>
                             <input
@@ -1630,7 +1633,7 @@ export default function AdminPage() {
                               value={brandingForm.logoImageUrl}
                               onChange={(e) => setBrandingForm({ ...brandingForm, logoImageUrl: e.target.value })}
                               placeholder="https://example.com/brand-logo.png"
-                              className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs text-[#F5EBDD] outline-none focus:border-[#c59325]"
+                              className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3 text-xs text-[#141210] outline-none focus:border-[#8C6834]"
                             />
                           </div>
                         </div>
@@ -1641,21 +1644,21 @@ export default function AdminPage() {
                   {/* SUB-TAB 3: ANNOUNCEMENT RIBBON */}
                   {brandingSubTab === 'announcement' && (
                     <div className="space-y-5">
-                      <div className="flex items-center justify-between border-b border-[rgba(212,175,120,0.25)] pb-3">
+                      <div className="flex items-center justify-between border-b border-[rgba(122,91,50,0.2)] pb-3">
                         <div className="flex items-center gap-2">
-                          <Tag className="h-4 w-4 text-[#D4AF78]" />
-                          <h4 className="font-serif text-sm font-bold uppercase tracking-wider text-[#F5EBDD]">
+                          <Tag className="h-4 w-4 text-[#7A5B32]" />
+                          <h4 className="font-tagline text-sm font-bold uppercase tracking-wider text-[#141210]">
                             Top Announcement Ribbon
                           </h4>
                         </div>
-                        <span className="rounded-full bg-[#191713] border border-[rgba(212,175,120,0.25)] px-2.5 py-0.5 text-[10px] font-bold text-[#D4AF78]">
+                        <span className="rounded-full bg-[#EFE8DC] border border-[rgba(122,91,50,0.22)] px-2.5 py-0.5 text-[10px] font-bold text-[#7A5B32]">
                           Tab 3 of 4
                         </span>
                       </div>
 
                       <div className="space-y-3.5">
                         <div>
-                          <label className="block text-xs font-bold text-[#F5EBDD] mb-1.5">
+                          <label className="block text-xs font-bold text-[#141210] mb-1.5">
                             Announcement Bar Message
                           </label>
                           <textarea
@@ -1663,16 +1666,16 @@ export default function AdminPage() {
                             value={brandingForm.announcementText}
                             onChange={(e) => setBrandingForm({ ...brandingForm, announcementText: e.target.value })}
                             placeholder="e.g. Handcrafted Artisan Drops &amp; Exotic Aquatics Live • Code ATELIER10 for 10% off"
-                            className="w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] p-3.5 text-xs text-[#F5EBDD] outline-none focus:border-[#c59325] focus:ring-2 focus:ring-[#D4AF37]/20 shadow-xs leading-relaxed"
+                            className="w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] p-3.5 text-xs text-[#141210] outline-none focus:border-[#8C6834] focus:ring-2 focus:ring-[#D4AF78]/25 shadow-xs leading-relaxed"
                           />
-                          <p className="mt-1 text-[11px] text-[#7A6F62]">
+                          <p className="mt-1 text-[11px] text-[#5C4D3C]">
                             Pinned at the very top of all storefront pages to announce sales, free shipping, or special drops.
                           </p>
                         </div>
 
                         {/* Curated Presets */}
-                        <div className="space-y-2 pt-2 border-t border-[rgba(212,175,120,0.25)]">
-                          <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8C7A58]">
+                        <div className="space-y-2 pt-2 border-t border-[rgba(122,91,50,0.2)]">
+                          <label className="block text-[11px] font-bold uppercase tracking-wider text-[#7A5B32]">
                             Curated Announcement Presets (Click to apply):
                           </label>
                           <div className="space-y-1.5">
@@ -1687,10 +1690,10 @@ export default function AdminPage() {
                                 key={idx}
                                 type="button"
                                 onClick={() => setBrandingForm({ ...brandingForm, announcementText: txt })}
-                                className="w-full text-left rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#191713]/80 p-2.5 text-xs text-[#B8AA96] hover:bg-[#12110F] hover:border-[#D4AF37] hover:text-[#F5EBDD] transition shadow-xs flex items-center justify-between group cursor-pointer"
+                                className="w-full text-left rounded-xl border border-[rgba(122,91,50,0.2)] bg-[#FAF6EF] p-2.5 text-xs text-[#5C4D3C] hover:bg-[#EFE8DC] hover:border-[#B68D52] hover:text-[#141210] transition shadow-xs flex items-center justify-between group cursor-pointer"
                               >
                                 <span className="truncate pr-2 font-medium">{txt}</span>
-                                <span className="text-[10px] font-bold text-[#D4AF78] opacity-0 group-hover:opacity-100 transition shrink-0">
+                                <span className="text-[10px] font-bold text-[#7A5B32] opacity-0 group-hover:opacity-100 transition shrink-0">
                                   Apply ↗
                                 </span>
                               </button>
@@ -1704,22 +1707,22 @@ export default function AdminPage() {
                   {/* SUB-TAB 4: SUPPORT CHANNELS & WHATSAPP */}
                   {brandingSubTab === 'contact' && (
                     <div className="space-y-5">
-                      <div className="flex items-center justify-between border-b border-[rgba(212,175,120,0.25)] pb-3">
+                      <div className="flex items-center justify-between border-b border-[rgba(122,91,50,0.2)] pb-3">
                         <div className="flex items-center gap-2">
-                          <Phone className="h-4 w-4 text-[#D4AF78]" />
-                          <h4 className="font-serif text-sm font-bold uppercase tracking-wider text-[#F5EBDD]">
+                          <Phone className="h-4 w-4 text-[#7A5B32]" />
+                          <h4 className="font-tagline text-sm font-bold uppercase tracking-wider text-[#141210]">
                             Support Channels &amp; 1-Click WhatsApp
                           </h4>
                         </div>
-                        <span className="rounded-full bg-[#191713] border border-[rgba(212,175,120,0.25)] px-2.5 py-0.5 text-[10px] font-bold text-[#D4AF78]">
+                        <span className="rounded-full bg-[#EFE8DC] border border-[rgba(122,91,50,0.22)] px-2.5 py-0.5 text-[10px] font-bold text-[#7A5B32]">
                           Tab 4 of 4
                         </span>
                       </div>
 
                       <div className="space-y-4">
                         <div>
-                          <label className="block text-xs font-bold text-[#F5EBDD] mb-1.5 flex items-center gap-1.5">
-                            <Mail className="h-3.5 w-3.5 text-[#D4AF78]" />
+                          <label className="block text-xs font-bold text-[#141210] mb-1.5 flex items-center gap-1.5">
+                            <Mail className="h-3.5 w-3.5 text-[#7A5B32]" />
                             <span>Official Customer Support Email</span>
                           </label>
                           <input
@@ -1727,16 +1730,16 @@ export default function AdminPage() {
                             value={brandingForm.contactEmail}
                             onChange={(e) => setBrandingForm({ ...brandingForm, contactEmail: e.target.value })}
                             placeholder="npatelierindia@gmail.com"
-                            className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-xs font-medium text-[#F5EBDD] outline-none focus:border-[#c59325]"
+                            className="h-11 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3.5 text-xs font-medium text-[#141210] outline-none focus:border-[#8C6834]"
                           />
-                          <p className="mt-1 text-[11px] text-[#7A6F62]">
+                          <p className="mt-1 text-[11px] text-[#5C4D3C]">
                             Displayed in the storefront footer, customer invoices, and contact modals.
                           </p>
                         </div>
 
                         <div>
-                          <label className="block text-xs font-bold text-[#F5EBDD] mb-1.5 flex items-center gap-1.5">
-                            <MessageCircle className="h-3.5 w-3.5 text-emerald-600" />
+                          <label className="block text-xs font-bold text-[#141210] mb-1.5 flex items-center gap-1.5">
+                            <MessageCircle className="h-3.5 w-3.5 text-emerald-700" />
                             <span>WhatsApp &amp; Phone Support Line</span>
                           </label>
                           <input
@@ -1744,17 +1747,17 @@ export default function AdminPage() {
                             value={brandingForm.contactPhone}
                             onChange={(e) => setBrandingForm({ ...brandingForm, contactPhone: e.target.value })}
                             placeholder="+91 93412 97124"
-                            className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-xs font-bold text-[#F5EBDD] outline-none focus:border-[#c59325]"
+                            className="h-11 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3.5 text-xs font-bold text-[#141210] outline-none focus:border-[#8C6834]"
                           />
-                          <p className="mt-1 text-[11px] text-[#7A6F62]">
+                          <p className="mt-1 text-[11px] text-[#5C4D3C]">
                             Powers the instant &quot;Order on WhatsApp&quot; button across all catalog cards.
                           </p>
                         </div>
 
                         {/* WhatsApp Ordering Direct Simulation Note */}
-                        <div className="rounded-2xl border border-emerald-300/60 bg-gradient-to-br from-emerald-50/70 to-emerald-100/40 p-3.5 space-y-2">
+                        <div className="rounded-2xl border border-emerald-600/30 bg-emerald-50 p-3.5 space-y-2">
                           <div className="flex items-center gap-2 text-xs font-bold text-emerald-900">
-                            <MessageCircle className="h-4 w-4 text-emerald-600 shrink-0" />
+                            <MessageCircle className="h-4 w-4 text-emerald-700 shrink-0" />
                             <span>Instant WhatsApp Catalog Order Routing</span>
                           </div>
                           <p className="text-[11px] text-emerald-800 leading-relaxed">
@@ -1766,7 +1769,7 @@ export default function AdminPage() {
                   )}
 
                   {/* Sub-tab Progressive Navigation Buttons */}
-                  <div className="flex items-center justify-between pt-4 border-t border-[rgba(212,175,120,0.25)]">
+                  <div className="flex items-center justify-between pt-4 border-t border-[rgba(122,91,50,0.2)]">
                     <button
                       type="button"
                       disabled={brandingSubTab === 'identity'}
@@ -1780,7 +1783,7 @@ export default function AdminPage() {
                         const idx = tabs.indexOf(brandingSubTab)
                         if (idx > 0) setBrandingSubTab(tabs[idx - 1])
                       }}
-                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[rgba(212,175,120,0.25)] text-xs font-bold text-[#B8AA96] hover:bg-[#12110F] disabled:opacity-30 disabled:pointer-events-none transition cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[rgba(122,91,50,0.22)] text-xs font-bold text-[#5C4D3C] hover:bg-[#EFE8DC] hover:text-[#141210] disabled:opacity-30 disabled:pointer-events-none transition cursor-pointer"
                     >
                       <ChevronLeft className="h-3.5 w-3.5" />
                       <span>Previous Tab</span>
@@ -1799,7 +1802,7 @@ export default function AdminPage() {
                         const idx = tabs.indexOf(brandingSubTab)
                         if (idx < tabs.length - 1) setBrandingSubTab(tabs[idx + 1])
                       }}
-                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[rgba(212,175,120,0.25)] text-xs font-bold text-[#B8AA96] hover:bg-[#12110F] disabled:opacity-30 disabled:pointer-events-none transition cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[rgba(122,91,50,0.22)] text-xs font-bold text-[#5C4D3C] hover:bg-[#EFE8DC] hover:text-[#141210] disabled:opacity-30 disabled:pointer-events-none transition cursor-pointer"
                     >
                       <span>Next Tab</span>
                       <ChevronRight className="h-3.5 w-3.5" />
@@ -1807,11 +1810,11 @@ export default function AdminPage() {
                   </div>
 
                   {/* Primary Submit & Reset Actions */}
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-3 border-t border-[#d4a338]/30">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-3 border-t border-[rgba(122,91,50,0.22)]">
                     <button
                       type="submit"
                       disabled={isSavingBranding}
-                      className="btn-gold flex-1 py-3 text-xs font-bold justify-center shadow-[0_6px_20px_rgba(212,175,55,0.35)] cursor-pointer"
+                      className="btn-gold flex-1 py-3 text-xs font-bold justify-center shadow-[0_6px_20px_rgba(182,141,82,0.28)] cursor-pointer"
                     >
                       <Save className="h-4 w-4" />
                       <span>{isSavingBranding ? 'Saving Changes...' : 'Save Branding Settings'}</span>
@@ -1820,7 +1823,7 @@ export default function AdminPage() {
                     <button
                       type="button"
                       onClick={handleResetBranding}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-4 py-2.5 text-xs font-bold text-[#B8AA96] hover:bg-[#12110F] hover:text-[#F5EBDD] transition cursor-pointer"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[rgba(122,91,50,0.22)] bg-[#FAF6EF] px-4 py-2.5 text-xs font-bold text-[#5C4D3C] hover:bg-[#EFE8DC] hover:text-[#141210] transition cursor-pointer"
                     >
                       <RefreshCw className="h-3.5 w-3.5" />
                       <span>Reset to Defaults</span>
@@ -1832,24 +1835,24 @@ export default function AdminPage() {
               {/* Right Column: Live Device Preview Switcher (Desktop & Mobile) */}
               <div className="space-y-4 lg:sticky lg:top-24">
                 {/* Device Switcher Header Card */}
-                <div className="flex items-center justify-between rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#191713] p-2.5 shadow-xs">
+                <div className="flex items-center justify-between rounded-2xl border border-[rgba(122,91,50,0.22)] bg-[#FCF9F4] p-2.5 shadow-xs">
                   <div className="flex items-center gap-2 pl-2">
                     <span className="flex h-2 w-2 relative">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                     </span>
-                    <span className="text-xs font-bold text-[#F5EBDD]">Live Preview</span>
+                    <span className="text-xs font-bold text-[#141210]">Live Preview</span>
                   </div>
 
                   {/* Desktop vs Mobile Toggle Buttons */}
-                  <div className="flex items-center gap-1 rounded-xl bg-[#0B0B0A] p-1 border border-[rgba(212,175,120,0.2)]">
+                  <div className="flex items-center gap-1 rounded-xl bg-[#EFE8DC] p-1 border border-[rgba(122,91,50,0.2)]">
                     <button
                       type="button"
                       onClick={() => setPreviewDevice('desktop')}
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
                         previewDevice === 'desktop'
-                          ? 'bg-[#141414] text-[#D4AF78] shadow-xs'
-                          : 'text-[#B8AA96] hover:text-[#F5EBDD]'
+                          ? 'bg-[#141210] text-[#E5C18A] shadow-xs'
+                          : 'text-[#5C4D3C] hover:text-[#141210]'
                       }`}
                     >
                       <Monitor className="h-3.5 w-3.5" />
@@ -1861,8 +1864,8 @@ export default function AdminPage() {
                       onClick={() => setPreviewDevice('mobile')}
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
                         previewDevice === 'mobile'
-                          ? 'bg-[#141414] text-[#D4AF78] shadow-xs'
-                          : 'text-[#B8AA96] hover:text-[#F5EBDD]'
+                          ? 'bg-[#141210] text-[#E5C18A] shadow-xs'
+                          : 'text-[#5C4D3C] hover:text-[#141210]'
                       }`}
                     >
                       <Smartphone className="h-3.5 w-3.5" />
@@ -1875,27 +1878,27 @@ export default function AdminPage() {
                 {/* VIEW 1: DESKTOP SIMULATOR */}
                 {/* ========================================================= */}
                 {previewDevice === 'desktop' && (
-                  <div className="rounded-2xl overflow-hidden border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] shadow-lg space-y-0 transition-all duration-300">
+                  <div className="rounded-2xl overflow-hidden border border-[rgba(122,91,50,0.25)] bg-[#F5F0E8] shadow-lg space-y-0 transition-all duration-300">
                     {/* Desktop Browser Chrome */}
-                    <div className="bg-[#12110F] px-3.5 py-2.5 border-b border-[rgba(212,175,120,0.25)] flex items-center justify-between">
+                    <div className="bg-[#EFE8DC] px-3.5 py-2.5 border-b border-[rgba(122,91,50,0.2)] flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="h-2.5 w-2.5 rounded-full bg-rose-400 inline-block" />
                         <span className="h-2.5 w-2.5 rounded-full bg-amber-400 inline-block" />
                         <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 inline-block" />
-                        <div className="ml-2 flex items-center gap-1.5 rounded-lg bg-[#0B0B0A] border border-[rgba(212,175,120,0.25)] px-2.5 py-0.5 text-[10px] text-[#B8AA96] font-mono">
-                          <span className="text-[#D4AF78]">🔒</span>
+                        <div className="ml-2 flex items-center gap-1.5 rounded-lg bg-[#FCF9F4] border border-[rgba(122,91,50,0.22)] px-2.5 py-0.5 text-[10px] text-[#5C4D3C] font-mono">
+                          <span className="text-[#7A5B32]">🔒</span>
                           <span>https://npatelier.in</span>
                         </div>
                       </div>
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-[#8C7A58]">
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-[#7A5B32]">
                         Desktop View
                       </span>
                     </div>
 
                     {/* Viewport Content */}
-                    <div className="p-3 sm:p-4 bg-[#FAF7F2] space-y-3.5">
+                    <div className="p-3 sm:p-4 bg-[#F5F0E8] space-y-3.5">
                       {/* 1. Desktop Simulated Top Ribbon */}
-                      <div className="rounded-xl bg-gradient-to-r from-[#17130C] via-[#2A2214] to-[#17130C] border border-[#D4AF37]/50 p-2 text-center text-[10px] font-bold text-[#D4AF78] flex items-center justify-center gap-1.5 shadow-xs">
+                      <div className="rounded-xl bg-[#141210] border border-[#B68D52]/50 p-2 text-center text-[10px] font-bold text-[#E5C18A] flex items-center justify-center gap-1.5 shadow-xs">
                         <Sparkles className="h-3 w-3 text-[#D4AF78] shrink-0" />
                         <span className="truncate">
                           {brandingForm.announcementText || 'Handcrafted Artisan Drops & Exotic Aquatics Live'}
@@ -1903,51 +1906,53 @@ export default function AdminPage() {
                       </div>
 
                       {/* 2. Desktop Navigation Header */}
-                      <div className="rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#191713] p-3 sm:p-3.5 shadow-sm space-y-2">
+                      <div className="rounded-2xl border border-[rgba(122,91,50,0.22)] bg-[#FCF9F4] p-3 sm:p-3.5 shadow-sm space-y-2">
                         <div className="flex items-center justify-between gap-2">
                           {/* Brand Logo & Title */}
                           <div className="flex items-center gap-2 min-w-0 flex-1">
                             {brandingForm.logoImageUrl &&
                             (brandingForm.logoType === 'image' || brandingForm.logoType === 'both') ? (
-                              <img
-                                src={brandingForm.logoImageUrl}
-                                alt="Logo"
-                                className="h-8 w-auto max-w-[65px] rounded-lg object-contain border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] p-0.5 shadow-xs shrink-0"
-                              />
+                              <div className="h-8 w-8 rounded-full overflow-hidden border border-[#B68D52]/50 bg-[#F5F0E8] shadow-xs shrink-0">
+                                <img
+                                  src={brandingForm.logoImageUrl}
+                                  alt="Logo"
+                                  className="h-full w-full rounded-full object-cover object-center scale-[1.16]"
+                                />
+                              </div>
                             ) : null}
 
                             {(!brandingForm.logoImageUrl ||
                               brandingForm.logoType === 'icon' ||
                               brandingForm.logoType === 'both') && (
-                              <span className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-[#1C170F] to-[#0A0805] text-[#D4AF78] border border-[#D4AF37]/80 font-serif font-extrabold text-xs shadow-xs shrink-0">
-                                {brandingForm.logoText || 'NP'}
+                              <span className="grid h-8 w-8 place-items-center rounded-full bg-[#FCF9F4] text-[#141210] border border-[#B68D52]/60 font-tagline font-bold text-xs shadow-xs shrink-0">
+                                {brandingForm.logoText === 'NP' || !brandingForm.logoText ? <NpMonogramSvg className="h-4 w-auto text-[#141210]" /> : brandingForm.logoText}
                               </span>
                             )}
 
                             <div className="min-w-0">
-                              <p className="font-serif text-sm font-bold text-[#F5EBDD] leading-tight truncate">
-                                {brandingForm.siteName || 'NP Atelier'}
+                              <p className="text-sm font-bold text-[#141210] leading-tight truncate">
+                                <BrandTitle siteName={brandingForm.siteName || 'NP Atelier'} />
                               </p>
-                              <p className="text-[8px] font-bold uppercase tracking-wider text-[#9E7A2E] truncate">
-                                {brandingForm.tagline || 'Luxury Crafts & Exotic Aquatics'}
+                              <p className="font-tagline italic text-[10px] font-medium text-[#7A5B32] truncate">
+                                {brandingForm.tagline || 'Where elegance is handcrafted'}
                               </p>
                             </div>
                           </div>
 
                           {/* Desktop Header Badges */}
                           <div className="flex items-center gap-1.5 shrink-0">
-                            <span className="rounded-full bg-[#FAF5E8] border border-[rgba(212,175,120,0.25)] text-[#7A5408] px-2 py-0.5 text-[9px] font-bold hidden sm:inline">
+                            <span className="rounded-full bg-[#EFE8DC] border border-[rgba(122,91,50,0.22)] text-[#7A5B32] px-2 py-0.5 text-[9px] font-bold hidden sm:inline">
                               Wishlist (3)
                             </span>
-                            <span className="rounded-full bg-[#141414] text-[#D4AF78] border border-[#D4AF37]/60 px-2.5 py-1 text-[10px] font-extrabold shadow-xs">
+                            <span className="rounded-full bg-[#141210] text-[#E5C18A] border border-[#B68D52]/60 px-2.5 py-1 text-[10px] font-extrabold shadow-xs">
                               Bag (2)
                             </span>
                           </div>
                         </div>
 
                         {/* Desktop Nav Links */}
-                        <div className="flex items-center gap-3 pt-2 border-t border-[#F2ECE1] text-[10px] font-bold text-[#6B5A33]">
-                          <span className="text-[#F5EBDD] border-b-2 border-[#D4AF37] pb-0.5">Artisan Drops</span>
+                        <div className="flex items-center gap-3 pt-2 border-t border-[rgba(122,91,50,0.16)] text-[10px] font-bold text-[#5C4D3C]">
+                          <span className="text-[#141210] border-b-2 border-[#B68D52] pb-0.5">Artisan Drops</span>
                           <span>Living Aquatics</span>
                           <span>Meet Makers</span>
                           <span>Inspiration</span>
@@ -1955,74 +1960,74 @@ export default function AdminPage() {
                       </div>
 
                       {/* 3. Hero Stage Banner */}
-                      <div className="rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] p-3.5 shadow-xs">
-                        <span className="inline-block rounded-full bg-white/90 border border-[#D4AF37]/50 px-2 py-0.5 text-[9px] font-bold text-[#7A5408] mb-1 shadow-2xs">
+                      <div className="rounded-2xl border border-[rgba(122,91,50,0.22)] bg-[#FAF6EF] p-3.5 shadow-xs">
+                        <span className="inline-block rounded-full bg-[#EFE8DC] border border-[#B68D52]/40 px-2 py-0.5 text-[9px] font-bold text-[#7A5B32] mb-1 shadow-2xs">
                           ✦ Spring Curation
                         </span>
-                        <h5 className="font-serif text-sm font-bold text-[#F5EBDD] leading-snug">
+                        <h5 className="font-tagline text-base font-bold text-[#141210] leading-snug">
                           Where Fine Art Meets Living Waters.
                         </h5>
-                        <p className="text-[10px] text-[#B8AA96] mt-1 leading-relaxed">
-                          Curated by <span className="font-bold text-[#F5EBDD]">{brandingForm.siteName || 'NP Atelier'}</span> Studio.
+                        <p className="text-[10px] text-[#5C4D3C] mt-1 leading-relaxed">
+                          Curated by <span className="font-bold text-[#141210]">{brandingForm.siteName || 'NP Atelier'}</span> Studio.
                         </p>
                       </div>
 
                       {/* 4. Desktop Luxury Footer Card */}
-                      <div className="rounded-2xl bg-[#0F0E0C] text-white p-4 border border-[#D4AF37]/40 space-y-2.5 shadow-md">
-                        <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                      <div className="rounded-2xl bg-gradient-to-b from-[#F2ECE2] to-[#EAE0D1] text-[#141210] p-4 border border-[rgba(122,91,50,0.25)] space-y-2.5 shadow-sm">
+                        <div className="flex items-center justify-between border-b border-[rgba(122,91,50,0.18)] pb-2">
                           <div>
-                            <p className="font-serif text-sm font-bold bg-gradient-to-r from-white via-[#F2D785] to-[#D4AF37] bg-clip-text text-transparent truncate">
-                              {brandingForm.siteName || 'NP Atelier'}
+                            <p className="text-sm font-bold text-[#141210] truncate">
+                              <BrandTitle siteName={brandingForm.siteName || 'NP Atelier'} />
                             </p>
-                            <p className="text-[9px] text-[#A6977D] truncate">
-                              {brandingForm.tagline || 'Luxury Crafts & Exotic Aquatics'}
+                            <p className="font-tagline italic text-[10px] text-[#7A5B32] truncate">
+                              {brandingForm.tagline || 'Where elegance is handcrafted'}
                             </p>
                           </div>
-                          <span className="rounded-full bg-[#241E15] border border-[#D4AF37]/40 px-2 py-0.5 text-[8px] font-mono font-bold text-[#D4AF78]">
+                          <span className="rounded-full bg-[#FCF9F4] border border-[#B68D52]/40 px-2 py-0.5 text-[8px] font-mono font-bold text-[#7A5B32]">
                             FOOTER
                           </span>
                         </div>
 
                         {/* Contact Badges in Footer */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px]">
-                          <div className="flex items-center gap-1.5 rounded-xl bg-white/5 border border-white/10 p-2 truncate">
-                            <Mail className="h-3 w-3 text-[#D4AF78] shrink-0" />
-                            <span className="text-[#D9CEBA] font-medium truncate">
+                          <div className="flex items-center gap-1.5 rounded-xl bg-[#FCF9F4] border border-[rgba(122,91,50,0.2)] p-2 truncate">
+                            <Mail className="h-3 w-3 text-[#7A5B32] shrink-0" />
+                            <span className="text-[#141210] font-medium truncate">
                               {brandingForm.contactEmail || 'npatelierindia@gmail.com'}
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-1.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 p-2 truncate">
-                            <MessageCircle className="h-3 w-3 text-emerald-400 shrink-0" />
-                            <span className="text-emerald-300 font-bold truncate">
+                          <div className="flex items-center gap-1.5 rounded-xl bg-emerald-50 border border-emerald-600/30 p-2 truncate">
+                            <MessageCircle className="h-3 w-3 text-emerald-700 shrink-0" />
+                            <span className="text-emerald-800 font-bold truncate">
                               {brandingForm.contactPhone || '+91 93412 97124'}
                             </span>
                           </div>
                         </div>
 
                         {/* Copyright note */}
-                        <p className="text-[9px] text-[#6E6352] pt-1 border-t border-white/10 flex items-center justify-between">
+                        <p className="text-[9px] text-[#5C4D3C] pt-1 border-t border-[rgba(122,91,50,0.16)] flex items-center justify-between">
                           <span>© 2026 {brandingForm.siteName || 'NP Atelier'}. All rights reserved.</span>
-                          <span className="text-[#A6832E] font-bold">100% Artisan Value</span>
+                          <span className="text-[#7A5B32] font-bold">100% Artisan Value</span>
                         </p>
                       </div>
 
                       {/* 5. Customer Invoice Preview */}
-                      <div className="rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#191713] p-3.5 shadow-xs space-y-2">
-                        <div className="flex items-center justify-between border-b border-[#F2ECE1] pb-1.5 text-[10px] font-bold">
-                          <span className="flex items-center gap-1 text-[#D4AF78]">
+                      <div className="rounded-2xl border border-[rgba(122,91,50,0.22)] bg-[#FCF9F4] p-3.5 shadow-xs space-y-2">
+                        <div className="flex items-center justify-between border-b border-[rgba(122,91,50,0.16)] pb-1.5 text-[10px] font-bold">
+                          <span className="flex items-center gap-1 text-[#7A5B32]">
                             <Receipt className="h-3 w-3" />
                             <span>Customer Invoice Preview</span>
                           </span>
-                          <span className="text-[#B8AA96] font-mono">#INV-9842</span>
+                          <span className="text-[#5C4D3C] font-mono">#INV-9842</span>
                         </div>
 
-                        <div className="flex items-center justify-between text-xs font-bold text-[#F5EBDD]">
+                        <div className="flex items-center justify-between text-xs font-bold text-[#141210]">
                           <span className="truncate max-w-[170px]">{brandingForm.siteName} Special Drop</span>
-                          <span className="text-[#D4AF78] font-mono">{brandingForm.currency || '₹'}1,599</span>
+                          <span className="text-[#7A5B32] font-mono">{brandingForm.currency || '₹'}1,599</span>
                         </div>
 
-                        <p className="text-[10px] text-[#7A6F62] flex items-center justify-between">
+                        <p className="text-[10px] text-[#5C4D3C] flex items-center justify-between">
                           <span>Invoice dispatched to buyer</span>
                           <span className="font-bold text-emerald-700">Verified Dispatch ✓</span>
                         </p>
@@ -2042,9 +2047,9 @@ export default function AdminPage() {
                     </div>
 
                     {/* Mobile Viewport Screen */}
-                    <div className="rounded-[28px] overflow-hidden bg-[#FAF7F2] border border-[rgba(212,175,120,0.25)] space-y-3 p-3">
+                    <div className="rounded-[28px] overflow-hidden bg-[#F5F0E8] border border-[rgba(122,91,50,0.24)] space-y-3 p-3">
                       {/* Mobile Top Announcement Ribbon */}
-                      <div className="rounded-lg bg-gradient-to-r from-[#17130C] via-[#2A2214] to-[#17130C] p-1.5 text-center text-[9px] font-bold text-[#D4AF78] flex items-center justify-center gap-1 truncate shadow-2xs">
+                      <div className="rounded-lg bg-[#141210] p-1.5 text-center text-[9px] font-bold text-[#E5C18A] flex items-center justify-center gap-1 truncate shadow-2xs">
                         <Sparkles className="h-2.5 w-2.5 text-[#D4AF78] shrink-0" />
                         <span className="truncate">
                           {brandingForm.announcementText || 'Handcrafted Artisan Drops Live'}
@@ -2052,9 +2057,9 @@ export default function AdminPage() {
                       </div>
 
                       {/* Mobile Header Bar */}
-                      <div className="rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#191713] p-2.5 shadow-2xs flex items-center justify-between gap-2">
+                      <div className="rounded-xl border border-[rgba(122,91,50,0.22)] bg-[#FCF9F4] p-2.5 shadow-2xs flex items-center justify-between gap-2">
                         {/* Hamburger icon representation */}
-                        <div className="grid h-7 w-7 place-items-center rounded-lg bg-[#FAF5E8] border border-[rgba(212,175,120,0.25)] text-[#D4AF78] shrink-0">
+                        <div className="grid h-7 w-7 place-items-center rounded-lg bg-[#EFE8DC] border border-[rgba(122,91,50,0.22)] text-[#7A5B32] shrink-0">
                           <span className="text-xs font-bold">☰</span>
                         </div>
 
@@ -2062,52 +2067,54 @@ export default function AdminPage() {
                         <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-center">
                           {brandingForm.logoImageUrl &&
                           (brandingForm.logoType === 'image' || brandingForm.logoType === 'both') ? (
-                            <img
-                              src={brandingForm.logoImageUrl}
-                              alt="Logo"
-                              className="h-6 w-auto max-w-[40px] rounded object-contain border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] p-0.5 shrink-0"
-                            />
+                            <div className="h-6 w-6 rounded-full overflow-hidden border border-[#B68D52]/50 bg-[#F5F0E8] shrink-0">
+                              <img
+                                src={brandingForm.logoImageUrl}
+                                alt="Logo"
+                                className="h-full w-full rounded-full object-cover object-center scale-[1.16]"
+                              />
+                            </div>
                           ) : null}
 
                           {(!brandingForm.logoImageUrl ||
                             brandingForm.logoType === 'icon' ||
                             brandingForm.logoType === 'both') && (
-                            <span className="grid h-6 w-6 place-items-center rounded-lg bg-gradient-to-br from-[#1C170F] to-[#0A0805] text-[#D4AF78] border border-[#D4AF37]/80 font-serif font-extrabold text-[10px] shrink-0">
-                              {brandingForm.logoText || 'NP'}
+                            <span className="grid h-6 w-6 place-items-center rounded-full bg-[#FCF9F4] text-[#141210] border border-[#B68D52]/60 font-tagline font-bold text-[10px] shrink-0">
+                              {brandingForm.logoText === 'NP' || !brandingForm.logoText ? <NpMonogramSvg className="h-3 w-auto text-[#141210]" /> : brandingForm.logoText}
                             </span>
                           )}
 
                           <div className="min-w-0 text-center">
-                            <p className="font-serif text-xs font-bold text-[#F5EBDD] leading-tight truncate">
-                              {brandingForm.siteName || 'NP Atelier'}
+                            <p className="text-xs font-bold text-[#141210] leading-tight truncate">
+                              <BrandTitle siteName={brandingForm.siteName || 'NP Atelier'} />
                             </p>
                           </div>
                         </div>
 
                         {/* Shopping Bag */}
-                        <div className="grid h-7 w-7 place-items-center rounded-lg bg-[#141414] text-[#D4AF78] border border-[#D4AF37]/60 text-[10px] font-bold shrink-0">
+                        <div className="grid h-7 w-7 place-items-center rounded-lg bg-[#141210] text-[#E5C18A] border border-[#B68D52]/60 text-[10px] font-bold shrink-0">
                           2
                         </div>
                       </div>
 
                       {/* Mobile Hero Spotlight */}
-                      <div className="rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] p-3 text-center space-y-1 shadow-2xs">
-                        <span className="inline-block rounded-full bg-white/90 border border-[#D4AF37]/50 px-2 py-0.5 text-[8px] font-bold text-[#7A5408]">
+                      <div className="rounded-xl border border-[rgba(122,91,50,0.22)] bg-[#FAF6EF] p-3 text-center space-y-1 shadow-2xs">
+                        <span className="inline-block rounded-full bg-[#EFE8DC] border border-[#B68D52]/40 px-2 py-0.5 text-[8px] font-bold text-[#7A5B32]">
                           ✦ Fine Art &amp; Living Waters
                         </span>
-                        <h6 className="font-serif text-xs font-bold text-[#F5EBDD]">
-                          {brandingForm.siteName || 'NP Atelier'}
+                        <h6 className="text-xs font-bold text-[#141210]">
+                          <BrandTitle siteName={brandingForm.siteName || 'NP Atelier'} />
                         </h6>
-                        <p className="text-[9px] text-[#B8AA96] leading-snug">
-                          {brandingForm.tagline || 'Luxury Crafts & Exotic Aquatics'}
+                        <p className="font-tagline italic text-[10px] text-[#7A5B32] leading-snug">
+                          {brandingForm.tagline || 'Where elegance is handcrafted'}
                         </p>
                       </div>
 
                       {/* Mobile Product Card with 1-Click WhatsApp */}
-                      <div className="rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#191713] p-2.5 shadow-2xs space-y-2">
+                      <div className="rounded-xl border border-[rgba(122,91,50,0.22)] bg-[#FCF9F4] p-2.5 shadow-2xs space-y-2">
                         <div className="flex items-center justify-between text-[10px] font-bold">
-                          <span className="truncate max-w-[130px] text-[#F5EBDD]">Aura Ocean Resin Board</span>
-                          <span className="text-[#D4AF78] font-mono">{brandingForm.currency || '₹'}1,850</span>
+                          <span className="truncate max-w-[130px] text-[#141210]">Aura Ocean Resin Board</span>
+                          <span className="text-[#7A5B32] font-mono">{brandingForm.currency || '₹'}1,850</span>
                         </div>
 
                         {/* Simulated Mobile Order on WhatsApp Button */}
@@ -2118,24 +2125,24 @@ export default function AdminPage() {
                       </div>
 
                       {/* Mobile Simulated Bottom Dock */}
-                      <div className="rounded-xl bg-[#141414] text-[#DCD1BA] p-2 border border-[#D4AF37]/40 flex items-center justify-around text-[8px] font-bold">
-                        <span className="text-[#D4AF78] flex flex-col items-center">
+                      <div className="rounded-xl bg-[#FCF9F4]/95 text-[#5C4D3C] p-2 border border-[rgba(122,91,50,0.24)] flex items-center justify-around text-[8px] font-bold shadow-xs">
+                        <span className="text-[#7A5B32] flex flex-col items-center">
                           <span>✦</span>
                           <span>Home</span>
                         </span>
-                        <span className="flex flex-col items-center opacity-70">
+                        <span className="flex flex-col items-center opacity-75">
                           <span>🎨</span>
                           <span>Crafts</span>
                         </span>
-                        <span className="flex flex-col items-center opacity-70">
+                        <span className="flex flex-col items-center opacity-75">
                           <span>🐠</span>
                           <span>Aquatics</span>
                         </span>
-                        <span className="flex flex-col items-center opacity-70">
+                        <span className="flex flex-col items-center opacity-75">
                           <span>♡</span>
                           <span>Saved</span>
                         </span>
-                        <span className="flex flex-col items-center opacity-70">
+                        <span className="flex flex-col items-center opacity-75">
                           <span>👜</span>
                           <span>Bag</span>
                         </span>
@@ -2161,17 +2168,17 @@ export default function AdminPage() {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="section-eyebrow">
-                    <Truck className="h-3.5 w-3.5 text-[#D4AF78]" />
+                    <Truck className="h-3.5 w-3.5 text-[#7A5B32]" />
                     Pan-India Logistics &amp; Shipping Charges
                   </span>
-                  <span className="rounded-full bg-emerald-950/50 border border-emerald-500/30 px-2.5 py-0.5 text-[10px] font-bold text-emerald-400">
+                  <span className="rounded-full bg-emerald-50 border border-emerald-600/30 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800">
                     Database Synced
                   </span>
                 </div>
-                <h2 className="mt-1 font-serif text-2xl sm:text-3xl font-bold text-[#F5EBDD]">
-                  Regional Delivery <span className="italic font-normal text-gold-gradient font-serif">Management</span>
+                <h2 className="mt-1 font-tagline text-2xl sm:text-3xl font-bold text-[#141210]">
+                  Regional Delivery <span className="italic font-normal text-gold-gradient font-tagline">Management</span>
                 </h2>
-                <p className="body-lead mt-1 text-xs sm:text-sm text-[#B8AA96] max-w-2xl">
+                <p className="body-lead mt-1 text-xs sm:text-sm text-[#5C4D3C] max-w-2xl">
                   Configure official delivery charges in ₹, toggle zone enablement, and set transit timelines for North, South, East, and West India.
                   All delivery charges are stored in the database and securely verified on the backend during checkout.
                 </p>
@@ -2181,7 +2188,7 @@ export default function AdminPage() {
                 <button
                   type="button"
                   onClick={handleResetDeliveryCharges}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(212,175,120,0.25)] bg-[#12110F] px-4 py-2 text-xs font-bold text-[#B8AA96] hover:text-[#F5EBDD] hover:bg-[#191713] transition shadow-xs cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(122,91,50,0.24)] bg-[#FAF6EF] px-4 py-2 text-xs font-bold text-[#5C4D3C] hover:text-[#141210] hover:bg-[#EFE8DC] transition shadow-xs cursor-pointer"
                 >
                   <RefreshCw className="h-3.5 w-3.5" />
                   <span>Reset Defaults</span>
@@ -2191,7 +2198,7 @@ export default function AdminPage() {
                   type="button"
                   onClick={() => handleSaveDeliveryCharges()}
                   disabled={isSavingDelivery}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] px-5 py-2.5 text-xs font-bold text-[#0B0B0A] shadow-[0_8px_20px_rgba(212,175,120,0.3)] transition active:scale-95 cursor-pointer disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] px-5 py-2.5 text-xs font-bold text-[#141210] border border-[#B68D52] shadow-[0_8px_20px_rgba(182,141,82,0.28)] transition active:scale-95 cursor-pointer disabled:opacity-60"
                 >
                   <Save className="h-4 w-4" />
                   <span>{isSavingDelivery ? 'Saving...' : 'Save All Delivery Charges'}</span>
@@ -2203,58 +2210,58 @@ export default function AdminPage() {
             <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
               <div className="glass-card p-4 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96]">Active Coverage</span>
-                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#0B0B0A] border border-[#D4AF78]/30 text-[#D4AF78]">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#5C4D3C]">Active Coverage</span>
+                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#EFE8DC] border border-[rgba(122,91,50,0.25)] text-[#7A5B32]">
                     <Globe className="h-4 w-4" />
                   </div>
                 </div>
-                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#F5EBDD]">
+                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#141210]">
                   {Object.values(deliveryForm.regions || {}).filter((r) => r.enabled).length} / 4 Zones
                 </p>
-                <p className="mt-1 text-[11px] text-[#B8AA96]">Covering all 28 states &amp; 8 UTs</p>
+                <p className="mt-1 text-[11px] text-[#5C4D3C]">Covering all 28 states &amp; 8 UTs</p>
               </div>
 
               <div className="glass-card p-4 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96]">North Zone Rate</span>
-                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#0B0B0A] border border-[#D4AF78]/30 text-[#D4AF78]">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#5C4D3C]">North Zone Rate</span>
+                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#EFE8DC] border border-[rgba(122,91,50,0.25)] text-[#7A5B32]">
                     <Compass className="h-4 w-4" />
                   </div>
                 </div>
-                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#D4AF78]">
+                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#7A5B32]">
                   ₹{deliveryForm.regions.north?.fee || 0}
                 </p>
-                <p className="mt-1 text-[11px] text-[#B8AA96]">
+                <p className="mt-1 text-[11px] text-[#5C4D3C]">
                   {deliveryForm.regions.north?.enabled ? `Active • ${deliveryForm.regions.north?.estimatedDays}` : 'Suspended'}
                 </p>
               </div>
 
               <div className="glass-card p-4 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96]">South Zone Rate</span>
-                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#0B0B0A] border border-[#D4AF78]/30 text-[#D4AF78]">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#5C4D3C]">South Zone Rate</span>
+                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#EFE8DC] border border-[rgba(122,91,50,0.25)] text-[#7A5B32]">
                     <Truck className="h-4 w-4" />
                   </div>
                 </div>
-                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#D4AF78]">
+                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#7A5B32]">
                   ₹{deliveryForm.regions.south?.fee || 0}
                 </p>
-                <p className="mt-1 text-[11px] text-[#B8AA96]">
+                <p className="mt-1 text-[11px] text-[#5C4D3C]">
                   {deliveryForm.regions.south?.enabled ? `Active • ${deliveryForm.regions.south?.estimatedDays}` : 'Suspended'}
                 </p>
               </div>
 
               <div className="glass-card p-4 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#B8AA96]">East &amp; West Rates</span>
-                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#0B0B0A] border border-[#D4AF78]/30 text-[#D4AF78]">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#5C4D3C]">East &amp; West Rates</span>
+                  <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#EFE8DC] border border-[rgba(122,91,50,0.25)] text-[#7A5B32]">
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                 </div>
-                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#F5EBDD]">
-                  ₹{deliveryForm.regions.east?.fee || 0} <span className="text-xs text-[#B8AA96]">/</span> ₹{deliveryForm.regions.west?.fee || 0}
+                <p className="mt-2 text-xl sm:text-2xl font-extrabold text-[#141210]">
+                  ₹{deliveryForm.regions.east?.fee || 0} <span className="text-xs text-[#5C4D3C]">/</span> ₹{deliveryForm.regions.west?.fee || 0}
                 </p>
-                <p className="mt-1 text-[11px] text-[#B8AA96]">Backend price verification</p>
+                <p className="mt-1 text-[11px] text-[#5C4D3C]">Backend price verification</p>
               </div>
             </div>
 
@@ -2268,37 +2275,37 @@ export default function AdminPage() {
                 return (
                   <div
                     key={regKey}
-                    className={`rounded-2xl sm:rounded-3xl border transition-all duration-300 p-5 sm:p-6 flex flex-col justify-between shadow-lg ${
+                    className={`rounded-2xl sm:rounded-3xl border transition-all duration-300 p-5 sm:p-6 flex flex-col justify-between shadow-sm ${
                       isEnabled
-                        ? 'border-[rgba(212,175,120,0.35)] bg-gradient-to-b from-[#181613] via-[#141310] to-[#0E0D0C] shadow-[0_10px_35px_rgba(0,0,0,0.6)]'
-                        : 'border-[#6D5738]/20 bg-[#12110F]/60 opacity-80'
+                        ? 'border-[rgba(122,91,50,0.26)] bg-gradient-to-b from-[#FCF9F4] via-[#FAF6EF] to-[#F5EFE4] shadow-[0_10px_30px_rgba(20,18,16,0.06)]'
+                        : 'border-[rgba(122,91,50,0.18)] bg-[#EFE8DC]/75 opacity-85'
                     }`}
                   >
                     <div>
                       {/* Top Bar: Title & Toggle */}
-                      <div className="flex items-center justify-between gap-3 border-b border-[rgba(212,175,120,0.2)] pb-4">
+                      <div className="flex items-center justify-between gap-3 border-b border-[rgba(122,91,50,0.18)] pb-4">
                         <div className="flex items-center gap-3">
                           <div className={`grid h-10 w-10 sm:h-11 sm:w-11 place-items-center rounded-xl border text-sm font-bold ${
                             isEnabled
-                              ? 'bg-[#0B0B0A] border-[#D4AF78]/50 text-[#D4AF78] shadow-xs'
-                              : 'bg-[#151412] border-neutral-700 text-neutral-500'
+                              ? 'bg-[#EFE8DC] border-[#B68D52]/50 text-[#7A5B32] shadow-xs'
+                              : 'bg-[#E5DEC9] border-[rgba(122,91,50,0.25)] text-[#5C4D3C]'
                           }`}>
-                            <span className="font-serif font-black">{regKey[0].toUpperCase()}</span>
+                            <span className="font-tagline font-black">{regKey[0].toUpperCase()}</span>
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#F5EBDD]">
+                              <h3 className="font-tagline text-lg sm:text-xl font-bold text-[#141210]">
                                 {reg.name} Region
                               </h3>
                               <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider border ${
                                 isEnabled
-                                  ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-400'
-                                  : 'bg-rose-950/60 border-rose-500/40 text-rose-400'
+                                  ? 'bg-emerald-50 border-emerald-600/30 text-emerald-800'
+                                  : 'bg-rose-50 border-rose-600/30 text-rose-700'
                               }`}>
                                 {isEnabled ? 'Active ✓' : 'Disabled ✕'}
                               </span>
                             </div>
-                            <p className="text-[11px] text-[#B8AA96]">
+                            <p className="text-[11px] text-[#5C4D3C]">
                               {isEnabled ? 'Customers in this zone can place orders' : 'Delivery temporarily suspended'}
                             </p>
                           </div>
@@ -2309,14 +2316,14 @@ export default function AdminPage() {
                           type="button"
                           onClick={() => handleRegionToggle(regKey)}
                           className={`relative inline-flex h-6 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                            isEnabled ? 'bg-[#D4AF78]' : 'bg-neutral-800'
+                            isEnabled ? 'bg-[#D4AF78]' : 'bg-[#D6CCB9]'
                           }`}
                           role="switch"
                           aria-checked={isEnabled}
                           title={isEnabled ? 'Click to Disable Region' : 'Click to Enable Region'}
                         >
                           <span
-                            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-[#0B0B0A] shadow-lg ring-0 transition duration-200 ease-in-out ${
+                            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-[#141210] shadow-md ring-0 transition duration-200 ease-in-out ${
                               isEnabled ? 'translate-x-6' : 'translate-x-0'
                             }`}
                           />
@@ -2327,12 +2334,12 @@ export default function AdminPage() {
                       <div className="mt-5 grid gap-4 sm:grid-cols-2">
                         {/* Delivery Fee Input in ₹ */}
                         <div>
-                          <label className="mb-1.5 block text-xs font-bold text-[#F5EBDD] flex items-center justify-between">
+                          <label className="mb-1.5 block text-xs font-bold text-[#141210] flex items-center justify-between">
                             <span>Delivery Fee (₹)</span>
-                            <span className="text-[10px] text-[#D4AF78] font-normal">Customer Charge</span>
+                            <span className="text-[10px] text-[#7A5B32] font-normal">Customer Charge</span>
                           </label>
                           <div className="relative">
-                            <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-[#D4AF78] text-base">
+                            <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-[#7A5B32] text-base">
                               ₹
                             </span>
                             <input
@@ -2343,16 +2350,16 @@ export default function AdminPage() {
                               value={reg.fee}
                               onChange={(e) => handleRegionFeeChange(regKey, e.target.value)}
                               placeholder="49"
-                              className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.3)] bg-[#0B0B0A] pl-8 pr-3.5 text-base font-bold text-[#F5EBDD] outline-none transition focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40 disabled:opacity-40"
+                              className="h-11 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] pl-8 pr-3.5 text-base font-bold text-[#141210] outline-none transition focus:border-[#8C6834] focus:ring-1 focus:ring-[#D4AF78]/40 disabled:opacity-50"
                             />
                           </div>
                         </div>
 
                         {/* Estimated Days */}
                         <div>
-                          <label className="mb-1.5 block text-xs font-bold text-[#F5EBDD] flex items-center justify-between">
+                          <label className="mb-1.5 block text-xs font-bold text-[#141210] flex items-center justify-between">
                             <span>Estimated Transit</span>
-                            <span className="text-[10px] text-[#B8AA96] font-normal">SLA Display</span>
+                            <span className="text-[10px] text-[#5C4D3C] font-normal">SLA Display</span>
                           </label>
                           <input
                             type="text"
@@ -2360,21 +2367,21 @@ export default function AdminPage() {
                             value={reg.estimatedDays}
                             onChange={(e) => handleRegionDaysChange(regKey, e.target.value)}
                             placeholder="2-4 Business Days"
-                            className="h-11 w-full rounded-xl border border-[rgba(212,175,120,0.3)] bg-[#0B0B0A] px-3.5 text-xs font-bold text-[#F5EBDD] outline-none transition focus:border-[#D4AF78] focus:ring-1 focus:ring-[#D4AF78]/40 disabled:opacity-40"
+                            className="h-11 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3.5 text-xs font-bold text-[#141210] outline-none transition focus:border-[#8C6834] focus:ring-1 focus:ring-[#D4AF78]/40 disabled:opacity-50"
                           />
                         </div>
                       </div>
 
                       {/* Covered States & Geographical Area */}
-                      <div className="mt-4 pt-4 border-t border-[rgba(212,175,120,0.15)]">
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-[#B8AA96] mb-2 flex items-center gap-1.5">
-                          <MapPin className="h-3 w-3 text-[#D4AF78]" /> Covered States &amp; Territories ({reg.states?.length || 0})
+                      <div className="mt-4 pt-4 border-t border-[rgba(122,91,50,0.16)]">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-[#5C4D3C] mb-2 flex items-center gap-1.5">
+                          <MapPin className="h-3 w-3 text-[#7A5B32]" /> Covered States &amp; Territories ({reg.states?.length || 0})
                         </p>
                         <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto no-scrollbar">
                           {reg.states?.map((st) => (
                             <span
                               key={st}
-                              className="inline-block rounded-md border border-[rgba(212,175,120,0.2)] bg-[#0B0B0A]/80 px-2 py-0.5 text-[10px] font-medium text-[#F5EBDD]/90"
+                              className="inline-block rounded-md border border-[rgba(122,91,50,0.2)] bg-[#EFE8DC]/75 px-2 py-0.5 text-[10px] font-medium text-[#141210]"
                             >
                               {st}
                             </span>
@@ -2383,9 +2390,9 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    <div className="mt-5 pt-3 border-t border-[rgba(212,175,120,0.15)] flex items-center justify-between text-[11px] text-[#B8AA96]">
+                    <div className="mt-5 pt-3 border-t border-[rgba(122,91,50,0.16)] flex items-center justify-between text-[11px] text-[#5C4D3C]">
                       <span>Checkout Status:</span>
-                      <span className="font-bold text-[#D4AF78]">
+                      <span className="font-bold text-[#7A5B32]">
                         {isEnabled ? `Adds ₹${reg.fee} to Order` : 'Zone Suspended'}
                       </span>
                     </div>
@@ -2395,20 +2402,20 @@ export default function AdminPage() {
             </div>
 
             {/* LIVE CUSTOMER CHECKOUT TOTAL CALCULATOR SIMULATOR */}
-            <div className="rounded-2xl sm:rounded-3xl border border-[rgba(212,175,120,0.3)] bg-gradient-to-b from-[#191714] to-[#12110F] p-5 sm:p-7 shadow-[0_15px_40px_rgba(0,0,0,0.7)] space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[rgba(212,175,120,0.2)] pb-4">
+            <div className="rounded-2xl sm:rounded-3xl border border-[rgba(122,91,50,0.26)] bg-gradient-to-b from-[#FCF9F4] to-[#FAF6EF] p-5 sm:p-7 shadow-[0_14px_38px_rgba(20,18,16,0.06)] space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[rgba(122,91,50,0.18)] pb-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-[#D4AF78]">✦ Live Checkout Preview</span>
-                    <span className="rounded-full bg-[#D4AF78]/15 border border-[#D4AF78]/30 px-2 py-0.5 text-[9px] font-bold text-[#D4AF78]">
+                    <span className="text-xs font-bold text-[#7A5B32]">✦ Live Checkout Preview</span>
+                    <span className="rounded-full bg-[#EFE8DC] border border-[#B68D52]/35 px-2 py-0.5 text-[9px] font-bold text-[#7A5B32]">
                       Interactive Test
                     </span>
                   </div>
-                  <h3 className="font-serif text-lg sm:text-xl font-bold text-[#F5EBDD] mt-0.5">
+                  <h3 className="font-tagline text-lg sm:text-xl font-bold text-[#141210] mt-0.5">
                     Dynamic Customer Checkout Recalculation Preview
                   </h3>
                 </div>
-                <div className="text-xs text-[#B8AA96]">
+                <div className="text-xs text-[#5C4D3C]">
                   Click each zone to see real-time customer total calculation:
                 </div>
               </div>
@@ -2427,19 +2434,19 @@ export default function AdminPage() {
                       onClick={() => setSimulatedRegion(regKey)}
                       className={`p-3 rounded-xl border text-left transition cursor-pointer flex flex-col justify-between ${
                         isSimActive
-                          ? 'border-[#D4AF78] bg-[#242018] shadow-[0_4px_15px_rgba(212,175,120,0.2)]'
-                          : 'border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] hover:border-[#D4AF78]/60'
+                          ? 'border-[#B68D52] bg-[#EFE8DC] shadow-sm'
+                          : 'border-[rgba(122,91,50,0.2)] bg-[#FCF9F4] hover:border-[#B68D52]/60'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-xs text-[#F5EBDD]">{reg?.name}</span>
+                        <span className="font-bold text-xs text-[#141210]">{reg?.name}</span>
                         <span className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded ${
-                          isEnabled ? 'bg-emerald-950 text-emerald-400' : 'bg-rose-950 text-rose-400'
+                          isEnabled ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700'
                         }`}>
                           {isEnabled ? 'Active' : 'Disabled'}
                         </span>
                       </div>
-                      <p className="mt-2 text-sm font-extrabold text-[#D4AF78]">
+                      <p className="mt-2 text-sm font-extrabold text-[#7A5B32]">
                         ₹{reg?.fee || 0}
                       </p>
                     </button>
@@ -2456,27 +2463,27 @@ export default function AdminPage() {
                 const simTotal = sampleSubtotal - sampleDiscount + simFee
 
                 return (
-                  <div className="rounded-xl border border-[rgba(212,175,120,0.2)] bg-[#0B0B0A] p-4 text-xs space-y-2">
-                    <div className="flex justify-between text-[#B8AA96]">
+                  <div className="rounded-xl border border-[rgba(122,91,50,0.2)] bg-[#F5F0E8] p-4 text-xs space-y-2">
+                    <div className="flex justify-between text-[#5C4D3C]">
                       <span>Sample Crafts Subtotal (2 items)</span>
-                      <span className="font-bold text-[#F5EBDD]">₹{sampleSubtotal}</span>
+                      <span className="font-bold text-[#141210]">₹{sampleSubtotal}</span>
                     </div>
-                    <div className="flex justify-between text-[#D4AF78]">
+                    <div className="flex justify-between text-[#7A5B32] font-semibold">
                       <span>Promotional Coupon (ATELIER10)</span>
                       <span>-₹{sampleDiscount}</span>
                     </div>
-                    <div className="flex justify-between items-center text-[#B8AA96] pt-1 border-t border-white/5">
+                    <div className="flex justify-between items-center text-[#5C4D3C] pt-1 border-t border-[rgba(122,91,50,0.14)]">
                       <span className="flex items-center gap-1.5">
-                        <Truck className="h-3.5 w-3.5 text-[#D4AF78]" />
+                        <Truck className="h-3.5 w-3.5 text-[#7A5B32]" />
                         <span>Regional Delivery ({simReg?.name} Zone)</span>
                       </span>
-                      <span className="font-bold text-[#D4AF78]">
+                      <span className="font-bold text-[#7A5B32]">
                         {simReg?.enabled ? `+₹${simFee}` : 'Zone Disabled (Cannot Checkout)'}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center text-sm font-bold text-[#F5EBDD] pt-2 border-t border-[rgba(212,175,120,0.2)]">
+                    <div className="flex justify-between items-center text-sm font-bold text-[#141210] pt-2 border-t border-[rgba(122,91,50,0.2)]">
                       <span>Total Customer Due</span>
-                      <span className="text-lg font-extrabold text-[#D4AF78]">
+                      <span className="text-lg font-extrabold text-[#7A5B32]">
                         {simReg?.enabled ? `₹${simTotal}` : 'N/A (Disabled)'}
                       </span>
                     </div>
@@ -2486,11 +2493,11 @@ export default function AdminPage() {
             </div>
 
             {/* Bottom Save Action Bar */}
-            <div className="sticky bottom-4 z-20 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D4AF78]/40 bg-[#151412]/95 px-5 py-4 shadow-[0_10px_35px_rgba(0,0,0,0.8)] backdrop-blur-md">
-              <div className="flex items-center gap-2 text-xs text-[#F5EBDD]">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="sticky bottom-4 z-20 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#B68D52]/40 bg-[#FCF9F4]/95 px-5 py-4 shadow-[0_10px_35px_rgba(20,18,16,0.12)] backdrop-blur-md">
+              <div className="flex items-center gap-2 text-xs text-[#141210]">
+                <span className="h-2 w-2 rounded-full bg-emerald-600 animate-pulse" />
                 <span className="font-bold">Database Delivery Rate Controller</span>
-                <span className="hidden sm:inline text-[#B8AA96]">• All rates save live to MongoDB and Local Fallback</span>
+                <span className="hidden sm:inline text-[#5C4D3C]">• All rates save live to MongoDB and Local Fallback</span>
               </div>
 
               <div className="flex items-center gap-2">
@@ -2498,7 +2505,7 @@ export default function AdminPage() {
                   type="button"
                   onClick={() => handleSaveDeliveryCharges()}
                   disabled={isSavingDelivery}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] px-6 py-2.5 text-xs font-bold text-[#0B0B0A] shadow-md transition active:scale-95 cursor-pointer disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] px-6 py-2.5 text-xs font-bold text-[#141210] border border-[#B68D52] shadow-md transition active:scale-95 cursor-pointer disabled:opacity-60"
                 >
                   <Save className="h-4 w-4" />
                   <span>{isSavingDelivery ? 'Saving...' : 'Save All Changes'}</span>
@@ -2514,22 +2521,22 @@ export default function AdminPage() {
         {activeTab === 'orders' && (
           <div className="space-y-4 sm:space-y-6">
             <div className="glass-card overflow-hidden">
-              <div className="border-b border-[rgba(212,175,120,0.25)] bg-[#12110F] p-3.5 sm:p-4">
-                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#F5EBDD]">
+              <div className="border-b border-[rgba(122,91,50,0.2)] bg-[#FAF6EF] p-3.5 sm:p-4">
+                <h3 className="font-tagline text-lg sm:text-xl font-bold text-[#141210]">
                   All Customer Orders ({orders.length})
                 </h3>
-                <p className="text-[11px] sm:text-xs text-[#B8AA96]">
+                <p className="text-[11px] sm:text-xs text-[#5C4D3C]">
                   Manage craft packing, oxygenated aquatic bagging, and shipment tracking
                 </p>
               </div>
 
               {/* Mobile View: Dedicated Luxury Order Cards (md:hidden) */}
-              <div className="block md:hidden divide-y divide-[#d4a338]/15">
+              <div className="block md:hidden divide-y divide-[rgba(122,91,50,0.14)]">
                 {orders.length === 0 ? (
-                  <div className="p-8 text-center text-[#B8AA96]">
-                    <Package className="mx-auto h-8 w-8 text-[#d4a338]/60 mb-2" />
-                    <p className="font-serif text-sm font-bold text-[#F5EBDD]">No Customer Orders Yet</p>
-                    <p className="text-[11px] text-[#B8AA96] mt-1">
+                  <div className="p-8 text-center text-[#5C4D3C]">
+                    <Package className="mx-auto h-8 w-8 text-[#7A5B32]/60 mb-2" />
+                    <p className="font-tagline text-sm font-bold text-[#141210]">No Customer Orders Yet</p>
+                    <p className="text-[11px] text-[#5C4D3C] mt-1">
                       Live orders placed by buyers on the store will appear here in real time.
                     </p>
                   </div>
@@ -2539,11 +2546,11 @@ export default function AdminPage() {
                       (i: any) => i.department === 'aquarium' || aquariumCategories.includes(i.category)
                     )
                     return (
-                      <div key={order.orderId} className="p-3.5 space-y-3 bg-[#12110F] transition hover:bg-[#191713]">
+                      <div key={order.orderId} className="p-3.5 space-y-3 bg-[#FCF9F4] transition hover:bg-[#FAF6EF]">
                         {/* Top: Order ID & Date & View */}
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="font-mono text-xs font-bold text-[#D4AF78] bg-[#0B0B0A] px-2 py-0.5 rounded-lg border border-[rgba(212,175,120,0.25)]">
+                            <span className="font-mono text-xs font-bold text-[#7A5B32] bg-[#EFE8DC] px-2 py-0.5 rounded-lg border border-[rgba(122,91,50,0.22)]">
                               #{order.orderId}
                             </span>
                             {hasAquatics && (
@@ -2552,35 +2559,35 @@ export default function AdminPage() {
                               </span>
                             )}
                           </div>
-                          <span className="text-[10px] text-[#B8AA96] font-medium">{order.date}</span>
+                          <span className="text-[10px] text-[#5C4D3C] font-medium">{order.date}</span>
                         </div>
 
                         {/* Customer & Items Summary */}
                         <div className="flex items-start justify-between gap-2 text-xs">
                           <div>
-                            <p className="font-bold text-[#F5EBDD]">{order.customer?.fullName || 'Customer'}</p>
-                            <p className="text-[10px] text-[#B8AA96]">
+                            <p className="font-bold text-[#141210]">{order.customer?.fullName || 'Customer'}</p>
+                            <p className="text-[10px] text-[#5C4D3C]">
                               {order.customer?.city || 'India'}{order.customer?.phone ? ` • ${order.customer.phone}` : ''}
                             </p>
                             {order.deliveryRegion && (
-                              <p className="text-[10px] text-[#D4AF78] font-bold mt-0.5">
+                              <p className="text-[10px] text-[#7A5B32] font-bold mt-0.5">
                                 🚚 {order.deliveryRegion} Zone (₹{order.deliveryFee ?? order.shipping ?? 0})
                               </p>
                             )}
                           </div>
                           <div className="text-right">
-                            <p className="text-sm font-extrabold text-[#D4AF78]">₹{order.total?.toFixed(0)}</p>
-                            <p className="text-[10px] text-[#B8AA96] font-semibold">{order.items?.length || 1} item(s)</p>
+                            <p className="text-sm font-extrabold text-[#7A5B32]">₹{order.total?.toFixed(0)}</p>
+                            <p className="text-[10px] text-[#5C4D3C] font-semibold">{order.items?.length || 1} item(s)</p>
                           </div>
                         </div>
 
                         {/* Status Select & Action Button */}
-                        <div className="flex items-center gap-2 pt-1 border-t border-[#d4a338]/10">
+                        <div className="flex items-center gap-2 pt-1 border-t border-[rgba(122,91,50,0.14)]">
                           <div className="flex-1">
                             <select
                               value={order.status}
                               onChange={(e) => updateOrderStatus(order.orderId, e.target.value)}
-                              className="h-8 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-2 text-[11px] font-bold text-[#F5EBDD] outline-none shadow-xs truncate"
+                              className="h-8 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-2 text-[11px] font-bold text-[#141210] outline-none shadow-xs truncate"
                             >
                               <option value="Aquatic Packing & Oxygenation">Aquatic Packing</option>
                               <option value="Handcrafting & Packing">Craft Packing</option>
@@ -2592,9 +2599,9 @@ export default function AdminPage() {
                           <button
                             type="button"
                             onClick={() => setSelectedOrder(order)}
-                            className="inline-flex items-center gap-1 rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#191713] px-3 py-1.5 text-xs font-bold text-[#D4AF78] hover:bg-[#0B0B0A] transition shadow-xs shrink-0"
+                            className="inline-flex items-center gap-1 rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#EFE8DC] px-3 py-1.5 text-xs font-bold text-[#7A5B32] hover:bg-[#D4AF78] hover:text-[#141210] transition shadow-xs shrink-0"
                           >
-                            <Eye className="h-3.5 w-3.5 text-[#D4AF78]" /> View
+                            <Eye className="h-3.5 w-3.5" /> View
                           </button>
                         </div>
                       </div>
@@ -2606,7 +2613,7 @@ export default function AdminPage() {
               {/* Desktop View: Full 7-Column Data Table (hidden md:block) */}
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="border-b border-[#d4a338]/20 font-bold uppercase tracking-wider text-[#B8AA96]">
+                  <thead className="border-b border-[rgba(122,91,50,0.2)] bg-[#FAF6EF] font-bold uppercase tracking-wider text-[#5C4D3C]">
                     <tr>
                       <th className="p-4">Order ID</th>
                       <th className="p-4">Date</th>
@@ -2617,13 +2624,13 @@ export default function AdminPage() {
                       <th className="p-4 text-right">Details</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#d4a338]/15">
+                  <tbody className="divide-y divide-[rgba(122,91,50,0.14)]">
                     {orders.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="p-12 text-center text-[#B8AA96]">
-                          <Package className="mx-auto h-10 w-10 text-[#d4a338]/60 mb-2" />
-                          <p className="font-serif text-base font-bold text-[#F5EBDD]">No Customer Orders Yet</p>
-                          <p className="text-xs text-[#B8AA96] mt-1">
+                        <td colSpan={7} className="p-12 text-center text-[#5C4D3C]">
+                          <Package className="mx-auto h-10 w-10 text-[#7A5B32]/60 mb-2" />
+                          <p className="font-tagline text-base font-bold text-[#141210]">No Customer Orders Yet</p>
+                          <p className="text-xs text-[#5C4D3C] mt-1">
                             Live orders placed by buyers on the store will appear here in real time.
                           </p>
                         </td>
@@ -2634,15 +2641,15 @@ export default function AdminPage() {
                           (i: any) => i.department === 'aquarium' || aquariumCategories.includes(i.category)
                         )
                         return (
-                          <tr key={order.orderId} className="transition hover:bg-[#12110F]/60">
-                            <td className="p-4 font-mono font-bold text-[#F5EBDD]">{order.orderId}</td>
-                            <td className="p-4 text-[#B8AA96]">{order.date}</td>
+                          <tr key={order.orderId} className="transition hover:bg-[#FAF6EF]">
+                            <td className="p-4 font-mono font-bold text-[#141210]">{order.orderId}</td>
+                            <td className="p-4 text-[#5C4D3C]">{order.date}</td>
                             <td className="p-4">
-                              <p className="font-bold text-[#F5EBDD]">{order.customer?.fullName || 'Customer'}</p>
-                              <p className="text-[10px] text-[#B8AA96]">
+                              <p className="font-bold text-[#141210]">{order.customer?.fullName || 'Customer'}</p>
+                              <p className="text-[10px] text-[#5C4D3C]">
                                 {order.customer?.city || 'India'}
                                 {order.deliveryRegion && (
-                                  <span className="ml-1.5 inline-flex items-center rounded-md bg-[#D4AF78]/15 border border-[#D4AF78]/30 px-1.5 py-0.2 text-[9px] font-bold text-[#D4AF78]">
+                                  <span className="ml-1.5 inline-flex items-center rounded-md bg-[#EFE8DC] border border-[rgba(122,91,50,0.24)] px-1.5 py-0.2 text-[9px] font-bold text-[#7A5B32]">
                                     {order.deliveryRegion} • ₹{order.deliveryFee ?? order.shipping ?? 0}
                                   </span>
                                 )}
@@ -2650,7 +2657,7 @@ export default function AdminPage() {
                             </td>
                             <td className="p-4">
                               <div className="flex items-center gap-1.5">
-                                <span className="font-semibold text-[#F5EBDD]">
+                                <span className="font-semibold text-[#141210]">
                                   {order.items?.length || 1} item(s)
                                 </span>
                                 {hasAquatics && (
@@ -2660,12 +2667,12 @@ export default function AdminPage() {
                                 )}
                               </div>
                             </td>
-                            <td className="p-4 text-sm font-extrabold text-[#D4AF78]">₹{order.total?.toFixed(0)}</td>
+                            <td className="p-4 text-sm font-extrabold text-[#7A5B32]">₹{order.total?.toFixed(0)}</td>
                             <td className="p-4">
                               <select
                                 value={order.status}
                                 onChange={(e) => updateOrderStatus(order.orderId, e.target.value)}
-                                className="rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-2.5 py-1 text-xs font-bold text-[#F5EBDD] outline-none shadow-sm"
+                                className="rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-2.5 py-1 text-xs font-bold text-[#141210] outline-none shadow-sm"
                               >
                                 <option value="Aquatic Packing & Oxygenation">Aquatic Packing & Oxygenation</option>
                                 <option value="Handcrafting & Packing">Handcrafting & Packing</option>
@@ -2678,7 +2685,7 @@ export default function AdminPage() {
                               <button
                                 type="button"
                                 onClick={() => setSelectedOrder(order)}
-                                className="inline-flex items-center gap-1 rounded-lg border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-2.5 py-1 text-xs font-bold text-[#F5EBDD] transition hover:bg-[#12110F] shadow-sm"
+                                className="inline-flex items-center gap-1 rounded-lg border border-[rgba(122,91,50,0.24)] bg-[#EFE8DC] px-2.5 py-1 text-xs font-bold text-[#141210] transition hover:bg-[#D4AF78] shadow-sm"
                               >
                                 <Eye className="h-3.5 w-3.5" /> View
                               </button>
@@ -2701,30 +2708,30 @@ export default function AdminPage() {
           <div className="grid gap-4 sm:gap-6 lg:grid-cols-[1fr_1.1fr]">
             {/* Create Coupon Form */}
             <div className="glass-card p-4 sm:p-6">
-              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#F5EBDD]">Create Promotional Coupon</h3>
-              <p className="mt-1 text-xs text-[#B8AA96]">
+              <h3 className="font-tagline text-lg sm:text-xl font-bold text-[#141210]">Create Promotional Coupon</h3>
+              <p className="mt-1 text-xs text-[#5C4D3C]">
                 New codes will be immediately valid for customers in the storefront checkout.
               </p>
 
               <form onSubmit={handleCreateCoupon} className="mt-4 sm:mt-5 space-y-3.5 sm:space-y-4">
                 <div>
-                  <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Coupon Code</label>
+                  <label className="mb-1 block text-xs font-bold text-[#141210]">Coupon Code</label>
                   <input
                     required
                     value={newCoupon.code}
                     onChange={(e) => setNewCoupon({ ...newCoupon, code: e.target.value })}
                     placeholder="e.g. AQUASPRING25"
-                    className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 font-mono text-xs font-bold uppercase text-[#F5EBDD] outline-none focus:border-[#c59325] shadow-sm"
+                    className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3.5 font-mono text-xs font-bold uppercase text-[#141210] outline-none focus:border-[#8C6834] shadow-sm"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Discount Type</label>
+                    <label className="mb-1 block text-xs font-bold text-[#141210]">Discount Type</label>
                     <select
                       value={newCoupon.type}
                       onChange={(e) => setNewCoupon({ ...newCoupon, type: e.target.value })}
-                      className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs font-bold text-[#F5EBDD] outline-none shadow-sm"
+                      className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3 text-xs font-bold text-[#141210] outline-none shadow-sm"
                     >
                       <option value="percent">Percentage (%)</option>
                       <option value="fixed">Fixed Amount (₹)</option>
@@ -2733,24 +2740,24 @@ export default function AdminPage() {
                   </div>
 
                   <div>
-                    <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Discount Value</label>
+                    <label className="mb-1 block text-xs font-bold text-[#141210]">Discount Value</label>
                     <input
                       type="number"
                       value={newCoupon.value}
                       onChange={(e) => setNewCoupon({ ...newCoupon, value: Number(e.target.value) })}
                       placeholder="15"
-                      className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-xs font-bold text-[#F5EBDD] outline-none shadow-sm"
+                      className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3.5 text-xs font-bold text-[#141210] outline-none shadow-sm"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Promotion Description / Label</label>
+                  <label className="mb-1 block text-xs font-bold text-[#141210]">Promotion Description / Label</label>
                   <input
                     value={newCoupon.label}
                     onChange={(e) => setNewCoupon({ ...newCoupon, label: e.target.value })}
                     placeholder="e.g. 15% Off Spring Aquatics & Crafts"
-                    className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3.5 text-xs text-[#F5EBDD] outline-none shadow-sm"
+                    className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3.5 text-xs text-[#141210] outline-none shadow-sm"
                   />
                 </div>
 
@@ -2762,20 +2769,20 @@ export default function AdminPage() {
 
             {/* Active Coupons List */}
             <div className="glass-card p-4 sm:p-6">
-              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#F5EBDD]">Active Coupon Codes</h3>
-              <p className="mt-1 text-xs text-[#B8AA96]">Active codes applicable by store shoppers</p>
+              <h3 className="font-tagline text-lg sm:text-xl font-bold text-[#141210]">Active Coupon Codes</h3>
+              <p className="mt-1 text-xs text-[#5C4D3C]">Active codes applicable by store shoppers</p>
 
               <div className="mt-4 sm:mt-5 space-y-2.5 sm:space-y-3">
                 {Object.values(availableCoupons as Record<string, any>).map((c: any) => (
                   <div
                     key={c.code}
-                    className="flex items-center justify-between gap-3 rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] p-3 sm:p-3.5 shadow-sm"
+                    className="flex items-center justify-between gap-3 rounded-2xl border border-[rgba(122,91,50,0.22)] bg-[#FAF6EF] p-3 sm:p-3.5 shadow-sm"
                   >
                     <div className="min-w-0">
-                      <span className="inline-block rounded-lg border border-dashed border-[#D4AF78] bg-[#0B0B0A] px-2.5 py-0.5 font-mono text-xs font-bold text-[#D4AF78]">
+                      <span className="inline-block rounded-lg border border-dashed border-[#B68D52] bg-[#EFE8DC] px-2.5 py-0.5 font-mono text-xs font-bold text-[#7A5B32]">
                         {c.code}
                       </span>
-                      <p className="mt-1 text-xs font-bold text-[#F5EBDD] truncate">{c.label}</p>
+                      <p className="mt-1 text-xs font-bold text-[#141210] truncate">{c.label}</p>
                       <p className="text-[10px] text-emerald-700 font-semibold">
                         {c.type === 'percent'
                           ? `${c.value}% discount`
@@ -2817,11 +2824,11 @@ export default function AdminPage() {
                   <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800">
                     {artisan.status}
                   </span>
-                  <span className="text-xs font-bold text-[#D4AF78]">{artisan.items} Offerings</span>
+                  <span className="text-xs font-bold text-[#7A5B32]">{artisan.items} Offerings</span>
                 </div>
-                <h4 className="mt-2.5 sm:mt-3 font-serif text-lg sm:text-xl font-bold text-[#F5EBDD]">{artisan.name}</h4>
-                <p className="text-xs font-semibold text-[#B8AA96]">{artisan.specialty}</p>
-                <p className="mt-1.5 sm:mt-2 text-xs text-[#B8AA96]">{artisan.location}</p>
+                <h4 className="mt-2.5 sm:mt-3 font-tagline text-lg sm:text-xl font-bold text-[#141210]">{artisan.name}</h4>
+                <p className="text-xs font-semibold text-[#5C4D3C]">{artisan.specialty}</p>
+                <p className="mt-1.5 sm:mt-2 text-xs text-[#5C4D3C]">{artisan.location}</p>
               </div>
             ))}
           </div>
@@ -2832,19 +2839,19 @@ export default function AdminPage() {
       {/* ADD / EDIT PRODUCT MODAL (COMPLETE WITH FISH & AQUARIUM & CRAFTS SUPPORT) */}
       {/* ========================================================================= */}
       {isProductModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#17120a]/60 p-2.5 sm:p-4 backdrop-blur-md overflow-hidden">
-          <div className="relative my-auto w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden rounded-2xl sm:rounded-[2.2rem] bg-[#191713] border border-[rgba(212,175,120,0.25)] shadow-[0_25px_60px_rgba(0,0,0,0.85)]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#141210]/45 p-2.5 sm:p-4 backdrop-blur-md overflow-hidden">
+          <div className="relative my-auto w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden rounded-2xl sm:rounded-[2.2rem] bg-[#FCF9F4] border border-[rgba(122,91,50,0.24)] shadow-[0_25px_60px_rgba(20,18,16,0.22)]">
             <button
               type="button"
               onClick={() => setIsProductModalOpen(false)}
-              className="absolute right-3.5 top-3.5 sm:right-5 sm:top-5 grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-full border border-[rgba(212,175,120,0.25)] bg-[#191713] text-[#F5EBDD] hover:bg-[#0B0B0A] hover:border-[rgba(212,175,120,0.5)] z-10 transition shadow-xs cursor-pointer"
+              className="absolute right-3.5 top-3.5 sm:right-5 sm:top-5 grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-full border border-[rgba(122,91,50,0.24)] bg-[#FAF6EF] text-[#141210] hover:bg-[#EFE8DC] hover:border-[#8C6834] z-10 transition shadow-xs cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
 
-            <div className="shrink-0 border-b border-[rgba(212,175,120,0.25)] bg-[#12110F] p-4 sm:p-6 pr-12">
+            <div className="shrink-0 border-b border-[rgba(122,91,50,0.2)] bg-[#FAF6EF] p-4 sm:p-6 pr-12">
               <span className="section-eyebrow">Catalog Product Management</span>
-              <h3 className="mt-1 sm:mt-2 font-serif text-xl sm:text-2xl font-bold text-[#F5EBDD]">
+              <h3 className="mt-1 sm:mt-2 font-tagline text-xl sm:text-2xl font-bold text-[#141210]">
                 {editingProduct ? 'Edit Product Details' : 'Add New Offering'}
               </h3>
             </div>
@@ -2852,7 +2859,7 @@ export default function AdminPage() {
             <form onSubmit={handleProductSubmit} className="flex-1 min-h-0 space-y-3.5 sm:space-y-4 p-3.5 sm:p-6 sidebar-scroller">
               {/* Department Selector */}
               <div>
-                <label className="mb-1.5 block text-xs font-bold text-[#F5EBDD]">Department</label>
+                <label className="mb-1.5 block text-xs font-bold text-[#141210]">Department</label>
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <button
                     type="button"
@@ -2867,7 +2874,7 @@ export default function AdminPage() {
                     className={`flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl border p-2 sm:p-2.5 text-xs font-bold transition ${
                       productForm.department === 'aquarium'
                         ? 'border-cyan-600 bg-cyan-700 text-white shadow-sm'
-                        : 'border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] text-[#F5EBDD] hover:bg-[#12110F]'
+                        : 'border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] text-[#141210] hover:bg-[#EFE8DC]'
                     }`}
                   >
                     <Fish className="h-4 w-4 shrink-0" />
@@ -2887,7 +2894,7 @@ export default function AdminPage() {
                     className={`flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl border p-2 sm:p-2.5 text-xs font-bold transition ${
                       productForm.department === 'crafts'
                         ? 'border-[#855a10] bg-[#855a10] text-white shadow-sm'
-                        : 'border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] text-[#F5EBDD] hover:bg-[#12110F]'
+                        : 'border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] text-[#141210] hover:bg-[#EFE8DC]'
                     }`}
                   >
                     <Palette className="h-4 w-4 shrink-0" />
@@ -2898,7 +2905,7 @@ export default function AdminPage() {
 
               {/* Title */}
               <div>
-                <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Product Title</label>
+                <label className="mb-1 block text-xs font-bold text-[#141210]">Product Title</label>
                 <input
                   required
                   value={productForm.title}
@@ -2908,18 +2915,18 @@ export default function AdminPage() {
                       ? 'e.g. Royal Blue Diamond Discus Pair'
                       : 'e.g. Scalloped Floral Resin Serving Tray'
                   }
-                  className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs font-semibold text-[#F5EBDD] outline-none focus:border-[#c59325] shadow-sm"
+                  className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3 text-xs font-semibold text-[#141210] outline-none focus:border-[#8C6834] shadow-sm"
                 />
               </div>
 
               {/* Category-Wise Selection Hub */}
-              <div className="rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A]/70 p-3 sm:p-4 space-y-3 sm:space-y-3.5 shadow-xs">
+              <div className="rounded-2xl border border-[rgba(122,91,50,0.22)] bg-[#FAF6EF] p-3 sm:p-4 space-y-3 sm:space-y-3.5 shadow-xs">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <Layers className="h-4 w-4 text-[#D4AF78] shrink-0" />
+                    <Layers className="h-4 w-4 text-[#7A5B32] shrink-0" />
                     <div>
-                      <span className="text-xs font-extrabold text-[#F5EBDD]">Product Category (Category-Wise)</span>
-                      <p className="text-[10px] text-[#B8AA96]">Organize product category-wise or create a brand new category</p>
+                      <span className="text-xs font-extrabold text-[#141210]">Product Category (Category-Wise)</span>
+                      <p className="text-[10px] text-[#5C4D3C]">Organize product category-wise or create a brand new category</p>
                     </div>
                   </div>
 
@@ -2937,7 +2944,7 @@ export default function AdminPage() {
                         }))
                       }
                     }}
-                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#d4a338]/40 bg-[#faeed1] px-2.5 py-1 text-[11px] font-bold text-[#D4AF78] hover:bg-[#191713] transition shadow-xs shrink-0 self-start sm:self-auto"
+                    className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#B68D52]/40 bg-[#FAF0D8] px-2.5 py-1 text-[11px] font-bold text-[#7A5B32] hover:bg-[#EFE4C8] transition shadow-xs shrink-0 self-start sm:self-auto"
                   >
                     {isCustomCategory ? (
                       <>
@@ -2956,7 +2963,7 @@ export default function AdminPage() {
                 {/* Quick Category Chips */}
                 {!isCustomCategory && (
                   <div>
-                    <label className="mb-1.5 block text-[10px] font-extrabold uppercase tracking-wider text-[#B8AA96]">
+                    <label className="mb-1.5 block text-[10px] font-extrabold uppercase tracking-wider text-[#5C4D3C]">
                       Pick Category ({activeDepartmentCategories.length} Available):
                     </label>
                     <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto pr-1">
@@ -2973,7 +2980,7 @@ export default function AdminPage() {
                                 ? isAqua
                                   ? 'bg-cyan-700 text-white shadow-xs'
                                   : 'bg-[#855a10] text-white shadow-xs'
-                                : 'border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] text-[#B8AA96] hover:bg-[#12110F]'
+                                : 'border border-[rgba(122,91,50,0.22)] bg-[#F5F0E8] text-[#5C4D3C] hover:bg-[#EFE8DC] hover:text-[#141210]'
                             }`}
                           >
                             {isSelected && <Check className="h-3 w-3 stroke-[3]" />}
@@ -2987,9 +2994,9 @@ export default function AdminPage() {
 
                 {/* Category Dropdown or Custom Input */}
                 {isCustomCategory ? (
-                  <div className="rounded-xl border border-dashed border-[rgba(212,175,120,0.35)] bg-[#12110F] p-3 space-y-1">
-                    <label className="block text-[11px] font-bold text-[#D4AF78]">
-                      Enter Custom Category Name <span className="text-rose-500">*</span>
+                  <div className="rounded-xl border border-dashed border-[rgba(122,91,50,0.35)] bg-[#F5F0E8] p-3 space-y-1">
+                    <label className="block text-[11px] font-bold text-[#7A5B32]">
+                      Enter Custom Category Name <span className="text-rose-600">*</span>
                     </label>
                     <input
                       required
@@ -3004,15 +3011,15 @@ export default function AdminPage() {
                           ? 'e.g. Freshwater Shrimp, Terrarium Kits, Coral Frags'
                           : 'e.g. Resin Clocks, Polymer Clay Jewelry, Handmade Candles'
                       }
-                      className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs font-bold text-[#F5EBDD] outline-none focus:border-[#D4AF78] shadow-sm"
+                      className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#FCF9F4] px-3 text-xs font-bold text-[#141210] outline-none focus:border-[#8C6834] shadow-sm"
                     />
-                    <p className="text-[10px] text-[#B8AA96]">
+                    <p className="text-[10px] text-[#5C4D3C]">
                       This category will appear live in catalog filters, admin analytics, and navigation.
                     </p>
                   </div>
                 ) : (
                   <div>
-                    <label className="mb-1 block text-[11px] font-bold text-[#F5EBDD]">
+                    <label className="mb-1 block text-[11px] font-bold text-[#141210]">
                       Selected Category Dropdown
                     </label>
                     <select
@@ -3025,7 +3032,7 @@ export default function AdminPage() {
                           setProductForm({ ...productForm, category: e.target.value })
                         }
                       }}
-                      className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs font-bold text-[#F5EBDD] outline-none shadow-sm"
+                      className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3 text-xs font-bold text-[#141210] outline-none shadow-sm"
                     >
                       {activeDepartmentCategories.map((c) => (
                         <option key={c} value={c}>
@@ -3042,10 +3049,10 @@ export default function AdminPage() {
                 {/* Subcategory / Micro-tag input */}
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-[11px] font-bold text-[#F5EBDD]">
-                      Subcategory / Specific Type <span className="text-[10px] font-normal text-[#8c827a]">(Optional)</span>
+                    <label className="text-[11px] font-bold text-[#141210]">
+                      Subcategory / Specific Type <span className="text-[10px] font-normal text-[#5C4D3C]">(Optional)</span>
                     </label>
-                    <span className="text-[10px] text-[#8c827a] hidden sm:inline">e.g. Serving Tray, Studs, Discus Pair</span>
+                    <span className="text-[10px] text-[#5C4D3C] hidden sm:inline">e.g. Serving Tray, Studs, Discus Pair</span>
                   </div>
                   <input
                     type="text"
@@ -3056,7 +3063,7 @@ export default function AdminPage() {
                         ? 'e.g. Discus Cichlid, Nano Rimless 60P, External Canister'
                         : 'e.g. Scalloped Floral Tray, Silk Bangles, Soy Wax Candle'
                     }
-                    className="h-9 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs font-medium text-[#F5EBDD] outline-none focus:border-[#c59325] shadow-xs"
+                    className="h-9 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3 text-xs font-medium text-[#141210] outline-none focus:border-[#8C6834] shadow-xs"
                   />
                 </div>
               </div>
@@ -3064,33 +3071,33 @@ export default function AdminPage() {
               {/* Price & Stock Inventory Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Price (₹ INR)</label>
+                  <label className="mb-1 block text-xs font-bold text-[#141210]">Price (₹ INR)</label>
                   <input
                     required
                     type="number"
                     value={productForm.price}
                     onChange={(e) => setProductForm({ ...productForm, price: e.target.value })}
                     placeholder="899"
-                    className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs font-bold text-[#F5EBDD] outline-none shadow-sm"
+                    className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3 text-xs font-bold text-[#141210] outline-none shadow-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Stock Inventory</label>
+                  <label className="mb-1 block text-xs font-bold text-[#141210]">Stock Inventory</label>
                   <input
                     required
                     type="number"
                     value={productForm.stock}
                     onChange={(e) => setProductForm({ ...productForm, stock: Number(e.target.value) })}
                     placeholder="25"
-                    className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs font-bold text-[#F5EBDD] outline-none shadow-sm"
+                    className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3 text-xs font-bold text-[#141210] outline-none shadow-sm"
                   />
                 </div>
               </div>
 
               {/* Badges */}
               <div>
-                <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Badges (comma-separated)</label>
+                <label className="mb-1 block text-xs font-bold text-[#141210]">Badges (comma-separated)</label>
                 <input
                   value={(productForm.badges || []).join(', ')}
                   onChange={(e) =>
@@ -3100,25 +3107,25 @@ export default function AdminPage() {
                     })
                   }
                   placeholder="Live Arrival Guarantee, Captive Bred, Handmade"
-                  className="h-10 w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs font-bold text-[#F5EBDD] outline-none shadow-sm"
+                  className="h-10 w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3 text-xs font-bold text-[#141210] outline-none shadow-sm"
                 />
               </div>
 
               {/* Description */}
               <div>
-                <label className="mb-1 block text-xs font-bold text-[#F5EBDD]">Description</label>
+                <label className="mb-1 block text-xs font-bold text-[#141210]">Description</label>
                 <textarea
                   rows={2}
                   value={productForm.description}
                   onChange={(e) => setProductForm({ ...productForm, description: e.target.value })}
                   placeholder="Materials, origin, care specifications, or styling notes..."
-                  className="w-full rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] p-3 text-xs font-medium text-[#F5EBDD] outline-none shadow-sm"
+                  className="w-full rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] p-3 text-xs font-medium text-[#141210] outline-none shadow-sm"
                 />
               </div>
 
               {/* Aquatic Parameters Section (Only shown if department === 'aquarium') */}
               {productForm.department === 'aquarium' && (
-                <div className="rounded-2xl border border-cyan-400/50 bg-cyan-50/70 p-3.5 sm:p-4 space-y-3">
+                <div className="rounded-2xl border border-cyan-600/35 bg-cyan-50/75 p-3.5 sm:p-4 space-y-3">
                   <div className="flex items-center gap-2 text-xs font-bold text-cyan-900">
                     <Fish className="h-4 w-4 text-cyan-700" />
                     <span>Aquatic Parameters &amp; Transit Specs</span>
@@ -3138,7 +3145,7 @@ export default function AdminPage() {
                             },
                           })
                         }
-                        className="h-9 w-full rounded-lg border border-cyan-800/40 bg-[#0B0B0A] px-2.5 text-xs text-[#F5EBDD] focus:border-[#D4AF78] outline-none"
+                        className="h-9 w-full rounded-lg border border-cyan-700/35 bg-[#FCF9F4] px-2.5 text-xs text-[#141210] focus:border-cyan-700 outline-none"
                       >
                         <option value="Freshwater">Freshwater</option>
                         <option value="Saltwater / Marine">Saltwater / Marine</option>
@@ -3159,7 +3166,7 @@ export default function AdminPage() {
                             },
                           })
                         }
-                        className="h-9 w-full rounded-lg border border-cyan-800/40 bg-[#0B0B0A] px-2.5 text-xs text-[#F5EBDD] focus:border-[#D4AF78] outline-none"
+                        className="h-9 w-full rounded-lg border border-cyan-700/35 bg-[#FCF9F4] px-2.5 text-xs text-[#141210] focus:border-cyan-700 outline-none"
                       >
                         <option value="Easy">Easy</option>
                         <option value="Moderate">Moderate</option>
@@ -3181,7 +3188,7 @@ export default function AdminPage() {
                           })
                         }
                         placeholder="e.g. 50 Liters+"
-                        className="h-9 w-full rounded-lg border border-cyan-800/40 bg-[#0B0B0A] px-2.5 text-xs text-[#F5EBDD] focus:border-[#D4AF78] outline-none"
+                        className="h-9 w-full rounded-lg border border-cyan-700/35 bg-[#FCF9F4] px-2.5 text-xs text-[#141210] focus:border-cyan-700 outline-none"
                       />
                     </div>
 
@@ -3199,7 +3206,7 @@ export default function AdminPage() {
                           })
                         }
                         placeholder="e.g. 60x30x36cm or 1200L/H"
-                        className="h-9 w-full rounded-lg border border-cyan-800/40 bg-[#0B0B0A] px-2.5 text-xs text-[#F5EBDD] focus:border-[#D4AF78] outline-none"
+                        className="h-9 w-full rounded-lg border border-cyan-700/35 bg-[#FCF9F4] px-2.5 text-xs text-[#141210] focus:border-cyan-700 outline-none"
                       />
                     </div>
                   </div>
@@ -3209,7 +3216,7 @@ export default function AdminPage() {
               {/* Product Image Selection & Upload */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="block text-xs font-bold text-[#F5EBDD]">Product Image</label>
+                  <label className="block text-xs font-bold text-[#141210]">Product Image</label>
                   <input
                     type="file"
                     ref={productFileInputRef}
@@ -3221,7 +3228,7 @@ export default function AdminPage() {
                     type="button"
                     disabled={isUploadingImage}
                     onClick={() => productFileInputRef.current?.click()}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D4AF78] hover:underline"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#7A5B32] hover:underline"
                   >
                     <Upload className="h-3.5 w-3.5" />
                     <span>{isUploadingImage ? 'Uploading...' : 'Upload Image File'}</span>
@@ -3237,7 +3244,7 @@ export default function AdminPage() {
                       key={img.label}
                       type="button"
                       onClick={() => setProductForm({ ...productForm, image: img.url })}
-                      className="rounded-full border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A]/80 px-2.5 py-1 text-[10px] font-bold text-[#F5EBDD] hover:bg-[#12110F] shadow-xs"
+                      className="rounded-full border border-[rgba(122,91,50,0.24)] bg-[#EFE8DC] px-2.5 py-1 text-[10px] font-bold text-[#141210] hover:bg-[#D4AF78] shadow-xs"
                     >
                       {img.label}
                     </button>
@@ -3251,7 +3258,7 @@ export default function AdminPage() {
                     value={productForm.image}
                     onChange={(e) => setProductForm({ ...productForm, image: e.target.value })}
                     placeholder="https://images.unsplash.com/..."
-                    className="h-10 flex-1 min-w-0 rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A] px-3 text-xs text-[#F5EBDD] outline-none shadow-sm"
+                    className="h-10 flex-1 min-w-0 rounded-xl border border-[rgba(122,91,50,0.24)] bg-[#F5F0E8] px-3 text-xs text-[#141210] outline-none shadow-sm"
                   />
                   {productForm.image && (
                     <img
@@ -3260,7 +3267,7 @@ export default function AdminPage() {
                       onError={(e) => {
                         e.currentTarget.src = fallbackCraftImage
                       }}
-                      className="h-10 w-10 shrink-0 rounded-xl object-cover border border-[#d4a338]/30"
+                      className="h-10 w-10 shrink-0 rounded-xl object-cover border border-[rgba(122,91,50,0.28)]"
                     />
                   )}
                 </div>
@@ -3280,37 +3287,37 @@ export default function AdminPage() {
       {/* ORDER DETAILS MODAL */}
       {/* ========================================================================= */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#17120a]/60 p-2.5 sm:p-4 backdrop-blur-md overflow-hidden">
-          <div className="relative my-auto w-full max-w-xl max-h-[92vh] flex flex-col overflow-hidden rounded-2xl sm:rounded-[2.2rem] bg-[#191713] border border-[rgba(212,175,120,0.25)] shadow-[0_25px_60px_rgba(0,0,0,0.85)]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#141210]/45 p-2.5 sm:p-4 backdrop-blur-md overflow-hidden">
+          <div className="relative my-auto w-full max-w-xl max-h-[92vh] flex flex-col overflow-hidden rounded-2xl sm:rounded-[2.2rem] bg-[#FCF9F4] border border-[rgba(122,91,50,0.24)] shadow-[0_25px_60px_rgba(20,18,16,0.22)]">
             <button
               type="button"
               onClick={() => setSelectedOrder(null)}
-              className="absolute right-3.5 top-3.5 sm:right-5 sm:top-5 grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-full border border-[rgba(212,175,120,0.25)] bg-[#0B0B0A]/80 text-[#F5EBDD] hover:bg-[#12110F] hover:border-[rgba(212,175,120,0.5)] z-10 transition shadow-xs cursor-pointer"
+              className="absolute right-3.5 top-3.5 sm:right-5 sm:top-5 grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-full border border-[rgba(122,91,50,0.24)] bg-[#FAF6EF] text-[#141210] hover:bg-[#EFE8DC] hover:border-[#8C6834] z-10 transition shadow-xs cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
 
-            <div className="shrink-0 border-b border-[rgba(212,175,120,0.25)] bg-[#12110F] p-4 sm:p-6 pr-12">
+            <div className="shrink-0 border-b border-[rgba(122,91,50,0.2)] bg-[#FAF6EF] p-4 sm:p-6 pr-12">
               <span className="section-eyebrow">Order Inspection &amp; Tracking</span>
-              <h3 className="mt-1 sm:mt-2 font-serif text-xl sm:text-2xl font-bold text-[#F5EBDD]">
+              <h3 className="mt-1 sm:mt-2 font-tagline text-xl sm:text-2xl font-bold text-[#141210]">
                 Order #{selectedOrder.orderId}
               </h3>
-              <p className="text-xs text-[#B8AA96]">Placed on {selectedOrder.date}</p>
+              <p className="text-xs text-[#5C4D3C]">Placed on {selectedOrder.date}</p>
             </div>
 
             <div className="flex-1 min-h-0 space-y-3.5 sm:space-y-4 p-4 sm:p-6 text-xs sidebar-scroller">
               {/* Customer Info */}
-              <div className="rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] p-3.5 sm:p-4 shadow-sm">
-                <h4 className="font-bold text-[#F5EBDD]">Customer &amp; Shipping Destination</h4>
-                <p className="mt-1.5 text-[#F5EBDD] font-semibold">{selectedOrder.customer?.fullName}</p>
-                <p className="text-[#B8AA96]">{selectedOrder.customer?.email}</p>
-                <p className="text-[#B8AA96]">{selectedOrder.customer?.phone}</p>
-                <p className="text-[#B8AA96]">{selectedOrder.customer?.address}</p>
-                <p className="text-[#B8AA96]">{selectedOrder.customer?.city}</p>
+              <div className="rounded-2xl border border-[rgba(122,91,50,0.2)] bg-[#FAF6EF] p-3.5 sm:p-4 shadow-sm">
+                <h4 className="font-bold text-[#141210]">Customer &amp; Shipping Destination</h4>
+                <p className="mt-1.5 text-[#141210] font-semibold">{selectedOrder.customer?.fullName}</p>
+                <p className="text-[#5C4D3C]">{selectedOrder.customer?.email}</p>
+                <p className="text-[#5C4D3C]">{selectedOrder.customer?.phone}</p>
+                <p className="text-[#5C4D3C]">{selectedOrder.customer?.address}</p>
+                <p className="text-[#5C4D3C]">{selectedOrder.customer?.city}</p>
                 {selectedOrder.deliveryRegion && (
-                  <div className="mt-2 pt-2 border-t border-[rgba(212,175,120,0.2)] flex items-center justify-between text-xs font-semibold">
-                    <span className="text-[#B8AA96]">Regional Delivery:</span>
-                    <span className="font-bold text-[#D4AF78] bg-[#D4AF78]/10 border border-[#D4AF78]/30 px-2 py-0.5 rounded-full">
+                  <div className="mt-2 pt-2 border-t border-[rgba(122,91,50,0.16)] flex items-center justify-between text-xs font-semibold">
+                    <span className="text-[#5C4D3C]">Regional Delivery:</span>
+                    <span className="font-bold text-[#7A5B32] bg-[#EFE8DC] border border-[rgba(122,91,50,0.25)] px-2 py-0.5 rounded-full">
                       {selectedOrder.deliveryRegion} Zone (₹{selectedOrder.deliveryFee ?? selectedOrder.shipping ?? 0})
                     </span>
                   </div>
@@ -3318,22 +3325,22 @@ export default function AdminPage() {
               </div>
 
               {/* Items */}
-              <div className="rounded-2xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] p-3.5 sm:p-4 shadow-sm">
-                <h4 className="font-bold text-[#F5EBDD]">Ordered Items ({selectedOrder.items?.length || 1})</h4>
+              <div className="rounded-2xl border border-[rgba(122,91,50,0.2)] bg-[#FAF6EF] p-3.5 sm:p-4 shadow-sm">
+                <h4 className="font-bold text-[#141210]">Ordered Items ({selectedOrder.items?.length || 1})</h4>
                 <div className="mt-3 space-y-2">
                   {selectedOrder.items?.map((item: any, i: number) => {
                     const isAqua = item.department === 'aquarium' || aquariumCategories.includes(item.category)
                     return (
-                      <div key={i} className="flex items-center justify-between gap-2 border-b border-[#d4a338]/15 pb-2">
+                      <div key={i} className="flex items-center justify-between gap-2 border-b border-[rgba(122,91,50,0.14)] pb-2">
                         <div className="flex items-center gap-2.5 min-w-0">
                           <img
                             src={item.image}
                             alt={item.title}
-                            className="h-10 w-10 shrink-0 rounded-lg object-cover border border-[#d4a338]/25"
+                            className="h-10 w-10 shrink-0 rounded-lg object-cover border border-[rgba(122,91,50,0.22)]"
                           />
                           <div className="min-w-0">
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              <p className="font-bold text-[#F5EBDD] truncate">{item.title}</p>
+                              <p className="font-bold text-[#141210] truncate">{item.title}</p>
                               {isAqua && (
                                 <span className="rounded-full bg-cyan-100 px-1.5 py-0.2 text-[8px] font-bold text-cyan-800 shrink-0">
                                   Aquatic
@@ -3345,7 +3352,7 @@ export default function AdminPage() {
                             </p>
                           </div>
                         </div>
-                        <span className="font-bold text-[#D4AF78] shrink-0">{item.price}</span>
+                        <span className="font-bold text-[#7A5B32] shrink-0">{item.price}</span>
                       </div>
                     )
                   })}
@@ -3353,9 +3360,9 @@ export default function AdminPage() {
               </div>
 
               {/* Total & Status */}
-              <div className="flex items-center justify-between rounded-xl border border-[rgba(212,175,120,0.25)] bg-[#12110F] p-3 text-sm font-bold text-[#F5EBDD] shadow-sm">
+              <div className="flex items-center justify-between rounded-xl border border-[rgba(122,91,50,0.2)] bg-[#FAF6EF] p-3 text-sm font-bold text-[#141210] shadow-sm">
                 <span>Total Amount</span>
-                <span className="text-[#D4AF78]">₹{selectedOrder.total?.toFixed(0)}</span>
+                <span className="text-[#7A5B32]">₹{selectedOrder.total?.toFixed(0)}</span>
               </div>
             </div>
           </div>

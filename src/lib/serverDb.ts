@@ -24,9 +24,9 @@ export interface BrandingSettings {
 export const DEFAULT_BRANDING: BrandingSettings = {
   siteName: 'NP Atelier',
   tagline: 'Luxury Crafts & Exotic Aquatics',
-  logoType: 'icon',
+  logoType: 'both',
   logoText: 'NP',
-  logoImageUrl: '',
+  logoImageUrl: '/np-atelier-logo.jpg',
   announcementText: 'Handcrafted Artisan Drops & Exotic Aquatics Live • Code ATELIER10 for 10% off',
   contactEmail: 'npatelierindia@gmail.com',
   contactPhone: '+91 93412 97124',
@@ -186,6 +186,17 @@ let memoryProducts: Product[] = [...allInitialProducts]
 let memoryOrders: any[] = []
 let memoryDelivery: RegionalDeliverySettings = JSON.parse(JSON.stringify(DEFAULT_DELIVERY_SETTINGS))
 
+function withDefaultBranding(incoming?: Partial<BrandingSettings> | null): BrandingSettings {
+  const merged = { ...DEFAULT_BRANDING, ...(incoming || {}) }
+  if (!merged.logoImageUrl) {
+    merged.logoImageUrl = DEFAULT_BRANDING.logoImageUrl
+    if (merged.logoType === 'icon') {
+      merged.logoType = DEFAULT_BRANDING.logoType
+    }
+  }
+  return merged
+}
+
 export async function getSettings(): Promise<BrandingSettings> {
   const now = Date.now()
   if (cachedSettings && cachedSettings.expiresAt > now) {
@@ -198,7 +209,7 @@ export async function getSettings(): Promise<BrandingSettings> {
     const doc = await db.collection('settings').findOne({ _id: 'global_settings' as any })
     if (doc) {
       const { _id, ...rest } = doc
-      memorySettings = { ...DEFAULT_BRANDING, ...rest } as BrandingSettings
+      memorySettings = withDefaultBranding(rest as Partial<BrandingSettings>)
       cachedSettings = { data: memorySettings, expiresAt: now + SETTINGS_TTL_MS }
       return memorySettings
     }
@@ -225,7 +236,7 @@ export async function getSettings(): Promise<BrandingSettings> {
     }
     const raw = await fs.promises.readFile(SETTINGS_FILE, 'utf8')
     const parsed = JSON.parse(raw)
-    memorySettings = { ...DEFAULT_BRANDING, ...parsed }
+    memorySettings = withDefaultBranding(parsed)
     cachedSettings = { data: memorySettings, expiresAt: now + SETTINGS_TTL_MS }
     return memorySettings
   } catch (err) {

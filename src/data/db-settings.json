@@ -1,9 +1,9 @@
 {
   "siteName": "NP Atelier",
   "tagline": "Luxury Crafts & Exotic Aquatics",
-  "logoType": "icon",
+  "logoType": "both",
   "logoText": "NP",
-  "logoImageUrl": "",
+  "logoImageUrl": "/np-atelier-logo.jpg",
   "announcementText": "Handcrafted Artisan Drops & Exotic Aquatics Live • Code ATELIER10 for 10% off",
   "contactEmail": "npatelierindia@gmail.com",
   "contactPhone": "+91 93412 97124",

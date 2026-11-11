@@ -161,14 +161,14 @@ function ProductCard({
         isCompact
           ? 'rounded-[1.15rem] sm:rounded-[1.35rem] p-2 sm:p-2.5'
           : 'rounded-[1.25rem] sm:rounded-[1.65rem] p-2.5 sm:p-3'
-      } border border-[rgba(212,175,120,0.25)] bg-gradient-to-b from-[#1C1A16] via-[#171512] to-[#12110F] shadow-[0_8px_24px_rgba(0,0,0,0.65)] sm:hover:shadow-[0_18px_42px_rgba(0,0,0,0.9),0_0_24px_rgba(212,175,120,0.12)] sm:hover:border-[#D4AF78]/70 sm:hover:-translate-y-1 transition-[transform,box-shadow,border-color] duration-200 ease-out transform-gpu hover:will-change-transform ${className}`}
+      } border border-[#8C6D46]/25 bg-gradient-to-b from-[#FCF9F4] via-[#FAF6EE] to-[#F3ECE0] shadow-[0_8px_24px_rgba(72,54,30,0.08)] sm:hover:shadow-[0_18px_36px_rgba(72,54,30,0.14),0_0_20px_rgba(212,175,120,0.14)] sm:hover:border-[#B8925A] sm:hover:-translate-y-1 transition-[transform,box-shadow,border-color] duration-200 ease-out transform-gpu hover:will-change-transform ${className}`}
     >
       <div>
         {/* Image Showcase Frame */}
         <div
           className={`relative ${
             isCompact ? 'aspect-square sm:aspect-[4/3.8]' : 'aspect-square sm:aspect-[4/4.3]'
-          } w-full overflow-hidden rounded-xl sm:rounded-2xl bg-[#0B0B0A] border border-[rgba(212,175,120,0.25)]`}
+          } w-full overflow-hidden rounded-xl sm:rounded-2xl bg-[#EDE4DD] border border-[#8C6D46]/20`}
         >
           <img
             src={product.image}
@@ -182,7 +182,7 @@ function ProductCard({
             }}
             className="h-full w-full object-cover transition-transform duration-300 ease-out sm:group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0A]/70 via-transparent to-transparent opacity-0 transition-opacity duration-200 sm:group-hover:opacity-100" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0A]/65 via-transparent to-transparent opacity-0 transition-opacity duration-200 sm:group-hover:opacity-100" />
 
           {/* Luxury Curated Badges */}
           <div className="absolute left-1.5 sm:left-2 top-1.5 sm:top-2 z-10 flex flex-wrap items-center gap-1 max-w-[80%]">
@@ -197,7 +197,7 @@ function ProductCard({
               </span>
             )}
             {!isCompact && !isCardComingSoon && product.badges?.[1] && (
-              <span className="hidden sm:inline-flex items-center rounded-full bg-[#12110F]/90 border border-[rgba(212,175,120,0.25)] px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-bold uppercase tracking-wider text-[#B8AA96] shadow-sm">
+              <span className="hidden sm:inline-flex items-center rounded-full bg-[#12110F]/90 border border-[rgba(212,175,120,0.25)] px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-bold uppercase tracking-wider text-[#F5EBDD] shadow-sm">
                 {product.badges[1]}
               </span>
             )}
@@ -231,11 +231,11 @@ function ProductCard({
               aria-pressed={isWishlisted}
               aria-label={`Save ${product.title} to wishlist`}
               onClick={handleWishlistClick}
-              className="grid h-6 w-6 sm:h-7.5 sm:w-7.5 place-items-center rounded-full bg-[#12110F]/90 border border-[rgba(212,175,120,0.25)] text-[#F5EBDD] shadow-sm transition duration-150 active:scale-90 sm:hover:scale-105 sm:hover:border-rose-400 sm:hover:text-rose-400 cursor-pointer"
+              className="grid h-6 w-6 sm:h-7.5 sm:w-7.5 place-items-center rounded-full bg-[#FCF9F4]/95 border border-[#8C6D46]/30 text-[#141210] shadow-sm transition duration-150 active:scale-90 sm:hover:scale-105 sm:hover:border-rose-500 sm:hover:text-rose-500 cursor-pointer"
             >
               <Heart
                 className={`h-3 w-3 sm:h-3.5 sm:w-3.5 transition ${
-                  isWishlisted ? 'fill-rose-500 text-rose-500 scale-105' : 'text-[#F5EBDD]'
+                  isWishlisted ? 'fill-rose-500 text-rose-500 scale-105' : 'text-[#141210]'
                 }`}
               />
             </button>
@@ -243,7 +243,7 @@ function ProductCard({
               type="button"
               aria-label={`Quick view ${product.title}`}
               onClick={handleQuickViewClick}
-              className="grid h-6 w-6 sm:h-7.5 sm:w-7.5 place-items-center rounded-full bg-[#12110F]/90 border border-[rgba(212,175,120,0.25)] text-[#F5EBDD] shadow-sm transition duration-150 active:scale-90 sm:hover:scale-105 sm:hover:border-[#D4AF78] sm:hover:text-[#E5C18A] cursor-pointer"
+              className="grid h-6 w-6 sm:h-7.5 sm:w-7.5 place-items-center rounded-full bg-[#FCF9F4]/95 border border-[#8C6D46]/30 text-[#141210] shadow-sm transition duration-150 active:scale-90 sm:hover:scale-105 sm:hover:border-[#B8925A] sm:hover:text-[#7A5B32] cursor-pointer"
             >
               <Eye className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
             </button>
@@ -255,13 +255,13 @@ function ProductCard({
           {/* Category & Rating Row */}
           <div className="flex items-center justify-between gap-1 text-[9px] sm:text-[10px]">
             <span
-              className="font-bold uppercase tracking-[0.1em] truncate text-[#D4AF78]"
+              className="font-bold uppercase tracking-[0.1em] truncate text-[#7A5B32]"
               title={product.category}
             >
               {product.category}
             </span>
-            <div className="flex items-center gap-1 shrink-0 font-bold text-[#F5EBDD]">
-              <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 fill-[#D4AF78] text-[#D4AF78]" />
+            <div className="flex items-center gap-1 shrink-0 font-bold text-[#141210]">
+              <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 fill-[#D4AF78] text-[#B88B44]" />
               <span>{product.rating ?? '4.9'}</span>
             </div>
           </div>
@@ -269,10 +269,10 @@ function ProductCard({
           {/* Product Title */}
           <h3
             onClick={handleQuickViewClick}
-            className={`cursor-pointer font-serif font-bold tracking-tight text-[#F5EBDD] leading-snug transition-colors duration-150 hover:text-[#E5C18A] ${
+            className={`cursor-pointer font-tagline font-bold tracking-tight text-[#141210] leading-snug transition-colors duration-150 hover:text-[#7A5B32] ${
               isCompact
-                ? 'text-xs sm:text-[13px] line-clamp-1 min-h-0'
-                : 'text-[12.5px] sm:text-[14px] line-clamp-2 min-h-[2.1rem] sm:min-h-[2.4rem]'
+                ? 'text-sm sm:text-[15px] line-clamp-1 min-h-0'
+                : 'text-sm sm:text-base line-clamp-2 min-h-[2.2rem] sm:min-h-[2.5rem]'
             }`}
             title={product.title}
           >
@@ -283,33 +283,33 @@ function ProductCard({
       </div>
 
       {/* Footer: Clean Price & Never-Cramped Action Bar */}
-      <div className={`pt-2.5 sm:pt-3 border-t border-[rgba(212,175,120,0.20)] px-0.5 mt-2 space-y-2`}>
+      <div className={`pt-2.5 sm:pt-3 border-t border-[#8C6D46]/20 px-0.5 mt-2 space-y-2`}>
         {/* Price & Availability Status */}
         <div className="flex items-center justify-between gap-1.5 py-0.5">
           <div className="flex items-baseline gap-1.5 flex-wrap">
-            <span className={`font-serif font-extrabold text-[#F5EBDD] tracking-tight leading-none whitespace-nowrap ${
+            <span className={`font-serif font-extrabold text-[#141210] tracking-tight leading-none whitespace-nowrap ${
               isCompact ? 'text-sm sm:text-base' : 'text-base sm:text-lg'
             }`}>
               {formattedPrice}
             </span>
             {formattedOriginalPrice && (
-              <span className="text-[10px] sm:text-xs text-[#B8AA96]/60 line-through font-medium whitespace-nowrap">
+              <span className="text-[10px] sm:text-xs text-[#75624C] line-through font-medium whitespace-nowrap">
                 {formattedOriginalPrice}
               </span>
             )}
           </div>
 
           {discountPercent ? (
-            <span className="text-[8.5px] sm:text-[9.5px] font-extrabold text-[#0B0B0A] bg-gradient-to-r from-[#D4AF78] to-[#ECC872] px-2 py-0.5 rounded-full shadow-2xs shrink-0">
+            <span className="text-[8.5px] sm:text-[9.5px] font-extrabold text-[#141210] bg-gradient-to-r from-[#D4AF78] to-[#ECC872] px-2 py-0.5 rounded-full shadow-2xs shrink-0">
               {discountPercent}% OFF
             </span>
           ) : isCardComingSoon ? (
-            <span className="text-[8.5px] sm:text-[9.5px] font-bold text-[#D4AF78] bg-[#D4AF78]/10 border border-[#D4AF78]/30 px-2 py-0.5 rounded-full shrink-0">
+            <span className="text-[8.5px] sm:text-[9.5px] font-bold text-[#7A5B32] bg-[#EFE8DC] border border-[#8C6D46]/30 px-2 py-0.5 rounded-full shrink-0">
               Coming Soon
             </span>
           ) : (
-            <span className="text-[8.5px] sm:text-[9.5px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[8.5px] sm:text-[9.5px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>In Stock</span>
             </span>
           )}
@@ -318,7 +318,7 @@ function ProductCard({
         {/* Unified Action Bar: Stacked on Mobile for 100% clarity & comfort, Side-by-Side on Desktop */}
         <div className="relative">
           {plusPop && (
-            <span className="absolute -top-7 right-2 sm:right-4 z-30 pointer-events-none inline-flex items-center gap-1 rounded-full bg-[#D4AF78] text-[#0B0B0A] text-[9px] sm:text-[10px] font-black px-2 py-0.5 shadow-[0_4px_14px_rgba(212,175,120,0.4)] animate-bounce border border-[#E5C18A]">
+            <span className="absolute -top-7 right-2 sm:right-4 z-30 pointer-events-none inline-flex items-center gap-1 rounded-full bg-[#D4AF78] text-[#141210] text-[9px] sm:text-[10px] font-black px-2 py-0.5 shadow-[0_4px_14px_rgba(212,175,120,0.4)] animate-bounce border border-[#E5C18A]">
               ✨ +{activeQuantity > 1 ? activeQuantity : 1} in Bag!
             </span>
           )}
@@ -338,24 +338,24 @@ function ProductCard({
               <>
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="w-full h-8.5 sm:h-9 flex items-center justify-between rounded-full bg-[#0B0B0A] border border-[#D4AF78] p-0.5 shadow-[0_4px_16px_rgba(212,175,120,0.25)] select-none transition-all duration-200"
+                  className="w-full h-8.5 sm:h-9 flex items-center justify-between rounded-full bg-[#EFE8DC] border border-[#B8925A] p-0.5 shadow-xs select-none transition-all duration-200"
                 >
                   {/* Minus Button */}
                   <button
                     type="button"
                     aria-label={`Decrease ${product.title} quantity`}
                     onClick={handleDecrement}
-                    className="grid h-7 w-7 place-items-center rounded-full bg-[#191713] text-[#D4AF78] hover:bg-[#25221B] hover:text-[#F5EBDD] transition duration-150 active:scale-85 cursor-pointer shrink-0 border border-[rgba(212,175,120,0.25)] shadow-xs"
+                    className="grid h-7 w-7 place-items-center rounded-full bg-[#FAF6EF] text-[#7A5B32] hover:bg-[#E7DDD0] hover:text-[#141210] transition duration-150 active:scale-85 cursor-pointer shrink-0 border border-[#8C6D46]/30 shadow-xs"
                     title="Decrease (-1)"
                   >
                     <Minus className="h-3 w-3 stroke-[3]" />
                   </button>
 
                   <div className="flex items-center gap-1.5 px-2 justify-center flex-1 min-w-0">
-                    <span className="inline-flex items-center justify-center min-w-[20px] px-1.5 py-0.2 rounded-full bg-[#D4AF78] text-[#0B0B0A] text-[11px] font-black font-mono shadow-xs">
+                    <span className="inline-flex items-center justify-center min-w-[20px] px-1.5 py-0.2 rounded-full bg-[#D4AF78] text-[#141210] text-[11px] font-black font-mono shadow-xs">
                       {activeQuantity}
                     </span>
-                    <span className="text-[10px] sm:text-[11px] font-bold text-[#B8AA96] uppercase tracking-wider">
+                    <span className="text-[10px] sm:text-[11px] font-bold text-[#5C4D3C] uppercase tracking-wider">
                       in Bag
                     </span>
                   </div>
@@ -365,7 +365,7 @@ function ProductCard({
                     type="button"
                     aria-label={`Increase ${product.title} quantity`}
                     onClick={handleIncrement}
-                    className="grid h-7 w-7 place-items-center rounded-full bg-[#D4AF78] text-[#0B0B0A] hover:bg-[#E5C18A] transition duration-150 active:scale-85 cursor-pointer shadow-xs shrink-0"
+                    className="grid h-7 w-7 place-items-center rounded-full bg-[#D4AF78] text-[#141210] hover:bg-[#E5C18A] transition duration-150 active:scale-85 cursor-pointer shadow-xs shrink-0"
                     title="Add (+1)"
                   >
                     <Plus className="h-3 w-3 stroke-[3]" />
@@ -387,10 +387,10 @@ function ProductCard({
                 <button
                   type="button"
                   onClick={handleAdd}
-                  className="w-full h-8.5 sm:h-9 inline-flex items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] hover:brightness-105 border border-[#F5DC9A]/60 px-3 font-extrabold text-[#0B0B0A] text-xs transition-all duration-200 active:scale-[0.98] shadow-[0_2px_10px_rgba(212,175,120,0.25)] cursor-pointer"
+                  className="w-full h-8.5 sm:h-9 inline-flex items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] hover:brightness-105 border border-[#F5DC9A]/60 px-3 font-extrabold text-[#141210] text-xs transition-all duration-200 active:scale-[0.98] shadow-[0_2px_10px_rgba(212,175,120,0.25)] cursor-pointer"
                   title={`Add ${product.title} to Bag`}
                 >
-                  <ShoppingBag className="h-3.5 w-3.5 text-[#0B0B0A] transition-transform duration-200 group-hover/btn:scale-110 shrink-0 stroke-[2.5]" />
+                  <ShoppingBag className="h-3.5 w-3.5 text-[#141210] transition-transform duration-200 group-hover/btn:scale-110 shrink-0 stroke-[2.5]" />
                   <span className="font-extrabold whitespace-nowrap">Add to Bag</span>
                 </button>
 
