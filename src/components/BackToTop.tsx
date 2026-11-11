@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
+import { useMarketplace } from '../context/MarketplaceContext'
 
 export default function BackToTop() {
+  const { isAquaticTheme } = useMarketplace()
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -44,7 +46,11 @@ export default function BackToTop() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="fixed bottom-20 sm:bottom-6 right-3 sm:right-6 z-30 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-[#D4AF37]/50 bg-gradient-to-br from-[#1A140B] to-[#0D0A05] text-[#F2D785] shadow-[0_4px_20px_rgba(212,175,55,0.35)] transition-colors duration-150 hover:border-[#D4AF37] hover:bg-[#2A1E0E] hover:text-[#FFF5D1] hover:shadow-[0_4px_25px_rgba(212,175,55,0.55)] cursor-pointer transform-gpu hover:will-change-transform"
+          className={`fixed bottom-20 sm:bottom-6 right-3 sm:right-6 z-30 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border transition-colors duration-150 cursor-pointer transform-gpu hover:will-change-transform ${
+            isAquaticTheme
+              ? 'border-[#F43F5E]/65 bg-gradient-to-br from-[#0A243A] to-[#051320] text-emerald-300 shadow-[0_4px_20px_rgba(225,29,72,0.35)] hover:border-emerald-400 hover:bg-[#0E2F4A] hover:text-white'
+              : 'border-[#D4AF37]/50 bg-gradient-to-br from-[#1A140B] to-[#0D0A05] text-[#F2D785] shadow-[0_4px_20px_rgba(212,175,55,0.35)] hover:border-[#D4AF37] hover:bg-[#2A1E0E] hover:text-[#FFF5D1] hover:shadow-[0_4px_25px_rgba(212,175,55,0.55)]'
+          }`}
         >
           <ArrowUp className="h-5 w-5 stroke-[2.5]" />
         </motion.button>

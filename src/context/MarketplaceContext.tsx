@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useMemo, useState, useCallback, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import {
   allInitialProducts,
   aquariumCategories,
@@ -8,6 +9,7 @@ import {
   Product,
 } from '../data/products'
 import { getSavedShippingAddress, saveShippingAddress } from '../utils/addressStorage'
+import { AQUARIUM_THEME_META_COLOR, CRAFTS_THEME_META_COLOR } from '../utils/worldTheme'
 import { useModalDispatch } from './UIModalContext'
 
 export interface BrandingSettings {
@@ -215,6 +217,7 @@ export const DEFAULT_PATRON_USER = {
 }
 
 export function MarketplaceProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
   const [branding, setBranding] = useState<BrandingSettings>(DEFAULT_BRANDING)
   const [products, setProducts] = useState<Product[]>(allInitialProducts)
   const [cart, setCart] = useState<any[]>([])
@@ -227,6 +230,23 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
   const [isGiftWrap, setIsGiftWrap] = useState(false)
   const [activeDepartment, setActiveDepartment] = useState<'all' | 'crafts' | 'aquarium'>('crafts')
+
+  const isStorefrontAquaticRoute =
+    !pathname || pathname === '/' || pathname.startsWith('/acquario-tropicale')
+  const isAquaticTheme = activeDepartment === 'aquarium' && isStorefrontAquaticRoute
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    const root = document.documentElement
+    root.setAttribute('data-world', isAquaticTheme ? 'aquarium' : 'crafts')
+    const metaTheme = document.querySelector('meta[name="theme-color"]')
+    if (metaTheme) {
+      metaTheme.setAttribute(
+        'content',
+        isAquaticTheme ? AQUARIUM_THEME_META_COLOR : CRAFTS_THEME_META_COLOR
+      )
+    }
+  }, [isAquaticTheme])
 
   // Regional Delivery Settings & Customer Region Selection
   const [deliverySettings, setDeliverySettings] = useState<RegionalDeliverySettings>(DEFAULT_DELIVERY_SETTINGS)
@@ -427,7 +447,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
       const urlParams = new URLSearchParams(window.location.search)
       const deptParam = urlParams.get('dept')
-      if (deptParam === 'aquarium') {
+      if (deptParam === 'aquarium' || window.location.pathname.startsWith('/acquario-tropicale')) {
         setActiveDepartment('aquarium')
       } else if (deptParam === 'crafts') {
         setActiveDepartment('crafts')
@@ -1296,6 +1316,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       user,
       toasts,
       activeDepartment,
+      isAquaticTheme,
       setActiveDepartment,
       setIsCartOpen,
       setIsWishlistOpen,
@@ -1355,6 +1376,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       user,
       toasts,
       activeDepartment,
+      isAquaticTheme,
       isAuthLoading,
       globalLoader,
       triggerGlobalLoader,

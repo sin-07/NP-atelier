@@ -5,8 +5,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Heart, Search, ShoppingBag, X, Fish } from 'lucide-react'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { useUIModals } from '../context/UIModalContext'
-import { fallbackCraftImage } from '../utils/fallbackImage'
+import { fallbackAquariumImage, fallbackCraftImage } from '../utils/fallbackImage'
 import { lockScroll, unlockScroll } from '../utils/scrollLock'
+import { getWorldModalTheme } from '../utils/worldTheme'
 
 const SEARCH_CATEGORIES = [
   'All',
@@ -26,7 +27,9 @@ export default function QuickSearchModal() {
     addToCart,
     toggleWishlist,
     isWishlisted,
+    isAquaticTheme,
   } = useMarketplace()
+  const wt = getWorldModalTheme(isAquaticTheme)
 
   const [query, setQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
@@ -118,7 +121,7 @@ export default function QuickSearchModal() {
           role="dialog"
           aria-modal="true"
           aria-label="Quick Search"
-          className="fixed inset-0 z-[130] flex items-start justify-center bg-[#141210]/55 backdrop-blur-xs p-3 sm:p-4 pt-3 sm:pt-20 touch-none overscroll-contain"
+          className={`fixed inset-0 z-[130] flex items-start justify-center ${wt.backdrop} p-3 sm:p-4 pt-3 sm:pt-20 touch-none overscroll-contain`}
           onClick={() => setIsQuickSearchOpen(false)}
         >
           <motion.div
@@ -128,26 +131,26 @@ export default function QuickSearchModal() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
             transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-2xl overflow-hidden rounded-3xl border border-[#6D5738]/25 bg-[#FCF9F4] shadow-[0_25px_60px_rgba(44,34,20,0.28)] transform-gpu touch-auto overscroll-contain"
+            className={`w-full max-w-2xl overflow-hidden rounded-3xl ${wt.card} transform-gpu touch-auto overscroll-contain`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Search Input Bar with Clear and Dedicated Close Button */}
-            <div className="relative flex items-center gap-2 border-b border-[#6D5738]/20 bg-[#FAF6EF] p-3 sm:p-4">
+            <div className={`relative flex items-center gap-2 ${wt.subHeader} p-3 sm:p-4`}>
               <div className="relative flex-1">
-                <Search className="pointer-events-none absolute left-3.5 sm:left-4 top-1/2 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-[#7A5B32]" />
+                <Search className={`pointer-events-none absolute left-3.5 sm:left-4 top-1/2 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 ${wt.accentText}`} />
                 <input
                   ref={inputRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search fish, aquariums, plants, candles, jewelry..."
-                  className="h-11 sm:h-12 w-full rounded-2xl border border-[#6D5738]/25 bg-[#F5F0E8] pl-10 sm:pl-12 pr-10 text-xs sm:text-base text-[#141210] outline-none placeholder:text-[#5C4D3C]/65 transition focus:border-[#B68D52] focus:ring-2 focus:ring-[#D4AF78]/30 font-medium"
+                  className={`h-11 sm:h-12 w-full rounded-2xl border pl-10 sm:pl-12 pr-10 text-xs sm:text-base outline-none transition font-medium ${wt.input}`}
                 />
                 {query && (
                   <button
                     type="button"
                     aria-label="Clear query"
                     onClick={() => setQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5C4D3C] transition hover:text-[#7A5B32] cursor-pointer p-1"
+                    className={`absolute right-3 top-1/2 -translate-y-1/2 transition cursor-pointer p-1 ${wt.muted} hover:text-[#F43F5E]`}
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -159,7 +162,7 @@ export default function QuickSearchModal() {
                 type="button"
                 aria-label="Close search"
                 onClick={() => setIsQuickSearchOpen(false)}
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl border border-[#6D5738]/25 bg-[#EFE8DC] text-[#141210] hover:bg-[#E5DCCD] hover:border-[#B68D52] transition duration-150 active:scale-95 cursor-pointer"
+                className={`grid h-10 w-10 shrink-0 place-items-center rounded-2xl transition duration-150 active:scale-95 cursor-pointer ${wt.closeBtn}`}
                 title="Close Search"
               >
                 <X className="h-4 w-4 stroke-[2.5]" />
@@ -167,16 +170,14 @@ export default function QuickSearchModal() {
             </div>
 
             {/* Quick Category Filter Bar */}
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar border-b border-[#6D5738]/20 bg-[#FAF6EF] px-3 sm:px-5 py-2.5">
+            <div className={`flex items-center gap-1.5 overflow-x-auto no-scrollbar ${wt.subHeader} px-3 sm:px-5 py-2.5`}>
               {SEARCH_CATEGORIES.map((cat) => (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => setSelectedCategory(cat)}
                   className={`rounded-full px-3 py-1 text-xs font-bold transition shrink-0 cursor-pointer ${
-                    selectedCategory === cat
-                      ? 'bg-[#D4AF78] text-[#141210] border border-[#C69C5D] shadow-xs font-extrabold'
-                      : 'border border-[#6D5738]/25 bg-[#F5F0E8] text-[#5C4D3C] hover:text-[#141210] hover:border-[#B68D52]'
+                    selectedCategory === cat ? wt.activeTab : wt.inactiveTab
                   }`}
                 >
                   {cat}
@@ -185,22 +186,26 @@ export default function QuickSearchModal() {
             </div>
 
             {/* Suggestions & Results List */}
-            <div className="max-h-[60vh] sm:max-h-[55vh] sidebar-scroller p-3 sm:p-5 bg-[#F5F0E8] overscroll-contain">
-              <div className="flex items-center justify-between pb-2.5 text-xs font-bold uppercase tracking-wider text-[#5C4D3C]">
+            <div
+              className={`max-h-[60vh] sm:max-h-[55vh] sidebar-scroller p-3 sm:p-5 overscroll-contain ${
+                isAquaticTheme ? 'bg-[#051320]' : 'bg-[#F5F0E8]'
+              }`}
+            >
+              <div className={`flex items-center justify-between pb-2.5 text-xs font-bold uppercase tracking-wider ${wt.muted}`}>
                 <span>
                   {query ? `Found ${searchResults.length} items` : 'Trending Marketplace Drops'}
                 </span>
-                <span className="text-[10px] text-[#7A5B32] font-semibold hidden sm:inline">
+                <span className={`text-[10px] font-semibold hidden sm:inline ${wt.accentText}`}>
                   Press ESC to exit
                 </span>
               </div>
 
               {searchResults.length === 0 ? (
                 <div className="py-10 text-center">
-                  <p className="font-tagline text-xl font-bold text-[#141210]">
+                  <p className={`font-tagline text-xl font-bold ${wt.title}`}>
                     No items found matching "{query}"
                   </p>
-                  <p className="mt-1 text-xs text-[#5C4D3C]">
+                  <p className={`mt-1 text-xs ${wt.muted}`}>
                     Try searching for Discus, Betta, Aquarium, Candle, Resin, or Bangles.
                   </p>
                 </div>
@@ -209,7 +214,11 @@ export default function QuickSearchModal() {
                   {searchResults.map((product: any) => (
                     <div
                       key={product.id}
-                      className="group flex items-center justify-between rounded-2xl border border-[#6D5738]/20 bg-[#FCF9F4] p-2.5 sm:p-3 transition duration-150 hover:border-[#B68D52]/65 hover:bg-[#FAF6EF] hover:shadow-xs"
+                      className={`group flex items-center justify-between rounded-2xl border p-2.5 sm:p-3 transition duration-150 hover:shadow-xs ${
+                        isAquaticTheme
+                          ? 'border-sky-400/20 bg-[#0A2237] hover:border-emerald-400/55 hover:bg-[#0D2B44]'
+                          : 'border-[#6D5738]/20 bg-[#FCF9F4] hover:border-[#B68D52]/65 hover:bg-[#FAF6EF]'
+                      }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <img
@@ -218,25 +227,44 @@ export default function QuickSearchModal() {
                           loading="lazy"
                           decoding="async"
                           onError={(e) => {
-                            e.currentTarget.src = fallbackCraftImage
+                            e.currentTarget.src =
+                              product.department === 'aquarium'
+                                ? fallbackAquariumImage
+                                : fallbackCraftImage
                           }}
-                          className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl object-cover border border-[#6D5738]/20 shrink-0 bg-[#EFE8DC]"
+                          className={`h-12 w-12 sm:h-14 sm:w-14 rounded-xl object-cover border shrink-0 ${
+                            isAquaticTheme
+                              ? 'border-sky-400/25 bg-[#071A2B]'
+                              : 'border-[#6D5738]/20 bg-[#EFE8DC]'
+                          }`}
                         />
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A5B32] truncate">
+                            <span className={`text-[10px] font-bold uppercase tracking-wider truncate ${wt.accentText}`}>
                               {product.category}
                             </span>
                             {product.department === 'aquarium' && (
-                              <span className="rounded-full bg-teal-50 border border-teal-600/30 px-1.5 py-0.2 text-[8px] font-bold text-teal-700 shrink-0">
+                              <span
+                                className={`rounded-full border px-1.5 py-0.2 text-[8px] font-bold shrink-0 ${
+                                  isAquaticTheme
+                                    ? 'bg-emerald-500/15 border-emerald-400/40 text-emerald-300'
+                                    : 'bg-teal-50 border-teal-600/30 text-teal-700'
+                                }`}
+                              >
                                 Aquarium
                               </span>
                             )}
                           </div>
-                          <h4 className="truncate font-tagline text-sm sm:text-base font-bold text-[#141210] group-hover:text-[#7A5B32] transition">
+                          <h4
+                            className={`truncate font-tagline text-sm sm:text-base font-bold transition ${
+                              isAquaticTheme
+                                ? 'text-[#F0F8FF] group-hover:text-emerald-300'
+                                : 'text-[#141210] group-hover:text-[#7A5B32]'
+                            }`}
+                          >
                             {product.title}
                           </h4>
-                          <span className="text-xs font-extrabold text-[#141210]">
+                          <span className={`text-xs font-extrabold ${wt.title}`}>
                             {product.price}
                           </span>
                         </div>
@@ -250,10 +278,14 @@ export default function QuickSearchModal() {
                             e.stopPropagation()
                             toggleWishlist(product.id)
                           }}
-                          className={`grid h-8 w-8 place-items-center rounded-full border border-[#6D5738]/25 bg-[#F5F0E8] text-[#141210] transition hover:border-rose-400 hover:text-rose-500 cursor-pointer ${
+                          className={`grid h-8 w-8 place-items-center rounded-full border transition cursor-pointer ${
                             isWishlisted(product.id)
-                              ? 'border-rose-400 bg-rose-50 text-rose-600'
-                              : ''
+                              ? isAquaticTheme
+                                ? 'border-rose-400/60 bg-rose-500/20 text-rose-300'
+                                : 'border-rose-400 bg-rose-50 text-rose-600'
+                              : isAquaticTheme
+                              ? 'border-sky-400/25 bg-[#071A2B] text-[#F0F8FF] hover:border-rose-400 hover:text-rose-400'
+                              : 'border-[#6D5738]/25 bg-[#F5F0E8] text-[#141210] hover:border-rose-400 hover:text-rose-500'
                           }`}
                         >
                           <Heart
@@ -263,7 +295,13 @@ export default function QuickSearchModal() {
                           />
                         </button>
                         {product.department === 'aquarium' ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-[#EFE8DC] border border-[#6D5738]/25 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#7A5B32]">
+                          <span
+                            className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider ${
+                              isAquaticTheme
+                                ? wt.redBadge
+                                : 'bg-[#EFE8DC] border-[#6D5738]/25 text-[#7A5B32]'
+                            }`}
+                          >
                             Coming Soon
                           </span>
                         ) : (
@@ -273,7 +311,11 @@ export default function QuickSearchModal() {
                               addToCart(product, 1)
                               setIsQuickSearchOpen(false)
                             }}
-                            className="inline-flex items-center gap-1.5 rounded-full bg-[#D4AF78] hover:bg-[#E5C18A] px-3 py-1.5 text-xs font-bold text-[#141210] transition active:scale-95 cursor-pointer"
+                            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition active:scale-95 cursor-pointer ${
+                              isAquaticTheme
+                                ? 'bg-[#E11D48] hover:bg-[#F43F5E] text-white'
+                                : 'bg-[#D4AF78] hover:bg-[#E5C18A] text-[#141210]'
+                            }`}
                           >
                             <ShoppingBag className="h-3.5 w-3.5" />
                             <span className="hidden sm:inline">Add</span>

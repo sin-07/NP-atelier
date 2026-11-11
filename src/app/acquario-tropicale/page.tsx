@@ -17,7 +17,7 @@ export default function AcquarioTropicalePage() {
   }, [setActiveDepartment])
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden selection:bg-[#D4AF78]/30 selection:text-[#141210] bg-[#F5F0E8] text-[#141210]">
+    <div className="relative min-h-screen overflow-x-hidden selection:bg-[#E11D48]/35 selection:text-white bg-[#051320] text-[#F0F8FF]">
       {/* Toast Notifications */}
       <ToastContainer />
 

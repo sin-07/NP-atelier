@@ -339,6 +339,12 @@ export default function Hero() {
     if (setActiveDepartment) {
       setActiveDepartment(dept)
     }
+    if (dept === 'aquarium') {
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+      return
+    }
     const collectionEl = document.getElementById('collection')
     if (collectionEl) {
       collectionEl.scrollIntoView({ behavior: 'smooth' })

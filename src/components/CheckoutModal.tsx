@@ -27,6 +27,7 @@ import { lookupPincode } from '../utils/pincodeLookup'
 import { getSavedShippingAddress, saveShippingAddress, findAddressByPhone } from '../utils/addressStorage'
 import { buildCartWhatsAppMessage, sendWhatsAppOrder } from '../utils/whatsappOrder'
 import { lockScroll, unlockScroll } from '../utils/scrollLock'
+import { getWorldContactEmail, getWorldModalTheme } from '../utils/worldTheme'
 
 export default function CheckoutModal() {
   const { isCheckoutOpen, setIsCheckoutOpen, setIsAuthOpen } = useUIModals()
@@ -46,7 +47,10 @@ export default function CheckoutModal() {
     deliverySettings,
     selectedRegion,
     setSelectedRegion,
+    isAquaticTheme,
   } = useMarketplace()
+  const wt = getWorldModalTheme(isAquaticTheme)
+  const contactEmail = getWorldContactEmail(isAquaticTheme, branding?.contactEmail)
 
   const currentRegionKey = (selectedRegion || 'north').toLowerCase() as 'north' | 'south' | 'east' | 'west'
   const activeRegionConfig = deliverySettings?.regions?.[currentRegionKey] || deliverySettings?.regions?.north
@@ -324,7 +328,7 @@ export default function CheckoutModal() {
       {isCheckoutOpen ? (
         <motion.div
           key="checkout-modal-backdrop"
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-[#141210]/50 backdrop-blur-xs p-0 sm:p-4 overflow-hidden touch-none"
+          className={`fixed inset-0 z-[100] flex items-end sm:items-center justify-center ${wt.backdrop} p-0 sm:p-4 overflow-hidden touch-none`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -333,7 +337,7 @@ export default function CheckoutModal() {
         >
           <motion.div
             key="checkout-modal-card"
-            className="relative my-0 sm:my-8 w-full max-w-2xl max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] bg-[#FCF9F4] border border-[#6D5738]/25 shadow-[0_20px_60px_rgba(44,34,20,0.28)] transform-gpu will-change-transform touch-auto overscroll-contain"
+            className={`relative my-0 sm:my-8 w-full max-w-2xl max-h-[92vh] sidebar-scroller rounded-t-[2.2rem] sm:rounded-[2.2rem] ${wt.card} transform-gpu will-change-transform touch-auto overscroll-contain`}
             initial={{ scale: 0.96, y: 14 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, y: 14 }}
@@ -344,33 +348,39 @@ export default function CheckoutModal() {
               type="button"
               aria-label="Close checkout modal"
               onClick={handleClose}
-              className="absolute right-5 top-5 z-20 grid h-10 w-10 place-items-center rounded-full border border-[#6D5738]/25 bg-[#F5F0E8] text-[#141210] shadow-xs transition hover:bg-[#EFE8DC] hover:border-[#B68D52]"
+              className={`absolute right-5 top-5 z-20 grid h-10 w-10 place-items-center rounded-full shadow-xs transition ${wt.closeBtn}`}
             >
               <X className="h-5 w-5" />
             </button>
 
             {step === 'form' ? (
               <div>
-                <div className="border-b border-[#6D5738]/20 bg-[#FAF6EF] px-6 py-6 sm:px-8 text-[#141210]">
-                  <div className="flex items-center gap-2">
+                <div className={`${wt.header} px-6 py-6 sm:px-8 ${wt.title}`}>
+                  <div className="flex items-center gap-2 flex-wrap">
                     <span className="section-eyebrow">WhatsApp Direct Checkout</span>
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-[#5C4D3C]">
-                      <MessageCircle className="h-3.5 w-3.5 text-emerald-600" /> WhatsApp Verified Desk • India
+                    <span className={`inline-flex items-center gap-1 text-xs font-bold ${wt.muted}`}>
+                      <MessageCircle className={`h-3.5 w-3.5 ${isAquaticTheme ? 'text-emerald-400' : 'text-emerald-600'}`} /> WhatsApp Verified Desk • India
                     </span>
                   </div>
-                  <h3 className="mt-2 font-tagline text-2xl sm:text-3xl text-[#141210] font-bold">
+                  <h3 className={`mt-2 font-tagline text-2xl sm:text-3xl font-bold ${wt.title}`}>
                     Order Confirmation via WhatsApp
                   </h3>
                   <div className="mt-1.5 flex flex-wrap items-center gap-2">
                     {user ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-600/35 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700">
-                        <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                      <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${wt.greenBadge}`}>
+                        <CheckCircle2 className="h-3 w-3" />
                         <span>Signed in as {user.name} ({user.email}) • Address auto-filled</span>
                       </span>
                     ) : (
                       <div className="flex flex-wrap items-center gap-2 text-xs">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-[#6D5738]/25 bg-[#F5F0E8] px-2.5 py-0.5 text-[11px] font-bold text-[#7A5B32]">
-                          <Sparkles className="h-3 w-3 text-[#7A5B32]" />
+                        <span
+                          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${
+                            isAquaticTheme
+                              ? 'border-sky-400/25 bg-[#0B263E] text-emerald-300'
+                              : 'border-[#6D5738]/25 bg-[#F5F0E8] text-[#7A5B32]'
+                          }`}
+                        >
+                          <Sparkles className={`h-3 w-3 ${wt.accentText}`} />
                           <span>Guest Checkout • No password required</span>
                         </span>
                         <button
@@ -379,7 +389,9 @@ export default function CheckoutModal() {
                             setIsCheckoutOpen(false)
                             setIsAuthOpen(true)
                           }}
-                          className="text-[11px] font-bold text-[#7A5B32] underline hover:text-[#141210] cursor-pointer"
+                          className={`text-[11px] font-bold underline cursor-pointer ${
+                            isAquaticTheme ? 'text-sky-300 hover:text-white' : 'text-[#7A5B32] hover:text-[#141210]'
+                          }`}
                         >
                           Have an account? Sign in
                         </button>
@@ -391,26 +403,40 @@ export default function CheckoutModal() {
                 <form onSubmit={handleSubmit} className="space-y-6 p-6 sm:p-8">
                   {/* Live Aquarium Care Banner if order has fish/aquariums */}
                   {hasAquariumItems && (
-                    <div className="flex items-center gap-3 rounded-2xl border border-teal-600/30 bg-teal-50 p-3.5 text-xs text-teal-800 font-semibold shadow-xs">
-                      <ShieldCheck className="h-5 w-5 text-teal-600 shrink-0" />
+                    <div
+                      className={`flex items-center gap-3 rounded-2xl border p-3.5 text-xs font-semibold shadow-xs ${
+                        isAquaticTheme
+                          ? 'border-emerald-400/40 bg-emerald-500/15 text-emerald-100'
+                          : 'border-teal-600/30 bg-teal-50 text-teal-800'
+                      }`}
+                    >
+                      <ShieldCheck className={`h-5 w-5 shrink-0 ${isAquaticTheme ? 'text-emerald-300' : 'text-teal-600'}`} />
                       <div>
-                        <span className="font-bold text-teal-900 block">Live Arrival & Fragile Glass Guarantee Included</span>
+                        <span className={`font-bold block ${isAquaticTheme ? 'text-white' : 'text-teal-900'}`}>
+                          Live Arrival & Fragile Glass Guarantee Included
+                        </span>
                         <span>Aquatics packed with pure oxygen and climate insulation. Glass aquariums ship with reinforced wooden corner crating.</span>
                       </div>
                     </div>
                   )}
 
                   {/* Order Summary Pill */}
-                  <div className="rounded-2xl border border-[#6D5738]/20 bg-[#FAF6EF] p-4 shadow-xs">
-                    <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#5C4D3C]">
+                  <div className={`rounded-2xl ${wt.inset} p-4 shadow-xs`}>
+                    <div className={`flex items-center justify-between text-xs font-bold uppercase tracking-wider ${wt.muted}`}>
                       <span>Order Items ({cartItems.length})</span>
-                      <span className="text-[#7A5B32] font-extrabold">Total: ₹{cartFinalTotal.toFixed(0)}</span>
+                      <span className={`font-extrabold ${isAquaticTheme ? 'text-[#FB7185]' : 'text-[#7A5B32]'}`}>
+                        Total: ₹{cartFinalTotal.toFixed(0)}
+                      </span>
                     </div>
                     <div className="mt-3 flex gap-2 overflow-x-auto pb-1 sidebar-scroller">
                       {cartItems.map((item: any) => (
                         <div
                           key={item.cartItemId}
-                          className="flex shrink-0 items-center gap-2 rounded-xl bg-[#F5F0E8] border border-[#6D5738]/20 p-1.5 pr-3 text-xs"
+                          className={`flex shrink-0 items-center gap-2 rounded-xl border p-1.5 pr-3 text-xs ${
+                            isAquaticTheme
+                              ? 'bg-[#071A2B] border-sky-400/25'
+                              : 'bg-[#F5F0E8] border-[#6D5738]/20'
+                          }`}
                         >
                           <img
                             src={item.image}
@@ -421,8 +447,8 @@ export default function CheckoutModal() {
                             className="h-9 w-9 rounded-lg object-cover"
                           />
                           <div>
-                            <p className="max-w-[120px] truncate font-bold text-[#141210]">{item.title}</p>
-                            <p className="text-[10px] text-[#5C4D3C]">{item.quantity}x • {item.price}</p>
+                            <p className={`max-w-[120px] truncate font-bold ${wt.title}`}>{item.title}</p>
+                            <p className={`text-[10px] ${wt.muted}`}>{item.quantity}x • {item.price}</p>
                           </div>
                         </div>
                       ))}
@@ -432,16 +458,20 @@ export default function CheckoutModal() {
                   {/* Shipping Section */}
                   <div>
                     <div className="flex items-center justify-between">
-                      <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#141210]">
-                        <Truck className="h-4 w-4 text-[#7A5B32]" /> 1. Shipping Details (India)
+                      <h4 className={`flex items-center gap-2 text-sm font-bold uppercase tracking-wider ${wt.title}`}>
+                        <Truck className={`h-4 w-4 ${wt.accentText}`} /> 1. Shipping Details (India)
                       </h4>
                       {hasSavedAddress && !isEditingAddress && (
                         <button
                           type="button"
                           onClick={() => setIsEditingAddress(true)}
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#7A5B32] hover:text-[#141210] bg-[#FAF6EF] border border-[#6D5738]/25 hover:border-[#B68D52] px-3 py-1 rounded-xl transition shadow-2xs cursor-pointer"
+                          className={`inline-flex items-center gap-1.5 text-xs font-bold border px-3 py-1 rounded-xl transition shadow-2xs cursor-pointer ${
+                            isAquaticTheme
+                              ? 'text-emerald-300 hover:text-white bg-[#0B263E] border-sky-400/25 hover:border-emerald-400'
+                              : 'text-[#7A5B32] hover:text-[#141210] bg-[#FAF6EF] border-[#6D5738]/25 hover:border-[#B68D52]'
+                          }`}
                         >
-                          <Edit3 className="h-3.5 w-3.5 text-[#7A5B32]" />
+                          <Edit3 className={`h-3.5 w-3.5 ${wt.accentText}`} />
                           <span>Change / Edit Address</span>
                         </button>
                       )}
@@ -449,44 +479,52 @@ export default function CheckoutModal() {
 
                     {/* SAVED ADDRESS CARD (Fast 1-Click Checkout) */}
                     {hasSavedAddress && !isEditingAddress ? (
-                      <div className="mt-3 rounded-2xl border border-[#B68D52]/35 bg-[#FAF6EF] p-4 shadow-xs">
+                      <div className={`mt-3 rounded-2xl ${wt.inset} p-4 shadow-xs`}>
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex items-start gap-3">
-                            <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#F5F0E8] border border-[#6D5738]/25 text-[#7A5B32] shadow-xs shrink-0 mt-0.5">
+                            <div className={`grid h-10 w-10 place-items-center rounded-xl ${wt.well} shadow-xs shrink-0 mt-0.5`}>
                               <MapPin className="h-5 w-5" />
                             </div>
                             <div>
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-sm font-bold text-[#141210]">{formData.fullName || 'Patron'}</span>
+                                <span className={`text-sm font-bold ${wt.title}`}>{formData.fullName || 'Patron'}</span>
                                 {formData.phone && (
-                                  <span className="text-xs font-mono font-bold text-[#7A5B32] bg-[#F5F0E8] border border-[#6D5738]/25 px-2 py-0.5 rounded-md">
+                                  <span
+                                    className={`text-xs font-mono font-bold border px-2 py-0.5 rounded-md ${
+                                      isAquaticTheme
+                                        ? 'text-sky-200 bg-[#071A2B] border-sky-400/25'
+                                        : 'text-[#7A5B32] bg-[#F5F0E8] border-[#6D5738]/25'
+                                    }`}
+                                  >
                                     {formData.phone}
                                   </span>
                                 )}
-                                <span className="rounded-full bg-emerald-50 border border-emerald-600/35 text-emerald-700 px-2.5 py-0.5 text-[10px] font-bold inline-flex items-center gap-1">
-                                  <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                                <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold inline-flex items-center gap-1 ${wt.greenBadge}`}>
+                                  <CheckCircle2 className="h-3 w-3" />
                                   <span>Saved Address • 1-Click Ready</span>
                                 </span>
                               </div>
-                              <p className="mt-1 text-xs text-[#5C4D3C] font-medium leading-relaxed">
+                              <p className={`mt-1 text-xs font-medium leading-relaxed ${wt.muted}`}>
                                 {formData.address ? `${formData.address}, ` : ''}{formData.city ? `${formData.city}, ` : ''}{formData.state ? `${formData.state} ` : ''}
-                                {formData.zip && <span className="font-mono font-bold text-[#7A5B32]">- {formData.zip}</span>}
+                                {formData.zip && <span className={`font-mono font-bold ${wt.accentText}`}>- {formData.zip}</span>}
                               </p>
                               {formData.email && (
-                                <p className="mt-1 text-[11px] text-[#5C4D3C]/80">Invoice will be sent to: {formData.email}</p>
+                                <p className={`mt-1 text-[11px] opacity-80 ${wt.muted}`}>Invoice will be sent to: {formData.email}</p>
                               )}
                             </div>
                           </div>
                         </div>
-                        <div className="mt-3 pt-2.5 border-t border-[#6D5738]/20 flex items-center justify-between text-[11px] text-[#5C4D3C]">
+                        <div className={`mt-3 pt-2.5 border-t ${wt.divider} flex items-center justify-between text-[11px] ${wt.muted}`}>
                           <span className="flex items-center gap-1">
-                            <Sparkles className="h-3 w-3 text-[#7A5B32]" />
+                            <Sparkles className={`h-3 w-3 ${wt.accentText}`} />
                             <span>Your delivery address is pre-filled. No need to re-type!</span>
                           </span>
                           <button
                             type="button"
                             onClick={() => setIsEditingAddress(true)}
-                            className="text-[11px] font-bold text-[#7A5B32] underline hover:text-[#141210] cursor-pointer"
+                            className={`text-[11px] font-bold underline cursor-pointer ${
+                              isAquaticTheme ? 'text-sky-300 hover:text-white' : 'text-[#7A5B32] hover:text-[#141210]'
+                            }`}
                           >
                             Use Different Address
                           </button>
@@ -497,31 +535,31 @@ export default function CheckoutModal() {
                       <div className="mt-3 space-y-3">
                         <div className="grid gap-3 sm:grid-cols-2">
                           <div>
-                            <label className="mb-1 block text-xs font-bold text-[#141210]">Full Name</label>
+                            <label className={`mb-1 block text-xs font-bold ${wt.title}`}>Full Name</label>
                             <input
                               required
                               value={formData.fullName}
                               onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                               placeholder="Ananya Sharma"
-                              className="h-11 w-full rounded-xl border border-[#6D5738]/25 bg-[#F5F0E8] px-3.5 text-sm text-[#141210] placeholder-[#5C4D3C]/55 outline-none transition focus:border-[#B68D52] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
+                              className={`h-11 w-full rounded-xl border px-3.5 text-sm outline-none transition font-medium ${wt.input}`}
                             />
                           </div>
                           <div>
-                            <label className="mb-1 block text-xs font-bold text-[#141210]">
-                              Email Address <span className="text-[#5C4D3C] font-normal">(Optional for Invoice)</span>
+                            <label className={`mb-1 block text-xs font-bold ${wt.title}`}>
+                              Email Address <span className={`${wt.muted} font-normal`}>(Optional for Invoice)</span>
                             </label>
                             <input
                               type="email"
                               value={formData.email}
                               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                               placeholder="your.email@example.com"
-                              className="h-11 w-full rounded-xl border border-[#6D5738]/25 bg-[#F5F0E8] px-3.5 text-sm text-[#141210] placeholder-[#5C4D3C]/55 outline-none transition focus:border-[#B68D52] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
+                              className={`h-11 w-full rounded-xl border px-3.5 text-sm outline-none transition font-medium ${wt.input}`}
                             />
                           </div>
                           <div>
                             <div className="flex items-center justify-between mb-1">
-                              <label className="block text-xs font-bold text-[#141210]">
-                                WhatsApp Mobile Number <span className="text-[#7A5B32]">(Order tracking)</span>
+                              <label className={`block text-xs font-bold ${wt.title}`}>
+                                WhatsApp Mobile Number <span className={wt.accentText}>(Order tracking)</span>
                               </label>
                             </div>
                             <input
@@ -530,16 +568,16 @@ export default function CheckoutModal() {
                               value={formData.phone}
                               onChange={(e) => handlePhoneChange(e.target.value)}
                               placeholder="+91 98765 43210"
-                              className="h-11 w-full rounded-xl border border-[#6D5738]/25 bg-[#F5F0E8] px-3.5 text-sm text-[#141210] placeholder-[#5C4D3C]/55 outline-none transition focus:border-[#B68D52] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium font-mono"
+                              className={`h-11 w-full rounded-xl border px-3.5 text-sm outline-none transition font-medium font-mono ${wt.input}`}
                             />
                           </div>
                           <div>
                             <div className="flex items-center justify-between mb-1">
-                              <label className="block text-xs font-bold text-[#141210] flex items-center gap-1">
-                                <MapPin className="h-3 w-3 text-[#7A5B32]" />
+                              <label className={`block text-xs font-bold flex items-center gap-1 ${wt.title}`}>
+                                <MapPin className={`h-3 w-3 ${wt.accentText}`} />
                                 <span>Postal PIN Code (6 Digits)</span>
                               </label>
-                              <span className="text-[10px] text-[#5C4D3C]">Auto-fills City & State</span>
+                              <span className={`text-[10px] ${wt.muted}`}>Auto-fills City & State</span>
                             </div>
                             <div className="relative">
                               <input
@@ -549,62 +587,64 @@ export default function CheckoutModal() {
                                 value={formData.zip}
                                 onChange={(e) => handlePincodeChange(e.target.value)}
                                 placeholder="e.g. 560038"
-                                className="h-11 w-full rounded-xl border border-[#6D5738]/25 bg-[#F5F0E8] px-3.5 pr-20 text-sm font-bold text-[#141210] tracking-wider outline-none transition focus:border-[#B68D52] focus:ring-1 focus:ring-[#D4AF78]/40"
+                                className={`h-11 w-full rounded-xl border px-3.5 pr-20 text-sm font-bold tracking-wider outline-none transition ${wt.input}`}
                               />
                               <div className="absolute right-3 top-1/2 -translate-y-1/2">
                                 {isLocatingPin ? (
-                                  <Loader2 className="h-3.5 w-3.5 text-[#7A5B32] animate-spin" />
+                                  <Loader2 className={`h-3.5 w-3.5 animate-spin ${wt.accentText}`} />
                                 ) : formData.zip.length === 6 && formData.city ? (
-                                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                                  <CheckCircle2 className={`h-3.5 w-3.5 ${isAquaticTheme ? 'text-emerald-400' : 'text-emerald-600'}`} />
                                 ) : null}
                               </div>
                             </div>
                             {pinStatus && (
-                              <p className="mt-1 text-[10px] font-semibold text-[#7A5B32]">
+                              <p className={`mt-1 text-[10px] font-semibold ${wt.accentText}`}>
                                 {pinStatus}
                               </p>
                             )}
                           </div>
                           <div>
-                            <label className="mb-1 block text-xs font-bold text-[#141210]">City / Capital</label>
+                            <label className={`mb-1 block text-xs font-bold ${wt.title}`}>City / Capital</label>
                             <input
                               required
                               value={formData.city}
                               onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                               placeholder="e.g. Bengaluru"
-                              className="h-11 w-full rounded-xl border border-[#6D5738]/25 bg-[#F5F0E8] px-3.5 text-sm text-[#141210] placeholder-[#5C4D3C]/55 outline-none transition focus:border-[#B68D52] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
+                              className={`h-11 w-full rounded-xl border px-3.5 text-sm outline-none transition font-medium ${wt.input}`}
                             />
                           </div>
                           <div>
-                            <label className="mb-1 block text-xs font-bold text-[#141210]">State / Union Territory</label>
+                            <label className={`mb-1 block text-xs font-bold ${wt.title}`}>State / Union Territory</label>
                             <input
                               required
                               value={formData.state}
                               onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                               placeholder="e.g. Karnataka"
-                              className="h-11 w-full rounded-xl border border-[#6D5738]/25 bg-[#F5F0E8] px-3.5 text-sm text-[#141210] placeholder-[#5C4D3C]/55 outline-none transition focus:border-[#B68D52] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
+                              className={`h-11 w-full rounded-xl border px-3.5 text-sm outline-none transition font-medium ${wt.input}`}
                             />
                           </div>
                           <div className="sm:col-span-2">
-                            <label className="mb-1 block text-xs font-bold text-[#141210]">Full Street Address</label>
+                            <label className={`mb-1 block text-xs font-bold ${wt.title}`}>Full Street Address</label>
                             <input
                               required
                               value={formData.address}
                               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                               placeholder="Flat 402, Lotus Residency, MG Road"
-                              className="h-11 w-full rounded-xl border border-[#6D5738]/25 bg-[#F5F0E8] px-3.5 text-sm text-[#141210] placeholder-[#5C4D3C]/55 outline-none transition focus:border-[#B68D52] focus:ring-1 focus:ring-[#D4AF78]/40 font-medium"
+                              className={`h-11 w-full rounded-xl border px-3.5 text-sm outline-none transition font-medium ${wt.input}`}
                             />
                           </div>
                         </div>
 
                         {/* Save Address Toggle & Cancel Option */}
-                        <div className="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-[#6D5738]/20">
-                          <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#5C4D3C]">
+                        <div className={`pt-2 flex flex-wrap items-center justify-between gap-2 border-t ${wt.divider}`}>
+                          <label className={`flex items-center gap-2 cursor-pointer text-xs font-semibold ${wt.muted}`}>
                             <input
                               type="checkbox"
                               checked={saveForFuture}
                               onChange={(e) => setSaveForFuture(e.target.checked)}
-                              className="h-4 w-4 rounded accent-[#B68D52] border-[#6D5738]/30 cursor-pointer"
+                              className={`h-4 w-4 rounded cursor-pointer ${
+                                isAquaticTheme ? 'accent-[#E11D48]' : 'accent-[#B68D52]'
+                              }`}
                             />
                             <span>Remember & save this address for 1-click orders</span>
                           </label>
@@ -612,7 +652,9 @@ export default function CheckoutModal() {
                             <button
                               type="button"
                               onClick={() => setIsEditingAddress(false)}
-                              className="text-xs font-bold text-[#7A5B32] hover:text-[#141210] underline cursor-pointer"
+                              className={`text-xs font-bold underline cursor-pointer ${
+                                isAquaticTheme ? 'text-sky-300 hover:text-white' : 'text-[#7A5B32] hover:text-[#141210]'
+                              }`}
                             >
                               Cancel & Use Saved Address
                             </button>
@@ -625,16 +667,16 @@ export default function CheckoutModal() {
                   {/* Regional Delivery Selection */}
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#141210]">
-                        <Truck className="h-4 w-4 text-[#7A5B32]" /> 2. Delivery Region &amp; Courier Fee
+                      <h4 className={`flex items-center gap-2 text-sm font-bold uppercase tracking-wider ${wt.title}`}>
+                        <Truck className={`h-4 w-4 ${wt.accentText}`} /> 2. Delivery Region &amp; Courier Fee
                       </h4>
-                      <span className="text-[11px] text-[#7A5B32] font-bold">
+                      <span className={`text-[11px] font-bold ${wt.accentText}`}>
                         {activeRegionConfig?.enabled
                           ? `${activeRegionConfig.name} Zone (₹${activeRegionConfig.fee})`
                           : 'Select Zone'}
                       </span>
                     </div>
-                    <p className="text-[11px] text-[#5C4D3C] mb-3">
+                    <p className={`text-[11px] mb-3 ${wt.muted}`}>
                       Select your delivery region to calculate dynamic courier charges verified from our logistics database:
                     </p>
 
@@ -656,33 +698,45 @@ export default function CheckoutModal() {
                             }}
                             className={`relative p-3 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between ${
                               !isEnabled
-                                ? 'opacity-40 border-[#6D5738]/20 bg-[#EFE8DC] cursor-not-allowed'
+                                ? isAquaticTheme
+                                  ? 'opacity-40 border-sky-400/15 bg-[#061828] cursor-not-allowed'
+                                  : 'opacity-40 border-[#6D5738]/20 bg-[#EFE8DC] cursor-not-allowed'
                                 : isSelected
-                                ? 'border-[#B68D52] bg-gradient-to-b from-[#FAF6EF] via-[#FCF9F4] to-[#F3ECE1] shadow-xs ring-1 ring-[#B68D52]/50'
+                                ? isAquaticTheme
+                                  ? 'border-[#F43F5E] bg-gradient-to-b from-[#0E2F4A] via-[#0B253B] to-[#081D30] shadow-xs ring-1 ring-rose-400/50'
+                                  : 'border-[#B68D52] bg-gradient-to-b from-[#FAF6EF] via-[#FCF9F4] to-[#F3ECE1] shadow-xs ring-1 ring-[#B68D52]/50'
+                                : isAquaticTheme
+                                ? 'border-sky-400/20 bg-[#071A2B] hover:border-emerald-400/55 hover:bg-[#0B263E]'
                                 : 'border-[#6D5738]/20 bg-[#F5F0E8] hover:border-[#B68D52] hover:bg-[#FAF6EF]'
                             }`}
                           >
                             <div>
                               <div className="flex items-center justify-between">
-                                <span className="text-xs font-bold text-[#141210] font-tagline">
+                                <span className={`text-xs font-bold font-tagline ${wt.title}`}>
                                   {reg?.name || regKey.toUpperCase()}
                                 </span>
                                 {isSelected && isEnabled && (
-                                  <span className="grid h-4 w-4 place-items-center rounded-full bg-[#D4AF78] text-[#141210] text-[9px] font-black shrink-0">
+                                  <span
+                                    className={`grid h-4 w-4 place-items-center rounded-full text-[9px] font-black shrink-0 ${
+                                      isAquaticTheme
+                                        ? 'bg-[#E11D48] text-white'
+                                        : 'bg-[#D4AF78] text-[#141210]'
+                                    }`}
+                                  >
                                     ✓
                                   </span>
                                 )}
                               </div>
-                              <p className="text-[10px] text-[#5C4D3C] mt-0.5 leading-tight truncate">
+                              <p className={`text-[10px] mt-0.5 leading-tight truncate ${wt.muted}`}>
                                 {isEnabled ? (reg?.estimatedDays || '2-4 Days') : 'Suspended'}
                               </p>
                             </div>
 
-                            <div className="mt-3 pt-2 border-t border-[#6D5738]/15 flex items-center justify-between">
-                              <span className="text-xs font-black text-[#7A5B32]">
+                            <div className={`mt-3 pt-2 border-t flex items-center justify-between ${wt.divider}`}>
+                              <span className={`text-xs font-black ${wt.accentText}`}>
                                 {isEnabled ? `₹${reg?.fee}` : '✕'}
                               </span>
-                              <span className="text-[9px] font-extrabold uppercase tracking-wider text-[#5C4D3C]/80">
+                              <span className={`text-[9px] font-extrabold uppercase tracking-wider opacity-80 ${wt.muted}`}>
                                 {isEnabled ? (isSelected ? 'Active' : 'Select') : 'Closed'}
                               </span>
                             </div>
@@ -694,21 +748,21 @@ export default function CheckoutModal() {
 
                   {/* Payment Section: Pay on Delivery Only */}
                   <div>
-                    <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#141210]">
-                      <ShieldCheck className="h-4 w-4 text-[#7A5B32]" /> 3. Payment Method
+                    <h4 className={`flex items-center gap-2 text-sm font-bold uppercase tracking-wider ${wt.title}`}>
+                      <ShieldCheck className={`h-4 w-4 ${wt.accentText}`} /> 3. Payment Method
                     </h4>
-                    <div className="mt-3 rounded-2xl border border-[#6D5738]/25 bg-[#FAF6EF] p-4 shadow-xs">
-                      <div className="flex items-center justify-between">
+                    <div className={`mt-3 rounded-2xl ${wt.inset} p-4 shadow-xs`}>
+                      <div className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-3">
-                          <div className="grid h-11 w-11 place-items-center rounded-xl bg-[#F5F0E8] border border-[#6D5738]/25 text-[#7A5B32] shadow-xs shrink-0">
+                          <div className={`grid h-11 w-11 place-items-center rounded-xl ${wt.well} shadow-xs shrink-0`}>
                             <PackageCheck className="h-5 w-5" />
                           </div>
                           <div>
-                            <p className="text-sm font-bold text-[#141210]">Pay on Delivery (Cash on Delivery)</p>
-                            <p className="text-xs text-[#5C4D3C] mt-0.5">Pay comfortably to the courier executive upon parcel arrival.</p>
+                            <p className={`text-sm font-bold ${wt.title}`}>Pay on Delivery (Cash on Delivery)</p>
+                            <p className={`text-xs mt-0.5 ${wt.muted}`}>Pay comfortably to the courier executive upon parcel arrival.</p>
                           </div>
                         </div>
-                        <span className="rounded-full bg-emerald-50 border border-emerald-600/35 text-emerald-700 px-2.5 py-0.5 text-[10px] font-bold shrink-0">
+                        <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold shrink-0 ${wt.greenBadge}`}>
                           Selected ✓
                         </span>
                       </div>
@@ -716,27 +770,27 @@ export default function CheckoutModal() {
                   </div>
 
                   {/* Financial Breakdown */}
-                  <div className="space-y-1.5 rounded-2xl bg-[#FAF6EF] border border-[#6D5738]/20 p-4 text-xs text-[#5C4D3C]">
+                  <div className={`space-y-1.5 rounded-2xl ${wt.inset} p-4 text-xs ${wt.muted}`}>
                     <div className="flex justify-between">
                       <span>Items Subtotal</span>
-                      <span className="font-bold text-[#141210]">₹{cartSubtotal.toFixed(0)}</span>
+                      <span className={`font-bold ${wt.title}`}>₹{cartSubtotal.toFixed(0)}</span>
                     </div>
                     {discountAmount > 0 && (
-                      <div className="flex justify-between font-bold text-[#7A5B32]">
+                      <div className={`flex justify-between font-bold ${wt.accentText}`}>
                         <span>Discount ({appliedCoupon?.code})</span>
                         <span>-₹{discountAmount.toFixed(0)}</span>
                       </div>
                     )}
                     <div className="flex justify-between items-center">
                       <span className="flex items-center gap-1.5">
-                        <Truck className="h-3.5 w-3.5 text-[#7A5B32]" />
+                        <Truck className={`h-3.5 w-3.5 ${wt.accentText}`} />
                         <span>Regional Delivery ({activeRegionConfig?.name || 'North'} Zone)</span>
                       </span>
-                      <span className="font-bold text-[#141210]">₹{shippingCost.toFixed(0)}</span>
+                      <span className={`font-bold ${wt.title}`}>₹{shippingCost.toFixed(0)}</span>
                     </div>
-                    <div className="border-t border-[#6D5738]/20 pt-2 flex justify-between text-sm font-bold text-[#141210]">
+                    <div className={`border-t ${wt.divider} pt-2 flex justify-between text-sm font-bold ${wt.title}`}>
                       <span>Total Due</span>
-                      <span className="text-xl text-[#141210] font-extrabold">₹{cartFinalTotal.toFixed(0)}</span>
+                      <span className={`text-xl font-extrabold ${wt.title}`}>₹{cartFinalTotal.toFixed(0)}</span>
                     </div>
                   </div>
 
@@ -744,7 +798,11 @@ export default function CheckoutModal() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-4 px-6 rounded-2xl bg-[#D4AF78] hover:bg-[#E5C18A] text-[#141210] font-bold text-base shadow-[0_8px_25px_rgba(182,141,82,0.28)] hover:shadow-[0_12px_30px_rgba(182,141,82,0.35)] transition-all flex items-center justify-center gap-3 tracking-wide cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed group"
+                      className={`w-full py-4 px-6 rounded-2xl font-bold text-base transition-all flex items-center justify-center gap-3 tracking-wide cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed group ${
+                        isAquaticTheme
+                          ? 'bg-gradient-to-r from-[#E11D48] via-[#DC2626] to-[#F43F5E] hover:brightness-110 text-white shadow-[0_8px_25px_rgba(225,29,72,0.4)]'
+                          : 'bg-[#D4AF78] hover:bg-[#E5C18A] text-[#141210] shadow-[0_8px_25px_rgba(182,141,82,0.28)] hover:shadow-[0_12px_30px_rgba(182,141,82,0.35)]'
+                      }`}
                     >
                       {isSubmitting ? (
                         <>
@@ -758,8 +816,8 @@ export default function CheckoutModal() {
                         </>
                       )}
                     </button>
-                    <p className="text-center text-xs text-[#5C4D3C] flex items-center justify-center gap-1.5 font-medium">
-                      <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <p className={`text-center text-xs flex items-center justify-center gap-1.5 font-medium ${wt.muted}`}>
+                      <ShieldCheck className={`h-4 w-4 shrink-0 ${isAquaticTheme ? 'text-emerald-400' : 'text-emerald-600'}`} />
                       <span>Saves order to Admin Panel &amp; automatically launches WhatsApp with full order details</span>
                     </p>
                   </div>
@@ -768,36 +826,42 @@ export default function CheckoutModal() {
             ) : (
               /* Success Celebration State */
               <div className="p-8 text-center sm:p-12">
-                <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[#E5C18A] to-[#D4AF78] text-[#141210] border-2 border-[#B68D52] shadow-[0_0_25px_rgba(182,141,82,0.35)]">
-                  <CheckCircle2 className="h-10 w-10 text-[#141210]" />
+                <div
+                  className={`mx-auto grid h-20 w-20 place-items-center rounded-full border-2 ${
+                    isAquaticTheme
+                      ? 'bg-gradient-to-br from-[#10B981] to-[#059669] text-[#031F16] border-emerald-300 shadow-[0_0_25px_rgba(16,185,129,0.4)]'
+                      : 'bg-gradient-to-br from-[#E5C18A] to-[#D4AF78] text-[#141210] border-[#B68D52] shadow-[0_0_25px_rgba(182,141,82,0.35)]'
+                  }`}
+                >
+                  <CheckCircle2 className="h-10 w-10" />
                 </div>
 
-                <span className="section-eyebrow mt-5 text-[#7A5B32]">Order Placed &amp; Dispatched to WhatsApp</span>
-                <h3 className="mt-2 font-tagline text-3xl sm:text-4xl text-[#141210] font-bold">
+                <span className={`section-eyebrow mt-5 ${wt.accentText}`}>Order Placed &amp; Dispatched to WhatsApp</span>
+                <h3 className={`mt-2 font-tagline text-3xl sm:text-4xl font-bold ${wt.title}`}>
                   Thank You for Ordering from {siteName}!
                 </h3>
-                <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#5C4D3C]">
-                  Your order <strong className="text-[#7A5B32] font-extrabold">#{confirmedOrder?.orderId}</strong> is saved. If WhatsApp didn&apos;t open automatically, tap below to send your order receipt directly!
+                <p className={`mx-auto mt-3 max-w-md text-sm leading-relaxed ${wt.muted}`}>
+                  Your order <strong className={`font-extrabold ${isAquaticTheme ? 'text-[#FB7185]' : 'text-[#7A5B32]'}`}>#{confirmedOrder?.orderId}</strong> is saved. If WhatsApp didn&apos;t open automatically, tap below to send your order receipt directly!
                 </p>
 
-                <div className="mx-auto mt-6 max-w-md rounded-2xl border border-[#6D5738]/25 bg-[#FAF6EF] p-4 text-left shadow-xs">
+                <div className={`mx-auto mt-6 max-w-md rounded-2xl ${wt.inset} p-4 text-left shadow-xs`}>
                   <div className="flex justify-between text-xs">
-                    <span className="font-semibold text-[#5C4D3C]">Estimated Delivery:</span>
-                    <strong className="text-[#141210]">{confirmedOrder?.estimatedDelivery}</strong>
+                    <span className={`font-semibold ${wt.muted}`}>Estimated Delivery:</span>
+                    <strong className={wt.title}>{confirmedOrder?.estimatedDelivery}</strong>
                   </div>
                   <div className="mt-2 flex justify-between text-xs">
-                    <span className="font-semibold text-[#5C4D3C]">Shipping to:</span>
-                    <strong className="text-[#141210]">{formData.fullName} ({formData.city})</strong>
+                    <span className={`font-semibold ${wt.muted}`}>Shipping to:</span>
+                    <strong className={wt.title}>{formData.fullName} ({formData.city})</strong>
                   </div>
                   <div className="mt-2 flex justify-between text-xs">
-                    <span className="font-semibold text-[#5C4D3C]">Delivery Region:</span>
-                    <strong className="text-[#141210] font-bold">
+                    <span className={`font-semibold ${wt.muted}`}>Delivery Region:</span>
+                    <strong className={`font-bold ${wt.title}`}>
                       {confirmedOrder?.deliveryRegion || activeRegionConfig?.name || 'North'} Zone (₹{confirmedOrder?.deliveryFee ?? shippingCost})
                     </strong>
                   </div>
                   <div className="mt-2 flex justify-between text-xs">
-                    <span className="font-semibold text-[#5C4D3C]">Order Total:</span>
-                    <strong className="text-[#7A5B32] font-extrabold">₹{confirmedOrder?.total?.toFixed(0)} (Pay on Delivery)</strong>
+                    <span className={`font-semibold ${wt.muted}`}>Order Total:</span>
+                    <strong className={`font-extrabold ${wt.accentText}`}>₹{confirmedOrder?.total?.toFixed(0)} (Pay on Delivery)</strong>
                   </div>
                 </div>
 
@@ -812,7 +876,11 @@ export default function CheckoutModal() {
                     }
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#D4AF78] hover:bg-[#E5C18A] text-[#141210] px-7 py-3.5 text-sm font-bold shadow-[0_8px_25px_rgba(182,141,82,0.28)] transition cursor-pointer"
+                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-2xl px-7 py-3.5 text-sm font-bold transition cursor-pointer ${
+                      isAquaticTheme
+                        ? 'bg-gradient-to-r from-[#E11D48] via-[#DC2626] to-[#F43F5E] hover:brightness-110 text-white shadow-[0_8px_25px_rgba(225,29,72,0.4)]'
+                        : 'bg-[#D4AF78] hover:bg-[#E5C18A] text-[#141210] shadow-[0_8px_25px_rgba(182,141,82,0.28)]'
+                    }`}
                   >
                     <MessageCircle className="h-5 w-5 fill-current" />
                     <span>Send / Chat on WhatsApp ↗</span>
@@ -821,15 +889,15 @@ export default function CheckoutModal() {
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="w-full sm:w-auto rounded-2xl border border-[#6D5738]/25 bg-[#F5F0E8] px-6 py-3.5 text-sm font-bold text-[#141210] hover:bg-[#EFE8DC] transition cursor-pointer"
+                    className={`w-full sm:w-auto rounded-2xl px-6 py-3.5 text-sm font-bold transition cursor-pointer ${wt.secondaryCta}`}
                   >
                     Continue Shopping
                   </button>
                 </div>
 
                 {/* Support and Tracking Info */}
-                <div className="mx-auto mt-6 max-w-md rounded-2xl border border-[#6D5738]/20 bg-[#FAF6EF] p-3.5 text-center shadow-xs">
-                  <p className="text-xs font-bold text-[#7A5B32]">
+                <div className={`mx-auto mt-6 max-w-md rounded-2xl ${wt.inset} p-3.5 text-center shadow-xs`}>
+                  <p className={`text-xs font-bold ${wt.accentText}`}>
                     Official Support &amp; Live Dispatch Tracking
                   </p>
                   <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2">
@@ -837,17 +905,25 @@ export default function CheckoutModal() {
                       href={`https://wa.me/${(branding?.contactPhone || '+91 93412 97124').replace(/[^0-9]/g, '') || '919341297124'}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full bg-[#FCF9F4] border border-emerald-600/35 px-3.5 py-1.5 text-xs font-bold text-emerald-700 shadow-xs hover:bg-emerald-50 transition"
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-bold shadow-xs transition ${
+                        isAquaticTheme
+                          ? 'bg-[#071A2B] border-emerald-400/40 text-emerald-300 hover:bg-emerald-500/15'
+                          : 'bg-[#FCF9F4] border-emerald-600/35 text-emerald-700 hover:bg-emerald-50'
+                      }`}
                     >
                       <MessageCircle className="h-3.5 w-3.5" />
                       <span>{branding?.contactPhone || '+91 93412 97124'}</span>
                     </a>
                     <a
-                      href="mailto:npatelierindia@gmail.com"
-                      className="inline-flex items-center gap-1.5 rounded-full bg-[#FCF9F4] border border-[#6D5738]/25 px-3.5 py-1.5 text-xs font-bold text-[#141210] shadow-xs hover:border-[#B68D52] transition"
+                      href={`mailto:${contactEmail}`}
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-bold shadow-xs transition ${
+                        isAquaticTheme
+                          ? 'bg-[#071A2B] border-sky-400/25 text-[#F0F8FF] hover:border-emerald-400'
+                          : 'bg-[#FCF9F4] border-[#6D5738]/25 text-[#141210] hover:border-[#B68D52]'
+                      }`}
                     >
                       <Mail className="h-3.5 w-3.5" />
-                      <span>npatelierindia@gmail.com</span>
+                      <span>{contactEmail}</span>
                     </a>
                   </div>
                 </div>

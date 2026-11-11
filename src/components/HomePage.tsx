@@ -21,8 +21,8 @@ const AcquarioTropicale = dynamic(() => import('./AcquarioTropicale'), {
   ssr: false,
   loading: () => (
     <div className="section-shell py-24 text-center">
-      <div className="mx-auto h-12 w-12 rounded-full border-2 border-dashed border-[#D4AF78] animate-spin" />
-      <p className="mt-4 font-serif text-sm text-[#D4AF78] tracking-widest uppercase font-bold">
+      <div className="mx-auto h-12 w-12 rounded-full border-2 border-dashed border-[#34D399] border-t-[#E11D48] animate-spin" />
+      <p className="mt-4 font-serif text-sm text-[#38BDF8] tracking-widest uppercase font-bold">
         Loading Living Waters...
       </p>
     </div>
@@ -30,11 +30,17 @@ const AcquarioTropicale = dynamic(() => import('./AcquarioTropicale'), {
 })
 
 export default function HomePage() {
-  const { activeDepartment } = useMarketplace()
+  const { activeDepartment, isAquaticTheme } = useMarketplace()
   const isAquariumView = activeDepartment === 'aquarium'
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#382606]">
+    <div
+      className={`relative min-h-screen overflow-x-hidden transition-colors duration-300 ${
+        isAquaticTheme
+          ? 'bg-[#051320] text-[#F0F8FF] selection:bg-[#E11D48]/35 selection:text-white'
+          : 'selection:bg-[#D4AF37]/30 selection:text-[#382606]'
+      }`}
+    >
       {/* Toast Notifications */}
       <ToastContainer />
 

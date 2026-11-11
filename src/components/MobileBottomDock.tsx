@@ -48,6 +48,7 @@ export default function MobileBottomDock() {
     setIsWishlistOpen,
     setIsQuickSearchOpen,
     activeDepartment,
+    isAquaticTheme,
     setActiveDepartment,
   } = useMarketplace()
 
@@ -106,21 +107,35 @@ export default function MobileBottomDock() {
       aria-label="Mobile primary navigation"
       className="fixed bottom-3 inset-x-2 max-w-md mx-auto z-40 sm:hidden transform-gpu"
     >
-      <div className="flex items-center justify-around rounded-full border border-[#8C6D46]/35 bg-[#FCF9F4]/95 backdrop-blur-md p-1.5 shadow-[0_12px_36px_rgba(72,54,30,0.18),0_0_16px_rgba(212,175,120,0.12)]">
+      <div
+        className={`flex items-center justify-around rounded-full border backdrop-blur-md p-1.5 transition-colors duration-300 ${
+          isAquaticTheme
+            ? 'border-sky-400/35 bg-[#071A2B]/95 shadow-[0_12px_36px_rgba(2,12,24,0.7),0_0_18px_rgba(16,185,129,0.18)]'
+            : 'border-[#8C6D46]/35 bg-[#FCF9F4]/95 shadow-[0_12px_36px_rgba(72,54,30,0.18),0_0_16px_rgba(212,175,120,0.12)]'
+        }`}
+      >
         {/* 1. Home / Atelier */}
         <button
           type="button"
           onClick={() => handleNavClick('home')}
           className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'home'
-              ? 'text-[#141210]'
+              ? isAquaticTheme
+                ? 'text-white'
+                : 'text-[#141210]'
+              : isAquaticTheme
+              ? 'text-[#B6D4E8] hover:text-white'
               : 'text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >
           {activeTab === 'home' && (
             <motion.div
               layoutId="mobileDockPill"
-              className="absolute inset-0 rounded-full bg-[#EFE8DC] shadow-xs border border-[#8C6D46]/25"
+              className={`absolute inset-0 rounded-full shadow-xs border ${
+                isAquaticTheme
+                  ? 'bg-[#E11D48] border-rose-400/60'
+                  : 'bg-[#EFE8DC] border-[#8C6D46]/25'
+              }`}
               transition={{ type: 'spring', stiffness: 450, damping: 35 }}
             />
           )}
@@ -134,14 +149,22 @@ export default function MobileBottomDock() {
           onClick={() => handleNavClick('crafts')}
           className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'crafts'
-              ? 'text-[#141210]'
+              ? isAquaticTheme
+                ? 'text-white'
+                : 'text-[#141210]'
+              : isAquaticTheme
+              ? 'text-[#B6D4E8] hover:text-white'
               : 'text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >
           {activeTab === 'crafts' && (
             <motion.div
               layoutId="mobileDockPill"
-              className="absolute inset-0 rounded-full bg-[#EFE8DC] shadow-xs border border-[#8C6D46]/25"
+              className={`absolute inset-0 rounded-full shadow-xs border ${
+                isAquaticTheme
+                  ? 'bg-[#E11D48] border-rose-400/60'
+                  : 'bg-[#EFE8DC] border-[#8C6D46]/25'
+              }`}
               transition={{ type: 'spring', stiffness: 450, damping: 35 }}
             />
           )}
@@ -155,18 +178,34 @@ export default function MobileBottomDock() {
           onClick={() => handleNavClick('aquarium')}
           className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
             activeTab === 'aquarium'
-              ? 'text-[#141210]'
+              ? isAquaticTheme
+                ? 'text-white'
+                : 'text-[#141210]'
+              : isAquaticTheme
+              ? 'text-[#B6D4E8] hover:text-emerald-300'
               : 'text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >
           {activeTab === 'aquarium' && (
             <motion.div
               layoutId="mobileDockPill"
-              className="absolute inset-0 rounded-full bg-[#EFE8DC] shadow-xs border border-[#8C6D46]/25"
+              className={`absolute inset-0 rounded-full shadow-xs border ${
+                isAquaticTheme
+                  ? 'bg-gradient-to-r from-[#E11D48] to-[#F43F5E] border-rose-400/60 shadow-[0_4px_14px_rgba(225,29,72,0.45)]'
+                  : 'bg-[#EFE8DC] border-[#8C6D46]/25'
+              }`}
               transition={{ type: 'spring', stiffness: 450, damping: 35 }}
             />
           )}
-          <Fish className="h-4.5 w-4.5 relative z-10 text-teal-700" />
+          <Fish
+            className={`h-4.5 w-4.5 relative z-10 ${
+              isAquaticTheme
+                ? activeTab === 'aquarium'
+                  ? 'text-emerald-300'
+                  : 'text-emerald-400'
+                : 'text-teal-700'
+            }`}
+          />
           <span className="text-[10px] font-bold tracking-tight mt-0.5 relative z-10 font-tagline">Acquario</span>
         </button>
 
@@ -177,12 +216,28 @@ export default function MobileBottomDock() {
             setActiveTab('search')
             setIsQuickSearchOpen(true)
           }}
-          className="gsap-dock-btn flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#5C4D3C] hover:text-[#141210] active:scale-95 transition-all duration-150 cursor-pointer"
+          className={`gsap-dock-btn flex flex-col items-center justify-center py-1 px-3 rounded-full active:scale-95 transition-all duration-150 cursor-pointer ${
+            isAquaticTheme
+              ? 'text-[#B6D4E8] hover:text-white'
+              : 'text-[#5C4D3C] hover:text-[#141210]'
+          }`}
         >
-          <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-tr from-[#D4AF78] to-[#E5C18A] text-[#141210] shadow-sm border border-[#B8925A]/40">
+          <div
+            className={`grid h-8 w-8 place-items-center rounded-full shadow-sm border ${
+              isAquaticTheme
+                ? 'bg-gradient-to-tr from-[#059669] to-[#34D399] text-[#051320] border-emerald-300/60 shadow-[0_0_12px_rgba(16,185,129,0.4)]'
+                : 'bg-gradient-to-tr from-[#D4AF78] to-[#E5C18A] text-[#141210] border-[#B8925A]/40'
+            }`}
+          >
             <Search className="h-4 w-4 stroke-[2.5]" />
           </div>
-          <span className="text-[10px] font-bold tracking-tight mt-0.5 text-[#7A5B32]">Search</span>
+          <span
+            className={`text-[10px] font-bold tracking-tight mt-0.5 ${
+              isAquaticTheme ? 'text-emerald-300' : 'text-[#7A5B32]'
+            }`}
+          >
+            Search
+          </span>
         </button>
 
         {/* 4. Wishlist */}
@@ -192,7 +247,11 @@ export default function MobileBottomDock() {
             setActiveTab('wishlist')
             setIsWishlistOpen(true)
           }}
-          className="gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#5C4D3C] hover:text-[#141210] active:scale-95 transition-all duration-150 cursor-pointer"
+          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full active:scale-95 transition-all duration-150 cursor-pointer ${
+            isAquaticTheme
+              ? 'text-[#B6D4E8] hover:text-white'
+              : 'text-[#5C4D3C] hover:text-[#141210]'
+          }`}
         >
           <div className="relative">
             <Heart className="h-5 w-5" />
@@ -212,12 +271,22 @@ export default function MobileBottomDock() {
             setActiveTab('bag')
             setIsCartOpen(true)
           }}
-          className="gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full text-[#5C4D3C] hover:text-[#141210] active:scale-95 transition-all duration-150 cursor-pointer"
+          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full active:scale-95 transition-all duration-150 cursor-pointer ${
+            isAquaticTheme
+              ? 'text-[#B6D4E8] hover:text-white'
+              : 'text-[#5C4D3C] hover:text-[#141210]'
+          }`}
         >
           <div className="relative">
             <ShoppingBag className="h-5 w-5" />
             {mounted && cartCount > 0 && (
-              <span className="absolute -top-1.5 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-gradient-to-r from-[#ECC872] to-[#D4AF78] px-1 text-[9px] font-black text-[#141210] shadow-xs">
+              <span
+                className={`absolute -top-1.5 -right-2 grid h-4 min-w-4 place-items-center rounded-full px-1 text-[9px] font-black shadow-xs ${
+                  isAquaticTheme
+                    ? 'bg-gradient-to-r from-[#E11D48] to-[#F43F5E] text-white'
+                    : 'bg-gradient-to-r from-[#ECC872] to-[#D4AF78] text-[#141210]'
+                }`}
+              >
                 {cartCount}
               </span>
             )}
