@@ -164,7 +164,7 @@ function ProductCard({
           : 'rounded-[1.25rem] sm:rounded-[1.65rem] p-2.5 sm:p-3'
       } border transition-[transform,box-shadow,border-color] duration-200 ease-out transform-gpu hover:will-change-transform sm:hover:-translate-y-1 ${
         useAquaticPalette
-          ? 'border-sky-400/25 bg-gradient-to-b from-[#0B2840] via-[#092035] to-[#061828] shadow-[0_10px_28px_rgba(2,12,24,0.5)] sm:hover:shadow-[0_18px_38px_rgba(2,12,24,0.72),0_0_22px_rgba(16,185,129,0.22)] sm:hover:border-emerald-400/70'
+          ? 'border-sky-300/65 bg-gradient-to-b from-[#FFFFFF] via-[#F7FBFF] to-[#ECF6FD] shadow-[0_10px_26px_rgba(12,74,110,0.10)] sm:hover:shadow-[0_16px_34px_rgba(12,74,110,0.16),0_0_18px_rgba(16,185,129,0.18)] sm:hover:border-emerald-500/70'
           : 'border-[#8C6D46]/25 bg-gradient-to-b from-[#FCF9F4] via-[#FAF6EE] to-[#F3ECE0] shadow-[0_8px_24px_rgba(72,54,30,0.08)] sm:hover:shadow-[0_18px_36px_rgba(72,54,30,0.14),0_0_20px_rgba(212,175,120,0.14)] sm:hover:border-[#B8925A]'
       } ${className}`}
     >
@@ -174,7 +174,7 @@ function ProductCard({
           className={`relative ${
             isCompact ? 'aspect-square sm:aspect-[4/3.8]' : 'aspect-square sm:aspect-[4/4.3]'
           } w-full overflow-hidden rounded-xl sm:rounded-2xl border ${
-            useAquaticPalette ? 'bg-[#051422] border-sky-400/20' : 'bg-[#EDE4DD] border-[#8C6D46]/20'
+            useAquaticPalette ? 'bg-[#E2F0FA] border-sky-200/80' : 'bg-[#EDE4DD] border-[#8C6D46]/20'
           }`}
         >
           <img
@@ -189,7 +189,7 @@ function ProductCard({
             }}
             className="h-full w-full object-cover transition-transform duration-300 ease-out sm:group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#04101C]/75 via-transparent to-transparent opacity-0 transition-opacity duration-200 sm:group-hover:opacity-100" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A2540]/60 via-transparent to-transparent opacity-0 transition-opacity duration-200 sm:group-hover:opacity-100" />
 
           {/* Luxury Curated Badges */}
           <div className="absolute left-1.5 sm:left-2 top-1.5 sm:top-2 z-10 flex flex-wrap items-center gap-1 max-w-[80%]">
@@ -197,18 +197,18 @@ function ProductCard({
               <span
                 className={`inline-flex items-center gap-1 rounded-full border px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-extrabold uppercase tracking-wider shadow-sm ${
                   useAquaticPalette
-                    ? 'bg-[#051422]/90 border-emerald-400/45 text-emerald-300'
+                    ? 'bg-white/95 border-emerald-500/50 text-emerald-700'
                     : 'bg-[#0B0B0A]/90 border-[rgba(212,175,120,0.35)] text-[#D4AF78]'
                 }`}
               >
-                <span className={`h-1 w-1 rounded-full ${useAquaticPalette ? 'bg-emerald-400' : 'bg-[#D4AF78]'}`} />
+                <span className={`h-1 w-1 rounded-full ${useAquaticPalette ? 'bg-emerald-500' : 'bg-[#D4AF78]'}`} />
                 <span className="truncate max-w-[90px] sm:max-w-none">{product.badges[0]}</span>
               </span>
             ) : (
               <span
                 className={`inline-flex items-center rounded-full border px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-extrabold uppercase tracking-wider shadow-sm ${
                   useAquaticPalette
-                    ? 'bg-[#051422]/90 border-emerald-400/40 text-emerald-300'
+                    ? 'bg-white/95 border-emerald-500/45 text-emerald-700'
                     : 'bg-[#0B0B0A]/90 border-[rgba(212,175,120,0.30)] text-[#D4AF78]'
                 }`}
               >
@@ -219,7 +219,7 @@ function ProductCard({
               <span
                 className={`hidden sm:inline-flex items-center rounded-full border px-1.5 sm:px-2 py-0.5 text-[7.5px] sm:text-[8.5px] font-bold uppercase tracking-wider shadow-sm ${
                   useAquaticPalette
-                    ? 'bg-[#051422]/90 border-sky-400/35 text-sky-200'
+                    ? 'bg-white/95 border-sky-400/50 text-sky-800'
                     : 'bg-[#12110F]/90 border-[rgba(212,175,120,0.25)] text-[#F5EBDD]'
                 }`}
               >
@@ -228,33 +228,28 @@ function ProductCard({
             )}
           </div>
 
-          {/* BICHO BICH (DEAD CENTER) "COMING SOON" BADGE */}
+          {/* Refined Corner "Coming Soon" Ribbon (keeps centerpiece specimen unobstructed) */}
           {isCardComingSoon && (
-            <div className="absolute inset-0 z-20 flex items-center justify-center p-1.5 sm:p-3 bg-[#04101C]/45 pointer-events-none transition-all duration-200">
+            <div className="absolute right-1.5 sm:right-2 bottom-1.5 sm:bottom-2 z-20 pointer-events-none">
               <div
-                className={`flex max-w-full items-center gap-1 sm:gap-2 rounded-full backdrop-blur-xs border px-2 sm:px-4 py-1 sm:py-2 transform transition-transform duration-200 sm:group-hover:scale-105 ${
+                className={`flex items-center gap-1 rounded-full border px-2 sm:px-2.5 py-0.5 sm:py-1 transform transition-transform duration-200 sm:group-hover:scale-105 ${
                   useAquaticPalette
-                    ? 'bg-[#061828]/95 border-[#F43F5E]/80 shadow-[0_8px_24px_rgba(2,12,24,0.8)]'
-                    : 'bg-[#0B0B0A]/95 border-[#D4AF78] shadow-[0_8px_24px_rgba(0,0,0,0.7)]'
+                    ? 'bg-white/95 border-[#E11D48]/65 shadow-[0_4px_12px_rgba(10,37,64,0.16)]'
+                    : 'bg-[#0B0B0A]/95 border-[#D4AF78] shadow-[0_6px_16px_rgba(0,0,0,0.6)]'
                 }`}
               >
                 <span
-                  className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full animate-pulse shrink-0 ${
-                    useAquaticPalette ? 'bg-[#F43F5E]' : 'bg-[#D4AF78]'
+                  className={`h-1.5 w-1.5 rounded-full animate-pulse shrink-0 ${
+                    useAquaticPalette ? 'bg-[#E11D48]' : 'bg-[#D4AF78]'
                   }`}
                 />
                 <span
-                  className={`font-serif text-[8.5px] sm:text-xs font-black uppercase tracking-[0.12em] sm:tracking-[0.2em] drop-shadow-sm whitespace-nowrap ${
-                    useAquaticPalette ? 'text-rose-300' : 'text-[#D4AF78]'
+                  className={`text-[8px] sm:text-[9.5px] font-black uppercase tracking-[0.12em] whitespace-nowrap ${
+                    useAquaticPalette ? 'text-[#BE123C]' : 'text-[#D4AF78]'
                   }`}
                 >
                   Coming Soon
                 </span>
-                <Sparkles
-                  className={`h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 shrink-0 ${
-                    useAquaticPalette ? 'text-emerald-300' : 'text-[#D4AF78]'
-                  }`}
-                />
               </div>
             </div>
           )}
@@ -264,13 +259,13 @@ function ProductCard({
             <div
               className={`absolute left-1.5 sm:left-2 bottom-1.5 sm:bottom-2 z-10 flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[8px] sm:text-[9.5px] font-bold shadow-md ${
                 useAquaticPalette
-                  ? 'bg-[#061828]/95 border-rose-400/70 text-rose-300'
+                  ? 'bg-white/95 border-rose-500/65 text-[#BE123C]'
                   : 'bg-[#0B0B0A]/95 border-[#D4AF78]/60 text-[#D4AF78]'
               }`}
             >
               <span
                 className={`h-1.5 w-1.5 rounded-full animate-pulse ${
-                  useAquaticPalette ? 'bg-[#F43F5E]' : 'bg-[#D4AF78]'
+                  useAquaticPalette ? 'bg-[#E11D48]' : 'bg-[#D4AF78]'
                 }`}
               />
               <span>+{activeQuantity} in Bag</span>
@@ -286,7 +281,7 @@ function ProductCard({
               onClick={handleWishlistClick}
               className={`grid h-6 w-6 sm:h-7.5 sm:w-7.5 place-items-center rounded-full border shadow-sm transition duration-150 active:scale-90 sm:hover:scale-105 sm:hover:border-rose-500 sm:hover:text-rose-500 cursor-pointer ${
                 useAquaticPalette
-                  ? 'bg-[#081D30]/92 border-sky-400/35 text-[#F0F8FF]'
+                  ? 'bg-white/95 border-sky-300/75 text-[#0A2540]'
                   : 'bg-[#FCF9F4]/95 border-[#8C6D46]/30 text-[#141210]'
               }`}
             >
@@ -295,7 +290,7 @@ function ProductCard({
                   isWishlisted
                     ? 'fill-rose-500 text-rose-500 scale-105'
                     : useAquaticPalette
-                    ? 'text-[#F0F8FF]'
+                    ? 'text-[#0A2540]'
                     : 'text-[#141210]'
                 }`}
               />
@@ -306,7 +301,7 @@ function ProductCard({
               onClick={handleQuickViewClick}
               className={`grid h-6 w-6 sm:h-7.5 sm:w-7.5 place-items-center rounded-full border shadow-sm transition duration-150 active:scale-90 sm:hover:scale-105 cursor-pointer ${
                 useAquaticPalette
-                  ? 'bg-[#081D30]/92 border-sky-400/35 text-[#F0F8FF] sm:hover:border-emerald-400 sm:hover:text-emerald-300'
+                  ? 'bg-white/95 border-sky-300/75 text-[#0A2540] sm:hover:border-emerald-500 sm:hover:text-emerald-700'
                   : 'bg-[#FCF9F4]/95 border-[#8C6D46]/30 text-[#141210] sm:hover:border-[#B8925A] sm:hover:text-[#7A5B32]'
               }`}
             >
@@ -321,7 +316,7 @@ function ProductCard({
           <div className="flex items-center justify-between gap-1 text-[9px] sm:text-[10px]">
             <span
               className={`font-bold uppercase tracking-[0.1em] truncate ${
-                useAquaticPalette ? 'text-emerald-400' : 'text-[#7A5B32]'
+                useAquaticPalette ? 'text-emerald-700' : 'text-[#7A5B32]'
               }`}
               title={product.category}
             >
@@ -329,13 +324,13 @@ function ProductCard({
             </span>
             <div
               className={`flex items-center gap-1 shrink-0 font-bold ${
-                useAquaticPalette ? 'text-[#F0F8FF]' : 'text-[#141210]'
+                useAquaticPalette ? 'text-[#0A2540]' : 'text-[#141210]'
               }`}
             >
               <Star
                 className={`h-2.5 w-2.5 sm:h-3 sm:w-3 ${
                   useAquaticPalette
-                    ? 'fill-rose-400 text-rose-400'
+                    ? 'fill-rose-500 text-rose-500'
                     : 'fill-[#D4AF78] text-[#B88B44]'
                 }`}
               />
@@ -348,7 +343,7 @@ function ProductCard({
             onClick={handleQuickViewClick}
             className={`cursor-pointer font-tagline font-bold tracking-tight leading-snug transition-colors duration-150 ${
               useAquaticPalette
-                ? 'text-[#F0F8FF] hover:text-emerald-300'
+                ? 'text-[#0A2540] hover:text-emerald-700'
                 : 'text-[#141210] hover:text-[#7A5B32]'
             } ${
               isCompact
@@ -366,7 +361,7 @@ function ProductCard({
       {/* Footer: Clean Price & Never-Cramped Action Bar */}
       <div
         className={`pt-2.5 sm:pt-3 border-t px-0.5 mt-2 space-y-2 ${
-          useAquaticPalette ? 'border-sky-400/20' : 'border-[#8C6D46]/20'
+          useAquaticPalette ? 'border-sky-200/85' : 'border-[#8C6D46]/20'
         }`}
       >
         {/* Price & Availability Status */}
@@ -374,7 +369,7 @@ function ProductCard({
           <div className="flex items-baseline gap-1.5 flex-wrap">
             <span
               className={`font-serif font-extrabold tracking-tight leading-none whitespace-nowrap ${
-                useAquaticPalette ? 'text-[#F0F8FF]' : 'text-[#141210]'
+                useAquaticPalette ? 'text-[#0A2540]' : 'text-[#141210]'
               } ${isCompact ? 'text-sm sm:text-base' : 'text-base sm:text-lg'}`}
             >
               {formattedPrice}
@@ -382,7 +377,7 @@ function ProductCard({
             {formattedOriginalPrice && (
               <span
                 className={`text-[10px] sm:text-xs line-through font-medium whitespace-nowrap ${
-                  useAquaticPalette ? 'text-[#7FB3D5]' : 'text-[#75624C]'
+                  useAquaticPalette ? 'text-[#5A81A0]' : 'text-[#75624C]'
                 }`}
               >
                 {formattedOriginalPrice}
@@ -404,7 +399,7 @@ function ProductCard({
             <span
               className={`text-[8.5px] sm:text-[9.5px] font-bold border px-2 py-0.5 rounded-full shrink-0 ${
                 useAquaticPalette
-                  ? 'text-rose-300 bg-rose-500/15 border-rose-400/45'
+                  ? 'text-[#BE123C] bg-rose-50 border-rose-300'
                   : 'text-[#7A5B32] bg-[#EFE8DC] border-[#8C6D46]/30'
               }`}
             >
@@ -414,11 +409,11 @@ function ProductCard({
             <span
               className={`text-[8.5px] sm:text-[9.5px] font-bold border px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0 ${
                 useAquaticPalette
-                  ? 'text-emerald-300 bg-emerald-500/15 border-emerald-400/40'
+                  ? 'text-emerald-700 bg-emerald-50 border-emerald-300'
                   : 'text-emerald-700 bg-emerald-50 border-emerald-200'
               }`}
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>In Stock</span>
             </span>
           )}
@@ -430,7 +425,7 @@ function ProductCard({
             <span
               className={`absolute -top-7 right-2 sm:right-4 z-30 pointer-events-none inline-flex items-center gap-1 rounded-full text-[9px] sm:text-[10px] font-black px-2 py-0.5 animate-bounce border ${
                 useAquaticPalette
-                  ? 'bg-[#E11D48] text-white border-rose-300 shadow-[0_4px_14px_rgba(225,29,72,0.45)]'
+                  ? 'bg-[#E11D48] text-white border-rose-300 shadow-[0_4px_14px_rgba(225,29,72,0.35)]'
                   : 'bg-[#D4AF78] text-[#141210] border-[#E5C18A] shadow-[0_4px_14px_rgba(212,175,120,0.4)]'
               }`}
             >
@@ -438,24 +433,24 @@ function ProductCard({
             </span>
           )}
 
-          <div className="flex flex-col gap-1.5 sm:grid sm:grid-cols-2 sm:gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {isCardComingSoon ? (
               <button
                 type="button"
                 onClick={handleWhatsAppAction}
-                className="w-full sm:col-span-2 h-8.5 sm:h-9 inline-flex items-center justify-center gap-2 rounded-full bg-[#063326] hover:bg-[#084534] border border-emerald-400/60 text-emerald-300 text-xs font-bold transition-all shadow-sm cursor-pointer active:scale-98"
+                className="w-full h-8.5 sm:h-9 inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 hover:bg-emerald-700 border border-emerald-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer active:scale-98"
                 title={`Inquire about ${product.title} on WhatsApp (${contactPhone})`}
               >
-                <WhatsAppIcon className="h-4 w-4 text-emerald-400 shrink-0" />
+                <WhatsAppIcon className="h-4 w-4 text-white shrink-0" />
                 <span className="whitespace-nowrap font-bold text-white">Inquire on WhatsApp</span>
               </button>
             ) : activeQuantity > 0 ? (
               <>
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className={`w-full h-8.5 sm:h-9 flex items-center justify-between rounded-full border p-0.5 shadow-xs select-none transition-all duration-200 ${
+                  className={`flex-1 min-w-0 h-8.5 sm:h-9 flex items-center justify-between rounded-full border p-0.5 shadow-xs select-none transition-all duration-200 ${
                     useAquaticPalette
-                      ? 'bg-[#051524] border-rose-400/70'
+                      ? 'bg-[#EBF6FD] border-rose-400/70'
                       : 'bg-[#EFE8DC] border-[#B8925A]'
                   }`}
                 >
@@ -466,7 +461,7 @@ function ProductCard({
                     onClick={handleDecrement}
                     className={`grid h-7 w-7 place-items-center rounded-full border transition duration-150 active:scale-85 cursor-pointer shrink-0 shadow-xs ${
                       useAquaticPalette
-                        ? 'bg-[#0D2E4A] text-sky-200 border-sky-400/35 hover:text-white'
+                        ? 'bg-white text-sky-700 border-sky-300/70 hover:text-[#0A2540]'
                         : 'bg-[#FAF6EF] text-[#7A5B32] hover:bg-[#E7DDD0] hover:text-[#141210] border-[#8C6D46]/30'
                     }`}
                     title="Decrease (-1)"
@@ -474,17 +469,17 @@ function ProductCard({
                     <Minus className="h-3 w-3 stroke-[3]" />
                   </button>
 
-                  <div className="flex items-center gap-1.5 px-2 justify-center flex-1 min-w-0">
+                  <div className="flex items-center gap-1 px-1 justify-center flex-1 min-w-0">
                     <span
-                      className={`inline-flex items-center justify-center min-w-[20px] px-1.5 py-0.2 rounded-full text-[11px] font-black font-mono shadow-xs ${
+                      className={`inline-flex items-center justify-center min-w-[18px] px-1 py-0.2 rounded-full text-[11px] font-black font-mono shadow-xs ${
                         useAquaticPalette ? 'bg-[#E11D48] text-white' : 'bg-[#D4AF78] text-[#141210]'
                       }`}
                     >
                       {activeQuantity}
                     </span>
                     <span
-                      className={`text-[10px] sm:text-[11px] font-bold uppercase tracking-wider ${
-                        useAquaticPalette ? 'text-[#B6D4E8]' : 'text-[#5C4D3C]'
+                      className={`text-[10px] sm:text-[11px] font-bold uppercase tracking-wider truncate ${
+                        useAquaticPalette ? 'text-[#2C5270]' : 'text-[#5C4D3C]'
                       }`}
                     >
                       in Bag
@@ -498,7 +493,7 @@ function ProductCard({
                     onClick={handleIncrement}
                     className={`grid h-7 w-7 place-items-center rounded-full transition duration-150 active:scale-85 cursor-pointer shadow-xs shrink-0 ${
                       useAquaticPalette
-                        ? 'bg-[#E11D48] text-white hover:bg-[#F43F5E]'
+                        ? 'bg-[#E11D48] text-white hover:bg-[#BE123C]'
                         : 'bg-[#D4AF78] text-[#141210] hover:bg-[#E5C18A]'
                     }`}
                     title="Add (+1)"
@@ -510,12 +505,17 @@ function ProductCard({
                 <button
                   type="button"
                   onClick={handleWhatsAppAction}
-                  className="w-full h-8 sm:h-9 rounded-full bg-[#063326] hover:bg-[#084534] border border-emerald-400/60 hover:border-emerald-300 text-emerald-300 transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 px-3 shadow-xs cursor-pointer group/wa"
+                  className={`h-8.5 sm:h-9 rounded-full border transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 px-2.5 sm:px-3 shadow-xs cursor-pointer shrink-0 group/wa ${
+                    useAquaticPalette
+                      ? 'bg-emerald-600 hover:bg-emerald-700 border-emerald-500 text-white'
+                      : 'bg-[#063326] hover:bg-[#084534] border-emerald-400/60 hover:border-emerald-300 text-emerald-300'
+                  }`}
                   title={`Order ${product.title} on WhatsApp (${contactPhone})`}
+                  aria-label={`Order ${product.title} on WhatsApp`}
                 >
-                  <WhatsAppIcon className="h-3.5 w-3.5 text-emerald-400 group-hover/wa:scale-110 transition-transform shrink-0" />
-                  <span className="text-[11px] font-bold text-white group-hover/wa:text-emerald-300 transition-colors whitespace-nowrap">
-                    Order on WhatsApp
+                  <WhatsAppIcon className={`h-3.5 w-3.5 group-hover/wa:scale-110 transition-transform shrink-0 ${useAquaticPalette ? 'text-white' : 'text-emerald-400'}`} />
+                  <span className={`text-[11px] font-bold transition-colors whitespace-nowrap hidden sm:inline ${useAquaticPalette ? 'text-white' : 'text-white group-hover/wa:text-emerald-300'}`}>
+                    WhatsApp
                   </span>
                 </button>
               </>
@@ -524,9 +524,9 @@ function ProductCard({
                 <button
                   type="button"
                   onClick={handleAdd}
-                  className={`w-full h-8.5 sm:h-9 inline-flex items-center justify-center gap-1.5 rounded-full border px-3 font-extrabold text-xs transition-all duration-200 active:scale-[0.98] cursor-pointer ${
+                  className={`flex-1 min-w-0 h-8.5 sm:h-9 inline-flex items-center justify-center gap-1.5 rounded-full border px-2.5 sm:px-3 font-extrabold text-xs transition-all duration-200 active:scale-[0.98] cursor-pointer ${
                     useAquaticPalette
-                      ? 'bg-gradient-to-r from-[#E11D48] via-[#DC2626] to-[#F43F5E] hover:brightness-110 border-rose-400/60 text-white shadow-[0_4px_14px_rgba(225,29,72,0.3)]'
+                      ? 'bg-gradient-to-r from-[#E11D48] via-[#DC2626] to-[#F43F5E] hover:brightness-105 border-rose-500/60 text-white shadow-[0_4px_12px_rgba(225,29,72,0.25)]'
                       : 'bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] hover:brightness-105 border-[#F5DC9A]/60 text-[#141210] shadow-[0_2px_10px_rgba(212,175,120,0.25)]'
                   }`}
                   title={`Add ${product.title} to Bag`}
@@ -536,18 +536,23 @@ function ProductCard({
                       useAquaticPalette ? 'text-white' : 'text-[#141210]'
                     }`}
                   />
-                  <span className="font-extrabold whitespace-nowrap">Add to Bag</span>
+                  <span className="font-extrabold whitespace-nowrap truncate">Add to Bag</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={handleWhatsAppAction}
-                  className="w-full h-8 sm:h-9 rounded-full bg-[#063326] hover:bg-[#084534] border border-emerald-400/60 hover:border-emerald-300 text-emerald-300 transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 px-3 shadow-xs cursor-pointer group/wa"
+                  className={`h-8.5 sm:h-9 rounded-full border transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 px-2.5 sm:px-3 shadow-xs cursor-pointer shrink-0 group/wa ${
+                    useAquaticPalette
+                      ? 'bg-emerald-600 hover:bg-emerald-700 border-emerald-500 text-white'
+                      : 'bg-[#063326] hover:bg-[#084534] border-emerald-400/60 hover:border-emerald-300 text-emerald-300'
+                  }`}
                   title={`Order ${product.title} on WhatsApp (${contactPhone})`}
+                  aria-label={`Order ${product.title} on WhatsApp`}
                 >
-                  <WhatsAppIcon className="h-3.5 w-3.5 text-emerald-400 group-hover/wa:scale-110 transition-transform shrink-0" />
-                  <span className="text-[11px] font-bold text-white group-hover/wa:text-emerald-300 transition-colors whitespace-nowrap">
-                    Order on WhatsApp
+                  <WhatsAppIcon className={`h-3.5 w-3.5 group-hover/wa:scale-110 transition-transform shrink-0 ${useAquaticPalette ? 'text-white' : 'text-emerald-400'}`} />
+                  <span className={`text-[11px] font-bold transition-colors whitespace-nowrap hidden sm:inline ${useAquaticPalette ? 'text-white' : 'text-white group-hover/wa:text-emerald-300'}`}>
+                    WhatsApp
                   </span>
                 </button>
               </>

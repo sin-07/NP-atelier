@@ -199,7 +199,7 @@ export default function AuthModal() {
               <div
                 className={`mt-5 flex rounded-full border p-1 shadow-xs ${
                   isAquaticTheme
-                    ? 'border-sky-400/25 bg-[#051320]'
+                    ? 'border-sky-300/70 bg-[#EBF6FD]'
                     : 'border-[#6D5738]/25 bg-[#F5F0E8]'
                 }`}
               >
@@ -212,7 +212,7 @@ export default function AuthModal() {
                         ? 'bg-[#E11D48] text-white font-extrabold shadow-xs'
                         : 'bg-[#D4AF78] text-[#141210] font-extrabold shadow-xs'
                       : isAquaticTheme
-                      ? 'text-[#B6D4E8] hover:text-white'
+                      ? 'text-[#2C5270] hover:text-[#0A2540]'
                       : 'text-[#5C4D3C] hover:text-[#141210]'
                   }`}
                 >
@@ -227,7 +227,7 @@ export default function AuthModal() {
                         ? 'bg-[#E11D48] text-white font-extrabold shadow-xs'
                         : 'bg-[#D4AF78] text-[#141210] font-extrabold shadow-xs'
                       : isAquaticTheme
-                      ? 'text-[#B6D4E8] hover:text-white'
+                      ? 'text-[#2C5270] hover:text-[#0A2540]'
                       : 'text-[#5C4D3C] hover:text-[#141210]'
                   }`}
                 >
@@ -408,7 +408,7 @@ export default function AuthModal() {
                       setIsAuthOpen(false)
                     }}
                     className={`w-full text-center text-xs font-bold hover:underline cursor-pointer ${
-                      isAquaticTheme ? 'text-[#FB7185]' : 'text-rose-600'
+                      isAquaticTheme ? 'text-[#E11D48]' : 'text-rose-600'
                     }`}
                   >
                     Log Out of Current Session ({user.name})
@@ -424,7 +424,7 @@ export default function AuthModal() {
                     onClick={() => setIsAuthOpen(false)}
                     className={`font-bold underline transition ${
                       isAquaticTheme
-                        ? 'text-emerald-300 hover:text-white'
+                        ? 'text-emerald-700 hover:text-emerald-900'
                         : 'text-[#7A5B32] hover:text-[#141210]'
                     }`}
                   >

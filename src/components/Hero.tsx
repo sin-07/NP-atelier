@@ -341,7 +341,7 @@ export default function Hero() {
     }
     if (dept === 'aquarium') {
       if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.scrollTo({ top: 0, behavior: 'instant' })
       }
       return
     }
@@ -359,9 +359,18 @@ export default function Hero() {
         className="reveal is-visible relative overflow-hidden rounded-[2.5rem] border border-[#8C6D46]/25 bg-gradient-to-br from-[#FAF7F2] via-[#F5F0E8] to-[#EDE4DD] p-6 sm:p-10 lg:p-12 shadow-[0_20px_50px_rgba(72,54,30,0.09),0_0_1px_1px_rgba(139,109,71,0.18)]"
       >
         {/* Soft Ambient Radiance Highlights */}
-        <div className="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-[#D4AF78]/12 blur-3xl pointer-events-none" />
-        <div className="absolute right-0 top-1/3 h-96 w-96 rounded-full bg-[#B8925A]/10 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 left-1/3 h-80 w-80 rounded-full bg-[#14B8A6]/8 blur-3xl pointer-events-none" />
+        <div
+          className="absolute -left-20 -top-20 h-80 w-80 rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(212,175,120,0.20) 0%, transparent 70%)' }}
+        />
+        <div
+          className="absolute right-0 top-1/3 h-96 w-96 rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(184,146,90,0.16) 0%, transparent 70%)' }}
+        />
+        <div
+          className="absolute -bottom-20 left-1/3 h-80 w-80 rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(20,184,166,0.12) 0%, transparent 70%)' }}
+        />
 
         {/* Top Architectural Header Bar */}
         <div className="gsap-hero-header relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-[#8C6D46]/22 pb-6">

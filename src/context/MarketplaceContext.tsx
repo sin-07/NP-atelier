@@ -1,6 +1,15 @@
 "use client"
 
-import { createContext, useContext, useEffect, useMemo, useState, useCallback, useRef } from 'react'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+  useCallback,
+  useRef,
+} from 'react'
 import { usePathname } from 'next/navigation'
 import {
   allInitialProducts,
@@ -11,6 +20,11 @@ import {
 import { getSavedShippingAddress, saveShippingAddress } from '../utils/addressStorage'
 import { AQUARIUM_THEME_META_COLOR, CRAFTS_THEME_META_COLOR } from '../utils/worldTheme'
 import { useModalDispatch } from './UIModalContext'
+import {
+  DEFAULT_GOOGLE_REVIEWS,
+  GoogleReviewsConfig,
+  withDefaultGoogleReviews,
+} from '../lib/googleReviews'
 
 export interface BrandingSettings {
   siteName: string
@@ -22,6 +36,7 @@ export interface BrandingSettings {
   contactEmail: string
   contactPhone: string
   currency: string
+  googleReviews?: GoogleReviewsConfig
 }
 
 export const DEFAULT_BRANDING: BrandingSettings = {
@@ -34,6 +49,7 @@ export const DEFAULT_BRANDING: BrandingSettings = {
   contactEmail: 'npatelierindia@gmail.com',
   contactPhone: '+91 93412 97124',
   currency: '₹',
+  googleReviews: DEFAULT_GOOGLE_REVIEWS,
 }
 
 export interface GlobalLoaderState {
@@ -229,24 +245,39 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   const [availableCoupons, setAvailableCoupons] = useState<any>(DEFAULT_COUPONS)
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
   const [isGiftWrap, setIsGiftWrap] = useState(false)
-  const [activeDepartment, setActiveDepartment] = useState<'all' | 'crafts' | 'aquarium'>('crafts')
+  const [activeDepartment, setActiveDepartmentState] = useState<'all' | 'crafts' | 'aquarium'>('crafts')
 
   const isStorefrontAquaticRoute =
     !pathname || pathname === '/' || pathname.startsWith('/acquario-tropicale')
   const isAquaticTheme = activeDepartment === 'aquarium' && isStorefrontAquaticRoute
 
-  useEffect(() => {
+  const syncWorldDocumentTheme = useCallback((aquaticActive: boolean) => {
     if (typeof document === 'undefined') return
     const root = document.documentElement
-    root.setAttribute('data-world', isAquaticTheme ? 'aquarium' : 'crafts')
+    const nextWorld = aquaticActive ? 'aquarium' : 'crafts'
+    if (root.getAttribute('data-world') !== nextWorld) {
+      root.setAttribute('data-world', nextWorld)
+    }
     const metaTheme = document.querySelector('meta[name="theme-color"]')
     if (metaTheme) {
       metaTheme.setAttribute(
         'content',
-        isAquaticTheme ? AQUARIUM_THEME_META_COLOR : CRAFTS_THEME_META_COLOR
+        aquaticActive ? AQUARIUM_THEME_META_COLOR : CRAFTS_THEME_META_COLOR
       )
     }
-  }, [isAquaticTheme])
+  }, [])
+
+  const setActiveDepartment = useCallback(
+    (dept: 'all' | 'crafts' | 'aquarium') => {
+      syncWorldDocumentTheme(dept === 'aquarium' && isStorefrontAquaticRoute)
+      setActiveDepartmentState(dept)
+    },
+    [isStorefrontAquaticRoute, syncWorldDocumentTheme]
+  )
+
+  useLayoutEffect(() => {
+    syncWorldDocumentTheme(isAquaticTheme)
+  }, [isAquaticTheme, syncWorldDocumentTheme])
 
   // Regional Delivery Settings & Customer Region Selection
   const [deliverySettings, setDeliverySettings] = useState<RegionalDeliverySettings>(DEFAULT_DELIVERY_SETTINGS)
@@ -401,7 +432,11 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     if (typeof window !== 'undefined') {
       const storedBranding = safeReadStorage<BrandingSettings | null>(STORAGE_KEYS.branding, null)
       if (storedBranding && storedBranding.siteName) {
-        setBranding(storedBranding)
+        setBranding({
+          ...DEFAULT_BRANDING,
+          ...storedBranding,
+          googleReviews: withDefaultGoogleReviews(storedBranding.googleReviews),
+        })
       }
 
       const storedCart = safeReadStorage<any[] | null>(STORAGE_KEYS.cart, null)
@@ -464,7 +499,11 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
         if (data?.success) {
           if (data.settings) {
             setBranding((prev) => {
-              const next = { ...prev, ...data.settings }
+              const next = {
+                ...prev,
+                ...data.settings,
+                googleReviews: withDefaultGoogleReviews(data.settings.googleReviews),
+              }
               if (!next.logoImageUrl) {
                 next.logoImageUrl = DEFAULT_BRANDING.logoImageUrl
                 if (next.logoType === 'icon') {
@@ -509,36 +548,46 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     }
   }, [])
 
-  const updateBranding = useCallback(async (newBranding: Partial<BrandingSettings>) => {
-    setBranding((current) => {
-      const updated = { ...current, ...newBranding }
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(STORAGE_KEYS.branding, JSON.stringify(updated))
-        document.title = `${updated.siteName} | ${updated.tagline}`
-      }
-      return updated
-    })
-
-    try {
-      const res = await fetch('/api/settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newBranding),
+  const updateBranding = useCallback(
+    async (
+      newBranding: Partial<BrandingSettings>,
+      options?: { skipServerSave?: boolean; silent?: boolean }
+    ) => {
+      setBranding((current) => {
+        const updated = { ...current, ...newBranding }
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem(STORAGE_KEYS.branding, JSON.stringify(updated))
+          document.title = `${updated.siteName} | ${updated.tagline}`
+        }
+        return updated
       })
-      const data = await res.json()
-      if (data?.success && data?.settings) {
-        setBranding(data.settings)
-      }
-    } catch (err) {
-      console.error('Failed to sync branding to server:', err)
-    }
 
-    showToast({
-      title: 'Branding Updated Live',
-      message: 'New store name & logo applied permanently across the entire website.',
-      type: 'success',
-    })
-  }, [showToast])
+      if (!options?.skipServerSave) {
+        try {
+          const res = await fetch('/api/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newBranding),
+          })
+          const data = await res.json()
+          if (data?.success && data?.settings) {
+            setBranding(data.settings)
+          }
+        } catch (err) {
+          console.error('Failed to sync branding to server:', err)
+        }
+      }
+
+      if (!options?.silent) {
+        showToast({
+          title: 'Branding Updated Live',
+          message: 'New store name & logo applied permanently across the entire website.',
+          type: 'success',
+        })
+      }
+    },
+    [showToast]
+  )
 
   const resetBranding = useCallback(async () => {
     await updateBranding(DEFAULT_BRANDING)

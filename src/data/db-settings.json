@@ -7,5 +7,29 @@
   "announcementText": "Handcrafted Artisan Drops & Exotic Aquatics Live • Code ATELIER10 for 10% off",
   "contactEmail": "npatelierindia@gmail.com",
   "contactPhone": "+91 93412 97124",
-  "currency": "₹"
+  "currency": "₹",
+  "googleReviews": {
+    "placeName": "NP Atelier",
+    "rating": 5.0,
+    "totalReviews": 12,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=NP+Atelier+Bhootnath+Road+Patna",
+    "placeId": "",
+    "featurableWidgetId": "",
+    "highlightTopics": [
+      { "label": "products", "count": 8 },
+      { "label": "memorable", "count": 2 }
+    ],
+    "reviews": [
+      {
+        "id": "google-rafat-ali",
+        "author": "RAFAT ALI",
+        "authorMeta": "2 reviews · 2 photos",
+        "rating": 5,
+        "relativeTime": "2 months ago",
+        "text": "Excellent 🌠 this product .... 💗 quality was awesome this product ( 10/10 ) 👌 ✨ , I like this product .... 😍 it is great money for value .. 🤗 🤩 💗 ...",
+        "source": "google_import"
+      }
+    ],
+    "syncSource": "saved"
+  }
 }

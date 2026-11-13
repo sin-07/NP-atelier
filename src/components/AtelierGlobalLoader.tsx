@@ -161,15 +161,24 @@ export default function AtelierGlobalLoader({
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.2, ease: 'easeInOut' }}
       className={`fixed inset-0 z-[999999] flex flex-col items-center justify-center overflow-hidden p-4 select-none ${
-        isAquaticTheme ? 'bg-[#051320] text-[#F0F8FF]' : 'bg-[#F5F0E8] text-[#141210]'
+        isAquaticTheme ? 'bg-[#F0F7FC] text-[#0A2540]' : 'bg-[#F5F0E8] text-[#141210]'
       }`}
     >
-      {/* Ambient Radiant Lighting Matching Website */}
+      {/* Ambient Radiant Lighting Matching Website (radial-gradient for GPU smoothness) */}
       {isAquaticTheme ? (
         <>
-          <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-gradient-to-tr from-sky-500/20 via-emerald-500/15 to-rose-500/15 blur-[140px]" />
-          <div className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-[#E11D48]/15 blur-[120px]" />
-          <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-[#10B981]/15 blur-[120px]" />
+          <div
+            className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(14,165,233,0.16) 0%, rgba(16,185,129,0.12) 45%, transparent 72%)' }}
+          />
+          <div
+            className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(225,29,72,0.10) 0%, transparent 70%)' }}
+          />
+          <div
+            className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)' }}
+          />
         </>
       ) : (
         <>
@@ -187,7 +196,7 @@ export default function AtelierGlobalLoader({
         transition={{ duration: 0.25, ease: 'easeOut' }}
         className={`relative z-10 w-full max-w-md rounded-[2.5rem] border p-7 sm:p-9 backdrop-blur-xl text-center flex flex-col items-center ${
           isAquaticTheme
-            ? 'border-sky-400/25 bg-[#092035]/95 shadow-[0_24px_70px_rgba(2,10,20,0.65),0_4px_24px_rgba(16,185,129,0.18)]'
+            ? 'border-sky-300/70 bg-white/95 shadow-[0_24px_60px_rgba(12,74,110,0.16),0_4px_20px_rgba(16,185,129,0.12)]'
             : 'border-[#6D5738]/25 bg-[#FCF9F4]/95 shadow-[0_24px_70px_rgba(68,52,32,0.16),0_4px_24px_rgba(182,141,82,0.14)]'
         }`}
       >
@@ -196,7 +205,7 @@ export default function AtelierGlobalLoader({
           {/* Outer Rotating Dashed Filigree Ring */}
           <div
             className={`h-28 w-28 sm:h-32 sm:w-32 rounded-full border border-dashed animate-[spin_14s_linear_infinite] ${
-              isAquaticTheme ? 'border-emerald-400/50' : 'border-[#B68D52]/45'
+              isAquaticTheme ? 'border-emerald-500/55' : 'border-[#B68D52]/45'
             }`}
           />
 
@@ -204,7 +213,7 @@ export default function AtelierGlobalLoader({
           <div
             className={`absolute h-24 w-24 sm:h-28 sm:w-28 rounded-full border-2 border-r-transparent border-l-transparent animate-[spin_4.5s_linear_infinite_reverse] ${
               isAquaticTheme
-                ? 'border-t-sky-400 border-b-[#F43F5E]'
+                ? 'border-t-sky-500 border-b-[#E11D48]'
                 : 'border-t-[#B68D52] border-b-[#D4AF78]'
             }`}
           />
@@ -218,7 +227,7 @@ export default function AtelierGlobalLoader({
             <span
               className={`absolute -top-1 left-1/2 -translate-x-1/2 h-2.5 w-2.5 rounded-full border ${
                 isAquaticTheme
-                  ? 'bg-gradient-to-tr from-[#34D399] to-[#F43F5E] shadow-[0_0_10px_rgba(52,211,153,0.8)] border-sky-200'
+                  ? 'bg-gradient-to-tr from-[#059669] to-[#E11D48] shadow-[0_0_8px_rgba(16,185,129,0.5)] border-white'
                   : 'bg-gradient-to-tr from-[#FCF9F4] to-[#B68D52] shadow-[0_0_8px_rgba(182,141,82,0.75)] border-[#FCF9F4]'
               }`}
             />
@@ -230,7 +239,7 @@ export default function AtelierGlobalLoader({
             transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
             className={`absolute grid h-18 w-18 sm:h-20 sm:w-20 place-items-center rounded-full border overflow-hidden ${
               isAquaticTheme
-                ? 'bg-gradient-to-br from-[#0E2E4A] via-[#081D30] to-[#051320] border-sky-400/45 shadow-[0_10px_25px_rgba(2,10,20,0.65)]'
+                ? 'bg-gradient-to-br from-[#FFFFFF] via-[#F0F7FC] to-[#E5F2FB] border-sky-300/75 shadow-[0_10px_25px_rgba(12,74,110,0.14)]'
                 : 'bg-gradient-to-br from-[#FCF9F4] via-[#F5F0E8] to-[#EDE4DD] border-[#B68D52]/55 shadow-[0_10px_25px_rgba(68,52,32,0.18)]'
             }`}
           >
@@ -246,13 +255,13 @@ export default function AtelierGlobalLoader({
                   {mode === 'signout' || mode === 'admin_signout' ? (
                     <Lock
                       className={`h-7 w-7 sm:h-8 sm:w-8 ${
-                        isAquaticTheme ? 'text-[#F43F5E]' : 'text-[#7A5B32]'
+                        isAquaticTheme ? 'text-[#E11D48]' : 'text-[#7A5B32]'
                       }`}
                     />
                   ) : (
                     <CheckCircle2
                       className={`h-7 w-7 sm:h-8 sm:w-8 ${
-                        isAquaticTheme ? 'text-emerald-400' : 'text-[#7A5B32]'
+                        isAquaticTheme ? 'text-emerald-600' : 'text-[#7A5B32]'
                       }`}
                     />
                   )}
@@ -267,13 +276,13 @@ export default function AtelierGlobalLoader({
                 >
                   <NpMonogramSvg
                     className={`h-6 sm:h-7 w-auto ${
-                      isAquaticTheme ? 'text-[#F0F8FF]' : ''
+                      isAquaticTheme ? 'text-[#0A2540]' : ''
                     }`}
                   />
                   <span className="sr-only">NP</span>
                   <AtelierScriptText
                     className={`text-[13px] leading-none -mt-0.5 ${
-                      isAquaticTheme ? 'text-[#F0F8FF]' : 'text-[#141210]'
+                      isAquaticTheme ? 'text-[#0A2540]' : 'text-[#141210]'
                     }`}
                   >
                     Atelier
@@ -291,26 +300,26 @@ export default function AtelierGlobalLoader({
           transition={{ delay: 0.08 }}
           className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1 text-xs font-bold shadow-xs mb-2.5 ${
             isAquaticTheme
-              ? 'border-emerald-400/35 bg-[#0D2B44] text-emerald-300'
+              ? 'border-emerald-400/55 bg-emerald-50 text-emerald-800'
               : 'border-[#6D5738]/25 bg-[#F5F0E8] text-[#7A5B32]'
           }`}
         >
           {mode === 'page_switch' ? (
             <Compass
               className={`h-3.5 w-3.5 animate-spin ${
-                isAquaticTheme ? 'text-sky-300' : 'text-[#7A5B32]'
+                isAquaticTheme ? 'text-sky-600' : 'text-[#7A5B32]'
               }`}
             />
           ) : mode === 'signout' || mode === 'admin_signout' ? (
             <ArrowRightLeft
               className={`h-3.5 w-3.5 ${
-                isAquaticTheme ? 'text-[#FB7185]' : 'text-[#7A5B32]'
+                isAquaticTheme ? 'text-[#E11D48]' : 'text-[#7A5B32]'
               }`}
             />
           ) : (
             <Sparkles
               className={`h-3.5 w-3.5 animate-pulse ${
-                isAquaticTheme ? 'text-emerald-300' : 'text-[#7A5B32]'
+                isAquaticTheme ? 'text-emerald-600' : 'text-[#7A5B32]'
               }`}
             />
           )}
@@ -323,7 +332,7 @@ export default function AtelierGlobalLoader({
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.12 }}
           className={`font-tagline text-2xl sm:text-3xl font-bold tracking-tight ${
-            isAquaticTheme ? 'text-[#F0F8FF]' : 'text-[#141210]'
+            isAquaticTheme ? 'text-[#0A2540]' : 'text-[#141210]'
           }`}
         >
           {displayTitle}
@@ -335,7 +344,7 @@ export default function AtelierGlobalLoader({
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.16 }}
           className={`text-xs sm:text-sm font-medium leading-relaxed mt-1 max-w-xs ${
-            isAquaticTheme ? 'text-[#B6D4E8]' : 'text-[#5C4D3C]'
+            isAquaticTheme ? 'text-[#2C5270]' : 'text-[#5C4D3C]'
           }`}
         >
           {displaySubtitle}
@@ -347,12 +356,12 @@ export default function AtelierGlobalLoader({
           <div className="flex items-center justify-between text-xs font-bold">
             <span
               className={`flex items-center gap-1.5 text-[11px] ${
-                isAquaticTheme ? 'text-[#B6D4E8]' : 'text-[#5C4D3C]'
+                isAquaticTheme ? 'text-[#2C5270]' : 'text-[#5C4D3C]'
               }`}
             >
               <ShieldCheck
                 className={`h-3.5 w-3.5 ${
-                  isAquaticTheme ? 'text-emerald-400' : 'text-[#7A5B32]'
+                  isAquaticTheme ? 'text-emerald-600' : 'text-[#7A5B32]'
                 }`}
               />
               <span>
@@ -363,7 +372,7 @@ export default function AtelierGlobalLoader({
             </span>
             <span
               className={`font-tagline text-sm font-extrabold ${
-                isAquaticTheme ? 'text-[#FB7185]' : 'text-[#7A5B32]'
+                isAquaticTheme ? 'text-[#E11D48]' : 'text-[#7A5B32]'
               }`}
             >
               {progress}%
@@ -374,14 +383,14 @@ export default function AtelierGlobalLoader({
           <div
             className={`relative h-2.5 w-full overflow-hidden rounded-full border p-0.5 shadow-inner ${
               isAquaticTheme
-                ? 'bg-[#071B2D] border-sky-400/30'
+                ? 'bg-[#E7F3FC] border-sky-300/70'
                 : 'bg-[#EFE8DC] border-[#6D5738]/25'
             }`}
           >
             <motion.div
               className={`h-full rounded-full relative overflow-hidden ${
                 isAquaticTheme
-                  ? 'bg-gradient-to-r from-[#0EA5E9] via-[#10B981] to-[#E11D48] shadow-[0_0_12px_rgba(16,185,129,0.45)]'
+                  ? 'bg-gradient-to-r from-[#0284C7] via-[#059669] to-[#E11D48] shadow-[0_0_10px_rgba(14,165,233,0.3)]'
                   : 'bg-gradient-to-r from-[#B68D52] via-[#D4AF78] to-[#B68D52] shadow-[0_0_12px_rgba(182,141,82,0.35)]'
               }`}
               initial={{ width: '0%' }}
@@ -407,7 +416,7 @@ export default function AtelierGlobalLoader({
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.16 }}
                 className={`text-[11.5px] font-semibold tracking-wide ${
-                  isAquaticTheme ? 'text-[#9EC6DF]' : 'text-[#5C4D3C]'
+                  isAquaticTheme ? 'text-[#2C5270]' : 'text-[#5C4D3C]'
                 }`}
               >
                 {steps[currentStepIndex]}

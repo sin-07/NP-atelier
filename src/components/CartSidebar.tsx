@@ -213,14 +213,14 @@ export default function CartSidebar() {
                 <div
                   className={`h-1.5 w-full overflow-hidden rounded-full border ${
                     isAquaticTheme
-                      ? 'bg-[#051320] border-sky-400/25'
+                      ? 'bg-white border-sky-200'
                       : 'bg-[#EFE8DC] border-[#6D5738]/20'
                   }`}
                 >
                   <div
                     className={`h-full rounded-full transition-all duration-300 ${
                       isAquaticTheme
-                        ? 'bg-gradient-to-r from-[#10B981] via-[#34D399] to-[#F43F5E]'
+                        ? 'bg-gradient-to-r from-[#0284C7] via-[#059669] to-[#E11D48]'
                         : 'bg-gradient-to-r from-[#B68D52] via-[#D4AF78] to-[#B68D52]'
                     }`}
                     style={{ width: `${shippingProgress}%` }}
@@ -261,14 +261,14 @@ export default function CartSidebar() {
                       <article
                         key={item.cartItemId}
                         className={`group overflow-hidden rounded-2xl ${wt.inset} p-3.5 shadow-[0_4px_16px_rgba(68,52,32,0.08)] transition duration-200 ${
-                          isAquaticTheme ? 'hover:border-emerald-400/60' : 'hover:border-[#B68D52]'
+                          isAquaticTheme ? 'hover:border-emerald-500/70' : 'hover:border-[#B68D52]'
                         }`}
                       >
                         <div className="flex gap-3.5">
                           <div
                             className={`relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border ${
                               isAquaticTheme
-                                ? 'bg-[#081D30] border-sky-400/25'
+                                ? 'bg-[#E2F0FA] border-sky-200'
                                 : 'bg-[#EFE8DC] border-[#6D5738]/20'
                             }`}
                           >
@@ -314,7 +314,7 @@ export default function CartSidebar() {
                               <div
                                 className={`flex items-center gap-2 rounded-full border px-2 py-1 ${
                                   isAquaticTheme
-                                    ? 'border-sky-400/30 bg-[#051320]'
+                                    ? 'border-sky-300/70 bg-white'
                                     : 'border-[#6D5738]/25 bg-[#F5F0E8]'
                                 }`}
                               >
@@ -323,7 +323,7 @@ export default function CartSidebar() {
                                   onClick={() => setCartQuantity(item.cartItemId, item.quantity - 1)}
                                   className={`grid h-6 w-6 place-items-center rounded-full shadow-xs transition cursor-pointer ${
                                     isAquaticTheme
-                                      ? 'bg-[#0E2E4A] text-[#F0F8FF] hover:bg-[#E11D48] hover:text-white'
+                                      ? 'bg-[#EBF6FD] text-[#0A2540] hover:bg-[#E11D48] hover:text-white'
                                       : 'bg-[#EFE8DC] text-[#141210] hover:bg-[#E5DCCD] hover:text-[#7A5B32]'
                                   }`}
                                 >
@@ -337,7 +337,7 @@ export default function CartSidebar() {
                                   onClick={() => setCartQuantity(item.cartItemId, item.quantity + 1)}
                                   className={`grid h-6 w-6 place-items-center rounded-full shadow-xs transition cursor-pointer ${
                                     isAquaticTheme
-                                      ? 'bg-[#0E2E4A] text-[#F0F8FF] hover:bg-[#10B981] hover:text-[#042318]'
+                                      ? 'bg-[#EBF6FD] text-[#0A2540] hover:bg-[#059669] hover:text-white'
                                       : 'bg-[#EFE8DC] text-[#141210] hover:bg-[#E5DCCD] hover:text-[#7A5B32]'
                                   }`}
                                 >
@@ -362,14 +362,14 @@ export default function CartSidebar() {
 
             {/* Footer Summary & Checkout */}
             {cartItems.length > 0 && (
-              <div className={`shrink-0 border-t p-5 shadow-lg z-10 ${isAquaticTheme ? 'border-sky-400/20 bg-[#081D30]' : 'border-[#6D5738]/20 bg-[#FCF9F4]'}`}>
+              <div className={`shrink-0 border-t p-5 shadow-lg z-10 ${isAquaticTheme ? 'border-sky-200/80 bg-white' : 'border-[#6D5738]/20 bg-[#FCF9F4]'}`}>
                 {/* Promo Code Input */}
                 <div className="mb-3.5">
                   {appliedCoupon ? (
                     <div
                       className={`flex items-center justify-between rounded-xl border px-3.5 py-2 text-xs font-bold ${
                         isAquaticTheme
-                          ? 'bg-emerald-500/15 border-emerald-400/35 text-emerald-200'
+                          ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
                           : 'bg-[#F5F0E8] border-[#6D5738]/25 text-[#141210]'
                       }`}
                     >
@@ -396,7 +396,7 @@ export default function CartSidebar() {
                             placeholder="Coupon code..."
                             className={`h-9 w-full rounded-xl border pl-8 pr-3 text-xs outline-none transition ${
                               isAquaticTheme
-                                ? 'border-sky-400/30 bg-[#051320] text-[#F0F8FF] placeholder:text-sky-200/45 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/35'
+                                ? 'border-sky-300/70 bg-[#F4FAFE] text-[#0A2540] placeholder:text-[#5A81A0]/70 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30'
                                 : 'border-[#6D5738]/25 bg-[#F5F0E8] text-[#141210] placeholder:text-[#5C4D3C]/60 focus:border-[#B68D52] focus:ring-1 focus:ring-[#D4AF78]/40'
                             }`}
                           />
@@ -405,7 +405,7 @@ export default function CartSidebar() {
                           type="submit"
                           className={`rounded-xl font-bold px-3.5 text-xs transition shadow-xs cursor-pointer ${
                             isAquaticTheme
-                              ? 'bg-[#10B981] hover:bg-[#34D399] text-[#042318]'
+                              ? 'bg-[#059669] hover:bg-[#047857] text-white'
                               : 'bg-[#D4AF78] hover:bg-[#E5C18A] text-[#141210]'
                           }`}
                         >
@@ -435,7 +435,7 @@ export default function CartSidebar() {
                         <span
                           className={`rounded border px-1.5 py-0.2 text-[9px] font-extrabold uppercase ${
                             isAquaticTheme
-                              ? 'bg-[#0E2E4A] border-emerald-400/35 text-emerald-300'
+                              ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
                               : 'bg-[#EFE8DC] border-[#6D5738]/25 text-[#7A5B32]'
                           }`}
                         >
@@ -464,7 +464,7 @@ export default function CartSidebar() {
                     <div
                       className={`mt-3 rounded-xl border px-3 py-2 text-xs flex items-center justify-between shadow-2xs ${
                         isAquaticTheme
-                          ? 'border-sky-400/25 bg-[#0B263E]'
+                          ? 'border-sky-200 bg-[#EBF6FD]'
                           : 'border-[#6D5738]/25 bg-[#F5F0E8]'
                       }`}
                     >
@@ -476,7 +476,7 @@ export default function CartSidebar() {
                         <span
                           className={`shrink-0 text-[10px] font-bold rounded-full px-1.5 py-0.5 border ${
                             isAquaticTheme
-                              ? 'text-emerald-300 bg-emerald-500/15 border-emerald-400/35'
+                              ? 'text-emerald-700 bg-emerald-50 border-emerald-300'
                               : 'text-[#7A5B32] bg-[#FCF9F4] border-[#6D5738]/25'
                           }`}
                         >
@@ -488,7 +488,7 @@ export default function CartSidebar() {
                         onClick={handleProceedToCheckout}
                         className={`text-[10px] font-bold underline shrink-0 ml-1.5 cursor-pointer ${
                           isAquaticTheme
-                            ? 'text-sky-300 hover:text-white'
+                            ? 'text-sky-700 hover:text-[#0A2540]'
                             : 'text-[#7A5B32] hover:text-[#141210]'
                         }`}
                       >
@@ -504,7 +504,7 @@ export default function CartSidebar() {
                     onClick={handleDirectWhatsAppOrder}
                     className={`w-full py-3.5 px-4 rounded-full font-extrabold text-sm transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.98] ${
                       isAquaticTheme
-                        ? 'bg-gradient-to-r from-[#E11D48] via-[#DC2626] to-[#F43F5E] hover:brightness-110 text-white shadow-[0_6px_22px_rgba(225,29,72,0.4)]'
+                        ? 'bg-gradient-to-r from-[#E11D48] via-[#DC2626] to-[#F43F5E] hover:brightness-105 text-white shadow-[0_6px_18px_rgba(225,29,72,0.28)]'
                         : 'bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] hover:brightness-105 text-[#141210] shadow-[0_4px_18px_rgba(182,141,82,0.28)]'
                     }`}
                   >
@@ -517,7 +517,7 @@ export default function CartSidebar() {
                     onClick={handleProceedToCheckout}
                     className={`w-full py-2.5 px-4 rounded-full border text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs ${
                       isAquaticTheme
-                        ? 'border-sky-400/30 bg-[#0B263E] hover:bg-[#0E2F4A] hover:border-emerald-400/60 text-[#F0F8FF]'
+                        ? 'border-sky-300/70 bg-[#EBF6FD] hover:bg-sky-100 hover:border-emerald-500/60 text-[#0A2540]'
                         : 'border-[#6D5738]/25 bg-[#F5F0E8] hover:bg-[#EFE8DC] hover:border-[#B68D52] text-[#141210]'
                     }`}
                   >
@@ -532,7 +532,7 @@ export default function CartSidebar() {
                   <div
                     className={`flex items-center justify-center gap-1.5 text-[11px] font-semibold border rounded-full py-1.5 px-3 ${
                       isAquaticTheme
-                        ? 'text-[#B6D4E8] bg-[#0B263E] border-sky-400/20'
+                        ? 'text-[#2C5270] bg-[#EBF6FD] border-sky-200'
                         : 'text-[#5C4D3C] bg-[#F5F0E8] border-[#6D5738]/20'
                     }`}
                   >
@@ -545,7 +545,7 @@ export default function CartSidebar() {
                 <div
                   className={`mt-3 rounded-xl border p-2.5 text-center ${
                     isAquaticTheme
-                      ? 'border-sky-400/20 bg-[#0B263E]'
+                      ? 'border-sky-200 bg-[#EBF6FD]'
                       : 'border-[#6D5738]/20 bg-[#F5F0E8]'
                   }`}
                 >
@@ -559,7 +559,7 @@ export default function CartSidebar() {
                       rel="noreferrer"
                       className={`inline-flex items-center gap-1 transition ${
                         isAquaticTheme
-                          ? 'text-emerald-300 hover:text-emerald-200'
+                          ? 'text-emerald-700 hover:text-emerald-900'
                           : 'text-emerald-700 hover:text-emerald-600'
                       }`}
                       title={`WhatsApp ${displayPhone}`}
@@ -572,7 +572,7 @@ export default function CartSidebar() {
                       href={`mailto:${contactEmail}`}
                       className={`inline-flex items-center gap-1 transition ${
                         isAquaticTheme
-                          ? 'text-[#B6D4E8] hover:text-white'
+                          ? 'text-[#2C5270] hover:text-[#0A2540]'
                           : 'text-[#5C4D3C] hover:text-[#141210]'
                       }`}
                       title={`Email ${contactEmail}`}

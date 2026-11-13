@@ -1,6 +1,6 @@
 "use client"
 
-import { FacebookIcon, InstagramIcon, PinterestIcon } from './Icons'
+import { FacebookIcon, InstagramIcon, PinterestIcon, WhatsAppIcon } from './Icons'
 import {
   Mail,
   MapPin,
@@ -34,19 +34,20 @@ export default function Footer() {
     <footer
       id="contact"
       ref={containerRef}
-      className={`mt-20 pt-20 pb-12 border-t relative overflow-hidden transition-colors duration-300 ${
+      className={`mt-20 pt-20 pb-12 border-t relative overflow-hidden transition-colors duration-200 ${
         isAquaticTheme
-          ? 'bg-gradient-to-b from-[#061828] via-[#05121E] to-[#030B14] text-[#F0F8FF] border-sky-400/25'
+          ? 'bg-gradient-to-b from-[#E7F3FC] via-[#EFF7FD] to-[#F7FBFF] text-[#0A2540] border-sky-300/65'
           : 'bg-gradient-to-b from-[#F2ECE2] via-[#EFE7DA] to-[#EAE0D1] text-[#141210] border-[#6D5738]/20'
       }`}
     >
       {/* Subtle top glow */}
       <div
-        className={`absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-24 blur-2xl pointer-events-none ${
-          isAquaticTheme
-            ? 'bg-gradient-to-r from-[#38BDF8]/20 via-[#10B981]/20 to-[#E11D48]/20'
-            : 'bg-gradient-to-b from-[#D4AF78]/15 to-transparent'
-        }`}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-24 pointer-events-none"
+        style={{
+          background: isAquaticTheme
+            ? 'radial-gradient(ellipse at top, rgba(14,165,233,0.12) 0%, rgba(16,185,129,0.08) 45%, transparent 75%)'
+            : 'radial-gradient(ellipse at top, rgba(212,175,120,0.16) 0%, transparent 75%)',
+        }}
       />
 
       <div className="section-shell relative z-10">
@@ -58,13 +59,13 @@ export default function Footer() {
               <div
                 className={`rounded-lg p-2 pb-5 border transition-all w-24 sm:w-28 ${
                   isAquaticTheme
-                    ? 'bg-gradient-to-b from-[#0D2E4A] to-[#081D30] border-sky-400/35 shadow-[0_14px_30px_rgba(2,12,24,0.65)] group-hover:border-emerald-400'
+                    ? 'bg-white border-sky-300/75 shadow-[0_12px_28px_rgba(12,74,110,0.14)] group-hover:border-emerald-500'
                     : 'bg-gradient-to-b from-white to-[#FDFBF7] border-[#B68D52]/35 shadow-[0_14px_30px_rgba(68,52,32,0.14)] group-hover:border-[#B68D52] group-hover:shadow-[0_12px_30px_rgba(182,141,82,0.28)]'
                 }`}
               >
                 <div
                   className={`aspect-square w-full overflow-hidden rounded ring-1 ${
-                    isAquaticTheme ? 'bg-[#051524] ring-sky-400/20' : 'bg-[#EFE8DC] ring-[#6D5738]/15'
+                    isAquaticTheme ? 'bg-[#E2F0FA] ring-sky-200' : 'bg-[#EFE8DC] ring-[#6D5738]/15'
                   }`}
                 >
                   <img
@@ -77,7 +78,7 @@ export default function Footer() {
                 </div>
                 <p
                   className={`mt-1.5 text-center text-[9px] font-bold ${
-                    isAquaticTheme ? 'text-[#F0F8FF]' : 'text-[#141210]'
+                    isAquaticTheme ? 'text-[#0A2540]' : 'text-[#141210]'
                   }`}
                 >
                   Artisan Jewelry
@@ -90,13 +91,13 @@ export default function Footer() {
               <div
                 className={`rounded-lg p-2 pb-5 border transition-all w-24 sm:w-28 ${
                   isAquaticTheme
-                    ? 'bg-gradient-to-b from-[#0F3554] to-[#092136] border-rose-400/60 shadow-[0_16px_32px_rgba(2,12,24,0.75)] group-hover:border-rose-400'
+                    ? 'bg-white border-rose-400/75 shadow-[0_14px_30px_rgba(225,29,72,0.16)] group-hover:border-[#E11D48]'
                     : 'bg-gradient-to-b from-white to-[#FDFBF7] border-[#B68D52]/55 shadow-[0_16px_32px_rgba(68,52,32,0.18)] group-hover:border-[#B68D52] group-hover:shadow-[0_12px_35px_rgba(182,141,82,0.32)]'
                 }`}
               >
                 <div
                   className={`aspect-square w-full overflow-hidden rounded ring-1 ${
-                    isAquaticTheme ? 'bg-[#051524] ring-emerald-400/30' : 'bg-[#EFE8DC] ring-[#6D5738]/20'
+                    isAquaticTheme ? 'bg-[#E2F0FA] ring-emerald-300/60' : 'bg-[#EFE8DC] ring-[#6D5738]/20'
                   }`}
                 >
                   <img
@@ -109,7 +110,7 @@ export default function Footer() {
                 </div>
                 <p
                   className={`mt-1.5 text-center text-[9px] font-bold ${
-                    isAquaticTheme ? 'text-emerald-300' : 'text-[#141210]'
+                    isAquaticTheme ? 'text-emerald-700' : 'text-[#141210]'
                   }`}
                 >
                   Exotic Aquatics
@@ -122,17 +123,17 @@ export default function Footer() {
               <div
                 className={`rounded-lg p-2 pb-5 border transition-all w-24 sm:w-28 ${
                   isAquaticTheme
-                    ? 'bg-gradient-to-b from-[#0D2E4A] to-[#081D30] border-emerald-400/35 shadow-[0_14px_30px_rgba(2,12,24,0.65)] group-hover:border-emerald-400'
+                    ? 'bg-white border-emerald-400/65 shadow-[0_12px_28px_rgba(12,74,110,0.14)] group-hover:border-emerald-500'
                     : 'bg-gradient-to-b from-white to-[#FDFBF7] border-[#B68D52]/35 shadow-[0_14px_30px_rgba(68,52,32,0.14)] group-hover:border-[#B68D52] group-hover:shadow-[0_12px_30px_rgba(182,141,82,0.28)]'
                 }`}
               >
                 <div
                   className={`aspect-square w-full overflow-hidden rounded ring-1 ${
-                    isAquaticTheme ? 'bg-[#051524] ring-sky-400/20' : 'bg-[#EFE8DC] ring-[#6D5738]/15'
+                    isAquaticTheme ? 'bg-[#E2F0FA] ring-sky-200' : 'bg-[#EFE8DC] ring-[#6D5738]/15'
                   }`}
                 >
                   <img
-                    src="https://images.unsplash.com/photo-1546026423-cc4642628d2b?auto=format&fit=crop&w=700&q=80"
+                    src="/products/acquario-rimless-tank.jpg"
                     alt="Planted Rimless Aquarium"
                     loading="lazy"
                     decoding="async"
@@ -141,7 +142,7 @@ export default function Footer() {
                 </div>
                 <p
                   className={`mt-1.5 text-center text-[9px] font-bold ${
-                    isAquaticTheme ? 'text-[#F0F8FF]' : 'text-[#141210]'
+                    isAquaticTheme ? 'text-[#0A2540]' : 'text-[#141210]'
                   }`}
                 >
                   Aquascaping
@@ -154,12 +155,12 @@ export default function Footer() {
         {/* Central Contact Headline */}
         <div
           className={`gsap-footer-item text-center space-y-4 pb-12 border-b ${
-            isAquaticTheme ? 'border-sky-400/20' : 'border-[#6D5738]/20'
+            isAquaticTheme ? 'border-sky-300/55' : 'border-[#6D5738]/20'
           }`}
         >
           <p
             className={`text-[11px] font-bold uppercase tracking-[0.3em] ${
-              isAquaticTheme ? 'text-rose-300' : 'text-[#7A5B32]'
+              isAquaticTheme ? 'text-[#BE123C]' : 'text-[#7A5B32]'
             }`}
           >
             Private Inquiries &amp; Commissions
@@ -168,7 +169,7 @@ export default function Footer() {
             href={`mailto:${email}`}
             className={`block text-xl sm:text-4xl lg:text-5xl font-tagline font-semibold tracking-tight transition-colors break-all sm:break-normal ${
               isAquaticTheme
-                ? 'text-[#F0F8FF] hover:text-emerald-300'
+                ? 'text-[#0A2540] hover:text-emerald-700'
                 : 'text-[#141210] hover:text-[#7A5B32]'
             }`}
           >
@@ -188,11 +189,11 @@ export default function Footer() {
               href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
               className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm sm:text-base font-bold shadow-xs transition cursor-pointer ${
                 isAquaticTheme
-                  ? 'border-sky-400/45 bg-[#0A243A] text-sky-200 hover:text-white hover:bg-[#0E3150] hover:border-emerald-400'
+                  ? 'border-sky-400/60 bg-white text-[#0369A1] hover:text-[#0A2540] hover:bg-[#ECFDF5] hover:border-emerald-500'
                   : 'border-[#B68D52]/55 bg-[#FCF9F4] text-[#7A5B32] hover:text-[#141210] hover:bg-[#EFE8DC] hover:border-[#B68D52]'
               }`}
             >
-              <Phone className={`h-4 w-4 ${isAquaticTheme ? 'text-emerald-400' : 'text-[#7A5B32]'}`} />
+              <Phone className={`h-4 w-4 ${isAquaticTheme ? 'text-emerald-600' : 'text-[#7A5B32]'}`} />
               <span>Direct Call: {phone}</span>
             </a>
           </div>
@@ -207,7 +208,7 @@ export default function Footer() {
                 <div
                   className={`h-10 w-10 rounded-full overflow-hidden border shadow-sm shrink-0 ${
                     isAquaticTheme
-                      ? 'border-emerald-400/75 bg-white'
+                      ? 'border-emerald-500/75 bg-white'
                       : 'border-[#B68D52]/50 bg-[#EDE4DD]'
                   }`}
                 >
@@ -221,7 +222,7 @@ export default function Footer() {
                 <span
                   className={`h-2 w-2 rounded-full ${
                     isAquaticTheme
-                      ? 'bg-[#F43F5E] shadow-[0_0_8px_rgba(244,63,94,0.65)]'
+                      ? 'bg-[#E11D48] shadow-[0_0_8px_rgba(225,29,72,0.5)]'
                       : 'bg-[#B68D52] shadow-[0_0_8px_rgba(182,141,82,0.5)]'
                   }`}
                 />
@@ -229,18 +230,18 @@ export default function Footer() {
               <BrandTitle
                 siteName={isAquaticTheme ? 'Acquario Tropicale' : siteName}
                 showNpMark={true}
-                svgClassName={`h-6 sm:h-7 w-auto ${isAquaticTheme ? 'text-[#F0F8FF]' : 'text-[#141210]'}`}
+                svgClassName={`h-6 sm:h-7 w-auto ${isAquaticTheme ? 'text-[#0A2540]' : 'text-[#141210]'}`}
                 atelierClassName={`text-[1.85rem] sm:text-[2.1rem] leading-none ${
-                  isAquaticTheme ? 'text-[#F0F8FF]' : 'text-[#141210]'
+                  isAquaticTheme ? 'text-[#0A2540]' : 'text-[#141210]'
                 }`}
                 fallbackClassName={`font-tagline text-xl sm:text-2xl font-bold tracking-tight whitespace-nowrap ${
-                  isAquaticTheme ? 'text-[#F0F8FF]' : 'text-[#141210]'
+                  isAquaticTheme ? 'text-[#0A2540]' : 'text-[#141210]'
                 }`}
               />
             </div>
             <p
               className={`font-tagline italic text-[14px] font-medium leading-relaxed max-w-xs mx-auto md:mx-0 ${
-                isAquaticTheme ? 'text-[#B6D4E8]' : 'text-[#5C4D3C]'
+                isAquaticTheme ? 'text-[#2C5270]' : 'text-[#5C4D3C]'
               }`}
             >
               {tagline}
@@ -250,34 +251,35 @@ export default function Footer() {
           {/* Minimal Links Row */}
           <div
             className={`flex flex-wrap justify-center gap-6 text-xs font-bold uppercase tracking-[0.2em] ${
-              isAquaticTheme ? 'text-[#B6D4E8]' : 'text-[#5C4D3C]'
+              isAquaticTheme ? 'text-[#2C5270]' : 'text-[#5C4D3C]'
             }`}
           >
             <a
               href="#home"
               onClick={() => setActiveDepartment?.('crafts')}
-              className={`transition-colors ${isAquaticTheme ? 'hover:text-emerald-300' : 'hover:text-[#7A5B32]'}`}
+              className={`transition-colors ${isAquaticTheme ? 'hover:text-emerald-700' : 'hover:text-[#7A5B32]'}`}
             >
               Home
             </a>
             <a
               href="#collection"
               onClick={() => setActiveDepartment?.('crafts')}
-              className={`transition-colors ${isAquaticTheme ? 'hover:text-emerald-300' : 'hover:text-[#7A5B32]'}`}
+              className={`transition-colors ${isAquaticTheme ? 'hover:text-emerald-700' : 'hover:text-[#7A5B32]'}`}
             >
               Artisan Crafts
             </a>
             <a
               href="#acquario-tropicale"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault()
                 setActiveDepartment?.('aquarium')
                 if (typeof window !== 'undefined') {
-                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                  window.scrollTo({ top: 0, behavior: 'instant' })
                 }
               }}
               className={`transition-colors font-tagline ${
                 isAquaticTheme
-                  ? 'text-rose-400 hover:text-rose-300'
+                  ? 'text-[#E11D48] hover:text-[#BE123C]'
                   : 'text-teal-700 hover:text-teal-600'
               }`}
             >
@@ -286,7 +288,7 @@ export default function Footer() {
             <a
               href="#makers"
               onClick={() => setActiveDepartment?.('crafts')}
-              className={`transition-colors ${isAquaticTheme ? 'hover:text-emerald-300' : 'hover:text-[#7A5B32]'}`}
+              className={`transition-colors ${isAquaticTheme ? 'hover:text-emerald-700' : 'hover:text-[#7A5B32]'}`}
             >
               Makers
             </a>
@@ -295,13 +297,26 @@ export default function Footer() {
           {/* Social Icons */}
           <div className="flex justify-center md:justify-end items-center gap-3">
             <a
+              href={`https://wa.me/${phone.replace(/[^0-9]/g, '').length === 10 ? `91${phone.replace(/[^0-9]/g, '')}` : phone.replace(/[^0-9]/g, '') || '919341297124'}`}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="WhatsApp"
+              className={`grid h-10 w-10 place-items-center rounded-full border transition duration-200 ${
+                isAquaticTheme
+                  ? 'border-sky-300/70 bg-white text-[#128C7E] hover:border-[#25D366] hover:bg-[#25D366] hover:text-white hover:shadow-[0_6px_14px_rgba(37,211,102,0.3)]'
+                  : 'border-[#6D5738]/25 bg-[#FCF9F4] text-[#5C4D3C] hover:border-[#25D366] hover:bg-[#25D366] hover:text-white hover:shadow-[0_6px_16px_rgba(37,211,102,0.28)]'
+              }`}
+            >
+              <WhatsAppIcon className="h-4 w-4" />
+            </a>
+            <a
               href="https://instagram.com"
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"
               className={`grid h-10 w-10 place-items-center rounded-full border transition duration-200 ${
                 isAquaticTheme
-                  ? 'border-sky-400/30 bg-[#0A243A] text-[#B6D4E8] hover:border-rose-400 hover:bg-[#E11D48] hover:text-white hover:shadow-[0_6px_16px_rgba(225,29,72,0.35)]'
+                  ? 'border-sky-300/70 bg-white text-[#2C5270] hover:border-rose-500 hover:bg-[#E11D48] hover:text-white hover:shadow-[0_6px_14px_rgba(225,29,72,0.25)]'
                   : 'border-[#6D5738]/25 bg-[#FCF9F4] text-[#5C4D3C] hover:border-[#B68D52] hover:bg-[#D4AF78] hover:text-[#141210] hover:shadow-[0_6px_16px_rgba(182,141,82,0.25)]'
               }`}
             >
@@ -314,7 +329,7 @@ export default function Footer() {
               aria-label="Pinterest"
               className={`grid h-10 w-10 place-items-center rounded-full border transition duration-200 ${
                 isAquaticTheme
-                  ? 'border-sky-400/30 bg-[#0A243A] text-[#B6D4E8] hover:border-emerald-400 hover:bg-emerald-600 hover:text-white hover:shadow-[0_6px_16px_rgba(16,185,129,0.35)]'
+                  ? 'border-sky-300/70 bg-white text-[#2C5270] hover:border-emerald-500 hover:bg-emerald-600 hover:text-white hover:shadow-[0_6px_14px_rgba(16,185,129,0.25)]'
                   : 'border-[#6D5738]/25 bg-[#FCF9F4] text-[#5C4D3C] hover:border-[#B68D52] hover:bg-[#D4AF78] hover:text-[#141210] hover:shadow-[0_6px_16px_rgba(182,141,82,0.25)]'
               }`}
             >
@@ -327,7 +342,7 @@ export default function Footer() {
               aria-label="Facebook"
               className={`grid h-10 w-10 place-items-center rounded-full border transition duration-200 ${
                 isAquaticTheme
-                  ? 'border-sky-400/30 bg-[#0A243A] text-[#B6D4E8] hover:border-sky-400 hover:bg-sky-500 hover:text-white hover:shadow-[0_6px_16px_rgba(56,189,248,0.35)]'
+                  ? 'border-sky-300/70 bg-white text-[#2C5270] hover:border-sky-500 hover:bg-sky-600 hover:text-white hover:shadow-[0_6px_14px_rgba(2,132,199,0.25)]'
                   : 'border-[#6D5738]/25 bg-[#FCF9F4] text-[#5C4D3C] hover:border-[#B68D52] hover:bg-[#D4AF78] hover:text-[#141210] hover:shadow-[0_6px_16px_rgba(182,141,82,0.25)]'
               }`}
             >
@@ -339,16 +354,16 @@ export default function Footer() {
         {/* Legal & Credits Bottom Bar */}
         <div
           className={`gsap-footer-item mt-12 pt-6 border-t flex flex-col sm:flex-row items-center justify-between text-[11px] gap-4 ${
-            isAquaticTheme ? 'border-sky-400/20 text-[#84B6D6]' : 'border-[#6D5738]/15 text-[#5C4D3C]'
+            isAquaticTheme ? 'border-sky-300/55 text-[#4B7494]' : 'border-[#6D5738]/15 text-[#5C4D3C]'
           }`}
         >
           <p>© {new Date().getFullYear()} {displaySiteName}. All handcrafted items and aquatic specimens protected by guarantee.</p>
           <div className="flex items-center gap-4">
-            <span className={`font-semibold ${isAquaticTheme ? 'text-emerald-300' : 'text-teal-700'}`}>
+            <span className={`font-semibold ${isAquaticTheme ? 'text-emerald-700' : 'text-teal-700'}`}>
               ● Live Fish Safe Arrival Guaranteed
             </span>
             <span>•</span>
-            <span className={`font-semibold ${isAquaticTheme ? 'text-rose-300' : 'text-[#7A5B32]'}`}>
+            <span className={`font-semibold ${isAquaticTheme ? 'text-[#BE123C]' : 'text-[#7A5B32]'}`}>
               100% Certified Artisans
             </span>
           </div>

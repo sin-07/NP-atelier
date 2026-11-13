@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
-import gsap from 'gsap'
 import {
   Compass,
   Sparkles,
@@ -23,22 +21,6 @@ export default function MobileBottomDock() {
 
   useEffect(() => {
     setMounted(true)
-
-    if (dockRef.current) {
-      const ctx = gsap.context(() => {
-        gsap.fromTo(
-          dockRef.current,
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.35, delay: 0.05, ease: 'power2.out', clearProps: 'all' }
-        )
-        gsap.fromTo(
-          '.gsap-dock-btn',
-          { opacity: 0, y: 6 },
-          { opacity: 1, y: 0, duration: 0.25, stagger: 0.025, delay: 0.1, ease: 'power2.out', clearProps: 'all' }
-        )
-      }, dockRef)
-      return () => ctx.revert()
-    }
   }, [])
 
   const {
@@ -89,14 +71,24 @@ export default function MobileBottomDock() {
     setActiveTab(tab)
     if (tab === 'home') {
       setActiveDepartment?.('crafts')
-      scrollToAnchor('#home')
+      if (typeof window !== 'undefined') {
+        if (window.location.pathname !== '/') {
+          router.push('/')
+          return
+        }
+        window.scrollTo({ top: 0, behavior: 'instant' })
+      }
     } else if (tab === 'crafts') {
       setActiveDepartment?.('crafts')
-      scrollToAnchor('#collection')
+      requestAnimationFrame(() => scrollToAnchor('#collection'))
     } else if (tab === 'aquarium') {
       setActiveDepartment?.('aquarium')
       if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        if (window.location.pathname !== '/') {
+          router.push('/?dept=aquarium')
+          return
+        }
+        window.scrollTo({ top: 0, behavior: 'instant' })
       }
     }
   }
@@ -108,9 +100,9 @@ export default function MobileBottomDock() {
       className="fixed bottom-3 inset-x-2 max-w-md mx-auto z-40 sm:hidden transform-gpu"
     >
       <div
-        className={`flex items-center justify-around rounded-full border backdrop-blur-md p-1.5 transition-colors duration-300 ${
+        className={`flex items-center justify-around rounded-full border backdrop-blur-md p-1.5 transition-colors duration-200 ${
           isAquaticTheme
-            ? 'border-sky-400/35 bg-[#071A2B]/95 shadow-[0_12px_36px_rgba(2,12,24,0.7),0_0_18px_rgba(16,185,129,0.18)]'
+            ? 'border-sky-300/75 bg-white/95 shadow-[0_10px_30px_rgba(12,74,110,0.16),0_0_14px_rgba(16,185,129,0.14)]'
             : 'border-[#8C6D46]/35 bg-[#FCF9F4]/95 shadow-[0_12px_36px_rgba(72,54,30,0.18),0_0_16px_rgba(212,175,120,0.12)]'
         }`}
       >
@@ -118,27 +110,16 @@ export default function MobileBottomDock() {
         <button
           type="button"
           onClick={() => handleNavClick('home')}
-          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
+          className={`relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full border transition-colors duration-150 active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
             activeTab === 'home'
               ? isAquaticTheme
-                ? 'text-white'
-                : 'text-[#141210]'
+                ? 'bg-[#E11D48] text-white border-rose-500 shadow-xs'
+                : 'bg-[#EFE8DC] text-[#141210] border-[#8C6D46]/25 shadow-xs'
               : isAquaticTheme
-              ? 'text-[#B6D4E8] hover:text-white'
-              : 'text-[#5C4D3C] hover:text-[#141210]'
+              ? 'border-transparent text-[#2C5270] hover:text-[#0A2540]'
+              : 'border-transparent text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >
-          {activeTab === 'home' && (
-            <motion.div
-              layoutId="mobileDockPill"
-              className={`absolute inset-0 rounded-full shadow-xs border ${
-                isAquaticTheme
-                  ? 'bg-[#E11D48] border-rose-400/60'
-                  : 'bg-[#EFE8DC] border-[#8C6D46]/25'
-              }`}
-              transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-            />
-          )}
           <Compass className="h-4.5 w-4.5 relative z-10" />
           <span className="text-[9.5px] font-bold tracking-tight mt-0.5 relative z-10">Atelier</span>
         </button>
@@ -147,27 +128,16 @@ export default function MobileBottomDock() {
         <button
           type="button"
           onClick={() => handleNavClick('crafts')}
-          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
+          className={`relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full border transition-colors duration-150 active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
             activeTab === 'crafts'
               ? isAquaticTheme
-                ? 'text-white'
-                : 'text-[#141210]'
+                ? 'bg-[#E11D48] text-white border-rose-500 shadow-xs'
+                : 'bg-[#EFE8DC] text-[#141210] border-[#8C6D46]/25 shadow-xs'
               : isAquaticTheme
-              ? 'text-[#B6D4E8] hover:text-white'
-              : 'text-[#5C4D3C] hover:text-[#141210]'
+              ? 'border-transparent text-[#2C5270] hover:text-[#0A2540]'
+              : 'border-transparent text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >
-          {activeTab === 'crafts' && (
-            <motion.div
-              layoutId="mobileDockPill"
-              className={`absolute inset-0 rounded-full shadow-xs border ${
-                isAquaticTheme
-                  ? 'bg-[#E11D48] border-rose-400/60'
-                  : 'bg-[#EFE8DC] border-[#8C6D46]/25'
-              }`}
-              transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-            />
-          )}
           <Palette className="h-4.5 w-4.5 relative z-10" />
           <span className="text-[9.5px] font-bold tracking-tight mt-0.5 relative z-10">Crafts</span>
         </button>
@@ -176,33 +146,22 @@ export default function MobileBottomDock() {
         <button
           type="button"
           onClick={() => handleNavClick('aquarium')}
-          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-colors duration-200 active:scale-95 cursor-pointer ${
+          className={`relative flex flex-col items-center justify-center py-1.5 px-3 rounded-full border transition-colors duration-150 active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
             activeTab === 'aquarium'
               ? isAquaticTheme
-                ? 'text-white'
-                : 'text-[#141210]'
+                ? 'bg-gradient-to-r from-[#E11D48] to-[#F43F5E] text-white border-rose-500 shadow-[0_4px_12px_rgba(225,29,72,0.28)]'
+                : 'bg-[#EFE8DC] text-[#141210] border-[#8C6D46]/25 shadow-xs'
               : isAquaticTheme
-              ? 'text-[#B6D4E8] hover:text-emerald-300'
-              : 'text-[#5C4D3C] hover:text-[#141210]'
+              ? 'border-transparent text-[#2C5270] hover:text-emerald-700'
+              : 'border-transparent text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >
-          {activeTab === 'aquarium' && (
-            <motion.div
-              layoutId="mobileDockPill"
-              className={`absolute inset-0 rounded-full shadow-xs border ${
-                isAquaticTheme
-                  ? 'bg-gradient-to-r from-[#E11D48] to-[#F43F5E] border-rose-400/60 shadow-[0_4px_14px_rgba(225,29,72,0.45)]'
-                  : 'bg-[#EFE8DC] border-[#8C6D46]/25'
-              }`}
-              transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-            />
-          )}
           <Fish
             className={`h-4.5 w-4.5 relative z-10 ${
               isAquaticTheme
                 ? activeTab === 'aquarium'
-                  ? 'text-emerald-300'
-                  : 'text-emerald-400'
+                  ? 'text-white'
+                  : 'text-emerald-600'
                 : 'text-teal-700'
             }`}
           />
@@ -216,16 +175,16 @@ export default function MobileBottomDock() {
             setActiveTab('search')
             setIsQuickSearchOpen(true)
           }}
-          className={`gsap-dock-btn flex flex-col items-center justify-center py-1 px-3 rounded-full active:scale-95 transition-all duration-150 cursor-pointer ${
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-full active:scale-95 transition-colors duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
             isAquaticTheme
-              ? 'text-[#B6D4E8] hover:text-white'
+              ? 'text-[#2C5270] hover:text-[#0A2540]'
               : 'text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >
           <div
             className={`grid h-8 w-8 place-items-center rounded-full shadow-sm border ${
               isAquaticTheme
-                ? 'bg-gradient-to-tr from-[#059669] to-[#34D399] text-[#051320] border-emerald-300/60 shadow-[0_0_12px_rgba(16,185,129,0.4)]'
+                ? 'bg-gradient-to-tr from-[#059669] to-[#10B981] text-white border-emerald-500/60 shadow-[0_4px_12px_rgba(16,185,129,0.28)]'
                 : 'bg-gradient-to-tr from-[#D4AF78] to-[#E5C18A] text-[#141210] border-[#B8925A]/40'
             }`}
           >
@@ -233,7 +192,7 @@ export default function MobileBottomDock() {
           </div>
           <span
             className={`text-[10px] font-bold tracking-tight mt-0.5 ${
-              isAquaticTheme ? 'text-emerald-300' : 'text-[#7A5B32]'
+              isAquaticTheme ? 'text-emerald-700' : 'text-[#7A5B32]'
             }`}
           >
             Search
@@ -247,9 +206,9 @@ export default function MobileBottomDock() {
             setActiveTab('wishlist')
             setIsWishlistOpen(true)
           }}
-          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full active:scale-95 transition-all duration-150 cursor-pointer ${
+          className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-full active:scale-95 transition-colors duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
             isAquaticTheme
-              ? 'text-[#B6D4E8] hover:text-white'
+              ? 'text-[#2C5270] hover:text-[#0A2540]'
               : 'text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >
@@ -271,9 +230,9 @@ export default function MobileBottomDock() {
             setActiveTab('bag')
             setIsCartOpen(true)
           }}
-          className={`gsap-dock-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-full active:scale-95 transition-all duration-150 cursor-pointer ${
+          className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-full active:scale-95 transition-colors duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
             isAquaticTheme
-              ? 'text-[#B6D4E8] hover:text-white'
+              ? 'text-[#2C5270] hover:text-[#0A2540]'
               : 'text-[#5C4D3C] hover:text-[#141210]'
           }`}
         >

@@ -359,7 +359,7 @@ export default function CheckoutModal() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="section-eyebrow">WhatsApp Direct Checkout</span>
                     <span className={`inline-flex items-center gap-1 text-xs font-bold ${wt.muted}`}>
-                      <MessageCircle className={`h-3.5 w-3.5 ${isAquaticTheme ? 'text-emerald-400' : 'text-emerald-600'}`} /> WhatsApp Verified Desk • India
+                      <MessageCircle className="h-3.5 w-3.5 text-emerald-600" /> WhatsApp Verified Desk • India
                     </span>
                   </div>
                   <h3 className={`mt-2 font-tagline text-2xl sm:text-3xl font-bold ${wt.title}`}>
@@ -376,7 +376,7 @@ export default function CheckoutModal() {
                         <span
                           className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${
                             isAquaticTheme
-                              ? 'border-sky-400/25 bg-[#0B263E] text-emerald-300'
+                              ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
                               : 'border-[#6D5738]/25 bg-[#F5F0E8] text-[#7A5B32]'
                           }`}
                         >
@@ -390,7 +390,7 @@ export default function CheckoutModal() {
                             setIsAuthOpen(true)
                           }}
                           className={`text-[11px] font-bold underline cursor-pointer ${
-                            isAquaticTheme ? 'text-sky-300 hover:text-white' : 'text-[#7A5B32] hover:text-[#141210]'
+                            isAquaticTheme ? 'text-sky-700 hover:text-[#0A2540]' : 'text-[#7A5B32] hover:text-[#141210]'
                           }`}
                         >
                           Have an account? Sign in
@@ -406,13 +406,13 @@ export default function CheckoutModal() {
                     <div
                       className={`flex items-center gap-3 rounded-2xl border p-3.5 text-xs font-semibold shadow-xs ${
                         isAquaticTheme
-                          ? 'border-emerald-400/40 bg-emerald-500/15 text-emerald-100'
+                          ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
                           : 'border-teal-600/30 bg-teal-50 text-teal-800'
                       }`}
                     >
-                      <ShieldCheck className={`h-5 w-5 shrink-0 ${isAquaticTheme ? 'text-emerald-300' : 'text-teal-600'}`} />
+                      <ShieldCheck className={`h-5 w-5 shrink-0 ${isAquaticTheme ? 'text-emerald-600' : 'text-teal-600'}`} />
                       <div>
-                        <span className={`font-bold block ${isAquaticTheme ? 'text-white' : 'text-teal-900'}`}>
+                        <span className={`font-bold block ${isAquaticTheme ? 'text-emerald-950' : 'text-teal-900'}`}>
                           Live Arrival & Fragile Glass Guarantee Included
                         </span>
                         <span>Aquatics packed with pure oxygen and climate insulation. Glass aquariums ship with reinforced wooden corner crating.</span>
@@ -424,7 +424,7 @@ export default function CheckoutModal() {
                   <div className={`rounded-2xl ${wt.inset} p-4 shadow-xs`}>
                     <div className={`flex items-center justify-between text-xs font-bold uppercase tracking-wider ${wt.muted}`}>
                       <span>Order Items ({cartItems.length})</span>
-                      <span className={`font-extrabold ${isAquaticTheme ? 'text-[#FB7185]' : 'text-[#7A5B32]'}`}>
+                      <span className={`font-extrabold ${isAquaticTheme ? 'text-[#E11D48]' : 'text-[#7A5B32]'}`}>
                         Total: ₹{cartFinalTotal.toFixed(0)}
                       </span>
                     </div>
@@ -434,7 +434,7 @@ export default function CheckoutModal() {
                           key={item.cartItemId}
                           className={`flex shrink-0 items-center gap-2 rounded-xl border p-1.5 pr-3 text-xs ${
                             isAquaticTheme
-                              ? 'bg-[#071A2B] border-sky-400/25'
+                              ? 'bg-white border-sky-200'
                               : 'bg-[#F5F0E8] border-[#6D5738]/20'
                           }`}
                         >
@@ -467,7 +467,7 @@ export default function CheckoutModal() {
                           onClick={() => setIsEditingAddress(true)}
                           className={`inline-flex items-center gap-1.5 text-xs font-bold border px-3 py-1 rounded-xl transition shadow-2xs cursor-pointer ${
                             isAquaticTheme
-                              ? 'text-emerald-300 hover:text-white bg-[#0B263E] border-sky-400/25 hover:border-emerald-400'
+                              ? 'text-emerald-700 hover:text-emerald-900 bg-white border-sky-300/70 hover:border-emerald-500'
                               : 'text-[#7A5B32] hover:text-[#141210] bg-[#FAF6EF] border-[#6D5738]/25 hover:border-[#B68D52]'
                           }`}
                         >
@@ -492,7 +492,7 @@ export default function CheckoutModal() {
                                   <span
                                     className={`text-xs font-mono font-bold border px-2 py-0.5 rounded-md ${
                                       isAquaticTheme
-                                        ? 'text-sky-200 bg-[#071A2B] border-sky-400/25'
+                                        ? 'text-sky-800 bg-white border-sky-200'
                                         : 'text-[#7A5B32] bg-[#F5F0E8] border-[#6D5738]/25'
                                     }`}
                                   >
@@ -523,7 +523,7 @@ export default function CheckoutModal() {
                             type="button"
                             onClick={() => setIsEditingAddress(true)}
                             className={`text-[11px] font-bold underline cursor-pointer ${
-                              isAquaticTheme ? 'text-sky-300 hover:text-white' : 'text-[#7A5B32] hover:text-[#141210]'
+                              isAquaticTheme ? 'text-sky-700 hover:text-[#0A2540]' : 'text-[#7A5B32] hover:text-[#141210]'
                             }`}
                           >
                             Use Different Address
@@ -593,7 +593,7 @@ export default function CheckoutModal() {
                                 {isLocatingPin ? (
                                   <Loader2 className={`h-3.5 w-3.5 animate-spin ${wt.accentText}`} />
                                 ) : formData.zip.length === 6 && formData.city ? (
-                                  <CheckCircle2 className={`h-3.5 w-3.5 ${isAquaticTheme ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                                 ) : null}
                               </div>
                             </div>
@@ -653,7 +653,7 @@ export default function CheckoutModal() {
                               type="button"
                               onClick={() => setIsEditingAddress(false)}
                               className={`text-xs font-bold underline cursor-pointer ${
-                                isAquaticTheme ? 'text-sky-300 hover:text-white' : 'text-[#7A5B32] hover:text-[#141210]'
+                                isAquaticTheme ? 'text-sky-700 hover:text-[#0A2540]' : 'text-[#7A5B32] hover:text-[#141210]'
                               }`}
                             >
                               Cancel & Use Saved Address
@@ -699,14 +699,14 @@ export default function CheckoutModal() {
                             className={`relative p-3 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between ${
                               !isEnabled
                                 ? isAquaticTheme
-                                  ? 'opacity-40 border-sky-400/15 bg-[#061828] cursor-not-allowed'
+                                  ? 'opacity-40 border-sky-200 bg-[#EBF6FD] cursor-not-allowed'
                                   : 'opacity-40 border-[#6D5738]/20 bg-[#EFE8DC] cursor-not-allowed'
                                 : isSelected
                                 ? isAquaticTheme
-                                  ? 'border-[#F43F5E] bg-gradient-to-b from-[#0E2F4A] via-[#0B253B] to-[#081D30] shadow-xs ring-1 ring-rose-400/50'
+                                  ? 'border-[#E11D48] bg-gradient-to-b from-[#FFF1F2] via-[#FFFFFF] to-[#ECFDF5] shadow-xs ring-1 ring-[#E11D48]/45'
                                   : 'border-[#B68D52] bg-gradient-to-b from-[#FAF6EF] via-[#FCF9F4] to-[#F3ECE1] shadow-xs ring-1 ring-[#B68D52]/50'
                                 : isAquaticTheme
-                                ? 'border-sky-400/20 bg-[#071A2B] hover:border-emerald-400/55 hover:bg-[#0B263E]'
+                                ? 'border-sky-200 bg-white hover:border-emerald-500 hover:bg-[#F5FAFF]'
                                 : 'border-[#6D5738]/20 bg-[#F5F0E8] hover:border-[#B68D52] hover:bg-[#FAF6EF]'
                             }`}
                           >
@@ -817,7 +817,7 @@ export default function CheckoutModal() {
                       )}
                     </button>
                     <p className={`text-center text-xs flex items-center justify-center gap-1.5 font-medium ${wt.muted}`}>
-                      <ShieldCheck className={`h-4 w-4 shrink-0 ${isAquaticTheme ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                      <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
                       <span>Saves order to Admin Panel &amp; automatically launches WhatsApp with full order details</span>
                     </p>
                   </div>
@@ -829,7 +829,7 @@ export default function CheckoutModal() {
                 <div
                   className={`mx-auto grid h-20 w-20 place-items-center rounded-full border-2 ${
                     isAquaticTheme
-                      ? 'bg-gradient-to-br from-[#10B981] to-[#059669] text-[#031F16] border-emerald-300 shadow-[0_0_25px_rgba(16,185,129,0.4)]'
+                      ? 'bg-gradient-to-br from-[#10B981] to-[#059669] text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.28)]'
                       : 'bg-gradient-to-br from-[#E5C18A] to-[#D4AF78] text-[#141210] border-[#B68D52] shadow-[0_0_25px_rgba(182,141,82,0.35)]'
                   }`}
                 >
@@ -841,7 +841,7 @@ export default function CheckoutModal() {
                   Thank You for Ordering from {siteName}!
                 </h3>
                 <p className={`mx-auto mt-3 max-w-md text-sm leading-relaxed ${wt.muted}`}>
-                  Your order <strong className={`font-extrabold ${isAquaticTheme ? 'text-[#FB7185]' : 'text-[#7A5B32]'}`}>#{confirmedOrder?.orderId}</strong> is saved. If WhatsApp didn&apos;t open automatically, tap below to send your order receipt directly!
+                  Your order <strong className={`font-extrabold ${isAquaticTheme ? 'text-[#E11D48]' : 'text-[#7A5B32]'}`}>#{confirmedOrder?.orderId}</strong> is saved. If WhatsApp didn&apos;t open automatically, tap below to send your order receipt directly!
                 </p>
 
                 <div className={`mx-auto mt-6 max-w-md rounded-2xl ${wt.inset} p-4 text-left shadow-xs`}>
@@ -907,7 +907,7 @@ export default function CheckoutModal() {
                       rel="noreferrer"
                       className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-bold shadow-xs transition ${
                         isAquaticTheme
-                          ? 'bg-[#071A2B] border-emerald-400/40 text-emerald-300 hover:bg-emerald-500/15'
+                          ? 'bg-emerald-50 border-emerald-300 text-emerald-700 hover:bg-emerald-100'
                           : 'bg-[#FCF9F4] border-emerald-600/35 text-emerald-700 hover:bg-emerald-50'
                       }`}
                     >
@@ -918,7 +918,7 @@ export default function CheckoutModal() {
                       href={`mailto:${contactEmail}`}
                       className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-bold shadow-xs transition ${
                         isAquaticTheme
-                          ? 'bg-[#071A2B] border-sky-400/25 text-[#F0F8FF] hover:border-emerald-400'
+                          ? 'bg-white border-sky-300/70 text-[#0A2540] hover:border-emerald-500'
                           : 'bg-[#FCF9F4] border-[#6D5738]/25 text-[#141210] hover:border-[#B68D52]'
                       }`}
                     >

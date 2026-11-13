@@ -1,4 +1,4 @@
-export const AQUARIUM_THEME_META_COLOR = '#051320'
+export const AQUARIUM_THEME_META_COLOR = '#F0F7FC'
 export const CRAFTS_THEME_META_COLOR = '#F5F0E8'
 
 export const AQUATIC_CONTACT_EMAIL = 'acquariotropicale2723@gmail.com'
@@ -71,34 +71,34 @@ const CRAFTS_MODAL_THEME: WorldModalTheme = {
 }
 
 const AQUARIUM_MODAL_THEME: WorldModalTheme = {
-  backdrop: 'bg-[#030B14]/75 backdrop-blur-sm',
-  card: 'bg-[#081D30] border-sky-400/25 shadow-[0_25px_75px_rgba(2,12,24,0.75)] text-[#F0F8FF]',
-  drawer: 'bg-[#051320] border-sky-400/25 shadow-[0_25px_70px_rgba(2,12,24,0.85)] text-[#F0F8FF]',
-  header: 'border-sky-400/20 bg-[#081D30] text-[#F0F8FF]',
-  subHeader: 'border-sky-400/20 bg-[#0A253D] text-[#F0F8FF]',
-  inset: 'border-sky-400/22 bg-[#0A253D]',
-  insetDashed: 'border-dashed border-emerald-400/35 bg-[#081D30]',
-  well: 'border-sky-400/25 bg-[#0D2E4A]',
-  title: 'text-[#F0F8FF]',
-  body: 'text-[#B6D4E8]',
-  muted: 'text-[#84B6D6]',
-  accentText: 'text-emerald-300',
-  greenBadge: 'bg-emerald-500/15 border-emerald-400/40 text-emerald-300',
-  redBadge: 'bg-rose-500/15 border-rose-400/45 text-rose-300',
+  backdrop: 'bg-[#0A2540]/35 backdrop-blur-sm',
+  card: 'bg-white border-sky-300/70 shadow-[0_24px_64px_rgba(14,116,144,0.16)] text-[#0A2540]',
+  drawer: 'bg-[#F4FAFE] border-sky-300/70 shadow-[0_24px_64px_rgba(14,116,144,0.18)] text-[#0A2540]',
+  header: 'border-sky-200/80 bg-[#FFFFFF] text-[#0A2540]',
+  subHeader: 'border-sky-200/80 bg-[#EBF6FD] text-[#0A2540]',
+  inset: 'border-sky-200/85 bg-[#EBF6FD]',
+  insetDashed: 'border-dashed border-emerald-400/55 bg-[#F2FBF7]',
+  well: 'border-sky-200/90 bg-[#E4F2FC]',
+  title: 'text-[#0A2540]',
+  body: 'text-[#2C5270]',
+  muted: 'text-[#4B7494]',
+  accentText: 'text-emerald-700',
+  greenBadge: 'bg-emerald-50 border-emerald-400/50 text-emerald-700',
+  redBadge: 'bg-rose-50 border-rose-400/50 text-rose-700',
   input:
-    'border-sky-400/25 bg-[#051524] text-[#F0F8FF] placeholder-[#7FAEC9]/65 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/35',
+    'border-sky-300/70 bg-white text-[#0A2540] placeholder-[#5A81A0]/70 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30',
   closeBtn:
-    'border-sky-400/30 bg-[#0D2E4A] text-[#F0F8FF] hover:bg-[#123B5E] hover:border-emerald-400/60',
+    'border-sky-300/70 bg-[#EBF6FD] text-[#0A2540] hover:bg-sky-100 hover:border-emerald-500/60',
   primaryCta:
-    'bg-gradient-to-r from-[#E11D48] via-[#DC2626] to-[#F43F5E] hover:brightness-110 text-white border border-rose-400/50 shadow-[0_8px_24px_rgba(225,29,72,0.38)]',
+    'bg-gradient-to-r from-[#E11D48] via-[#DC2626] to-[#F43F5E] hover:brightness-105 text-white border border-rose-500/50 shadow-[0_8px_20px_rgba(225,29,72,0.28)]',
   secondaryCta:
-    'border-sky-400/28 bg-[#0D2E4A] hover:bg-[#123B5E] hover:border-emerald-400/55 text-[#F0F8FF]',
-  activeTab: 'bg-[#E11D48] text-white font-extrabold border-rose-400/60 shadow-[0_4px_14px_rgba(225,29,72,0.35)]',
-  inactiveTab: 'border-sky-400/25 bg-[#0D2E4A] text-[#B6D4E8] hover:text-emerald-300 hover:border-emerald-400/50',
-  divider: 'border-sky-400/20',
-  pullBar: 'bg-sky-400/35',
-  topFade: 'from-[#051320] to-transparent',
-  bottomFade: 'from-[#051320] to-transparent',
+    'border-sky-300/70 bg-[#EBF6FD] hover:bg-sky-100 hover:border-emerald-500/60 text-[#0A2540]',
+  activeTab: 'bg-[#E11D48] text-white font-extrabold border-rose-500/70 shadow-[0_4px_12px_rgba(225,29,72,0.25)]',
+  inactiveTab: 'border-sky-300/65 bg-white text-[#2C5270] hover:text-emerald-700 hover:border-emerald-400/60',
+  divider: 'border-sky-200/85',
+  pullBar: 'bg-sky-400/50',
+  topFade: 'from-[#F4FAFE] to-transparent',
+  bottomFade: 'from-[#F4FAFE] to-transparent',
 }
 
 export function getWorldModalTheme(isAquatic: boolean): WorldModalTheme {

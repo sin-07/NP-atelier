@@ -3,6 +3,11 @@ import fs from 'fs'
 import path from 'path'
 import { allInitialProducts, Product } from '../data/products'
 import { getDb } from './mongodb'
+import {
+  DEFAULT_GOOGLE_REVIEWS,
+  GoogleReviewsConfig,
+  withDefaultGoogleReviews,
+} from './googleReviews'
 
 try {
   dns.setDefaultResultOrder?.('ipv4first')
@@ -19,6 +24,7 @@ export interface BrandingSettings {
   contactEmail: string
   contactPhone: string
   currency: string
+  googleReviews?: GoogleReviewsConfig
 }
 
 export const DEFAULT_BRANDING: BrandingSettings = {
@@ -31,6 +37,7 @@ export const DEFAULT_BRANDING: BrandingSettings = {
   contactEmail: 'npatelierindia@gmail.com',
   contactPhone: '+91 93412 97124',
   currency: '₹',
+  googleReviews: DEFAULT_GOOGLE_REVIEWS,
 }
 
 export type RegionKey = 'north' | 'south' | 'east' | 'west'
@@ -194,6 +201,7 @@ function withDefaultBranding(incoming?: Partial<BrandingSettings> | null): Brand
       merged.logoType = DEFAULT_BRANDING.logoType
     }
   }
+  merged.googleReviews = withDefaultGoogleReviews(incoming?.googleReviews)
   return merged
 }
 
@@ -251,6 +259,12 @@ export async function saveSettings(settings: Partial<BrandingSettings>): Promise
   const updated: BrandingSettings = {
     ...current,
     ...settings,
+    googleReviews: settings.googleReviews
+      ? withDefaultGoogleReviews({
+          ...current.googleReviews,
+          ...settings.googleReviews,
+        })
+      : withDefaultGoogleReviews(current.googleReviews),
   }
 
   // 1. Save to MongoDB Atlas

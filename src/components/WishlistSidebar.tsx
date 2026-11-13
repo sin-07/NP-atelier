@@ -62,7 +62,7 @@ export default function WishlistSidebar() {
                   <Heart
                     className={`h-5 w-5 ${
                       isAquaticTheme
-                        ? 'fill-[#F43F5E] text-[#F43F5E]'
+                        ? 'fill-[#E11D48] text-[#E11D48]'
                         : 'fill-[#B68D52] text-[#B68D52]'
                     }`}
                   />
@@ -92,7 +92,7 @@ export default function WishlistSidebar() {
                 {wishlistedProducts.length === 0 ? (
                 <div className={`flex h-full flex-col items-center justify-center rounded-3xl ${wt.insetDashed} p-8 text-center`}>
                   <div className={`grid h-16 w-16 place-items-center rounded-full ${wt.well}`}>
-                    <Heart className={`h-8 w-8 ${isAquaticTheme ? 'text-[#F43F5E]' : 'text-[#B68D52]'}`} />
+                    <Heart className={`h-8 w-8 ${isAquaticTheme ? 'text-[#E11D48]' : 'text-[#B68D52]'}`} />
                   </div>
                   <h4 className={`mt-4 font-tagline text-xl font-bold ${wt.title}`}>No saved items yet</h4>
                   <p className={`mt-2 max-w-xs text-sm leading-relaxed ${wt.muted}`}>
@@ -112,14 +112,14 @@ export default function WishlistSidebar() {
                     <article
                       key={product.id}
                       className={`group overflow-hidden rounded-2xl ${wt.inset} p-3.5 shadow-[0_4px_16px_rgba(68,52,32,0.08)] transition duration-300 ${
-                        isAquaticTheme ? 'hover:border-emerald-400/55' : 'hover:border-[#B68D52]/65'
+                        isAquaticTheme ? 'hover:border-emerald-500/70' : 'hover:border-[#B68D52]/65'
                       }`}
                     >
                       <div className="flex gap-3.5">
                         <div
                           className={`relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border ${
                             isAquaticTheme
-                              ? 'bg-[#081D30] border-sky-400/25'
+                              ? 'bg-[#E2F0FA] border-sky-200'
                               : 'bg-[#EFE8DC] border-[#6D5738]/20'
                           }`}
                         >
@@ -166,7 +166,7 @@ export default function WishlistSidebar() {
                               }}
                               className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold shadow-xs transition ${
                                 isAquaticTheme
-                                  ? 'bg-[#E11D48] hover:bg-[#F43F5E] border border-rose-400/50 text-white'
+                                  ? 'bg-[#E11D48] hover:bg-[#BE123C] border border-rose-500 text-white'
                                   : 'bg-[#D4AF78] hover:bg-[#E5C18A] border border-[#C69C5D] text-[#141210]'
                               }`}
                             >
@@ -187,7 +187,7 @@ export default function WishlistSidebar() {
             </div>
 
             {wishlistedProducts.length > 0 && (
-              <div className={`shrink-0 border-t p-5 shadow-lg z-10 ${isAquaticTheme ? 'border-sky-400/20 bg-[#081D30]' : 'border-[#6D5738]/20 bg-[#FCF9F4]'}`}>
+              <div className={`shrink-0 border-t p-5 shadow-lg z-10 ${isAquaticTheme ? 'border-sky-200/80 bg-white' : 'border-[#6D5738]/20 bg-[#FCF9F4]'}`}>
                 <button
                   type="button"
                   onClick={moveAllWishlistToCart}

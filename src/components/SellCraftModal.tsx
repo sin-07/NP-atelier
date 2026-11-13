@@ -290,10 +290,10 @@ export default function SellCraftModal() {
                         className={`px-2.5 py-1 rounded-full font-bold transition cursor-pointer ${
                           imageMode === 'gallery'
                             ? isAquaticTheme
-                              ? 'bg-[#E11D48] text-white'
+                              ? 'bg-[#E11D48] text-white shadow-xs'
                               : 'bg-[#D4AF78] text-[#141210]'
                             : isAquaticTheme
-                            ? 'text-[#B6D4E8] hover:text-white'
+                            ? 'text-[#2C5270] hover:text-[#0A2540]'
                             : 'text-[#5C4D3C] hover:text-[#141210]'
                         }`}
                       >
@@ -305,10 +305,10 @@ export default function SellCraftModal() {
                         className={`px-2.5 py-1 rounded-full font-bold transition cursor-pointer ${
                           imageMode === 'presets'
                             ? isAquaticTheme
-                              ? 'bg-[#E11D48] text-white'
+                              ? 'bg-[#E11D48] text-white shadow-xs'
                               : 'bg-[#D4AF78] text-[#141210]'
                             : isAquaticTheme
-                            ? 'text-[#B6D4E8] hover:text-white'
+                            ? 'text-[#2C5270] hover:text-[#0A2540]'
                             : 'text-[#5C4D3C] hover:text-[#141210]'
                         }`}
                       >
@@ -320,10 +320,10 @@ export default function SellCraftModal() {
                         className={`px-2.5 py-1 rounded-full font-bold transition cursor-pointer ${
                           imageMode === 'url'
                             ? isAquaticTheme
-                              ? 'bg-[#E11D48] text-white'
+                              ? 'bg-[#E11D48] text-white shadow-xs'
                               : 'bg-[#D4AF78] text-[#141210]'
                             : isAquaticTheme
-                            ? 'text-[#B6D4E8] hover:text-white'
+                            ? 'text-[#2C5270] hover:text-[#0A2540]'
                             : 'text-[#5C4D3C] hover:text-[#141210]'
                         }`}
                       >
@@ -357,7 +357,7 @@ export default function SellCraftModal() {
                             alt="Uploaded craft"
                             className={`h-16 w-16 sm:h-20 sm:w-20 rounded-xl object-cover border ${
                               isAquaticTheme
-                                ? 'bg-[#071A2B] border-sky-400/25'
+                                ? 'bg-white border-sky-200'
                                 : 'bg-[#EFE8DC] border-[#6D5738]/20'
                             }`}
                           />
@@ -375,7 +375,7 @@ export default function SellCraftModal() {
                               type="button"
                               onClick={() => fileInputRef.current?.click()}
                               className={`mt-1.5 text-xs font-bold hover:underline flex items-center gap-1 cursor-pointer ${
-                                isAquaticTheme ? 'text-sky-300 hover:text-white' : 'text-[#7A5B32] hover:text-[#141210]'
+                                isAquaticTheme ? 'text-sky-700 hover:text-[#0A2540]' : 'text-[#7A5B32] hover:text-[#141210]'
                               }`}
                             >
                               <Camera className="h-3 w-3" />
@@ -388,7 +388,7 @@ export default function SellCraftModal() {
                           onClick={() => fileInputRef.current?.click()}
                           className={`group cursor-pointer rounded-2xl border-2 border-dashed p-6 text-center transition shadow-xs ${
                             isAquaticTheme
-                              ? 'border-sky-400/35 bg-[#071A2B] hover:border-emerald-400 hover:bg-[#0B263E]'
+                              ? 'border-sky-300/70 bg-white hover:border-emerald-500 hover:bg-[#F5FAFF]'
                               : 'border-[#6D5738]/35 bg-[#F5F0E8] hover:border-[#B68D52] hover:bg-[#FAF6EF]'
                           }`}
                         >
@@ -481,7 +481,7 @@ export default function SellCraftModal() {
                           value={c}
                           className={
                             isAquaticTheme
-                              ? 'bg-[#081D30] text-[#F0F8FF]'
+                              ? 'bg-white text-[#0A2540]'
                               : 'bg-[#FCF9F4] text-[#141210]'
                           }
                         >
@@ -530,7 +530,7 @@ export default function SellCraftModal() {
                       alt="Preview"
                       className={`h-14 w-14 rounded-xl object-cover border ${
                         isAquaticTheme
-                          ? 'bg-[#071A2B] border-sky-400/25'
+                          ? 'bg-white border-sky-200'
                           : 'bg-[#EFE8DC] border-[#6D5738]/20'
                       }`}
                     />

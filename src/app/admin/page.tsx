@@ -37,6 +37,7 @@ import {
   ShoppingBag,
   Smartphone,
   Sparkles,
+  Star,
   Tag,
   Trash2,
   TrendingUp,
@@ -66,6 +67,7 @@ import {
 import { fallbackCraftImage } from '../../utils/fallbackImage'
 import AdminLoginForm from '../../components/AdminLoginForm'
 import { BrandTitle, NpMonogramSvg } from '../../components/BrandTypography'
+import AdminGoogleReviewsPanel from '../../components/AdminGoogleReviewsPanel'
 
 const PRESET_IMAGES = [
   // Crafts
@@ -310,6 +312,7 @@ export default function AdminPage() {
     contactEmail: branding?.contactEmail || DEFAULT_BRANDING.contactEmail,
     contactPhone: branding?.contactPhone || DEFAULT_BRANDING.contactPhone,
     currency: branding?.currency || DEFAULT_BRANDING.currency,
+    googleReviews: branding?.googleReviews || DEFAULT_BRANDING.googleReviews,
   })
 
   // Keep form in sync with context when branding changes
@@ -325,6 +328,7 @@ export default function AdminPage() {
         contactEmail: branding.contactEmail || DEFAULT_BRANDING.contactEmail,
         contactPhone: branding.contactPhone || DEFAULT_BRANDING.contactPhone,
         currency: branding.currency || DEFAULT_BRANDING.currency,
+        googleReviews: branding.googleReviews || DEFAULT_BRANDING.googleReviews,
       })
     }
   }, [branding])
@@ -332,7 +336,9 @@ export default function AdminPage() {
   const [isSavingBranding, setIsSavingBranding] = useState(false)
   const [isUploadingLogo, setIsUploadingLogo] = useState(false)
   const logoFileInputRef = useRef<HTMLInputElement>(null)
-  const [brandingSubTab, setBrandingSubTab] = useState<'identity' | 'logo' | 'announcement' | 'contact'>('identity')
+  const [brandingSubTab, setBrandingSubTab] = useState<
+    'identity' | 'logo' | 'announcement' | 'contact' | 'reviews'
+  >('identity')
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop')
 
   // Order Details Modal State
@@ -1263,7 +1269,7 @@ export default function AdminPage() {
             </div>
 
             {/* Categorized Sub-Tabs Navigation Bar */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5">
               {[
                 {
                   id: 'identity',
@@ -1292,6 +1298,13 @@ export default function AdminPage() {
                   short: 'WhatsApp & Line',
                   icon: Phone,
                   desc: 'Support email & 1-click orders',
+                },
+                {
+                  id: 'reviews',
+                  label: 'Google Reviews Sync',
+                  short: 'Google Sync',
+                  icon: Star,
+                  desc: 'Auto-sync & 1-paste importer',
                 },
               ].map((tab) => {
                 const isActive = brandingSubTab === tab.id
@@ -1322,7 +1335,7 @@ export default function AdminPage() {
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B8860B]" />
                         </span>
                       ) : (
-                        <span className="text-[10px] text-[#7A5B32] font-mono">0{['identity', 'logo', 'announcement', 'contact'].indexOf(tab.id) + 1}</span>
+                        <span className="text-[10px] text-[#7A5B32] font-mono">0{['identity', 'logo', 'announcement', 'contact', 'reviews'].indexOf(tab.id) + 1}</span>
                       )}
                     </div>
                     <div>
@@ -1768,17 +1781,30 @@ export default function AdminPage() {
                     </div>
                   )}
 
+                  {/* SUB-TAB 5: GOOGLE REVIEWS AUTO-SYNC */}
+                  {brandingSubTab === 'reviews' && (
+                    <AdminGoogleReviewsPanel
+                      initialConfig={brandingForm.googleReviews}
+                      onSynced={(nextReviews) => {
+                        setBrandingForm((prev) => ({ ...prev, googleReviews: nextReviews }))
+                        updateBranding({ googleReviews: nextReviews }, { skipServerSave: true, silent: true })
+                      }}
+                      onNotify={showToast}
+                    />
+                  )}
+
                   {/* Sub-tab Progressive Navigation Buttons */}
                   <div className="flex items-center justify-between pt-4 border-t border-[rgba(122,91,50,0.2)]">
                     <button
                       type="button"
                       disabled={brandingSubTab === 'identity'}
                       onClick={() => {
-                        const tabs: Array<'identity' | 'logo' | 'announcement' | 'contact'> = [
+                        const tabs: Array<'identity' | 'logo' | 'announcement' | 'contact' | 'reviews'> = [
                           'identity',
                           'logo',
                           'announcement',
                           'contact',
+                          'reviews',
                         ]
                         const idx = tabs.indexOf(brandingSubTab)
                         if (idx > 0) setBrandingSubTab(tabs[idx - 1])
@@ -1791,13 +1817,14 @@ export default function AdminPage() {
 
                     <button
                       type="button"
-                      disabled={brandingSubTab === 'contact'}
+                      disabled={brandingSubTab === 'reviews'}
                       onClick={() => {
-                        const tabs: Array<'identity' | 'logo' | 'announcement' | 'contact'> = [
+                        const tabs: Array<'identity' | 'logo' | 'announcement' | 'contact' | 'reviews'> = [
                           'identity',
                           'logo',
                           'announcement',
                           'contact',
+                          'reviews',
                         ]
                         const idx = tabs.indexOf(brandingSubTab)
                         if (idx < tabs.length - 1) setBrandingSubTab(tabs[idx + 1])

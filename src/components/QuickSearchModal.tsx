@@ -188,7 +188,7 @@ export default function QuickSearchModal() {
             {/* Suggestions & Results List */}
             <div
               className={`max-h-[60vh] sm:max-h-[55vh] sidebar-scroller p-3 sm:p-5 overscroll-contain ${
-                isAquaticTheme ? 'bg-[#051320]' : 'bg-[#F5F0E8]'
+                isAquaticTheme ? 'bg-[#F0F7FC]' : 'bg-[#F5F0E8]'
               }`}
             >
               <div className={`flex items-center justify-between pb-2.5 text-xs font-bold uppercase tracking-wider ${wt.muted}`}>
@@ -216,7 +216,7 @@ export default function QuickSearchModal() {
                       key={product.id}
                       className={`group flex items-center justify-between rounded-2xl border p-2.5 sm:p-3 transition duration-150 hover:shadow-xs ${
                         isAquaticTheme
-                          ? 'border-sky-400/20 bg-[#0A2237] hover:border-emerald-400/55 hover:bg-[#0D2B44]'
+                          ? 'border-sky-300/65 bg-white hover:border-emerald-500 hover:bg-[#F5FAFF]'
                           : 'border-[#6D5738]/20 bg-[#FCF9F4] hover:border-[#B68D52]/65 hover:bg-[#FAF6EF]'
                       }`}
                     >
@@ -234,7 +234,7 @@ export default function QuickSearchModal() {
                           }}
                           className={`h-12 w-12 sm:h-14 sm:w-14 rounded-xl object-cover border shrink-0 ${
                             isAquaticTheme
-                              ? 'border-sky-400/25 bg-[#071A2B]'
+                              ? 'border-sky-200 bg-[#E2F0FA]'
                               : 'border-[#6D5738]/20 bg-[#EFE8DC]'
                           }`}
                         />
@@ -247,7 +247,7 @@ export default function QuickSearchModal() {
                               <span
                                 className={`rounded-full border px-1.5 py-0.2 text-[8px] font-bold shrink-0 ${
                                   isAquaticTheme
-                                    ? 'bg-emerald-500/15 border-emerald-400/40 text-emerald-300'
+                                    ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
                                     : 'bg-teal-50 border-teal-600/30 text-teal-700'
                                 }`}
                               >
@@ -258,7 +258,7 @@ export default function QuickSearchModal() {
                           <h4
                             className={`truncate font-tagline text-sm sm:text-base font-bold transition ${
                               isAquaticTheme
-                                ? 'text-[#F0F8FF] group-hover:text-emerald-300'
+                                ? 'text-[#0A2540] group-hover:text-emerald-700'
                                 : 'text-[#141210] group-hover:text-[#7A5B32]'
                             }`}
                           >
@@ -281,10 +281,10 @@ export default function QuickSearchModal() {
                           className={`grid h-8 w-8 place-items-center rounded-full border transition cursor-pointer ${
                             isWishlisted(product.id)
                               ? isAquaticTheme
-                                ? 'border-rose-400/60 bg-rose-500/20 text-rose-300'
+                                ? 'border-rose-400 bg-rose-50 text-rose-600'
                                 : 'border-rose-400 bg-rose-50 text-rose-600'
                               : isAquaticTheme
-                              ? 'border-sky-400/25 bg-[#071A2B] text-[#F0F8FF] hover:border-rose-400 hover:text-rose-400'
+                              ? 'border-sky-300/70 bg-[#F4FAFE] text-[#0A2540] hover:border-rose-500 hover:text-rose-600'
                               : 'border-[#6D5738]/25 bg-[#F5F0E8] text-[#141210] hover:border-rose-400 hover:text-rose-500'
                           }`}
                         >

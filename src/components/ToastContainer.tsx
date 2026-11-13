@@ -8,16 +8,16 @@ export default function ToastContainer() {
   const { toasts, removeToast, isAquaticTheme } = useMarketplace()
 
   const getIcon = (type) => {
-    const goldOrGreen = isAquaticTheme ? 'text-emerald-400' : 'text-[#D4AF78]'
+    const goldOrGreen = isAquaticTheme ? 'text-emerald-600' : 'text-[#D4AF78]'
     switch (type) {
       case 'cart':
-        return <ShoppingBag className={`h-5 w-5 ${isAquaticTheme ? 'text-rose-400' : 'text-[#D4AF78]'}`} />
+        return <ShoppingBag className={`h-5 w-5 ${isAquaticTheme ? 'text-[#E11D48]' : 'text-[#D4AF78]'}`} />
       case 'wishlist':
-        return <Heart className="h-5 w-5 fill-rose-400 text-rose-400" />
+        return <Heart className="h-5 w-5 fill-rose-500 text-rose-500" />
       case 'success':
         return <CheckCircle2 className={`h-5 w-5 ${goldOrGreen}`} />
       default:
-        return <Sparkles className={`h-5 w-5 ${isAquaticTheme ? 'text-sky-400' : 'text-[#D4AF78]'}`} />
+        return <Sparkles className={`h-5 w-5 ${isAquaticTheme ? 'text-sky-600' : 'text-[#D4AF78]'}`} />
     }
   }
 
@@ -33,24 +33,24 @@ export default function ToastContainer() {
             transition={{ duration: 0.22, ease: 'easeOut' }}
             className={`pointer-events-auto flex items-start gap-3 rounded-2xl border p-3.5 backdrop-blur-md ${
               isAquaticTheme
-                ? 'border-sky-400/35 bg-[#081D30]/95 shadow-[0_12px_30px_rgba(2,12,24,0.65)]'
+                ? 'border-sky-300/75 bg-white/95 shadow-[0_12px_28px_rgba(12,74,110,0.16)]'
                 : 'border-[#8C6D46]/28 bg-[#FCF9F4]/95 shadow-[0_12px_30px_rgba(72,54,30,0.16)]'
             }`}
           >
             <div
               className={`mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl border ${
                 isAquaticTheme
-                  ? 'bg-[#0D2E4A] border-sky-400/25'
+                  ? 'bg-[#EBF6FD] border-sky-200'
                   : 'bg-[#EFE8DC] border-[#8C6D46]/25'
               }`}
             >
               {getIcon(toast.type)}
             </div>
             <div className="min-w-0 flex-1">
-              <p className={`text-sm font-bold ${isAquaticTheme ? 'text-[#F0F8FF]' : 'text-[#141210]'}`}>
+              <p className={`text-sm font-bold ${isAquaticTheme ? 'text-[#0A2540]' : 'text-[#141210]'}`}>
                 {toast.title}
               </p>
-              <p className={`mt-0.5 text-xs leading-5 ${isAquaticTheme ? 'text-[#B6D4E8]' : 'text-[#5C4D3C]'}`}>
+              <p className={`mt-0.5 text-xs leading-5 ${isAquaticTheme ? 'text-[#2C5270]' : 'text-[#5C4D3C]'}`}>
                 {toast.message}
               </p>
             </div>
@@ -60,7 +60,7 @@ export default function ToastContainer() {
               aria-label="Close notification"
               className={`grid h-6 w-6 place-items-center rounded-full transition ${
                 isAquaticTheme
-                  ? 'text-[#B6D4E8] hover:bg-[#0D2E4A] hover:text-white'
+                  ? 'text-[#2C5270] hover:bg-[#EBF6FD] hover:text-[#0A2540]'
                   : 'text-[#5C4D3C] hover:bg-[#EFE8DC] hover:text-[#141210]'
               }`}
             >
