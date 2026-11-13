@@ -433,7 +433,7 @@ function ProductCard({
             </span>
           )}
 
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-2">
             {isCardComingSoon ? (
               <button
                 type="button"
@@ -448,7 +448,7 @@ function ProductCard({
               <>
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className={`flex-1 min-w-0 h-8.5 sm:h-9 flex items-center justify-between rounded-full border p-0.5 shadow-xs select-none transition-all duration-200 ${
+                  className={`w-full sm:flex-1 sm:min-w-0 h-8.5 sm:h-9 flex items-center justify-between rounded-full border p-0.5 shadow-xs select-none transition-all duration-200 ${
                     useAquaticPalette
                       ? 'bg-[#EBF6FD] border-rose-400/70'
                       : 'bg-[#EFE8DC] border-[#B8925A]'
@@ -469,16 +469,16 @@ function ProductCard({
                     <Minus className="h-3 w-3 stroke-[3]" />
                   </button>
 
-                  <div className="flex items-center gap-1 px-1 justify-center flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 px-2 justify-center flex-1 min-w-0">
                     <span
-                      className={`inline-flex items-center justify-center min-w-[18px] px-1 py-0.2 rounded-full text-[11px] font-black font-mono shadow-xs ${
+                      className={`inline-flex items-center justify-center min-w-[20px] px-1.5 py-0.2 rounded-full text-[11px] font-black font-mono shadow-xs ${
                         useAquaticPalette ? 'bg-[#E11D48] text-white' : 'bg-[#D4AF78] text-[#141210]'
                       }`}
                     >
                       {activeQuantity}
                     </span>
                     <span
-                      className={`text-[10px] sm:text-[11px] font-bold uppercase tracking-wider truncate ${
+                      className={`text-[10px] sm:text-[11px] font-bold uppercase tracking-wider ${
                         useAquaticPalette ? 'text-[#2C5270]' : 'text-[#5C4D3C]'
                       }`}
                     >
@@ -505,16 +505,15 @@ function ProductCard({
                 <button
                   type="button"
                   onClick={handleWhatsAppAction}
-                  className={`h-8.5 sm:h-9 rounded-full border transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 px-2.5 sm:px-3 shadow-xs cursor-pointer shrink-0 group/wa ${
-                    useAquaticPalette
-                      ? 'bg-emerald-600 hover:bg-emerald-700 border-emerald-500 text-white'
-                      : 'bg-[#063326] hover:bg-[#084534] border-emerald-400/60 hover:border-emerald-300 text-emerald-300'
-                  }`}
+                  className="w-full sm:w-auto h-8 sm:h-9 rounded-full border border-emerald-500 bg-emerald-600 hover:bg-emerald-700 text-white transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 px-3 shadow-xs cursor-pointer sm:shrink-0 group/wa"
                   title={`Order ${product.title} on WhatsApp (${contactPhone})`}
                   aria-label={`Order ${product.title} on WhatsApp`}
                 >
-                  <WhatsAppIcon className={`h-3.5 w-3.5 group-hover/wa:scale-110 transition-transform shrink-0 ${useAquaticPalette ? 'text-white' : 'text-emerald-400'}`} />
-                  <span className={`text-[11px] font-bold transition-colors whitespace-nowrap hidden sm:inline ${useAquaticPalette ? 'text-white' : 'text-white group-hover/wa:text-emerald-300'}`}>
+                  <WhatsAppIcon className="h-3.5 w-3.5 text-white group-hover/wa:scale-110 transition-transform shrink-0" />
+                  <span className="text-xs font-bold text-white whitespace-nowrap sm:hidden">
+                    Order on WhatsApp
+                  </span>
+                  <span className="text-[11px] font-bold text-white whitespace-nowrap hidden sm:inline">
                     WhatsApp
                   </span>
                 </button>
@@ -524,7 +523,7 @@ function ProductCard({
                 <button
                   type="button"
                   onClick={handleAdd}
-                  className={`flex-1 min-w-0 h-8.5 sm:h-9 inline-flex items-center justify-center gap-1.5 rounded-full border px-2.5 sm:px-3 font-extrabold text-xs transition-all duration-200 active:scale-[0.98] cursor-pointer ${
+                  className={`w-full sm:flex-1 sm:min-w-0 h-8.5 sm:h-9 inline-flex items-center justify-center gap-1.5 rounded-full border px-3 font-extrabold text-xs transition-all duration-200 active:scale-[0.98] cursor-pointer ${
                     useAquaticPalette
                       ? 'bg-gradient-to-r from-[#E11D48] via-[#DC2626] to-[#F43F5E] hover:brightness-105 border-rose-500/60 text-white shadow-[0_4px_12px_rgba(225,29,72,0.25)]'
                       : 'bg-gradient-to-r from-[#D4AF78] via-[#ECC872] to-[#D4AF78] hover:brightness-105 border-[#F5DC9A]/60 text-[#141210] shadow-[0_2px_10px_rgba(212,175,120,0.25)]'
@@ -542,16 +541,15 @@ function ProductCard({
                 <button
                   type="button"
                   onClick={handleWhatsAppAction}
-                  className={`h-8.5 sm:h-9 rounded-full border transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 px-2.5 sm:px-3 shadow-xs cursor-pointer shrink-0 group/wa ${
-                    useAquaticPalette
-                      ? 'bg-emerald-600 hover:bg-emerald-700 border-emerald-500 text-white'
-                      : 'bg-[#063326] hover:bg-[#084534] border-emerald-400/60 hover:border-emerald-300 text-emerald-300'
-                  }`}
+                  className="w-full sm:w-auto h-8 sm:h-9 rounded-full border border-emerald-500 bg-emerald-600 hover:bg-emerald-700 text-white transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 px-3 shadow-xs cursor-pointer sm:shrink-0 group/wa"
                   title={`Order ${product.title} on WhatsApp (${contactPhone})`}
                   aria-label={`Order ${product.title} on WhatsApp`}
                 >
-                  <WhatsAppIcon className={`h-3.5 w-3.5 group-hover/wa:scale-110 transition-transform shrink-0 ${useAquaticPalette ? 'text-white' : 'text-emerald-400'}`} />
-                  <span className={`text-[11px] font-bold transition-colors whitespace-nowrap hidden sm:inline ${useAquaticPalette ? 'text-white' : 'text-white group-hover/wa:text-emerald-300'}`}>
+                  <WhatsAppIcon className="h-3.5 w-3.5 text-white group-hover/wa:scale-110 transition-transform shrink-0" />
+                  <span className="text-xs font-bold text-white whitespace-nowrap sm:hidden">
+                    Order on WhatsApp
+                  </span>
+                  <span className="text-[11px] font-bold text-white whitespace-nowrap hidden sm:inline">
                     WhatsApp
                   </span>
                 </button>
